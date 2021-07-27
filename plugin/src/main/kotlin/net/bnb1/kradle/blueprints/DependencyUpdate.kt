@@ -1,10 +1,9 @@
-package net.bnb1.kradle.tasks
+package net.bnb1.kradle.blueprints
 
 import com.github.benmanes.gradle.versions.updates.DependencyUpdatesTask
+import net.bnb1.kradle.TaskBlueprint
 
 object DependencyUpdate : TaskBlueprint<DependencyUpdatesTask> {
-
-    override val type = DependencyUpdatesTask::class.java
 
     override fun configure(task: DependencyUpdatesTask) = task.apply {
         revision = "release"

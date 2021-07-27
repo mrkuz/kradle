@@ -1,12 +1,12 @@
-package net.bnb1.kradle.tasks
+package net.bnb1.kradle
 
 import org.gradle.api.Project
 import org.gradle.api.Task
 
 class TaskFactory(private val project: Project) {
 
-    fun <T : Task> create(name: String, description: String, blueprint: TaskBlueprint<T>): T {
-        return blueprint.configure(create(name, description, blueprint.type))
+    inline fun <reified T : Task> create(name: String, description: String, blueprint: TaskBlueprint<T>): T {
+        return blueprint.configure(create(name, description, T::class.java))
     }
 
     fun <T : Task> create(name: String, description: String, type: Class<T>): T {

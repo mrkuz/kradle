@@ -1,7 +1,7 @@
 package net.bnb1.kradle
 
-import net.bnb1.kradle.tasks.DependencyUpdate
-import net.bnb1.kradle.tasks.TaskFactory
+import net.bnb1.kradle.blueprints.DependencyUpdate
+import net.bnb1.kradle.tasks.HelloWorldTask
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 
