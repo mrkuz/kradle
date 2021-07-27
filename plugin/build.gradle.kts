@@ -9,11 +9,14 @@ version = "1.0.0-SNAPSHOT"
 
 repositories {
     mavenCentral()
+    gradlePluginPortal()
 }
 
 dependencies {
     implementation(platform("org.jetbrains.kotlin:kotlin-bom"))
     implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
+    // Plugins
+    implementation("com.github.ben-manes:gradle-versions-plugin:0.38.0")
 }
 
 gradlePlugin {

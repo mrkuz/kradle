@@ -1,14 +1,16 @@
 package net.bnb1.kradle
 
-import org.gradle.api.Plugin;
-import org.gradle.api.Project;
-import java.lang.RuntimeException
+import org.gradle.api.Plugin
+import org.gradle.api.Project
 
 class KradlePlugin : Plugin<Project> {
 
     override fun apply(project: Project) {
-        val task = project.tasks.create("helloWorld", HelloWorldTask::class.java)
-        task.group = "Kradle"
-        task.description = "Print hello world"
+        project.rootProject.pluginManager.apply(KradleBasePlugin::class.java)
+
+        project.tasks.create("helloWorld", HelloWorldTask::class.java).apply {
+            group = Constants.TASK_GROUP
+            description = "Display hello world"
+        }
     }
 }
