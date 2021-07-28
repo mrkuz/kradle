@@ -3,7 +3,7 @@ package net.bnb1.kradle.blueprints
 import com.github.benmanes.gradle.versions.updates.DependencyUpdatesTask
 import net.bnb1.kradle.TaskBlueprint
 
-object DependencyUpdate : TaskBlueprint<DependencyUpdatesTask> {
+object DependencyUpdatesBlueprint : TaskBlueprint<DependencyUpdatesTask> {
 
     override fun configure(task: DependencyUpdatesTask) = task.apply {
         revision = "release"
