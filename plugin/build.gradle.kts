@@ -2,6 +2,7 @@ plugins {
     id("java-gradle-plugin")
     id("maven-publish")
     id("org.jetbrains.kotlin.jvm") version "1.5.21"
+    id("org.gradle.kotlin.kotlin-dsl") version "2.1.6"
 }
 
 group = "net.bnb1.kradle"
@@ -17,6 +18,7 @@ dependencies {
     implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
     // Plugins
     implementation("com.github.ben-manes:gradle-versions-plugin:0.38.0")
+    implementation("org.jetbrains.dokka:dokka-gradle-plugin:1.4.30")
 }
 
 gradlePlugin {
