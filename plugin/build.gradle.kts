@@ -17,6 +17,7 @@ dependencies {
     implementation(platform("org.jetbrains.kotlin:kotlin-bom"))
     implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
     // Plugins
+    implementation("org.jetbrains.kotlin:kotlin-gradle-plugin:1.5.21")
     implementation("com.github.ben-manes:gradle-versions-plugin:0.38.0")
     implementation("org.jetbrains.dokka:dokka-gradle-plugin:1.4.30")
 }
