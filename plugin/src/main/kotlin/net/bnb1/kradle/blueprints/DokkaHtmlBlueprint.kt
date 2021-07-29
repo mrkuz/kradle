@@ -17,6 +17,7 @@ object DokkaHtmlBlueprint : TaskBlueprint<DokkaTask> {
                 return false
             }
 
+            // These files are used for package/module documentation. First match wins.
             if (includeIfExists("src/main/kotlin/module.md")) return@forEach
             if (includeIfExists("src/main/kotlin/package.md")) return@forEach
             if (includeIfExists("module.md")) return@forEach

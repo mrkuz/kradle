@@ -11,6 +11,10 @@ inline fun <reified T : Plugin<Project>> Project.apply(blueprint: PluginBlueprin
     blueprint.configure(this)
 }
 
+fun <T : Plugin<Project>> Project.apply(type: Class<T>) {
+    pluginManager.apply(type)
+}
+
 inline fun <reified T : Task> Project.create(name: String, description: String, blueprint: TaskBlueprint<T>): T {
     return blueprint.configure(this, create(name, description, T::class.java))
 }
