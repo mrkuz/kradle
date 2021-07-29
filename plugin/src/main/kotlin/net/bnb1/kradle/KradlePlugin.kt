@@ -1,5 +1,6 @@
 package net.bnb1.kradle
 
+import com.adarshr.gradle.testlogger.TestLoggerPlugin
 import net.bnb1.kradle.blueprints.*
 import net.bnb1.kradle.tasks.HelloWorldTask
 import org.gradle.api.Plugin
@@ -21,6 +22,7 @@ class KradlePlugin : Plugin<Project> {
         project.apply(KotlinBlueprint)
         project.apply(AllOpenGradleSubplugin::class.java)
         project.apply(BenchmarksBlueprint)
+        project.apply(TestLoggerPlugin::class.java)
 
         project.create("dependencyUpdates", "Displays dependency updates", DependencyUpdatesBlueprint)
         project.create("docs", "Generates HTML documentation", DokkaHtmlBlueprint)

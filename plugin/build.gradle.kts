@@ -22,6 +22,7 @@ dependencies {
     implementation("org.jetbrains.dokka:dokka-gradle-plugin:1.4.30")
     implementation("org.jetbrains.kotlin:kotlin-allopen:1.5.0")
     implementation("org.jetbrains.kotlinx:kotlinx-benchmark-plugin:0.3.1")
+    implementation("com.adarshr:gradle-test-logger-plugin:2.1.1")
 }
 
 gradlePlugin {
