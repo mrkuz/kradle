@@ -17,13 +17,18 @@ repositories {
 dependencies {
     implementation(platform("org.jetbrains.kotlin:kotlin-bom"))
     implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
+
     // Plugins
-    implementation("org.jetbrains.kotlin:kotlin-gradle-plugin:1.5.21") // Determines the Kotlin version of the target project
+
     implementation("com.github.ben-manes:gradle-versions-plugin:0.39.0")
     implementation("org.jetbrains.dokka:dokka-gradle-plugin:1.4.30")
     implementation("org.jetbrains.kotlin:kotlin-allopen")
     implementation("org.jetbrains.kotlinx:kotlinx-benchmark-plugin:0.3.1")
     implementation("com.adarshr:gradle-test-logger-plugin:3.0.0")
+
+    // Sets the default Kotlin version for the target project
+    // (can be overridden by explicitly applying the Kotlin plugin)
+    implementation("org.jetbrains.kotlin:kotlin-gradle-plugin:1.5.21")
 }
 
 gradlePlugin {
