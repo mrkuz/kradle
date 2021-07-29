@@ -20,14 +20,8 @@ class KradlePlugin : Plugin<Project> {
 
         project.apply(KotlinBlueprint)
 
-        val factory = TaskFactory(project)
-        factory.create("dependencyUpdates", "Displays dependency updates", DependencyUpdatesBlueprint)
-        factory.create("docs", "Generates HTML documentation", DokkaHtmlBlueprint)
-        factory.create("helloWorld", "Displays hello world", HelloWorldTask::class.java)
-    }
-
-    private inline fun <reified T : Plugin<Project>> Project.apply(blueprint: PluginBlueprint<T>) {
-        pluginManager.apply(T::class.java)
-        blueprint.configure(this)
+        project.create("dependencyUpdates", "Displays dependency updates", DependencyUpdatesBlueprint)
+        project.create("docs", "Generates HTML documentation", DokkaHtmlBlueprint)
+        project.create("helloWorld", "Displays hello world", HelloWorldTask::class.java)
     }
 }
