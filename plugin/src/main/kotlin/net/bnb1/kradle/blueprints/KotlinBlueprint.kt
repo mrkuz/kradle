@@ -13,6 +13,7 @@ object KotlinBlueprint : PluginBlueprint<KotlinPluginWrapper> {
         project.dependencies {
             add("implementation", platform("org.jetbrains.kotlin:kotlin-bom"))
             add("implementation", "org.jetbrains.kotlin:kotlin-stdlib-jdk8")
+            add("testImplementation", "org.jetbrains.kotlin:kotlin-test")
         }
 
         project.tasks.withType<KotlinCompile> {
