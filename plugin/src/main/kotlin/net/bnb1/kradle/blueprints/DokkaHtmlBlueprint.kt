@@ -7,7 +7,7 @@ import java.io.File
 
 object DokkaHtmlBlueprint : TaskBlueprint<DokkaTask> {
 
-    override fun configure(projec: Project, task: DokkaTask) = task.apply {
+    override fun configure(project: Project, task: DokkaTask) = task.apply {
         dokkaSourceSets.forEach {
             fun includeIfExists(fileName: String): Boolean {
                 if (File("${project.projectDir}/${fileName}").exists()) {
