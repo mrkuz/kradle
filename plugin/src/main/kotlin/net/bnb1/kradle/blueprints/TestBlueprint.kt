@@ -19,7 +19,9 @@ object TestBlueprint : TaskBlueprint<Test> {
             testLogging {
                 events = setOf(TestLogEvent.SKIPPED, TestLogEvent.PASSED, TestLogEvent.FAILED)
             }
-            includes.add("**/*Tests*.class")
+            include("**/*Test.class")
+            include("**/*Tests.class")
+            include("**/*IT.class")
         }
     }
 }
