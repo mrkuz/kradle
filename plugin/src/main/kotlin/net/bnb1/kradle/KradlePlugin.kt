@@ -21,13 +21,15 @@ class KradlePlugin : Plugin<Project> {
 
         project.apply(KotlinBlueprint)
         project.apply(MavenPublishBlueprint)
+        project.apply(DependencyUpdatesBlueprint)
+        project.apply(DokkaBlueprint)
         project.apply(AllOpenGradleSubplugin::class.java)
         project.apply(BenchmarksBlueprint)
         project.apply(TestLoggerPlugin::class.java)
         project.apply(JacocoBlueprint)
 
-        project.create("showDependencyUpdates", "Displays dependency updates", DependencyUpdatesBlueprint)
-        project.create("generateDocumentation", "Generates HTML documentation", DokkaHtmlBlueprint)
+        project.alias("showDependencyUpdates", "Displays dependency updates", "dependencyUpdates")
+        project.alias("generateDocumentation", "Generates HTML documentation", "dokkaHtml")
         project.alias("runBenchmarks", "Runs all benchmarks", "benchmark")
         project.alias("package", "Creates JAR", "jar")
         project.alias("install", "Installs JAR to local Maven repository", "publishToMavenLocal")
