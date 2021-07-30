@@ -20,6 +20,7 @@ class KradlePlugin : Plugin<Project> {
         }
 
         project.apply(KotlinBlueprint)
+        project.apply(MavenPublishBlueprint)
         project.apply(AllOpenGradleSubplugin::class.java)
         project.apply(BenchmarksBlueprint)
         project.apply(TestLoggerPlugin::class.java)
