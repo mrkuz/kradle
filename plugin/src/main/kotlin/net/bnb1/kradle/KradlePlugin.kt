@@ -24,6 +24,7 @@ class KradlePlugin : Plugin<Project> {
         project.apply(AllOpenGradleSubplugin::class.java)
         project.apply(BenchmarksBlueprint)
         project.apply(TestLoggerPlugin::class.java)
+        project.apply(JacocoBlueprint)
 
         project.create("showDependencyUpdates", "Displays dependency updates", DependencyUpdatesBlueprint)
         project.create("generateDocumentation", "Generates HTML documentation", DokkaHtmlBlueprint)
