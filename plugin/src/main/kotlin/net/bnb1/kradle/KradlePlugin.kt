@@ -7,6 +7,7 @@ import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.kotlin.dsl.repositories
 import org.jetbrains.kotlin.allopen.gradle.AllOpenGradleSubplugin
+import org.owasp.dependencycheck.gradle.DependencyCheckPlugin
 
 
 class KradlePlugin : Plugin<Project> {
@@ -27,8 +28,10 @@ class KradlePlugin : Plugin<Project> {
         project.apply(BenchmarksBlueprint)
         project.apply(TestLoggerPlugin::class.java)
         project.apply(JacocoBlueprint)
+        project.apply(DependencyCheckPlugin::class.java)
 
         project.alias("showDependencyUpdates", "Displays dependency updates", "dependencyUpdates")
+        project.alias("analyzeDependencies", "Analyze dependencies for vulnerabilities", "dependencyCheckAnalyze")
         project.alias("generateDocumentation", "Generates HTML documentation", "dokkaHtml")
         project.alias("runBenchmarks", "Runs all benchmarks", "benchmark")
         project.alias("package", "Creates JAR", "jar")
