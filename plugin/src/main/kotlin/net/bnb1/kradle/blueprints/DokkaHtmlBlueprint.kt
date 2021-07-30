@@ -8,6 +8,7 @@ import java.io.File
 object DokkaHtmlBlueprint : TaskBlueprint<DokkaTask> {
 
     override fun configure(project: Project, task: DokkaTask) = task.apply {
+        task.outputDirectory.set(project.buildDir.resolve("docs"))
         dokkaSourceSets.forEach {
             fun includeIfExists(fileName: String): Boolean {
                 if (File("${project.projectDir}/${fileName}").exists()) {
