@@ -27,6 +27,19 @@ fun <T : Task> Project.create(name: String, description: String, type: Class<T>)
     return task
 }
 
+fun Project.create(name: String, description: String): Task {
+    val task = tasks.create(name)
+    task.group = TASK_GROUP
+    task.description = description
+    return task
+}
+
+fun Project.alias(name: String, description: String, targetTask: String): Task {
+    val task = create(name, description + " (alias for '${targetTask}')")
+    task.dependsOn(targetTask)
+    return task
+}
+
 inline fun <reified T : Task> Project.configure(name: String, blueprint: TaskBlueprint<T>) {
     tasks.named<T>(name).configure {
         blueprint.configure(this@configure, this)

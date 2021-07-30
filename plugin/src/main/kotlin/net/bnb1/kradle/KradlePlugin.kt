@@ -25,8 +25,11 @@ class KradlePlugin : Plugin<Project> {
         project.apply(BenchmarksBlueprint)
         project.apply(TestLoggerPlugin::class.java)
 
-        project.create("dependencyUpdates", "Displays dependency updates", DependencyUpdatesBlueprint)
-        project.create("docs", "Generates HTML documentation", DokkaHtmlBlueprint)
+        project.create("showDependencyUpdates", "Displays dependency updates", DependencyUpdatesBlueprint)
+        project.create("generateDocumentation", "Generates HTML documentation", DokkaHtmlBlueprint)
+        project.alias("runBenchmarks", "Runs all benchmarks", "benchmark")
+        project.alias("package", "Creates JAR", "jar")
+        project.alias("install", "Installs JAR to local Maven repository", "publishToMavenLocal")
         project.create("helloWorld", "Displays hello world", HelloWorldTask::class.java)
 
         project.configure("test", TestBlueprint)
