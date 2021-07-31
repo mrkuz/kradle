@@ -41,9 +41,13 @@ java {
 
 gradlePlugin {
     plugins {
-        create("kradle") {
-            id = "net.bnb1.kradle"
-            implementationClass = "net.bnb1.kradle.KradlePlugin"
+        create("kradleApp") {
+            id = "net.bnb1.kradle-app"
+            implementationClass = "net.bnb1.kradle.KradleAppPlugin"
+        }
+        create("kradleLib") {
+            id = "net.bnb1.kradle-lib"
+            implementationClass = "net.bnb1.kradle.KradleLibPlugin"
         }
     }
 }

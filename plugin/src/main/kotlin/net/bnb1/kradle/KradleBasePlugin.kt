@@ -10,7 +10,7 @@ import org.gradle.kotlin.dsl.repositories
 import org.jetbrains.kotlin.allopen.gradle.AllOpenGradleSubplugin
 
 
-class KradlePlugin : Plugin<Project> {
+class KradleBasePlugin : Plugin<Project> {
 
     override fun apply(project: Project) {
 
@@ -23,7 +23,7 @@ class KradlePlugin : Plugin<Project> {
         }
 
         project.apply(KotlinBlueprint)
-        project.apply(MavenPublishBlueprint)
+
         project.apply(DependencyUpdatesBlueprint)
         project.apply(DokkaBlueprint)
         project.apply(AllOpenGradleSubplugin::class.java)
@@ -41,7 +41,6 @@ class KradlePlugin : Plugin<Project> {
         project.alias("lint", "Runs ktlint", "ktlintCheck")
         project.alias("analyzeCode", "Runs detekt code analysis", "detekt")
         project.alias("package", "Creates JAR", "jar")
-        project.alias("install", "Installs JAR to local Maven repository", "publishToMavenLocal")
         project.create("helloWorld", "Displays hello world", HelloWorldTask::class.java)
 
         project.configure("test", TestBlueprint)
