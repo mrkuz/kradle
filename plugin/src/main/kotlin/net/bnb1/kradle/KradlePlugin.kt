@@ -5,6 +5,7 @@ import net.bnb1.kradle.blueprints.*
 import net.bnb1.kradle.tasks.HelloWorldTask
 import org.gradle.api.Plugin
 import org.gradle.api.Project
+import org.gradle.kotlin.dsl.create
 import org.gradle.kotlin.dsl.repositories
 import org.jetbrains.kotlin.allopen.gradle.AllOpenGradleSubplugin
 
@@ -12,6 +13,8 @@ import org.jetbrains.kotlin.allopen.gradle.AllOpenGradleSubplugin
 class KradlePlugin : Plugin<Project> {
 
     override fun apply(project: Project) {
+
+        project.extensions.create<KradleExtension>("kradle")
 
         project.repositories {
             mavenCentral()

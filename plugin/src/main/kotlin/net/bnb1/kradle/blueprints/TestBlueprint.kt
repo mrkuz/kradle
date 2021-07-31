@@ -1,5 +1,6 @@
 package net.bnb1.kradle.blueprints
 
+import net.bnb1.kradle.KradleExtension
 import net.bnb1.kradle.TaskBlueprint
 import org.gradle.api.Project
 import org.gradle.api.tasks.testing.Test
@@ -9,9 +10,12 @@ import org.gradle.kotlin.dsl.dependencies
 object TestBlueprint : TaskBlueprint<Test> {
 
     override fun configure(project: Project, task: Test): Test {
+
+        val extension = project.extensions.getByType(KradleExtension::class.java)
+
         project.dependencies {
-            add("testImplementation", "org.junit.jupiter:junit-jupiter-api:5.7.2")
-            add("testRuntimeOnly", "org.junit.jupiter:junit-jupiter-engine:5.7.2")
+            add("testImplementation", "org.junit.jupiter:junit-jupiter-api:${extension.junitJupiterVersion.get()}")
+            add("testRuntimeOnly", "org.junit.jupiter:junit-jupiter-engine:${extension.junitJupiterVersion.get()}}")
         }
 
         return task.apply {
