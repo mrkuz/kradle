@@ -31,6 +31,7 @@ class KradlePlugin : Plugin<Project> {
         project.apply(TestLoggerPlugin::class.java)
         project.apply(JacocoBlueprint)
         project.apply(DependencyCheckBlueprint)
+        project.apply(KtlintBlueprint)
 
         project.alias("showDependencyUpdates", "Displays dependency updates", "dependencyUpdates")
         project.alias("analyzeDependencies", "Analyze dependencies for vulnerabilities", "dependencyCheckAnalyze")
