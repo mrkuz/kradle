@@ -8,6 +8,7 @@ import org.gradle.api.file.DuplicatesStrategy
 import org.gradle.api.plugins.JavaPluginConvention
 import org.gradle.jvm.tasks.Jar
 import org.gradle.kotlin.dsl.configure
+import org.gradle.kotlin.dsl.named
 import org.gradle.kotlin.dsl.withConvention
 import org.jetbrains.kotlin.allopen.gradle.AllOpenExtension
 import org.jetbrains.kotlin.gradle.plugin.KotlinSourceSet
@@ -23,7 +24,7 @@ object BenchmarksBlueprint : PluginBlueprint<BenchmarksPlugin> {
         }
 
         project.afterEvaluate {
-            project.tasks.named("${SOURCE_SET_NAME}BenchmarkJar", Jar::class.java) {
+            project.tasks.named<Jar>("${SOURCE_SET_NAME}BenchmarkJar").configure {
                 // Required workaround. Otherwise running the benchmarks will complain because of
                 // duplicate META-INF/versions/9/module-info.class
                 duplicatesStrategy = DuplicatesStrategy.INCLUDE
