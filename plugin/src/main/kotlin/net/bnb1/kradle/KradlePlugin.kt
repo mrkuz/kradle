@@ -35,8 +35,9 @@ class KradlePlugin : Plugin<Project> {
 
         project.alias("showDependencyUpdates", "Displays dependency updates", "dependencyUpdates")
         project.alias("analyzeDependencies", "Analyze dependencies for vulnerabilities", "dependencyCheckAnalyze")
-        project.alias("generateDocumentation", "Generates HTML documentation", "dokkaHtml")
-        project.alias("runBenchmarks", "Runs all benchmarks", "benchmark")
+        project.alias("generateDocumentation", "Generates Dokka HTML documentation", "dokkaHtml")
+        project.alias("runBenchmarks", "Runs all JMH benchmarks", "benchmark")
+        project.alias("lint", "Runs ktlint", "ktlintCheck")
         project.alias("package", "Creates JAR", "jar")
         project.alias("install", "Installs JAR to local Maven repository", "publishToMavenLocal")
         project.create("helloWorld", "Displays hello world", HelloWorldTask::class.java)
