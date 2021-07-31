@@ -27,7 +27,7 @@ dependencies {
     implementation("com.adarshr:gradle-test-logger-plugin:3.0.0")
     implementation("org.owasp:dependency-check-gradle:6.2.2")
     implementation("org.jlleitschuh.gradle:ktlint-gradle:10.1.0")
-
+    implementation("io.gitlab.arturbosch.detekt:detekt-gradle-plugin:1.17.1")
 
     // Sets the default Kotlin version for the target project
     // (can be overridden by explicitly applying the Kotlin plugin)
