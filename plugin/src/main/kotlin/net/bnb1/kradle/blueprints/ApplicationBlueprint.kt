@@ -11,6 +11,8 @@ import org.gradle.kotlin.dsl.named
 
 object ApplicationBlueprint : PluginBlueprint<ApplicationPlugin> {
 
+    private val GROUP_PATTERN = Regex("^[a-z]+(\\.[a-z0-9]+)+$")
+
     override fun configure(project: Project) {
         project.tasks.named<JavaExec>("run").configure {
             // Allows the application to figure out we are running in development mode
@@ -21,6 +23,13 @@ object ApplicationBlueprint : PluginBlueprint<ApplicationPlugin> {
         }
 
         project.afterEvaluate {
+            if (!GROUP_PATTERN.matches(project.group.toString())) {
+                project.logger.warn("WARNING: Group doesn't comply with Java's package name rules: ${project.group}")
+            }
+            if (project.version == "unspecified") {
+                project.logger.warn("WARNING: Version is not specified")
+            }
+
             val extension = project.extensions.getByType(JavaApplication::class.java)
             val mainClass = extension.mainClass.get()
             project.tasks.named<Jar>("jar").configure {
