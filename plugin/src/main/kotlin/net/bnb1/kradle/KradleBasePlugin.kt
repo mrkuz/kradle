@@ -9,7 +9,6 @@ import org.gradle.kotlin.dsl.create
 import org.gradle.kotlin.dsl.repositories
 import org.jetbrains.kotlin.allopen.gradle.AllOpenGradleSubplugin
 
-
 class KradleBasePlugin : Plugin<Project> {
 
     override fun apply(project: Project) {
@@ -34,6 +33,7 @@ class KradleBasePlugin : Plugin<Project> {
         project.apply(DetektBlueprint)
 
         project.apply(GitPlugin::class.java)
+        project.apply(ProjectPropertiesPlugin::class.java)
 
         project.alias("showDependencyUpdates", "Displays dependency updates", "dependencyUpdates")
         project.alias("analyzeDependencies", "Analyzes dependencies for vulnerabilities", "dependencyCheckAnalyze")
