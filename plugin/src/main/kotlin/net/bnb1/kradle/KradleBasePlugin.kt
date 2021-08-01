@@ -2,7 +2,7 @@ package net.bnb1.kradle
 
 import com.adarshr.gradle.testlogger.TestLoggerPlugin
 import net.bnb1.kradle.blueprints.*
-import net.bnb1.kradle.tasks.HelloWorldTask
+import net.bnb1.kradle.tasks.GenerateBuildPropertiesTask
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.kotlin.dsl.create
@@ -42,7 +42,8 @@ class KradleBasePlugin : Plugin<Project> {
         project.alias("lint", "Runs ktlint", "ktlintCheck")
         project.alias("analyzeCode", "Runs detekt code analysis", "detekt")
         project.alias("package", "Creates JAR", "jar")
-        project.create("helloWorld", "Displays hello world", HelloWorldTask::class.java)
+
+        project.create("generateBuildProperties", "Generates build.properties", GenerateBuildPropertiesTask::class.java)
 
         project.configure("test", TestBlueprint)
     }
