@@ -23,7 +23,6 @@ class KradleBasePlugin : Plugin<Project> {
         }
 
         project.apply(KotlinBlueprint)
-
         project.apply(DependencyUpdatesBlueprint)
         project.apply(DokkaBlueprint)
         project.apply(AllOpenGradleSubplugin::class.java)
@@ -33,6 +32,8 @@ class KradleBasePlugin : Plugin<Project> {
         project.apply(DependencyCheckBlueprint)
         project.apply(KtlintBlueprint)
         project.apply(DetektBlueprint)
+
+        project.apply(GitPlugin::class.java)
 
         project.alias("showDependencyUpdates", "Displays dependency updates", "dependencyUpdates")
         project.alias("analyzeDependencies", "Analyzes dependencies for vulnerabilities", "dependencyCheckAnalyze")

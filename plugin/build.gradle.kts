@@ -33,6 +33,10 @@ dependencies {
     // Sets the default Kotlin version for the target project
     // (can be overridden by explicitly applying the Kotlin plugin)
     implementation("org.jetbrains.kotlin:kotlin-gradle-plugin:1.5.21")
+
+    // Miscellaneous
+
+    implementation("org.eclipse.jgit:org.eclipse.jgit:5.12.0.202106070339-r")
 }
 
 java {
