@@ -28,6 +28,7 @@ dependencies {
     implementation("org.owasp:dependency-check-gradle:6.2.2")
     implementation("org.jlleitschuh.gradle:ktlint-gradle:10.1.0")
     implementation("io.gitlab.arturbosch.detekt:detekt-gradle-plugin:1.17.1")
+    implementation("gradle.plugin.com.github.jengelman.gradle.plugins:shadow:7.0.0")
 
     // Sets the default Kotlin version for the target project
     // (can be overridden by explicitly applying the Kotlin plugin)
