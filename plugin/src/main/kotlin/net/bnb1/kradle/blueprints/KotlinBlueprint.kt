@@ -15,21 +15,22 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 object KotlinBlueprint : PluginBlueprint<KotlinPluginWrapper> {
 
     override fun configure(project: Project) {
-        val extension = project.extensions.getByType(KradleExtension::class.java)
-
-        project.dependencies {
-            implementation(platform("org.jetbrains.kotlin:kotlin-bom"))
-            implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
-            implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:${extension.kotlinxCoroutinesVersion.get()}")
-            testImplementation("org.jetbrains.kotlin:kotlin-test")
-        }
-
         project.extra["kotlinVersion"] = project.getKotlinPluginVersion()
 
-        project.tasks.withType<KotlinCompile> {
-            kotlinOptions {
-                freeCompilerArgs = listOf("-Xopt-in=kotlin.RequiresOptIn")
-                jvmTarget = "1.8"
+        project.afterEvaluate {
+            val extension = project.extensions.getByType(KradleExtension::class.java)
+            project.dependencies {
+                implementation(platform("org.jetbrains.kotlin:kotlin-bom"))
+                implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
+                implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:${extension.kotlinxCoroutinesVersion.get()}")
+                testImplementation("org.jetbrains.kotlin:kotlin-test")
+            }
+
+            project.tasks.withType<KotlinCompile> {
+                kotlinOptions {
+                    freeCompilerArgs = listOf("-Xopt-in=kotlin.RequiresOptIn")
+                    jvmTarget = extension.targetJvm.get()
+                }
             }
         }
     }

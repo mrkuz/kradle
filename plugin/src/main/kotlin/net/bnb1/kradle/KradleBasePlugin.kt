@@ -29,8 +29,8 @@ class KradleBasePlugin : Plugin<Project> {
             throw GradleException("Kotlin plugin not found")
         }
 
+        project.apply(JavaBlueprint)
         project.apply(KotlinBlueprint)
-
         project.apply(AllOpenGradleSubplugin::class.java)
         project.apply(SerializationGradleSubplugin::class.java)
 

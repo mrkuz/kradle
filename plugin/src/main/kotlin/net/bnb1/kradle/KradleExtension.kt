@@ -6,6 +6,7 @@ import javax.inject.Inject
 
 open class KradleExtension @Inject constructor(factory: ObjectFactory) {
 
+    val targetJvm: Property<String> = factory.property("1.8")
     val junitJupiterVersion: Property<String> = factory.property("5.7.2")
     val kotlinxCoroutinesVersion: Property<String> = factory.property("1.5.1")
 
