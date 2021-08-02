@@ -2,6 +2,8 @@ package net.bnb1.kradle.blueprints
 
 import net.bnb1.kradle.KradleExtension
 import net.bnb1.kradle.TaskBlueprint
+import net.bnb1.kradle.testImplementation
+import net.bnb1.kradle.testRuntimeOnly
 import org.gradle.api.Project
 import org.gradle.api.tasks.testing.Test
 import org.gradle.api.tasks.testing.logging.TestLogEvent
@@ -14,8 +16,8 @@ object TestBlueprint : TaskBlueprint<Test> {
         val extension = project.extensions.getByType(KradleExtension::class.java)
 
         project.dependencies {
-            add("testImplementation", "org.junit.jupiter:junit-jupiter-api:${extension.junitJupiterVersion.get()}")
-            add("testRuntimeOnly", "org.junit.jupiter:junit-jupiter-engine:${extension.junitJupiterVersion.get()}}")
+            testImplementation("org.junit.jupiter:junit-jupiter-api:${extension.junitJupiterVersion.get()}")
+            testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:${extension.junitJupiterVersion.get()}}")
         }
 
         return task.apply {

@@ -1,6 +1,9 @@
 package net.bnb1.kradle.blueprints
 
+import net.bnb1.kradle.KradleExtension
 import net.bnb1.kradle.PluginBlueprint
+import net.bnb1.kradle.implementation
+import net.bnb1.kradle.testImplementation
 import org.gradle.api.Project
 import org.gradle.kotlin.dsl.dependencies
 import org.gradle.kotlin.dsl.extra
@@ -12,10 +15,13 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 object KotlinBlueprint : PluginBlueprint<KotlinPluginWrapper> {
 
     override fun configure(project: Project) {
+        val extension = project.extensions.getByType(KradleExtension::class.java)
+
         project.dependencies {
-            add("implementation", platform("org.jetbrains.kotlin:kotlin-bom"))
-            add("implementation", "org.jetbrains.kotlin:kotlin-stdlib-jdk8")
-            add("testImplementation", "org.jetbrains.kotlin:kotlin-test")
+            implementation(platform("org.jetbrains.kotlin:kotlin-bom"))
+            implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
+            implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:${extension.kotlinxCoroutinesVersion.get()}")
+            testImplementation("org.jetbrains.kotlin:kotlin-test")
         }
 
         project.extra["kotlinVersion"] = project.getKotlinPluginVersion()
