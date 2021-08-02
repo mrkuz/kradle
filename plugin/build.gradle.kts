@@ -30,9 +30,8 @@ dependencies {
     implementation("io.gitlab.arturbosch.detekt:detekt-gradle-plugin:1.17.1")
     implementation("gradle.plugin.com.github.jengelman.gradle.plugins:shadow:7.0.0")
 
-    // Sets the default Kotlin version for the target project
-    // (can be overridden by explicitly applying the Kotlin plugin)
-    implementation("org.jetbrains.kotlin:kotlin-gradle-plugin:1.5.21")
+    // Target project needs to apply the Kotlin plugin
+    compileOnly("org.jetbrains.kotlin:kotlin-gradle-plugin")
 
     // Miscellaneous
 
