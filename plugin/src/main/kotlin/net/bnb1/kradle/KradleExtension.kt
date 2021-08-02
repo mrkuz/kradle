@@ -6,13 +6,27 @@ import javax.inject.Inject
 
 open class KradleExtension @Inject constructor(factory: ObjectFactory) {
 
-    val targetJvm: Property<String> = factory.property("1.8")
-    val junitJupiterVersion: Property<String> = factory.property("5.7.2")
-    val kotlinxCoroutinesVersion: Property<String> = factory.property("1.5.1")
+    val targetJvm = factory.property("1.8")
+    val kotlinxCoroutinesVersion = factory.property("1.5.1")
+
+    val junitJupiterVersion = factory.empty<String>()
+    val kotestVersion = factory.empty<String>()
+
+    fun useJunitJupiter(version: String = "5.7.2") {
+        junitJupiterVersion.set(version)
+    }
+
+    fun useKotest(version: String = "4.6.1") {
+        kotestVersion.set(version)
+    }
 
     private inline fun <reified T> ObjectFactory.property(default: T): Property<T> {
         return property(T::class.java).apply {
             convention(default)
         }
+    }
+
+    private inline fun <reified T> ObjectFactory.empty(): Property<T> {
+        return property(T::class.java)
     }
 }
