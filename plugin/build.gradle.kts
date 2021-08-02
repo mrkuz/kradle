@@ -23,6 +23,7 @@ dependencies {
     implementation("com.github.ben-manes:gradle-versions-plugin:0.39.0")
     implementation("org.jetbrains.dokka:dokka-gradle-plugin:1.4.30")
     implementation("org.jetbrains.kotlin:kotlin-allopen")
+    implementation("org.jetbrains.kotlin:kotlin-serialization")
     implementation("org.jetbrains.kotlinx:kotlinx-benchmark-plugin:0.3.1")
     implementation("com.adarshr:gradle-test-logger-plugin:3.0.0")
     implementation("org.owasp:dependency-check-gradle:6.2.2")

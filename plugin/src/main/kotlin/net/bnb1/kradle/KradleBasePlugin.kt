@@ -9,6 +9,7 @@ import org.gradle.api.Project
 import org.gradle.kotlin.dsl.create
 import org.gradle.kotlin.dsl.repositories
 import org.jetbrains.kotlin.allopen.gradle.AllOpenGradleSubplugin
+import org.jetbrains.kotlinx.serialization.gradle.SerializationGradleSubplugin
 
 class KradleBasePlugin : Plugin<Project> {
 
@@ -29,9 +30,12 @@ class KradleBasePlugin : Plugin<Project> {
         }
 
         project.apply(KotlinBlueprint)
+
+        project.apply(AllOpenGradleSubplugin::class.java)
+        project.apply(SerializationGradleSubplugin::class.java)
+
         project.apply(DependencyUpdatesBlueprint)
         project.apply(DokkaBlueprint)
-        project.apply(AllOpenGradleSubplugin::class.java)
         project.apply(BenchmarksBlueprint)
         project.apply(TestLoggerPlugin::class.java)
         project.apply(JacocoBlueprint)
