@@ -9,12 +9,8 @@ open class KradleExtension @Inject constructor(factory: ObjectFactory) {
     val targetJvm = factory.property("1.8")
     val kotlinxCoroutinesVersion = factory.property("1.5.1")
 
-    val junitJupiterVersion = factory.empty<String>()
+    val junitJupiterVersion = factory.property("5.7.2")
     val kotestVersion = factory.empty<String>()
-
-    fun useJunitJupiter(version: String = "5.7.2") {
-        junitJupiterVersion.set(version)
-    }
 
     fun useKotest(version: String = "4.6.1") {
         kotestVersion.set(version)
