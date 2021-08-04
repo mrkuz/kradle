@@ -2,7 +2,6 @@ package net.bnb1.kradle
 
 import com.adarshr.gradle.testlogger.TestLoggerPlugin
 import net.bnb1.kradle.blueprints.*
-import net.bnb1.kradle.tasks.GenerateBuildPropertiesTask
 import org.gradle.api.GradleException
 import org.gradle.api.Plugin
 import org.gradle.api.Project
@@ -45,6 +44,7 @@ class KradleBasePlugin : Plugin<Project> {
 
         project.apply(GitPlugin::class.java)
         project.apply(ProjectPropertiesPlugin::class.java)
+        project.apply(BuildPropertiesPlugin::class.java)
 
         project.alias("showDependencyUpdates", "Displays dependency updates", "dependencyUpdates")
         project.alias("analyzeDependencies", "Analyzes dependencies for vulnerabilities", "dependencyCheckAnalyze")
@@ -53,8 +53,6 @@ class KradleBasePlugin : Plugin<Project> {
         project.alias("lint", "Runs ktlint", "ktlintCheck")
         project.alias("analyzeCode", "Runs detekt code analysis", "detekt")
         project.alias("package", "Creates JAR", "jar")
-
-        project.create("generateBuildProperties", "Generates build.properties", GenerateBuildPropertiesTask::class.java)
 
         project.configure("test", TestBlueprint)
     }
