@@ -23,17 +23,17 @@ object BenchmarksBlueprint : PluginBlueprint<BenchmarksPlugin> {
             annotation("org.openjdk.jmh.annotations.State")
         }
 
+        createSourceSet(project)
+        project.configure<BenchmarksExtension> {
+            targets.register("$SOURCE_SET_NAME")
+        }
+
         project.afterEvaluate {
             project.tasks.named<Jar>("${SOURCE_SET_NAME}BenchmarkJar").configure {
                 // Required workaround. Otherwise running the benchmarks will complain because of
                 // duplicate META-INF/versions/9/module-info.class
                 duplicatesStrategy = DuplicatesStrategy.INCLUDE
             }
-        }
-
-        createSourceSet(project)
-        project.configure<BenchmarksExtension> {
-            targets.register("$SOURCE_SET_NAME")
         }
     }
 
