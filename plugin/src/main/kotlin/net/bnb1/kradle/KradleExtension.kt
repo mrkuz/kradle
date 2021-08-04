@@ -1,28 +1,26 @@
 package net.bnb1.kradle
 
 import org.gradle.api.model.ObjectFactory
-import org.gradle.api.provider.Property
 import javax.inject.Inject
 
 open class KradleExtension @Inject constructor(factory: ObjectFactory) {
 
-    val targetJvm = factory.property("1.8")
+    val targetJvm = factory.property("16")
     val kotlinxCoroutinesVersion = factory.property("1.5.1")
 
     val junitJupiterVersion = factory.property("5.7.2")
-    val kotestVersion = factory.empty<String>()
 
+    val image = ImageExtension(factory)
+    fun image(configure: ImageExtension.() -> Unit) = configure(image)
+
+    val kotestVersion = factory.empty<String>()
     fun useKotest(version: String = "4.6.1") {
         kotestVersion.set(version)
     }
 
-    private inline fun <reified T> ObjectFactory.property(default: T): Property<T> {
-        return property(T::class.java).apply {
-            convention(default)
-        }
-    }
+    open class ImageExtension(factory: ObjectFactory) {
 
-    private inline fun <reified T> ObjectFactory.empty(): Property<T> {
-        return property(T::class.java)
+        val baseImage = factory.property("bellsoft/liberica-openjdk-alpine-musl:16")
+        val ports = factory.setProperty(Int::class.java)
     }
 }

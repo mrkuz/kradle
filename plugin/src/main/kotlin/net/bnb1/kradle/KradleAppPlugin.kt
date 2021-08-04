@@ -1,6 +1,7 @@
 package net.bnb1.kradle
 
 import net.bnb1.kradle.blueprints.ApplicationBlueprint
+import net.bnb1.kradle.blueprints.JibBlueprint
 import net.bnb1.kradle.blueprints.ShadowBlueprint
 import org.gradle.api.Plugin
 import org.gradle.api.Project
@@ -11,7 +12,9 @@ class KradleAppPlugin : Plugin<Project> {
         project.apply(KradleBasePlugin::class.java)
         project.apply(ApplicationBlueprint)
         project.apply(ShadowBlueprint)
+        project.apply(JibBlueprint)
 
         project.alias("uberJar", "Creates Uber-JAR", "shadowJar")
+        project.alias("buildImage", "Builds Docker image", "jibDockerBuild")
     }
 }

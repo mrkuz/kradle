@@ -30,6 +30,7 @@ dependencies {
     implementation("org.jlleitschuh.gradle:ktlint-gradle:10.1.0")
     implementation("io.gitlab.arturbosch.detekt:detekt-gradle-plugin:1.17.1")
     implementation("gradle.plugin.com.github.jengelman.gradle.plugins:shadow:7.0.0")
+    implementation("gradle.plugin.com.google.cloud.tools:jib-gradle-plugin:3.1.2")
 
     // Target project needs to apply the Kotlin plugin
     compileOnly("org.jetbrains.kotlin:kotlin-gradle-plugin")
