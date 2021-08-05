@@ -4,7 +4,9 @@ import com.google.cloud.tools.jib.gradle.JibExtension
 import com.google.cloud.tools.jib.gradle.JibPlugin
 import net.bnb1.kradle.KradleExtension
 import net.bnb1.kradle.PluginBlueprint
+import net.bnb1.kradle.extraDir
 import org.gradle.api.Project
+import org.gradle.api.plugins.JavaApplication
 import org.gradle.kotlin.dsl.configure
 import java.net.URL
 import java.nio.file.Files
@@ -15,13 +17,20 @@ object JibBlueprint : PluginBlueprint<JibPlugin> {
         project.afterEvaluate {
             val extension = project.extensions.getByType(KradleExtension::class.java).image
             val useJvmKill = extension.jvmKillVersion.isPresent
+            val useAppSh = extension.useAppSh.get()
 
-            lateinit var jvmKillFileName: String
+            var jvmKillFileName = if (useJvmKill) {
+                "jvmkill-${extension.jvmKillVersion.get()}.so"
+            } else {
+                ""
+            }
 
-            if (useJvmKill) {
-                jvmKillFileName = "jvmkill-${extension.jvmKillVersion.get()}.so"
-                project.tasks.named("jibDockerBuild").configure {
-                    doFirst {
+            project.tasks.named("jibDockerBuild").configure {
+                doFirst {
+                    if (useAppSh) {
+                        createAppSh(project)
+                    }
+                    if (useJvmKill) {
                         downloadJvmKill(project, extension.jvmKillVersion.get(), jvmKillFileName)
                     }
                 }
@@ -45,17 +54,26 @@ object JibBlueprint : PluginBlueprint<JibPlugin> {
                     }
 
                     if (useJvmKill) {
-                        jvmFlags = jvmFlags + listOf("-agentpath:/app/extra/${jvmKillFileName}")
+                        if (useAppSh) {
+                            environment = mapOf("JAVA_AGENT" to "/app/extra/${jvmKillFileName}")
+                        } else {
+                            jvmFlags = listOf("-agentpath:/app/extra/${jvmKillFileName}")
+                        }
+                    }
+
+                    if (useAppSh) {
+                        entrypoint = listOf("/bin/sh", "/app/extra/app.sh")
                     }
                 }
 
-                if (useJvmKill) {
+                if (project.extraDir.exists()) {
                     extraDirectories {
                         paths {
                             path {
-                                setFrom("${project.rootDir}/extra/")
+                                setFrom(project.extraDir)
                                 into = "/app/extra"
                             }
+                            permissions = mapOf("**/*.sh" to "755")
                         }
                     }
                 }
@@ -64,7 +82,7 @@ object JibBlueprint : PluginBlueprint<JibPlugin> {
     }
 
     private fun downloadJvmKill(project: Project, jvmKillVersion: String, jvmKillFileName: String) {
-        val jvmKillFile = project.rootDir.resolve("extra/${jvmKillFileName}")
+        val jvmKillFile = project.extraDir.resolve("$jvmKillFileName")
         if (jvmKillFile.exists()) {
             return
         }
@@ -75,5 +93,37 @@ object JibBlueprint : PluginBlueprint<JibPlugin> {
         val url = URL(jvmKillBaseUrl + "/jvmkill-${jvmKillVersion}-RELEASE.so")
         project.logger.lifecycle("Downloading $url")
         url.openStream().use { Files.copy(it, jvmKillFile.toPath()) }
+    }
+
+    private fun createAppSh(project: Project) {
+        val file = project.rootDir.resolve("extra/app.sh")
+        if (file.exists()) {
+            return
+        }
+
+        val javaExtension = project.extensions.getByType(JavaApplication::class.java)
+        val mainClass = javaExtension.mainClass.get()
+
+        file.writeText(
+            """
+            # !/bin/sh -e
+            if [ "${'$'}{JAVA_URANDOM:-true}" = "true" ]; then
+                JAVA_OPTS="-Djava.security.egd=file:/dev/./urandom ${'$'}JAVA_OPTS"
+            fi
+            if [ "${'$'}JAVA_DIAGNOSTICS" = "true" ]; then
+                JAVA_OPTS="-XX:+UnlockDiagnosticVMOptions -XX:+PrintFlagsFinal -Xlog:gc ${'$'}JAVA_OPTS"
+            fi
+            if [ "${'$'}JAVA_DEBUG" = "true" ]; then
+                JAVA_OPTS="-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:${'$'}{JAVA_DEBUG_PORT:-8000} ${'$'}JAVA_OPTS"
+            fi
+            if [ -n "${'$'}JAVA_AGENT" ]; then
+                JAVA_OPTS="-agentpath:${'$'}JAVA_AGENT ${'$'}JAVA_OPTS"
+            fi
+            JAVA_OPTS="-XX:+ExitOnOutOfMemoryError ${'$'}JAVA_OPTS"
+
+            echo exec java ${'$'}JAVA_OPTS -cp @/app/jib-classpath-file $mainClass "${'$'}@"
+            exec java ${'$'}JAVA_OPTS -cp @/app/jib-classpath-file $mainClass "${'$'}@"
+        """.trimIndent()
+        )
     }
 }

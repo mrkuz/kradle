@@ -45,3 +45,6 @@ inline fun <reified T : Task> Project.configure(name: String, blueprint: TaskBlu
         blueprint.configure(this@configure, this)
     }
 }
+
+val Project.extraDir
+    get() = file(this.rootDir.resolve("extra"))

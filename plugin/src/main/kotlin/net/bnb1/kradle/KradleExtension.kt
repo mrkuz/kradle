@@ -17,7 +17,7 @@ open class KradleExtension @Inject constructor(factory: ObjectFactory) {
     fun useKotest(version: String = "4.6.1") {
         kotestVersion.set(version)
     }
-    
+
     open class ImageExtension(factory: ObjectFactory) {
 
         val baseImage = factory.property("bellsoft/liberica-openjdk-alpine:16")
@@ -26,6 +26,11 @@ open class KradleExtension @Inject constructor(factory: ObjectFactory) {
         val jvmKillVersion = factory.empty<String>()
         fun useJvmKill(version: String = "1.16.0") {
             jvmKillVersion.set(version)
+        }
+
+        val useAppSh = factory.property(false)
+        fun useAppSh() {
+            useAppSh.set(true)
         }
     }
 }
