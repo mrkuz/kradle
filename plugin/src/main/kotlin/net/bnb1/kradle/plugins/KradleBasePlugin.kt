@@ -5,7 +5,6 @@ import net.bnb1.kradle.KradleExtension
 import net.bnb1.kradle.alias
 import net.bnb1.kradle.apply
 import net.bnb1.kradle.blueprints.*
-import net.bnb1.kradle.configure
 import org.gradle.api.GradleException
 import org.gradle.api.Plugin
 import org.gradle.api.Project
@@ -34,6 +33,7 @@ class KradleBasePlugin : Plugin<Project> {
 
         project.apply(JavaBlueprint)
         project.apply(KotlinBlueprint)
+        project.apply(TestBlueprint)
         project.apply(AllOpenGradleSubplugin::class.java)
         project.apply(SerializationGradleSubplugin::class.java)
 
@@ -57,7 +57,5 @@ class KradleBasePlugin : Plugin<Project> {
         project.alias("lint", "Runs ktlint", "ktlintCheck")
         project.alias("analyzeCode", "Runs detekt code analysis", "detekt")
         project.alias("package", "Creates JAR", "jar")
-
-        project.configure("test", TestBlueprint)
     }
 }

@@ -6,7 +6,6 @@ import org.gradle.api.Task
 import org.gradle.api.model.ObjectFactory
 import org.gradle.api.provider.Property
 import org.gradle.kotlin.dsl.DependencyHandlerScope
-import org.gradle.kotlin.dsl.named
 
 const val TASK_GROUP = "Kradle"
 
@@ -19,10 +18,6 @@ inline fun <reified T : Plugin<Project>> Project.apply(blueprint: PluginBlueprin
 
 fun <T : Plugin<Project>> Project.apply(type: Class<T>) {
     pluginManager.apply(type)
-}
-
-inline fun <reified T : Task> Project.create(name: String, description: String, blueprint: TaskBlueprint<T>): T {
-    return blueprint.configure(this, create(name, description, T::class.java))
 }
 
 fun <T : Task> Project.create(name: String, description: String, type: Class<T>): T {
@@ -43,12 +38,6 @@ fun Project.alias(name: String, description: String, targetTask: String): Task {
     val task = create(name, description + " (alias for '${targetTask}')")
     task.dependsOn(targetTask)
     return task
-}
-
-inline fun <reified T : Task> Project.configure(name: String, blueprint: TaskBlueprint<T>) {
-    tasks.named<T>(name).configure {
-        blueprint.configure(this@configure, this)
-    }
 }
 
 val Project.extraDir
