@@ -49,11 +49,11 @@ gradlePlugin {
     plugins {
         create("kradleApp") {
             id = "net.bnb1.kradle-app"
-            implementationClass = "net.bnb1.kradle.KradleAppPlugin"
+            implementationClass = "net.bnb1.kradle.plugins.KradleAppPlugin"
         }
         create("kradleLib") {
             id = "net.bnb1.kradle-lib"
-            implementationClass = "net.bnb1.kradle.KradleLibPlugin"
+            implementationClass = "net.bnb1.kradle.plugins.KradleLibPlugin"
         }
     }
 }

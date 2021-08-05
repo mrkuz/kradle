@@ -3,9 +3,14 @@ package net.bnb1.kradle
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.api.Task
+import org.gradle.api.model.ObjectFactory
+import org.gradle.api.provider.Property
+import org.gradle.kotlin.dsl.DependencyHandlerScope
 import org.gradle.kotlin.dsl.named
 
 const val TASK_GROUP = "Kradle"
+
+// Project
 
 inline fun <reified T : Plugin<Project>> Project.apply(blueprint: PluginBlueprint<T>) {
     pluginManager.apply(T::class.java)
@@ -48,3 +53,21 @@ inline fun <reified T : Task> Project.configure(name: String, blueprint: TaskBlu
 
 val Project.extraDir
     get() = file(this.rootDir.resolve("extra"))
+
+// DependencyHandlerScope
+
+fun DependencyHandlerScope.implementation(notation: Any) = add("implementation", notation)
+fun DependencyHandlerScope.testImplementation(notation: Any) = add("testImplementation", notation)
+fun DependencyHandlerScope.testRuntimeOnly(notation: Any) = add("testRuntimeOnly", notation)
+
+// ObjectFactory
+
+inline fun <reified T> ObjectFactory.property(default: T): Property<T> {
+    return property(T::class.java).apply {
+        convention(default)
+    }
+}
+
+inline fun <reified T> ObjectFactory.empty(): Property<T> {
+    return property(T::class.java)
+}

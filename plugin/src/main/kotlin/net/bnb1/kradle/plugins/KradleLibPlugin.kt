@@ -1,5 +1,7 @@
-package net.bnb1.kradle
+package net.bnb1.kradle.plugins
 
+import net.bnb1.kradle.alias
+import net.bnb1.kradle.apply
 import net.bnb1.kradle.blueprints.MavenPublishBlueprint
 import org.gradle.api.Plugin
 import org.gradle.api.Project

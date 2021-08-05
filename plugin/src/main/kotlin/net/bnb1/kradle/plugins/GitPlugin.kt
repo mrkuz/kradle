@@ -1,4 +1,4 @@
-package net.bnb1.kradle
+package net.bnb1.kradle.plugins
 
 import org.eclipse.jgit.api.Git
 import org.eclipse.jgit.lib.Constants;
