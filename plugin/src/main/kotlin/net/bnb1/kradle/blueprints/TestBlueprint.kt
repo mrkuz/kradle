@@ -13,41 +13,37 @@ import org.gradle.kotlin.dsl.named
 
 object TestBlueprint : PluginBlueprint<NoOpPlugin> {
 
-    override fun configure(project: Project) {
-        project.afterEvaluate {
-            val extension = project.extensions.getByType(KradleExtension::class.java)
-            val useJunitJupiter = extension.junitJupiterVersion.isPresent
-            val useKotest = extension.kotestVersion.isPresent
-
-            if (useJunitJupiter) {
-                project.dependencies {
-                    testImplementation("org.junit.jupiter:junit-jupiter-api:${extension.junitJupiterVersion.get()}")
-                    testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:${extension.junitJupiterVersion.get()}}")
-                }
+    override fun configure(project: Project, extension: KradleExtension) {
+        val useJunitJupiter = extension.junitJupiterVersion.isPresent
+        if (useJunitJupiter) {
+            project.dependencies {
+                testImplementation("org.junit.jupiter:junit-jupiter-api:${extension.junitJupiterVersion.get()}")
+                testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:${extension.junitJupiterVersion.get()}}")
             }
+        }
 
-            if (useKotest) {
-                project.dependencies {
-                    testImplementation("io.kotest:kotest-assertions-core:${extension.kotestVersion.get()}")
-                    if (useJunitJupiter) {
-                        testImplementation("io.kotest:kotest-runner-junit5:${extension.kotestVersion.get()}")
-                    } else {
-                        testImplementation("io.kotest:kotest-runner-junit4:${extension.kotestVersion.get()}")
-                    }
-                }
-            }
-
-            project.tasks.named<Test>("test").configure {
+        val useKotest = extension.kotestVersion.isPresent
+        if (useKotest) {
+            project.dependencies {
+                testImplementation("io.kotest:kotest-assertions-core:${extension.kotestVersion.get()}")
                 if (useJunitJupiter) {
-                    useJUnitPlatform()
+                    testImplementation("io.kotest:kotest-runner-junit5:${extension.kotestVersion.get()}")
+                } else {
+                    testImplementation("io.kotest:kotest-runner-junit4:${extension.kotestVersion.get()}")
                 }
-                testLogging {
-                    events = setOf(TestLogEvent.SKIPPED, TestLogEvent.PASSED, TestLogEvent.FAILED)
-                }
-                include("**/*Test.class")
-                include("**/*Tests.class")
-                include("**/*IT.class")
             }
+        }
+
+        project.tasks.named<Test>("test").configure {
+            if (useJunitJupiter) {
+                useJUnitPlatform()
+            }
+            testLogging {
+                events = setOf(TestLogEvent.SKIPPED, TestLogEvent.PASSED, TestLogEvent.FAILED)
+            }
+            include("**/*Test.class")
+            include("**/*Tests.class")
+            include("**/*IT.class")
         }
     }
 }

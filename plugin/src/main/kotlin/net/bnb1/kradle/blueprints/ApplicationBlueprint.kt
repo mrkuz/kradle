@@ -1,5 +1,6 @@
 package net.bnb1.kradle.blueprints
 
+import net.bnb1.kradle.KradleExtension
 import net.bnb1.kradle.PluginBlueprint
 import org.gradle.api.Project
 import org.gradle.api.plugins.ApplicationPlugin
@@ -13,7 +14,14 @@ object ApplicationBlueprint : PluginBlueprint<ApplicationPlugin> {
 
     private val GROUP_PATTERN = Regex("^[a-z]+(\\.[a-z0-9]+)+$")
 
-    override fun configure(project: Project) {
+    override fun configure(project: Project, extension: KradleExtension) {
+        if (!GROUP_PATTERN.matches(project.group.toString())) {
+            project.logger.warn("WARNING: Group doesn't comply with Java's package name rules: ${project.group}")
+        }
+        if (project.version == "unspecified") {
+            project.logger.warn("WARNING: Version is not specified")
+        }
+
         project.tasks.named<JavaExec>("run").configure {
             // Allows the application to figure out we are running in development mode
             environment("DEV_MODE", "true")
@@ -22,20 +30,11 @@ object ApplicationBlueprint : PluginBlueprint<ApplicationPlugin> {
             jvmArgs = listOf("-XX:TieredStopAtLevel=1")
         }
 
-        project.afterEvaluate {
-            if (!GROUP_PATTERN.matches(project.group.toString())) {
-                project.logger.warn("WARNING: Group doesn't comply with Java's package name rules: ${project.group}")
-            }
-            if (project.version == "unspecified") {
-                project.logger.warn("WARNING: Version is not specified")
-            }
-
-            val extension = project.extensions.getByType(JavaApplication::class.java)
-            val mainClass = extension.mainClass.get()
-            project.tasks.named<Jar>("jar").configure {
-                manifest {
-                    attributes(Pair("Main-Class", mainClass))
-                }
+        val javaExtension = project.extensions.getByType(JavaApplication::class.java)
+        val mainClass = javaExtension.mainClass.get()
+        project.tasks.named<Jar>("jar").configure {
+            manifest {
+                attributes(Pair("Main-Class", mainClass))
             }
         }
     }

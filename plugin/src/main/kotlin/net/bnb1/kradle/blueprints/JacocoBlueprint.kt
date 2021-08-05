@@ -1,5 +1,6 @@
 package net.bnb1.kradle.blueprints
 
+import net.bnb1.kradle.KradleExtension
 import net.bnb1.kradle.PluginBlueprint
 import org.gradle.api.Project
 import org.gradle.kotlin.dsl.named
@@ -8,10 +9,11 @@ import org.gradle.testing.jacoco.tasks.JacocoReport
 
 object JacocoBlueprint : PluginBlueprint<JacocoPlugin> {
 
-    override fun configure(project: Project) {
+    override fun configure(project: Project, extension: KradleExtension) {
         project.tasks.named("test").configure {
             finalizedBy("jacocoTestReport")
         }
+
         project.tasks.named<JacocoReport>("jacocoTestReport").configure {
             dependsOn("test")
             reports {

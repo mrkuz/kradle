@@ -1,6 +1,8 @@
 package net.bnb1.kradle.blueprints
 
+import net.bnb1.kradle.KradleExtension
 import net.bnb1.kradle.PluginBlueprint
+import net.bnb1.kradle.alias
 import org.gradle.api.Project
 import org.gradle.kotlin.dsl.named
 import org.jetbrains.dokka.gradle.DokkaPlugin
@@ -9,7 +11,7 @@ import java.io.File
 
 object DokkaBlueprint : PluginBlueprint<DokkaPlugin> {
 
-    override fun configure(project: Project) {
+    override fun configure(project: Project, extension: KradleExtension) {
         project.tasks.named<DokkaTask>("dokkaHtml").configure {
             outputDirectory.set(project.buildDir.resolve("docs"))
             dokkaSourceSets.forEach {
@@ -28,5 +30,7 @@ object DokkaBlueprint : PluginBlueprint<DokkaPlugin> {
                 if (includeIfExists("package.md")) return@forEach
             }
         }
+
+        project.alias("generateDocumentation", "Generates Dokka HTML documentation", "dokkaHtml")
     }
 }

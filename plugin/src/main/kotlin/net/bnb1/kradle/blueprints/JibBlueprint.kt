@@ -4,6 +4,7 @@ import com.google.cloud.tools.jib.gradle.JibExtension
 import com.google.cloud.tools.jib.gradle.JibPlugin
 import net.bnb1.kradle.KradleExtension
 import net.bnb1.kradle.PluginBlueprint
+import net.bnb1.kradle.alias
 import net.bnb1.kradle.extraDir
 import org.gradle.api.Project
 import org.gradle.api.plugins.JavaApplication
@@ -13,72 +14,70 @@ import java.nio.file.Files
 
 object JibBlueprint : PluginBlueprint<JibPlugin> {
 
-    override fun configure(project: Project) {
-        project.afterEvaluate {
-            val extension = project.extensions.getByType(KradleExtension::class.java).image
-            val useJvmKill = extension.jvmKillVersion.isPresent
-            val useAppSh = extension.useAppSh.get()
+    override fun configure(project: Project, extension: KradleExtension) {
+        val useJvmKill = extension.image.jvmKillVersion.isPresent
+        val useAppSh = extension.image.useAppSh.get()
 
-            var jvmKillFileName = if (useJvmKill) {
-                "jvmkill-${extension.jvmKillVersion.get()}.so"
-            } else {
-                ""
-            }
+        var jvmKillFileName = if (useJvmKill) {
+            "jvmkill-${extension.image.jvmKillVersion.get()}.so"
+        } else {
+            ""
+        }
 
-            project.tasks.named("jibDockerBuild").configure {
-                doFirst {
-                    if (useAppSh) {
-                        createAppSh(project)
-                    }
-                    if (useJvmKill) {
-                        downloadJvmKill(project, extension.jvmKillVersion.get(), jvmKillFileName)
-                    }
+        project.tasks.named("jibDockerBuild").configure {
+            doFirst {
+                if (useAppSh) {
+                    createAppSh(project)
+                }
+                if (useJvmKill) {
+                    downloadJvmKill(project, extension.image.jvmKillVersion.get(), jvmKillFileName)
                 }
             }
+        }
 
-            project.configure<JibExtension> {
+        project.configure<JibExtension> {
+            from {
+                image = extension.image.baseImage.get()
+            }
 
-                from {
-                    image = extension.baseImage.get()
+            to {
+                image = "${project.rootProject.name}:latest"
+                tags = setOf(project.version.toString())
+            }
+
+            container {
+                creationTime = "USE_CURRENT_TIMESTAMP"
+                if (extension.image.ports.isPresent) {
+                    ports = extension.image.ports.get().map { it.toString() }
                 }
 
-                to {
-                    image = "${project.rootProject.name}:latest"
-                    tags = setOf(project.version.toString())
-                }
-
-                container {
-                    creationTime = "USE_CURRENT_TIMESTAMP"
-                    if (extension.ports.isPresent) {
-                        ports = extension.ports.get().map { it.toString() }
-                    }
-
-                    if (useJvmKill) {
-                        if (useAppSh) {
-                            environment = mapOf("JAVA_AGENT" to "/app/extra/${jvmKillFileName}")
-                        } else {
-                            jvmFlags = listOf("-agentpath:/app/extra/${jvmKillFileName}")
-                        }
-                    }
-
+                if (useJvmKill) {
                     if (useAppSh) {
-                        entrypoint = listOf("/bin/sh", "/app/extra/app.sh")
+                        environment = mapOf("JAVA_AGENT" to "/app/extra/${jvmKillFileName}")
+                    } else {
+                        jvmFlags = listOf("-agentpath:/app/extra/${jvmKillFileName}")
                     }
                 }
 
-                if (project.extraDir.exists()) {
-                    extraDirectories {
-                        paths {
-                            path {
-                                setFrom(project.extraDir)
-                                into = "/app/extra"
-                            }
-                            permissions = mapOf("**/*.sh" to "755")
+                if (useAppSh) {
+                    entrypoint = listOf("/bin/sh", "/app/extra/app.sh")
+                }
+            }
+
+            if (project.extraDir.exists()) {
+                extraDirectories {
+                    paths {
+                        path {
+                            setFrom(project.extraDir)
+                            into = "/app/extra"
                         }
+                        permissions = mapOf("**/*.sh" to "755")
                     }
                 }
             }
         }
+
+        project.alias("buildImage", "Builds Docker image", "jibDockerBuild")
     }
 
     private fun downloadJvmKill(project: Project, jvmKillVersion: String, jvmKillFileName: String) {

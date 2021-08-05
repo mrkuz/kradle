@@ -2,7 +2,6 @@ package net.bnb1.kradle.plugins
 
 import com.adarshr.gradle.testlogger.TestLoggerPlugin
 import net.bnb1.kradle.KradleExtension
-import net.bnb1.kradle.alias
 import net.bnb1.kradle.apply
 import net.bnb1.kradle.blueprints.*
 import org.gradle.api.GradleException
@@ -48,14 +47,6 @@ class KradleBasePlugin : Plugin<Project> {
 
         project.apply(GitPlugin::class.java)
         project.apply(ProjectPropertiesPlugin::class.java)
-        project.apply(BuildPropertiesPlugin::class.java)
-
-        project.alias("showDependencyUpdates", "Displays dependency updates", "dependencyUpdates")
-        project.alias("analyzeDependencies", "Analyzes dependencies for vulnerabilities", "dependencyCheckAnalyze")
-        project.alias("generateDocumentation", "Generates Dokka HTML documentation", "dokkaHtml")
-        project.alias("runBenchmarks", "Runs all JMH benchmarks", "benchmark")
-        project.alias("lint", "Runs ktlint", "ktlintCheck")
-        project.alias("analyzeCode", "Runs detekt code analysis", "detekt")
-        project.alias("package", "Creates JAR", "jar")
+        project.apply(BuildPropertiesBlueprint)
     }
 }

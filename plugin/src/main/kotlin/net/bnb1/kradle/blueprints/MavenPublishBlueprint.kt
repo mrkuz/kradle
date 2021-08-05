@@ -1,6 +1,8 @@
 package net.bnb1.kradle.blueprints
 
+import net.bnb1.kradle.KradleExtension
 import net.bnb1.kradle.PluginBlueprint
+import net.bnb1.kradle.alias
 import org.gradle.api.Project
 import org.gradle.api.publish.PublishingExtension
 import org.gradle.api.publish.maven.MavenPublication
@@ -9,7 +11,7 @@ import org.gradle.kotlin.dsl.configure
 
 object MavenPublishBlueprint : PluginBlueprint<MavenPublishPlugin> {
 
-    override fun configure(project: Project) {
+    override fun configure(project: Project, extension: KradleExtension) {
         project.configure<PublishingExtension> {
             publications {
                 create("default", MavenPublication::class.java) {
@@ -18,5 +20,7 @@ object MavenPublishBlueprint : PluginBlueprint<MavenPublishPlugin> {
                 }
             }
         }
+
+        project.alias("install", "Installs JAR to local Maven repository", "publishToMavenLocal")
     }
 }

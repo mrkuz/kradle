@@ -13,12 +13,16 @@ const val TASK_GROUP = "Kradle"
 
 inline fun <reified T : Plugin<Project>> Project.apply(blueprint: PluginBlueprint<T>) {
     pluginManager.apply(T::class.java)
-    blueprint.configure(this)
+    blueprint.configureEager(this)
+    afterEvaluate {
+        val extension = project.extensions.getByType(KradleExtension::class.java)
+        if (!extension.isDisabled(blueprint)) {
+            blueprint.configure(this, extension)
+        }
+    }
 }
 
-fun <T : Plugin<Project>> Project.apply(type: Class<T>) {
-    pluginManager.apply(type)
-}
+fun <T : Plugin<Project>> Project.apply(type: Class<T>) = pluginManager.apply(type)
 
 fun <T : Task> Project.create(name: String, description: String, type: Class<T>): T {
     val task = tasks.create(name, type)
@@ -57,6 +61,4 @@ inline fun <reified T> ObjectFactory.property(default: T): Property<T> {
     }
 }
 
-inline fun <reified T> ObjectFactory.empty(): Property<T> {
-    return property(T::class.java)
-}
+inline fun <reified T> ObjectFactory.empty(): Property<T> = property(T::class.java)

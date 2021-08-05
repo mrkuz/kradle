@@ -2,7 +2,9 @@ package net.bnb1.kradle.blueprints
 
 import kotlinx.benchmark.gradle.BenchmarksExtension
 import kotlinx.benchmark.gradle.BenchmarksPlugin
+import net.bnb1.kradle.KradleExtension
 import net.bnb1.kradle.PluginBlueprint
+import net.bnb1.kradle.alias
 import org.gradle.api.Project
 import org.gradle.api.file.DuplicatesStrategy
 import org.gradle.api.plugins.JavaPluginConvention
@@ -17,24 +19,26 @@ object BenchmarksBlueprint : PluginBlueprint<BenchmarksPlugin> {
 
     private const val SOURCE_SET_NAME = "benchmark"
 
-    override fun configure(project: Project) {
+    override fun configureEager(project: Project) {
+        createSourceSet(project)
+        project.configure<BenchmarksExtension> {
+            targets.register("$SOURCE_SET_NAME")
+        }
+    }
+
+    override fun configure(project: Project, extension: KradleExtension) {
         // JMH requires benchmark classes to be open
         project.configure<AllOpenExtension> {
             annotation("org.openjdk.jmh.annotations.State")
         }
 
-        createSourceSet(project)
-        project.configure<BenchmarksExtension> {
-            targets.register("$SOURCE_SET_NAME")
+        project.tasks.named<Jar>("${SOURCE_SET_NAME}BenchmarkJar").configure {
+            // Required workaround. Otherwise running the benchmarks will complain because of
+            // duplicate META-INF/versions/9/module-info.class
+            duplicatesStrategy = DuplicatesStrategy.INCLUDE
         }
 
-        project.afterEvaluate {
-            project.tasks.named<Jar>("${SOURCE_SET_NAME}BenchmarkJar").configure {
-                // Required workaround. Otherwise running the benchmarks will complain because of
-                // duplicate META-INF/versions/9/module-info.class
-                duplicatesStrategy = DuplicatesStrategy.INCLUDE
-            }
-        }
+        project.alias("runBenchmarks", "Runs all JMH benchmarks", "benchmark")
     }
 
     @Suppress("DEPRECATION")
