@@ -18,7 +18,7 @@ object TestBlueprint : PluginBlueprint<NoOpPlugin> {
         if (useJunitJupiter) {
             project.dependencies {
                 testImplementation("org.junit.jupiter:junit-jupiter-api:${extension.junitJupiterVersion.get()}")
-                testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:${extension.junitJupiterVersion.get()}}")
+                testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:${extension.junitJupiterVersion.get()}")
             }
         }
 

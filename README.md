@@ -1,4 +1,3 @@
-
 # Kradle
 
 Swiss army knive for Kotlin development.
@@ -14,25 +13,26 @@ This project aims to provide a solution for common Kotlin development tasks usin
 - [Packaging](#packaging)
 - [Create Docker images](#create-docker-image)
 
-It utilizies many other Gradle plugins. We will refer to them as vendor plugins.
-kradle takes care of applying and configuring them.
+It utilizies many other Gradle plugins. We will refer to them as vendor plugins. `kradle` takes care of applying and
+configuring them.
 
 So instead of fiddling with your build script, you just need to apply one plugin.
 
-- For Kotlin apps: net.bnb1.kradle-app
-- For Kotlin libs: net.bnb1.kradle-lib
+- For Kotlin apps: `net.bnb1.kradle-app`
+- For Kotlin libs: `net.bnb1.kradle-lib`
 
 ## Quickstart
 
-kradle is currently not available at [Gradle Plugin Portal](https://plugins.gradle.org/), so you need to install it to your local Maven repository.
+`kradle` is currently not available at [Gradle Plugin Portal](https://plugins.gradle.org/), so you need to install it to
+your local Maven repository.
 
 ```shell
 ./gradlew publishToMavenLocal
 ```
 
-In your project, add the local repository to your repositories list.
+In your project, add the local repository.
 
-`settings.gradle.kts`
+_settings.gradle.kts_
 
 ```kotlin
 pluginManagement {
@@ -47,7 +47,7 @@ rootProject.name = "demo"
 
 And finally apply the plugin.
 
-`build.gradle.kts`
+_build.gradle.kts_
 
 ```kotlin
 plugins {
@@ -65,24 +65,26 @@ application {
 
 ## Tasks
 
+These are the tasks added by `kradle`.
+
 | Task | Description | Alias for |
 |---|---|---
 | [showDependencyUpdates](#dependencyupdatesblueprint) | Displays dependency updates | dependencyUpdates
-| [lint](#ktlintblueprint) | Runs ktlint | ktlintCheck |
-| [analyzeCode](#detektblueprint) | Runs detekt code analysis | detekt |
+| [lint](#ktlintblueprint) | Runs [ktlint](https://ktlint.github.io/) | ktlintCheck |
+| [analyzeCode](#detektblueprint) | Runs [detekt](https://detekt.github.io/detekt/) code analysis | detekt |
 | [analyzeDependencies](#dependencycheckblueprint) | Analyzes dependencies for vulnerabilities | dependencyCheckAnalyze |
-| [runBenchmarks](#benchmarksblueprint) | Runs all JMH benchmarks | benchmark |
-| [generateDocumentation](#dokkablueprint) | Generates Dokka HTML documentation | dokkaHtml |
+| [runBenchmarks](#benchmarksblueprint) | Runs all [JMH](https://github.com/openjdk/jmh) benchmarks | benchmark |
+| [generateDocumentation](#dokkablueprint) | Generates [Dokka](https://kotlin.github.io/dokka/) HTML documentation | dokkaHtml |
 | [package](#javablueprint) | Creates JAR | jar |
 | [buildImage](#jibblueprint) | Builds Docker image (kradle-app only) | jibDockerBuild |
 | [uberJar](#shadowblueprint) | Creates Uber-JAR (kradle-app only) | shadowJar |
 | [install](#mavenpublishblueprint) | Installs JAR to local Maven repository (kradle-lib only) | publishToMavenLocal |
 | [generateBuildProperties](#buildpropertiesblueprint) | Generates build.properties | - |
 
-
 ## Configuration
 
-kradle provides an extension for configuration. These are all available options. The lines not commented out represent the defaults.
+`kradle` provides an extension for configuration. These are all available options. The lines __not__ commented out represent
+the defaults.
 
 ```kotlin
 kradle {
@@ -100,8 +102,6 @@ kradle {
     // disable(BuildPropertiesBlueprint::class.java)
 }
 ```
-
-You will find a more detailed explanation in the upcoming sections.
 
 ## Blueprints
 
@@ -125,16 +125,7 @@ Plugin: [Gradle Versions Plugin](https://plugins.gradle.org/plugin/com.github.be
 
 > Gradle plugin that provides tasks for discovering dependency updates.
 
-#### Description
-
-
-
-#### Tasks
-#### Aliases
-#### Project properties
-#### Configuration
-#### Dependencies
-#### Environment variables
+Adds the task `showDependencyUpdates`, which shows all available dependency updates. It only considers stable versions, no release candidates or milestone builds.
 
 ## Static code analyisis
 
@@ -144,13 +135,10 @@ Plugin: [ktlint Plugin](https://plugins.gradle.org/plugin/org.jlleitschuh.gradle
 
 > Provides a convenient wrapper plugin over the ktlint project.
 
-#### Description
-#### Tasks
-#### Aliases
-#### Project properties
-#### Configuration
-#### Dependencies
-#### Environment variables
+Adds the `lint` task, which runs [ktlint](https://ktlint.github.io/) on the project. Uses the standard rule set with one
+exception: Wildcard imports are allowed. Experimental rules are also enabled.
+
+The `lint` task is also executed when running `check`.
 
 ### DetektBlueprint
 
@@ -158,13 +146,8 @@ Plugin: [detekt Plugin](https://plugins.gradle.org/plugin/io.gitlab.arturbosch.d
 
 > Static code analysis for Kotlin.
 
-#### Description
-#### Tasks
-#### Aliases
-#### Project properties
-#### Configuration
-#### Dependencies
-#### Environment variables
+Adds the `analyzeCode` task, which runs [detekt](https://detekt.github.io/detekt/) on the project. This task is also
+executed when running `check`.
 
 ## Scan for vulnerabilities in dependencies
 
@@ -174,13 +157,7 @@ Plugin: [OWASP Dependency Check Plugin](https://plugins.gradle.org/plugin/org.ow
 
 > OWASP dependency-check-gradle plugin.
 
-#### Description
-#### Tasks
-#### Aliases
-#### Project properties
-#### Configuration
-#### Dependencies
-#### Environment variables
+Adds the `analyzeDependencies` tasks, which scans all dependencies on the runtime and compile classpath for vulnerabilities.
 
 ## Run JMH benchmarks
 
@@ -190,13 +167,8 @@ Plugin: [kotlinx.benchmark Plugin](https://plugins.gradle.org/plugin/org.jetbrai
 
 > Toolkit for running benchmarks for multiplatform Kotlin code.
 
-#### Description
-#### Tasks
-#### Aliases
-#### Project properties
-#### Configuration
-#### Dependencies
-#### Environment variables
+Adds the `runBenchmarks` tasks, which runs all [JMH](https://github.com/openjdk/jmh) benchmarks found
+under `src/benchmark/kotlin`.
 
 ## Testing
 
@@ -206,13 +178,17 @@ Plugin: [Java Plugin](https://docs.gradle.org/current/userguide/java_plugin.html
 
 > The Java plugin adds Java compilation along with testing and bundling capabilities to a project.
 
-#### Description
-#### Tasks
-#### Aliases
-#### Project properties
-#### Configuration
-#### Dependencies
-#### Environment variables
+Sets up [JUnit Jupiter](https://junit.org/junit5/) for running tests. The `kradle` extension provides a property to
+configure the version. There is also a convenience method to add [kotest](https://kotest.io/) dependencies.
+
+```kotlin
+kradle {
+    junitJupiterVersion.set("5.7.2")
+    useKotest("4.6.1")
+}
+```
+
+Test code must reside under `src/test/` and the files must end with `Test` `Tests` or `IT`.
 
 ### JacocoBlueprint
 
@@ -220,13 +196,8 @@ Plugin: [JaCocCo Plugin](https://docs.gradle.org/current/userguide/jacoco_plugin
 
 > The JaCoCo plugin provides code coverage metrics for Java code via integration with JaCoCo.
 
-#### Description
-#### Tasks
-#### Aliases
-#### Project properties
-#### Configuration
-#### Dependencies
-#### Environment variables
+Always generates [JaCoco](https://www.jacoco.org/jacoco/) code coverage reports when running tests. The report can be
+found under `build/reports/jacoco/`.
 
 ## Generate documentation
 
@@ -236,15 +207,9 @@ Plugin: [Dokka Plugin](https://plugins.gradle.org/plugin/org.jetbrains.dokka)
 
 > Dokka, the documentation engine for Kotlin.
 
-#### Description
-#### Tasks
-#### Aliases
-#### Project properties
-#### Configuration
-#### Dependencies
-#### Environment variables
+Adds the `generateDocumentation` task, which uses [Dokka](https://kotlin.github.io/dokka/) to generates a HTML documention based on KDoc comments. The documentation can be found under `build/docs`.
 
-## Packaging
+Package and module documentation can be placed in a file _package.md_ or _module.md_ in the project directory.
 
 ### ShadowBlueprint
 
@@ -254,13 +219,7 @@ Plugin: [Gradle Shadow Plugin](https://plugins.gradle.org/plugin/com.github.john
 
 > A Gradle plugin for collapsing all dependencies and project code into a single Jar file.
 
-#### Description
-#### Tasks
-#### Aliases
-#### Project properties
-#### Configuration
-#### Dependencies
-#### Environment variables
+Adds the task `uberJar`, which creates an Uber-Jar. This is a JAR containing all dependencies. The resulting JAR is minimized, so only required classes are added.
 
 ## Create Docker images
 
@@ -272,12 +231,24 @@ Plugin: [Jib Plugin](https://plugins.gradle.org/plugin/com.google.cloud.tools.ji
 
 > Containerize your Java application.
 
-#### Description
-#### Aliases
-#### Project properties
-#### Configuration
-#### Dependencies
-#### Environment variables
+Adds the task `buildImage`, which creates a Docker image using [Jib](https://github.com/GoogleContainerTools/jib).
+
+The base image and the exposed ports can be configured by the `kradle` extension.
+
+```kotlin
+kradle {
+    image {
+        baseImage.set("bellsoft/liberica-openjdk-alpine:16")
+        // ports.add(8080)
+        // useAppSh()
+        // useJvmKill("1.16.0")
+    }
+}
+```
+
+`useAppSh` will use a script as entrypoint for the container. You can provide your own script in `extra/app.sh`. If you don't, the plugin will create one for you.
+
+`useJvmKill` adds [jvmkill](https://github.com/airlift/jvmkill) to the image, which terminates the JVM when it is unable to allocate memory.
 
 ## Miscellaneous
 
@@ -287,13 +258,13 @@ Plugin: [Java Plugin](https://docs.gradle.org/current/userguide/java_plugin.html
 
 > The Java plugin adds Java compilation along with testing and bundling capabilities to a project.
 
-#### Description
-#### Tasks
-#### Aliases
-#### Project properties
-#### Configuration
-#### Dependencies
-#### Environment variables
+Adds the task `package`, which creates an JAR file. It also sets the `sourceCompatibility` and `targetCompatibility` based on the extension property.
+
+```kotlin
+kradle {
+    targetJvm.set("16")
+}
+```
 
 ### KotlinBlueprint
 
@@ -301,13 +272,26 @@ Plugin: [Kotlin Plugin](https://plugins.gradle.org/plugin/org.jetbrains.kotlin.j
 
 > Kotlin plugins for Gradle.
 
-#### Description
-#### Tasks
-#### Aliases
-#### Project properties
-#### Configuration
-#### Dependencies
-#### Environment variables
+Adds Kotlin Standard Library, kotlin.test library and coroutines dependencies. The coroutines version can be configured with the `kradle` extension.
+
+```kotlin
+kradle {
+    kotlinxCoroutinesVersion.set("1.5.1")
+}
+```
+
+You still have to apply the Kotlin plugin in your project. This also defines the Kotlin version used.
+
+_build.gradle.kts_
+
+```kotlin
+plugins {
+    id("org.jetbrains.kotlin.jvm") version "1.5.21"
+    id("net.bnb1.kradle-app") version "1.0.0-SNAPSHOT"
+}
+```
+
+The plugin also enables [opt-ins](https://kotlinlang.org/docs/opt-in-requirements.html).
 
 ### ApplicationBlueprint
 
@@ -317,43 +301,41 @@ Plugin: [Application Plugin](https://docs.gradle.org/current/userguide/applicati
 
 > The Application plugin facilitates creating an executable JVM application.
 
-#### Description
-#### Tasks
-#### Aliases
-#### Project properties
-#### Configuration
-#### Dependencies
-#### Environment variables
+Sets the environment variable `DEV_MODE=true` when executing `gradle run`. So the application can easily figure out, if it is run in development environment.
+
+Speeds up application start with `gradle run` by using `-XX:TieredStopAtLevel=1`.
+
+Also adds the `Main-Class` entry to the manifest, so the JAR is runnable.
 
 ### MavenPublishBlueprint
 
-_net.bnb1.kradle-app only_
+_net.bnb1.kradle-lib only_
 
 Plugin: [Maven Publish Plugin](https://docs.gradle.org/current/userguide/publishing_maven.html)
 
 > The Maven Publish Plugin provides the ability to publish build artifacts to an Apache Maven repository.
 
-#### Description
-#### Tasks
-#### Aliases
-#### Project properties
-#### Configuration
-#### Dependencies
-#### Environment variables
+Adds the task `install`, which installs the library to your local Maven repository.
 
 ### BuildPropertiesBlueprint
 
 Plugin: internal
 
-#### Description
-#### Tasks
-#### Aliases
-#### Project properties
-#### Configuration
-#### Dependencies
-#### Environment variables
+Adds the task `generateBuildProperties` which generates a file _build.properties_ which contains the build timestamp, project version and Git commit id.
+
+The task is also executed as after `processResources`.
 
 ## Other plugins
+
+These plugins are applied, but there are no blueprints for them.
+
+### Java Library Plugin
+
+_net.bnb1.kradle-lib only_
+
+Plugin: [Java Library Plugin](https://docs.gradle.org/current/userguide/java_library_plugin.html)
+
+> The Java Library plugin expands the capabilities of the Java plugin by providing specific knowledge about Java libraries
 
 ### Serialization Plugin
 
@@ -361,13 +343,7 @@ Plugin: [kotlinx.serialization Plugin](https://plugins.gradle.org/plugin/org.jet
 
 > Kotlin compiler plugin for kotlinx.serialization library.
 
-#### Description
-#### Tasks
-#### Aliases
-#### Project properties
-#### Configuration
-#### Dependencies
-#### Environment variables
+Required for kotlinx.serialization.
 
 ### All-open Plugin
 
@@ -375,13 +351,7 @@ Plugin: [All-open Compiler Plugin](https://plugins.gradle.org/plugin/org.jetbrai
 
 > Kotlin plugins for Gradle.
 
-#### Description
-#### Tasks
-#### Aliases
-#### Project properties
-#### Configuration
-#### Dependencies
-#### Environment variables
+Can be used to make specific classes `open`.
 
 ### Test Logger Plugin
 
@@ -389,40 +359,14 @@ Plugin: [Gradle Test Logger Plugin](https://plugins.gradle.org/plugin/com.adarsh
 
 > A Gradle plugin for printing beautiful logs on the console while running tests.
 
-#### Description
-#### Tasks
-#### Aliases
-#### Project properties
-#### Configuration
-#### Dependencies
-#### Environment variables
-
 ### Git Plugin
 
 Plugin: internal
 
-#### Description
-#### Tasks
-#### Aliases
-#### Project properties
-#### Configuration
-#### Dependencies
-#### Environment variables
+Adds `gitCommit` to the project properties.
 
 ### Project Properties Plugin
 
 Plugin: internal
 
-#### Description
-#### Tasks
-#### Aliases
-#### Project properties
-#### Configuration
-#### Dependencies
-#### Environment variables
-
-### Java Library Plugin
-
-Plugin: [Java Library Plugin](https://docs.gradle.org/current/userguide/java_library_plugin.html)
-
-> The Java Library plugin expands the capabilities of the Java plugin by providing specific knowledge about Java libraries
+Looks for a property file called _project.properties_ in the project directory. If found, adds the entries to the project properties.
