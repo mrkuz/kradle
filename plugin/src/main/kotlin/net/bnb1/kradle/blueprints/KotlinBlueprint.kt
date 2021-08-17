@@ -3,20 +3,20 @@ package net.bnb1.kradle.blueprints
 import net.bnb1.kradle.KradleExtension
 import net.bnb1.kradle.PluginBlueprint
 import net.bnb1.kradle.implementation
+import net.bnb1.kradle.plugins.NoOpPlugin
 import net.bnb1.kradle.testImplementation
 import org.gradle.api.Project
 import org.gradle.kotlin.dsl.dependencies
 import org.gradle.kotlin.dsl.extra
 import org.gradle.kotlin.dsl.withType
-import org.jetbrains.kotlin.gradle.plugin.KotlinPluginWrapper
 import org.jetbrains.kotlin.gradle.plugin.getKotlinPluginVersion
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
-object KotlinBlueprint : PluginBlueprint<KotlinPluginWrapper> {
+object KotlinBlueprint : PluginBlueprint<NoOpPlugin> {
 
     override fun configure(project: Project, extension: KradleExtension) {
         project.extra["kotlinVersion"] = project.getKotlinPluginVersion()
-        
+
         project.dependencies {
             implementation(platform("org.jetbrains.kotlin:kotlin-bom"))
             implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")

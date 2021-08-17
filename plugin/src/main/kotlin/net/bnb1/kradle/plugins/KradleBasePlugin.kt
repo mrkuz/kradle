@@ -4,7 +4,6 @@ import com.adarshr.gradle.testlogger.TestLoggerPlugin
 import net.bnb1.kradle.KradleExtension
 import net.bnb1.kradle.apply
 import net.bnb1.kradle.blueprints.*
-import org.gradle.api.GradleException
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.kotlin.dsl.create
@@ -22,12 +21,6 @@ class KradleBasePlugin : Plugin<Project> {
             mavenCentral()
             gradlePluginPortal()
             mavenLocal()
-        }
-
-        try {
-            Class.forName("org.jetbrains.kotlin.gradle.plugin.KotlinPluginWrapper")
-        } catch (e: ClassNotFoundException) {
-            throw GradleException("Kotlin plugin not found")
         }
 
         project.apply(JavaBlueprint)

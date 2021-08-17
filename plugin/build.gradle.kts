@@ -19,7 +19,6 @@ dependencies {
     implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
 
     // Plugins
-
     implementation("com.github.ben-manes:gradle-versions-plugin:0.39.0")
     implementation("org.jetbrains.dokka:dokka-gradle-plugin:1.4.30")
     implementation("org.jetbrains.kotlin:kotlin-allopen")
@@ -33,10 +32,9 @@ dependencies {
     implementation("gradle.plugin.com.google.cloud.tools:jib-gradle-plugin:3.1.2")
 
     // Target project needs to apply the Kotlin plugin
-    compileOnly("org.jetbrains.kotlin:kotlin-gradle-plugin")
+    implementation("org.jetbrains.kotlin:kotlin-gradle-plugin")
 
     // Miscellaneous
-
     implementation("org.eclipse.jgit:org.eclipse.jgit:5.12.0.202106070339-r")
 }
 
