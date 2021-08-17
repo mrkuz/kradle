@@ -39,6 +39,7 @@ object TestBlueprint : PluginBlueprint<NoOpPlugin> {
                 useJUnitPlatform()
             }
             testLogging {
+                showStandardStreams = true
                 events = setOf(TestLogEvent.SKIPPED, TestLogEvent.PASSED, TestLogEvent.FAILED)
             }
             include("**/*Test.class")
