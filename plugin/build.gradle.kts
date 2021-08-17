@@ -1,9 +1,12 @@
+import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
+
 plugins {
     `java-gradle-plugin`
     `kotlin-dsl`
     `maven-publish`
     kotlin("jvm") version "1.4.31"
     id("com.github.ben-manes.versions") version "0.39.0"
+    id("com.adarshr.test-logger") version "3.0.0"
 }
 
 group = "net.bnb1.kradle"
@@ -36,12 +39,28 @@ dependencies {
 
     // Miscellaneous
     implementation("org.eclipse.jgit:org.eclipse.jgit:5.12.0.202106070339-r")
-}
 
+    // Testing
+    testImplementation("org.jetbrains.kotlin:kotlin-test")
+    testImplementation("io.kotest:kotest-runner-junit5:4.6.1")
+    testImplementation("io.kotest:kotest-property:4.6.1")
+}
 java {
     sourceCompatibility = JavaVersion.VERSION_1_8
     targetCompatibility = JavaVersion.VERSION_1_8
 }
+
+tasks.withType<KotlinCompile> {
+    kotlinOptions {
+        freeCompilerArgs = listOf("-Xopt-in=kotlin.RequiresOptIn")
+    }
+}
+
+tasks.withType<Test> {
+    useJUnitPlatform()
+    testLogging.showStandardStreams = true
+}
+
 
 gradlePlugin {
     plugins {
