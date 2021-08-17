@@ -83,8 +83,8 @@ These are the tasks added by `kradle`.
 
 ## Configuration
 
-`kradle` provides an extension for configuration. These are all available options. The lines __not__ commented out represent
-the defaults.
+`kradle` provides an extension for configuration. These are all available options. The lines __not__ commented out
+represent the defaults.
 
 ```kotlin
 kradle {
@@ -125,7 +125,8 @@ Plugin: [Gradle Versions Plugin](https://plugins.gradle.org/plugin/com.github.be
 
 > Gradle plugin that provides tasks for discovering dependency updates.
 
-Adds the task `showDependencyUpdates`, which shows all available dependency updates. It only considers stable versions, no release candidates or milestone builds.
+Adds the task `showDependencyUpdates`, which shows all available dependency updates. It only considers stable versions,
+no release candidates or milestone builds.
 
 ## Static code analyisis
 
@@ -157,7 +158,8 @@ Plugin: [OWASP Dependency Check Plugin](https://plugins.gradle.org/plugin/org.ow
 
 > OWASP dependency-check-gradle plugin.
 
-Adds the `analyzeDependencies` tasks, which scans all dependencies on the runtime and compile classpath for vulnerabilities.
+Adds the `analyzeDependencies` tasks, which scans all dependencies on the runtime and compile classpath for
+vulnerabilities.
 
 ## Run JMH benchmarks
 
@@ -207,7 +209,8 @@ Plugin: [Dokka Plugin](https://plugins.gradle.org/plugin/org.jetbrains.dokka)
 
 > Dokka, the documentation engine for Kotlin.
 
-Adds the `generateDocumentation` task, which uses [Dokka](https://kotlin.github.io/dokka/) to generates a HTML documention based on KDoc comments. The documentation can be found under `build/docs`.
+Adds the `generateDocumentation` task, which uses [Dokka](https://kotlin.github.io/dokka/) to generates a HTML
+documention based on KDoc comments. The documentation can be found under `build/docs`.
 
 Package and module documentation can be placed in a file _package.md_ or _module.md_ in the project directory.
 
@@ -219,7 +222,8 @@ Plugin: [Gradle Shadow Plugin](https://plugins.gradle.org/plugin/com.github.john
 
 > A Gradle plugin for collapsing all dependencies and project code into a single Jar file.
 
-Adds the task `uberJar`, which creates an Uber-Jar. This is a JAR containing all dependencies. The resulting JAR is minimized, so only required classes are added.
+Adds the task `uberJar`, which creates an Uber-Jar. This is a JAR containing all dependencies. The resulting JAR is
+minimized, so only required classes are added.
 
 ## Create Docker images
 
@@ -246,9 +250,11 @@ kradle {
 }
 ```
 
-`useAppSh` will use a script as entrypoint for the container. You can provide your own script in `extra/app.sh`. If you don't, the plugin will create one for you.
+`useAppSh` will use a script as entrypoint for the container. You can provide your own script in `extra/app.sh`. If you
+don't, the plugin will create one for you.
 
-`useJvmKill` adds [jvmkill](https://github.com/airlift/jvmkill) to the image, which terminates the JVM when it is unable to allocate memory.
+`useJvmKill` adds [jvmkill](https://github.com/airlift/jvmkill) to the image, which terminates the JVM when it is unable
+to allocate memory.
 
 ## Miscellaneous
 
@@ -258,7 +264,8 @@ Plugin: [Java Plugin](https://docs.gradle.org/current/userguide/java_plugin.html
 
 > The Java plugin adds Java compilation along with testing and bundling capabilities to a project.
 
-Adds the task `package`, which creates an JAR file. It also sets the `sourceCompatibility` and `targetCompatibility` based on the extension property.
+Adds the task `package`, which creates an JAR file. It also sets the `sourceCompatibility` and `targetCompatibility`
+based on the extension property.
 
 ```kotlin
 kradle {
@@ -272,7 +279,8 @@ Plugin: [Kotlin Plugin](https://plugins.gradle.org/plugin/org.jetbrains.kotlin.j
 
 > Kotlin plugins for Gradle.
 
-Adds Kotlin Standard Library, kotlin.test library and coroutines dependencies. The coroutines version can be configured with the `kradle` extension.
+Adds Kotlin Standard Library, kotlin.test library and coroutines dependencies. The coroutines version can be configured
+with the `kradle` extension.
 
 ```kotlin
 kradle {
@@ -301,7 +309,8 @@ Plugin: [Application Plugin](https://docs.gradle.org/current/userguide/applicati
 
 > The Application plugin facilitates creating an executable JVM application.
 
-Sets the environment variable `DEV_MODE=true` when executing `gradle run`. So the application can easily figure out, if it is run in development environment.
+Sets the environment variable `DEV_MODE=true` when executing `gradle run`. So the application can easily figure out, if
+it is run in development environment.
 
 Speeds up application start with `gradle run` by using `-XX:TieredStopAtLevel=1`.
 
@@ -321,7 +330,8 @@ Adds the task `install`, which installs the library to your local Maven reposito
 
 Plugin: internal
 
-Adds the task `generateBuildProperties` which generates a file _build.properties_ which contains the build timestamp, project version and Git commit id.
+Adds the task `generateBuildProperties` which generates a file _build.properties_ which contains the build timestamp,
+project version and Git commit id.
 
 The task is also executed as after `processResources`.
 
@@ -369,4 +379,5 @@ Adds `gitCommit` to the project properties.
 
 Plugin: internal
 
-Looks for a property file called _project.properties_ in the project directory. If found, adds the entries to the project properties.
+Looks for a property file called _project.properties_ in the project directory. If found, adds the entries to the
+project properties.
