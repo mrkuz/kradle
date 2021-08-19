@@ -3,15 +3,14 @@ package net.bnb1.kradle.plugins
 import io.kotest.matchers.string.shouldContain
 import io.kotest.matchers.string.shouldNotContain
 import net.bnb1.kradle.PluginSpec
-import kotlin.io.path.ExperimentalPathApi
 
-
-@OptIn(ExperimentalPathApi::class)
 class KradleLibPluginTests : PluginSpec({
 
     test("Check available tasks") {
         bootstrapLibProject()
+
         val result = runTask("tasks")
+
         result.output shouldContain "analyzeCode "
         result.output shouldContain "analyzeDependencies "
         result.output shouldContain "generateBuildProperties "

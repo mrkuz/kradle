@@ -1,6 +1,7 @@
 package net.bnb1.kradle
 
 import io.kotest.core.spec.style.FunSpec
+import org.eclipse.jgit.api.Git
 import org.gradle.testkit.runner.GradleRunner
 import kotlin.io.path.ExperimentalPathApi
 import kotlin.io.path.createTempDirectory
@@ -32,6 +33,19 @@ abstract class PluginSpec(body: PluginSpec.() -> Unit) : FunSpec({}) {
         .withArguments(task)
         .build()
 
+    fun addTask(name: String, doLast: String) {
+        buildFile.appendText(
+            """
+            tasks.register("$name") {
+                doLast {
+                    $doLast
+                }
+            }
+            
+            """.trimIndent()
+        )
+    }
+
     fun bootstrapAppProject() {
         writeSettingsGradle("app")
         buildFile.writeText(
@@ -47,6 +61,7 @@ abstract class PluginSpec(body: PluginSpec.() -> Unit) : FunSpec({}) {
             application {
                 mainClass.set("com.test.AppKt")
             }
+            
             """.trimIndent()
         )
     }
@@ -62,6 +77,7 @@ abstract class PluginSpec(body: PluginSpec.() -> Unit) : FunSpec({}) {
             
             group = "com.test"
             version = "1.0.0"
+            
             """.trimIndent()
         )
     }
@@ -72,5 +88,11 @@ abstract class PluginSpec(body: PluginSpec.() -> Unit) : FunSpec({}) {
             rootProject.name = "$name"
             """.trimIndent()
         )
+    }
+
+    fun gitInit() {
+        val git = Git.init().setDirectory(projectDir).call()
+        git.add().addFilepattern(".").call()
+        git.commit().setMessage("Initial commit").call()
     }
 }

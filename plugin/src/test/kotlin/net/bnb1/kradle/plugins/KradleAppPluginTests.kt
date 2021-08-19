@@ -4,15 +4,14 @@ import io.kotest.matchers.string.shouldContain
 import io.kotest.matchers.string.shouldNotContain
 import net.bnb1.kradle.PluginSpec
 import org.gradle.testkit.runner.GradleRunner
-import kotlin.io.path.ExperimentalPathApi
 
-
-@OptIn(ExperimentalPathApi::class)
 class KradleAppPluginTests : PluginSpec({
 
     test("Check available tasks") {
         bootstrapAppProject()
+
         val result = runTask("tasks")
+
         result.output shouldContain "analyzeCode "
         result.output shouldContain "analyzeDependencies "
         result.output shouldContain "buildImage "
@@ -28,7 +27,9 @@ class KradleAppPluginTests : PluginSpec({
 
     test("Check default Kotlin version") {
         bootstrapAppProject()
+
         val result = runTask("dependencies")
+
         result.output shouldContain "org.jetbrains.kotlin:kotlin-stdlib:1.4.31"
         result.output shouldNotContain "org.jetbrains.kotlin:kotlin-stdlib:1.5.21"
     }
@@ -47,7 +48,6 @@ class KradleAppPluginTests : PluginSpec({
             rootProject.name = "app"
             """.trimIndent()
         )
-
         buildFile.writeText(
             """
             plugins {
