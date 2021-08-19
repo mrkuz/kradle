@@ -28,7 +28,7 @@ class KradleAppPluginTests : PluginSpec({
     test("Check default Kotlin version") {
         bootstrapAppProject()
 
-        val result = runTask("dependencies")
+        val result = runTask("dependencies", "--configuration", "runtimeClasspath")
 
         result.output shouldContain "org.jetbrains.kotlin:kotlin-stdlib:1.4.31"
         result.output shouldNotContain "org.jetbrains.kotlin:kotlin-stdlib:1.5.21"
@@ -66,7 +66,7 @@ class KradleAppPluginTests : PluginSpec({
 
         val result = GradleRunner.create()
             .withProjectDir(projectDir)
-            .withArguments("dependencies")
+            .withArguments("dependencies", "--configuration", "runtimeClasspath")
             .build()
 
         result.output shouldContain "org.jetbrains.kotlin:kotlin-stdlib:1.5.21"

@@ -17,7 +17,7 @@ class BuildPropertiesPluginTests : PluginSpec({
 
         result.task(":generateBuildProperties")!!.outcome shouldBe TaskOutcome.SUCCESS
 
-        val output = projectDir.resolve("build/resources/main/build.properties")
+        val output = buildDir.resolve("resources/main/build.properties")
         output.shouldExist()
 
         val lines = output.readLines()
@@ -34,7 +34,7 @@ class BuildPropertiesPluginTests : PluginSpec({
 
         result.task(":generateBuildProperties")!!.outcome shouldBe TaskOutcome.SUCCESS
 
-        val output = projectDir.resolve("build/resources/main/build.properties")
+        val output = buildDir.resolve("resources/main/build.properties")
         output.shouldExist()
 
         val lines = output.readLines()

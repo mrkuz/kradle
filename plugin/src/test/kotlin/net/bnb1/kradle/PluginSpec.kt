@@ -14,6 +14,8 @@ abstract class PluginSpec(body: PluginSpec.() -> Unit) : FunSpec({}) {
         get() = projectDir.resolve("settings.gradle.kts")
     val buildFile
         get() = projectDir.resolve("build.gradle.kts")
+    val buildDir
+        get() = projectDir.resolve("build")
 
     init {
         beforeEach {
@@ -27,10 +29,10 @@ abstract class PluginSpec(body: PluginSpec.() -> Unit) : FunSpec({}) {
         body()
     }
 
-    fun runTask(task: String) = GradleRunner.create()
+    fun runTask(task: String, vararg arguments: String) = GradleRunner.create()
         .withProjectDir(projectDir)
         .withPluginClasspath()
-        .withArguments(task)
+        .withArguments(listOf(task) + arguments)
         .build()
 
     fun addTask(name: String, doLast: String) {
