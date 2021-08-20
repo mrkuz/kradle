@@ -20,6 +20,10 @@ object BenchmarksBlueprint : PluginBlueprint<BenchmarksPlugin> {
     private const val SOURCE_SET_NAME = "benchmark"
 
     override fun configureEager(project: Project) {
+        // JMH requires benchmark classes to be open
+        project.configure<AllOpenExtension> {
+            annotation("org.openjdk.jmh.annotations.State")
+        }
         createSourceSet(project)
         project.configure<BenchmarksExtension> {
             targets.register("$SOURCE_SET_NAME")
@@ -27,11 +31,6 @@ object BenchmarksBlueprint : PluginBlueprint<BenchmarksPlugin> {
     }
 
     override fun configure(project: Project, extension: KradleExtension) {
-        // JMH requires benchmark classes to be open
-        project.configure<AllOpenExtension> {
-            annotation("org.openjdk.jmh.annotations.State")
-        }
-
         project.tasks.named<Jar>("${SOURCE_SET_NAME}BenchmarkJar").configure {
             // Required workaround. Otherwise running the benchmarks will complain because of
             // duplicate META-INF/versions/9/module-info.class

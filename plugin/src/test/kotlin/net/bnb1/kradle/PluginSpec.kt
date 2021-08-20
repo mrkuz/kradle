@@ -57,11 +57,32 @@ abstract class PluginSpec(body: PluginSpec.() -> Unit) : FunSpec({}) {
                id("net.bnb1.kradle-app") version "1.0.0-SNAPSHOT"
             }
             
-            group = "com.test"
+            group = "com.example"
             version = "1.0.0"
             
+            kradle {
+                targetJvm.set("11")
+            }
+            
             application {
-                mainClass.set("com.test.AppKt")
+                mainClass.set("com.example.AppKt")
+            }
+            
+            """.trimIndent()
+        )
+    }
+
+    fun writeAppKt(main: String) {
+        val sourceDir = projectDir.resolve("src/main/kotlin/com/example")
+        sourceDir.mkdirs()
+        sourceDir.resolve("App.kt").writeText(
+            """
+            package com.example
+            
+            class App {}
+            
+            fun main() {
+                $main
             }
             
             """.trimIndent()
@@ -77,14 +98,18 @@ abstract class PluginSpec(body: PluginSpec.() -> Unit) : FunSpec({}) {
                id("net.bnb1.kradle-lib") version "1.0.0-SNAPSHOT"
             }
             
-            group = "com.test"
+            group = "com.example"
             version = "1.0.0"
+            
+            kradle {
+                targetJvm.set("11")
+            }
             
             """.trimIndent()
         )
     }
 
-    private fun writeSettingsGradle(name: String) {
+    fun writeSettingsGradle(name: String) {
         settingsFile.writeText(
             """
             rootProject.name = "$name"

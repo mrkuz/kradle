@@ -15,8 +15,11 @@ object ApplicationBlueprint : PluginBlueprint<ApplicationPlugin> {
     private val GROUP_PATTERN = Regex("^[a-z]+(\\.[a-z0-9]+)+$")
 
     override fun configure(project: Project, extension: KradleExtension) {
+        if (project.group.toString().isEmpty()) {
+            project.logger.warn("WARNING: Group is not specified")
+        }
         if (!GROUP_PATTERN.matches(project.group.toString())) {
-            project.logger.warn("WARNING: Group doesn't comply with Java's package name rules: ${project.group}")
+            project.logger.warn("WARNING: Group doesn't comply with Java's package name rules")
         }
         if (project.version == "unspecified") {
             project.logger.warn("WARNING: Version is not specified")
