@@ -53,8 +53,8 @@ abstract class PluginSpec(body: PluginSpec.() -> Unit) : FunSpec({}) {
         buildFile.writeText(
             """
             plugins {
-               id("org.jetbrains.kotlin.jvm") version "1.4.31"
-               id("net.bnb1.kradle-app") version "1.0.0-SNAPSHOT"
+                id("org.jetbrains.kotlin.jvm") version "1.4.31"
+                id("net.bnb1.kradle-app") version "1.0.0-SNAPSHOT"
             }
             
             group = "com.example"
@@ -79,7 +79,7 @@ abstract class PluginSpec(body: PluginSpec.() -> Unit) : FunSpec({}) {
             """
             package com.example
             
-            class App {}
+            class App
             
             fun main() {
                 $main
@@ -94,8 +94,8 @@ abstract class PluginSpec(body: PluginSpec.() -> Unit) : FunSpec({}) {
         buildFile.writeText(
             """
             plugins {
-               id("org.jetbrains.kotlin.jvm") version "1.4.31"
-               id("net.bnb1.kradle-lib") version "1.0.0-SNAPSHOT"
+                id("org.jetbrains.kotlin.jvm") version "1.4.31"
+                id("net.bnb1.kradle-lib") version "1.0.0-SNAPSHOT"
             }
             
             group = "com.example"
@@ -113,6 +113,7 @@ abstract class PluginSpec(body: PluginSpec.() -> Unit) : FunSpec({}) {
         settingsFile.writeText(
             """
             rootProject.name = "$name"
+            
             """.trimIndent()
         )
     }
