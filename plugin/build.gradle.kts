@@ -44,6 +44,7 @@ dependencies {
     testImplementation("org.jetbrains.kotlin:kotlin-test")
     testImplementation("io.kotest:kotest-runner-junit5:4.6.1")
     testImplementation("io.kotest:kotest-property:4.6.1")
+    testImplementation("com.github.docker-java:docker-java:3.2.11")
 }
 java {
     sourceCompatibility = JavaVersion.VERSION_1_8

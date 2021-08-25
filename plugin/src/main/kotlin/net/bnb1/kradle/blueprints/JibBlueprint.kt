@@ -100,6 +100,8 @@ object JibBlueprint : PluginBlueprint<JibPlugin> {
             return
         }
 
+        file.parentFile.mkdirs()
+
         val javaExtension = project.extensions.getByType(JavaApplication::class.java)
         val mainClass = javaExtension.mainClass.get()
 
