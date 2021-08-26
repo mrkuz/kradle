@@ -1,6 +1,6 @@
 # Kradle
 
-Swiss army knive for Kotlin development.
+Swiss army knife for Kotlin development.
 
 This project aims to provide a solution for common Kotlin development tasks using Gradle.
 
@@ -52,7 +52,7 @@ _build.gradle.kts_
 ```kotlin
 plugins {
     id("org.jetbrains.kotlin.jvm") version "1.5.21"
-    id("net.bnb1.kradle-app") version "1.0.0-SNAPSHOT"
+    id("net.bnb1.kradle-app") version "main-SNAPSHOT"
 }
 
 group = "com.example"
@@ -295,7 +295,7 @@ _build.gradle.kts_
 ```kotlin
 plugins {
     id("org.jetbrains.kotlin.jvm") version "1.5.21"
-    id("net.bnb1.kradle-app") version "1.0.0-SNAPSHOT"
+    id("net.bnb1.kradle-app") version "main-SNAPSHOT"
 }
 ```
 

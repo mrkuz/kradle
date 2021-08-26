@@ -33,7 +33,7 @@ class ApplicationBlueprintTests : PluginSpec({
             """
             plugins {
                id("org.jetbrains.kotlin.jvm") version "1.4.31"
-               id("net.bnb1.kradle-app") version "1.0.0-SNAPSHOT"
+               id("net.bnb1.kradle-app") version "main-SNAPSHOT"
             }
             
             group = "com.example"
@@ -56,7 +56,7 @@ class ApplicationBlueprintTests : PluginSpec({
             """
             plugins {
                id("org.jetbrains.kotlin.jvm") version "1.4.31"
-               id("net.bnb1.kradle-app") version "1.0.0-SNAPSHOT"
+               id("net.bnb1.kradle-app") version "main-SNAPSHOT"
             }
             
             version = "1.0.0"
@@ -79,7 +79,7 @@ class ApplicationBlueprintTests : PluginSpec({
             """
             plugins {
                id("org.jetbrains.kotlin.jvm") version "1.4.31"
-               id("net.bnb1.kradle-app") version "1.0.0-SNAPSHOT"
+               id("net.bnb1.kradle-app") version "main-SNAPSHOT"
             }
             
             version = "1.0.0"

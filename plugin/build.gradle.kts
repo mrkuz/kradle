@@ -10,7 +10,7 @@ plugins {
 }
 
 group = "net.bnb1.kradle"
-version = "1.0.0-SNAPSHOT"
+version = "main-SNAPSHOT"
 
 repositories {
     mavenCentral()
