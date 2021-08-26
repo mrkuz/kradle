@@ -91,6 +91,7 @@ kradle {
     targetJvm.set("16")
     kotlinxCoroutinesVersion.set("1.5.1")
     jacocoVersion.set("0.8.7")
+    ktlintVersion.set("0.42.1")
     junitJupiterVersion.set("5.7.2")
     // useKotest()
     image {
@@ -142,6 +143,14 @@ Adds the `lint` task, which runs [ktlint](https://ktlint.github.io/) on the proj
 exception: Wildcard imports are allowed. Experimental rules are also enabled.
 
 The `lint` task is also executed when running `check`.
+
+The `kradle` extension provides a property to configure the ktlint version.
+
+```kotlin
+kradle {
+    ktlintVersion.set("0.42.1")
+}
+```
 
 ### DetektBlueprint
 

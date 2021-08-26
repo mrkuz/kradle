@@ -19,6 +19,7 @@ open class KradleExtension @Inject constructor(factory: ObjectFactory) {
     fun useKotest(version: String = "4.6.1") = kotestVersion.set(version)
 
     val jacocoVersion = factory.property("0.8.7")
+    val ktlintVersion = factory.property("0.42.1")
 
     private val disabledBlueprints = factory.setProperty(Class::class.java)
     fun disable(blueprint: Class<out PluginBlueprint<Plugin<Project>>>) = disabledBlueprints.add(blueprint)

@@ -14,6 +14,7 @@ object KtlintBlueprint : PluginBlueprint<KtlintPlugin> {
         project.configure<KtlintExtension> {
             enableExperimentalRules.set(true)
             disabledRules.set(setOf("no-wildcard-imports"))
+            version.set(extension.ktlintVersion.get())
         }
 
         project.alias("lint", "Runs ktlint", "ktlintCheck")
