@@ -92,8 +92,11 @@ kradle {
     kotlinxCoroutinesVersion.set("1.5.1")
     jacocoVersion.set("0.8.7")
     ktlintVersion.set("0.42.1")
-    junitJupiterVersion.set("5.7.2")
-    // useKotest()
+    tests {
+        junitJupiterVersion.set("5.7.2")
+        // useKotest()
+        // useMockk()
+    }
     image {
         baseImage.set("bellsoft/liberica-openjdk-alpine:16")
         // ports.add(8080)
@@ -192,12 +195,16 @@ Plugin: [Java Plugin](https://docs.gradle.org/current/userguide/java_plugin.html
 > The Java plugin adds Java compilation along with testing and bundling capabilities to a project.
 
 Sets up [JUnit Jupiter](https://junit.org/junit5/) for running tests. The `kradle` extension provides a property to
-configure the version. There is also a convenience method to add [kotest](https://kotest.io/) dependencies.
+configure the version. There are also convenience methods to add [kotest](https://kotest.io/)
+and [mockk](https://mockk.io/) dependencies.
 
 ```kotlin
 kradle {
-    junitJupiterVersion.set("5.7.2")
-    useKotest("4.6.1")
+    tests {
+        junitJupiterVersion.set("5.7.2")
+        useKotest("4.6.1")
+        useMockk("1.12.0")
+    }
 }
 ```
 

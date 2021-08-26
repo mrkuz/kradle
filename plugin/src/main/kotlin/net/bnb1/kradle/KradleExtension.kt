@@ -10,13 +10,11 @@ open class KradleExtension @Inject constructor(factory: ObjectFactory) {
     val targetJvm = factory.property("16")
     val kotlinxCoroutinesVersion = factory.property("1.5.1")
 
-    val junitJupiterVersion = factory.property("5.7.2")
+    val tests = TestsExtension(factory)
+    fun tests(configure: TestsExtension.() -> Unit) = configure(tests)
 
     val image = ImageExtension(factory)
     fun image(configure: ImageExtension.() -> Unit) = configure(image)
-
-    val kotestVersion = factory.empty<String>()
-    fun useKotest(version: String = "4.6.1") = kotestVersion.set(version)
 
     val jacocoVersion = factory.property("0.8.7")
     val ktlintVersion = factory.property("0.42.1")
@@ -38,5 +36,16 @@ open class KradleExtension @Inject constructor(factory: ObjectFactory) {
         fun useAppSh() = useAppSh.set(true)
 
         val javaOpts = factory.empty<String>()
+    }
+
+    open class TestsExtension(factory: ObjectFactory) {
+
+        val junitJupiterVersion = factory.property("5.7.2")
+
+        val kotestVersion = factory.empty<String>()
+        fun useKotest(version: String = "4.6.1") = kotestVersion.set(version)
+
+        val mockkVersion = factory.empty<String>()
+        fun useMockk(version: String = "1.12.0") = mockkVersion.set(version)
     }
 }

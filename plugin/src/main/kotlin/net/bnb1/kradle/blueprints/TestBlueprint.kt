@@ -14,23 +14,31 @@ import org.gradle.kotlin.dsl.named
 object TestBlueprint : PluginBlueprint<NoOpPlugin> {
 
     override fun configure(project: Project, extension: KradleExtension) {
-        val useJunitJupiter = extension.junitJupiterVersion.isPresent
+        val tests = extension.tests
+        val useJunitJupiter = tests.junitJupiterVersion.isPresent
         if (useJunitJupiter) {
             project.dependencies {
-                testImplementation("org.junit.jupiter:junit-jupiter-api:${extension.junitJupiterVersion.get()}")
-                testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:${extension.junitJupiterVersion.get()}")
+                testImplementation("org.junit.jupiter:junit-jupiter-api:${tests.junitJupiterVersion.get()}")
+                testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:${tests.junitJupiterVersion.get()}")
             }
         }
 
-        val useKotest = extension.kotestVersion.isPresent
+        val useKotest = tests.kotestVersion.isPresent
         if (useKotest) {
             project.dependencies {
-                testImplementation("io.kotest:kotest-assertions-core:${extension.kotestVersion.get()}")
+                testImplementation("io.kotest:kotest-assertions-core:${tests.kotestVersion.get()}")
                 if (useJunitJupiter) {
-                    testImplementation("io.kotest:kotest-runner-junit5:${extension.kotestVersion.get()}")
+                    testImplementation("io.kotest:kotest-runner-junit5:${tests.kotestVersion.get()}")
                 } else {
-                    testImplementation("io.kotest:kotest-runner-junit4:${extension.kotestVersion.get()}")
+                    testImplementation("io.kotest:kotest-runner-junit4:${tests.kotestVersion.get()}")
                 }
+            }
+        }
+
+        val useMockk = tests.mockkVersion.isPresent
+        if (useMockk) {
+            project.dependencies {
+                testImplementation("io.mockk:mockk:${tests.mockkVersion.get()}")
             }
         }
 
