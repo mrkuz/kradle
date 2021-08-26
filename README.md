@@ -90,6 +90,7 @@ represent the defaults.
 kradle {
     targetJvm.set("16")
     kotlinxCoroutinesVersion.set("1.5.1")
+    jacocoVersion.set("0.8.7")
     junitJupiterVersion.set("5.7.2")
     // useKotest()
     image {
@@ -201,6 +202,14 @@ Plugin: [JaCocCo Plugin](https://docs.gradle.org/current/userguide/jacoco_plugin
 
 Always generates [JaCoco](https://www.jacoco.org/jacoco/) code coverage reports when running tests. The report can be
 found under `build/reports/jacoco/`.
+
+The `kradle` extension provides a property to configure the JaCoCo version.
+
+```kotlin
+kradle {
+    jacocoVersion.set("0.8.7")
+}
+```
 
 ## Generate documentation
 

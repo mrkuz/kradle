@@ -17,7 +17,7 @@ object JacocoBlueprint : PluginBlueprint<JacocoPlugin> {
         }
 
         project.configure<JacocoPluginExtension> {
-            toolVersion = "0.8.7"
+            toolVersion = extension.jacocoVersion.get()
         }
 
         project.tasks.named<JacocoReport>("jacocoTestReport").configure {
