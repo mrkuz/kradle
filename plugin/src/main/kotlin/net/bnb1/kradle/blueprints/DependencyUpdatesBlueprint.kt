@@ -16,9 +16,12 @@ object DependencyUpdatesBlueprint : PluginBlueprint<VersionsPlugin> {
             checkForGradleUpdate = true
             // Exclude milestones and RCs
             rejectVersionIf {
-                val milestone = "^.*-M[0-9]+$".toRegex()
-                val releaseCandidate = "^.*-RC$".toRegex()
-                milestone.matches(candidate.version) || releaseCandidate.matches(candidate.version)
+                val alpha = "^.*-alpha[.-]?[0-9]*$".toRegex()
+                val milestone = "^.*-M[.-]?[0-9]+$".toRegex()
+                val releaseCandidate = "^.*-RC[.-]?[0-9]*$".toRegex()
+                alpha.matches(candidate.version)
+                        || milestone.matches(candidate.version)
+                        || releaseCandidate.matches(candidate.version)
             }
         }
 
