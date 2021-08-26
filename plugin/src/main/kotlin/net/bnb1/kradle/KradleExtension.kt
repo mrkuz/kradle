@@ -33,5 +33,7 @@ open class KradleExtension @Inject constructor(factory: ObjectFactory) {
 
         val useAppSh = factory.property(false)
         fun useAppSh() = useAppSh.set(true)
+
+        val javaOpts = factory.empty<String>()
     }
 }

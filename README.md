@@ -95,6 +95,7 @@ kradle {
     image {
         baseImage.set("bellsoft/liberica-openjdk-alpine:16")
         // ports.add(8080)
+        // jvmOpts.set("-Xmx512M")
         // useAppSh()
         // useJvmKill("1.16.0")
     }
@@ -237,13 +238,14 @@ Plugin: [Jib Plugin](https://plugins.gradle.org/plugin/com.google.cloud.tools.ji
 
 Adds the task `buildImage`, which creates a Docker image using [Jib](https://github.com/GoogleContainerTools/jib).
 
-The base image and the exposed ports can be configured by the `kradle` extension.
+The base image, exposed ports and JVM command-line options can be configured by the `kradle` extension.
 
 ```kotlin
 kradle {
     image {
         baseImage.set("bellsoft/liberica-openjdk-alpine:16")
         // ports.add(8080)
+        // jvmOpts.set("-Xmx512M")
         // useAppSh()
         // useJvmKill("1.16.0")
     }

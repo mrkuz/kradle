@@ -51,11 +51,19 @@ object JibBlueprint : PluginBlueprint<JibPlugin> {
                     ports = extension.image.ports.get().map { it.toString() }
                 }
 
+                if (extension.image.javaOpts.isPresent) {
+                    if (useAppSh) {
+                        environment = mapOf("JAVA_OPTS" to extension.image.javaOpts.get())
+                    } else {
+                        jvmFlags = extension.image.javaOpts.get().split(" ")
+                    }
+                }
+
                 if (useJvmKill) {
                     if (useAppSh) {
-                        environment = mapOf("JAVA_AGENT" to "/app/extra/${jvmKillFileName}")
+                        environment = environment + mapOf("JAVA_AGENT" to "/app/extra/${jvmKillFileName}")
                     } else {
-                        jvmFlags = listOf("-agentpath:/app/extra/${jvmKillFileName}")
+                        jvmFlags = jvmFlags + listOf("-agentpath:/app/extra/${jvmKillFileName}")
                     }
                 }
 
