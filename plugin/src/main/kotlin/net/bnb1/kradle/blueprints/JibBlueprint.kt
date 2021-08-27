@@ -18,7 +18,7 @@ object JibBlueprint : PluginBlueprint<JibPlugin> {
         val withJvmKill = extension.image.jvmKillVersion.isPresent
         val withAppSh = extension.image.withAppSh.get()
 
-        var jvmKillFileName = if (withJvmKill) {
+        val jvmKillFileName = if (withJvmKill) {
             "jvmkill-${extension.image.jvmKillVersion.get()}.so"
         } else {
             ""
@@ -68,6 +68,9 @@ object JibBlueprint : PluginBlueprint<JibPlugin> {
                 }
 
                 if (withAppSh) {
+                    val javaExtension = project.extensions.getByType(JavaApplication::class.java)
+                    val mainClass = javaExtension.mainClass.get()
+                    environment = environment + mapOf("MAIN_CLASS" to mainClass)
                     entrypoint = listOf("/bin/sh", "/app/extra/app.sh")
                 }
             }
@@ -89,7 +92,7 @@ object JibBlueprint : PluginBlueprint<JibPlugin> {
     }
 
     private fun downloadJvmKill(project: Project, jvmKillVersion: String, jvmKillFileName: String) {
-        val jvmKillFile = project.extraDir.resolve("$jvmKillFileName")
+        val jvmKillFile = project.extraDir.resolve(jvmKillFileName)
         if (jvmKillFile.exists()) {
             return
         }
@@ -109,30 +112,10 @@ object JibBlueprint : PluginBlueprint<JibPlugin> {
         }
 
         file.parentFile.mkdirs()
+        file.writeText(readResource("/app.sh"))
+    }
 
-        val javaExtension = project.extensions.getByType(JavaApplication::class.java)
-        val mainClass = javaExtension.mainClass.get()
-
-        file.writeText(
-            """
-            # !/bin/sh -e
-            if [ "${'$'}{JAVA_URANDOM:-true}" = "true" ]; then
-                JAVA_OPTS="-Djava.security.egd=file:/dev/./urandom ${'$'}JAVA_OPTS"
-            fi
-            if [ "${'$'}JAVA_DIAGNOSTICS" = "true" ]; then
-                JAVA_OPTS="-XX:+UnlockDiagnosticVMOptions -XX:+PrintFlagsFinal -Xlog:gc ${'$'}JAVA_OPTS"
-            fi
-            if [ "${'$'}JAVA_DEBUG" = "true" ]; then
-                JAVA_OPTS="-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:${'$'}{JAVA_DEBUG_PORT:-8000} ${'$'}JAVA_OPTS"
-            fi
-            if [ -n "${'$'}JAVA_AGENT" ]; then
-                JAVA_OPTS="-agentpath:${'$'}JAVA_AGENT ${'$'}JAVA_OPTS"
-            fi
-            JAVA_OPTS="-XX:+ExitOnOutOfMemoryError ${'$'}JAVA_OPTS"
-
-            echo exec java ${'$'}JAVA_OPTS -cp @/app/jib-classpath-file $mainClass "${'$'}@"
-            exec java ${'$'}JAVA_OPTS -cp @/app/jib-classpath-file $mainClass "${'$'}@"
-        """.trimIndent()
-        )
+    private fun readResource(path: String): String {
+        return javaClass.getResource(path)!!.readText()
     }
 }
