@@ -15,10 +15,10 @@ import java.nio.file.Files
 object JibBlueprint : PluginBlueprint<JibPlugin> {
 
     override fun configure(project: Project, extension: KradleExtension) {
-        val useJvmKill = extension.image.jvmKillVersion.isPresent
-        val useAppSh = extension.image.useAppSh.get()
+        val withJvmKill = extension.image.jvmKillVersion.isPresent
+        val withAppSh = extension.image.withAppSh.get()
 
-        var jvmKillFileName = if (useJvmKill) {
+        var jvmKillFileName = if (withJvmKill) {
             "jvmkill-${extension.image.jvmKillVersion.get()}.so"
         } else {
             ""
@@ -26,10 +26,10 @@ object JibBlueprint : PluginBlueprint<JibPlugin> {
 
         project.tasks.named("jibDockerBuild").configure {
             doFirst {
-                if (useAppSh) {
+                if (withAppSh) {
                     createAppSh(project)
                 }
-                if (useJvmKill) {
+                if (withJvmKill) {
                     downloadJvmKill(project, extension.image.jvmKillVersion.get(), jvmKillFileName)
                 }
             }
@@ -52,22 +52,22 @@ object JibBlueprint : PluginBlueprint<JibPlugin> {
                 }
 
                 if (extension.image.javaOpts.isPresent) {
-                    if (useAppSh) {
+                    if (withAppSh) {
                         environment = mapOf("JAVA_OPTS" to extension.image.javaOpts.get())
                     } else {
                         jvmFlags = extension.image.javaOpts.get().split(" ")
                     }
                 }
 
-                if (useJvmKill) {
-                    if (useAppSh) {
+                if (withJvmKill) {
+                    if (withAppSh) {
                         environment = environment + mapOf("JAVA_AGENT" to "/app/extra/${jvmKillFileName}")
                     } else {
                         jvmFlags = jvmFlags + listOf("-agentpath:/app/extra/${jvmKillFileName}")
                     }
                 }
 
-                if (useAppSh) {
+                if (withAppSh) {
                     entrypoint = listOf("/bin/sh", "/app/extra/app.sh")
                 }
             }

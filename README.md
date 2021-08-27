@@ -101,8 +101,8 @@ kradle {
         baseImage.set("bellsoft/liberica-openjdk-alpine:16")
         // ports.add(8080)
         // jvmOpts.set("-Xmx512M")
-        // useAppSh()
-        // useJvmKill("1.16.0")
+        // withAppSh()
+        // withJvmKill("1.16.0")
     }
 
     // disable(BuildPropertiesBlueprint::class.java)
@@ -271,17 +271,17 @@ kradle {
         baseImage.set("bellsoft/liberica-openjdk-alpine:16")
         // ports.add(8080)
         // jvmOpts.set("-Xmx512M")
-        // useAppSh()
-        // useJvmKill("1.16.0")
+        // withAppSh()
+        // withJvmKill("1.16.0")
     }
 }
 ```
 
-`useAppSh` will use a script as entrypoint for the container. You can provide your own script in `extra/app.sh`. If you
+`withAppSh` will use a script as entrypoint for the container. You can provide your own script in `extra/app.sh`. If you
 don't, the plugin will create one for you.
 
-`useJvmKill` adds [jvmkill](https://github.com/airlift/jvmkill) to the image, which terminates the JVM when it is unable
-to allocate memory.
+`withJvmKill` adds [jvmkill](https://github.com/airlift/jvmkill) to the image, which terminates the JVM when it is
+unable to allocate memory.
 
 ## Miscellaneous
 

@@ -105,7 +105,7 @@ class JibBlueprintTests : PluginSpec({
     }
 
     // Requires Docker running
-    xtest("Use app.sh") {
+    xtest("With app.sh") {
         writeSettingsGradle(name)
         buildFile.writeText(
             """
@@ -120,7 +120,7 @@ class JibBlueprintTests : PluginSpec({
             kradle {
                 targetJvm.set("11")
                 image {
-                  useAppSh()
+                  withAppSh()
                 }
             }
             
@@ -138,7 +138,7 @@ class JibBlueprintTests : PluginSpec({
     }
 
     // Requires Docker running
-    xtest("Use jvmkill") {
+    xtest("With jvmkill") {
         writeSettingsGradle(name)
         buildFile.writeText(
             """
@@ -153,7 +153,7 @@ class JibBlueprintTests : PluginSpec({
             kradle {
                 targetJvm.set("11")
                 image {
-                  useJvmKill()
+                  withJvmKill()
                 }
             }
             

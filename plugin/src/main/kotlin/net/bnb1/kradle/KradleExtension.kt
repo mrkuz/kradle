@@ -30,10 +30,10 @@ open class KradleExtension @Inject constructor(factory: ObjectFactory) {
         val ports = factory.setProperty(Int::class.java)
 
         val jvmKillVersion = factory.empty<String>()
-        fun useJvmKill(version: String = "1.16.0") = jvmKillVersion.set(version)
+        fun withJvmKill(version: String = "1.16.0") = jvmKillVersion.set(version)
 
-        val useAppSh = factory.property(false)
-        fun useAppSh() = useAppSh.set(true)
+        val withAppSh = factory.property(false)
+        fun withAppSh() = withAppSh.set(true)
 
         val javaOpts = factory.empty<String>()
     }
