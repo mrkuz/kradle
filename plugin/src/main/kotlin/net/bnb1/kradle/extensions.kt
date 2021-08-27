@@ -45,7 +45,7 @@ fun Project.alias(name: String, description: String, targetTask: String): Task {
 }
 
 val Project.extraDir
-    get() = file(this.rootProject.rootDir.resolve("extra"))
+    get() = file(this.projectDir.resolve("src/main/extra"))
 
 // DependencyHandlerScope
 

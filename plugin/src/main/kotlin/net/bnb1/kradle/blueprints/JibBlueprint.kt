@@ -106,7 +106,7 @@ object JibBlueprint : PluginBlueprint<JibPlugin> {
     }
 
     private fun createAppSh(project: Project) {
-        val file = project.rootDir.resolve("extra/app.sh")
+        val file = project.extraDir.resolve("app.sh")
         if (file.exists()) {
             return
         }

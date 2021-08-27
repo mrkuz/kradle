@@ -277,8 +277,8 @@ kradle {
 }
 ```
 
-`withAppSh` will use a script as entrypoint for the container. You can provide your own script in `extra/app.sh`. If you
-don't, the plugin will create one for you.
+`withAppSh` will use a script as entrypoint for the container. You can provide your own script
+in `src/main/extra/app.sh`. If you don't, the plugin will create one for you.
 
 `withJvmKill` adds [jvmkill](https://github.com/airlift/jvmkill) to the image, which terminates the JVM when it is
 unable to allocate memory.
