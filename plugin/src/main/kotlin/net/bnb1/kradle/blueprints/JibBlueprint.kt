@@ -112,10 +112,6 @@ object JibBlueprint : PluginBlueprint<JibPlugin> {
         }
 
         file.parentFile.mkdirs()
-        file.writeText(readResource("/app.sh"))
-    }
-
-    private fun readResource(path: String): String {
-        return javaClass.getResource(path)!!.readText()
+        file.writeText(javaClass.getResource("/app.sh")!!.readText())
     }
 }

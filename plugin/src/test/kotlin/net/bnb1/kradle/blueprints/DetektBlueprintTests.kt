@@ -13,4 +13,13 @@ class DetektBlueprintTests : PluginSpec({
 
         buildDir.resolve("reports/detekt/detekt.html").shouldExist()
     }
+
+    test("Generate detekt-config.yml") {
+        bootstrapAppProject()
+        writeAppKt("println(\"Hello World\")")
+
+        runTask("generateDetektConfig")
+
+        projectDir.resolve("detekt-config.yml").shouldExist()
+    }
 })

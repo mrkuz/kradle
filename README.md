@@ -72,6 +72,7 @@ These are the tasks added by `kradle`.
 | [showDependencyUpdates](#dependencyupdatesblueprint) | Displays dependency updates | dependencyUpdates
 | [lint](#ktlintblueprint) | Runs [ktlint](https://ktlint.github.io/) | ktlintCheck |
 | [analyzeCode](#detektblueprint) | Runs [detekt](https://detekt.github.io/detekt/) code analysis | detekt |
+| [generateDetektConfig](#detektblueprint) | Generates _detekt-config.yml_ | - |
 | [analyzeDependencies](#dependencycheckblueprint) | Analyzes dependencies for vulnerabilities | dependencyCheckAnalyze |
 | [runBenchmarks](#benchmarksblueprint) | Runs all [JMH](https://github.com/openjdk/jmh) benchmarks | benchmark |
 | [generateDocumentation](#dokkablueprint) | Generates [Dokka](https://kotlin.github.io/dokka/) HTML documentation | dokkaHtml |
@@ -79,7 +80,7 @@ These are the tasks added by `kradle`.
 | [buildImage](#jibblueprint) | Builds Docker image (kradle-app only) | jibDockerBuild |
 | [uberJar](#shadowblueprint) | Creates Uber-JAR (kradle-app only) | shadowJar |
 | [install](#mavenpublishblueprint) | Installs JAR to local Maven repository (kradle-lib only) | publishToMavenLocal |
-| [generateBuildProperties](#buildpropertiesblueprint) | Generates build.properties | - |
+| [generateBuildProperties](#buildpropertiesblueprint) | Generates _build.properties_ | - |
 
 ## Configuration
 
@@ -163,6 +164,10 @@ Plugin: [detekt Plugin](https://plugins.gradle.org/plugin/io.gitlab.arturbosch.d
 
 Adds the `analyzeCode` task, which runs [detekt](https://detekt.github.io/detekt/) on the project. This task is also
 executed when running `check`.
+
+detekt can be configured with a file named _detekt-config.yml_ in the project root directory.
+
+The task `generateDetektConfig` generates a configuration file with sane defaults.
 
 ## Scan for vulnerabilities in dependencies
 
@@ -357,7 +362,7 @@ Adds the task `install`, which installs the library to your local Maven reposito
 
 Plugin: internal
 
-Adds the task `generateBuildProperties` which generates a file _build.properties_ which contains the build timestamp,
+Adds the task `generateBuildProperties`, which generates a file _build.properties_ containing the build timestamp,
 project version and Git commit id.
 
 The task is also executed as after `processResources`.
