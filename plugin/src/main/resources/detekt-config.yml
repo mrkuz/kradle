@@ -237,6 +237,7 @@ exceptions:
     allowedExceptionNameRegex: '_|(ignore|expected).*'
   TooGenericExceptionThrown:
     active: true
+    excludes: [ '**/test/**', '**/androidTest/**', '**/commonTest/**', '**/jvmTest/**', '**/jsTest/**', '**/iosTest/**' ]
     exceptionNames:
       - Error
       - Exception
@@ -610,7 +611,7 @@ style:
     excludes: [ '**' ]
   LoopWithTooManyJumpStatements:
     active: true
-    maxJumpCount: 1
+    maxJumpCount: 3
   MagicNumber:
     active: true
     excludes: [ '**/test/**', '**/androidTest/**', '**/commonTest/**', '**/jvmTest/**', '**/jsTest/**', '**/iosTest/**' ]
