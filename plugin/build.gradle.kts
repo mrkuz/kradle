@@ -4,6 +4,7 @@ plugins {
     `java-gradle-plugin`
     `kotlin-dsl`
     `maven-publish`
+    id("com.gradle.plugin-publish") version "0.14.0"
     kotlin("jvm") version "1.4.31"
     id("com.github.ben-manes.versions") version "0.39.0"
     id("com.adarshr.test-logger") version "3.0.0"
@@ -68,12 +69,33 @@ gradlePlugin {
         create("kradleApp") {
             id = "net.bnb1.kradle-app"
             implementationClass = "net.bnb1.kradle.plugins.KradleAppPlugin"
+            displayName = "Kradle App Plugin"
+            description = "Swiss army knife for Kotlin development"
         }
         create("kradleLib") {
             id = "net.bnb1.kradle-lib"
             implementationClass = "net.bnb1.kradle.plugins.KradleLibPlugin"
+            displayName = "Kradle Lib Plugin"
+            description = "Swiss army knife for Kotlin development"
         }
     }
+}
+
+pluginBundle {
+    website = "https://github.com/mrkuz/kradle"
+    vcsUrl = "https://github.com/mrkuz/kradle"
+    tags =
+        listOf(
+            "kotlin",
+            "linting",
+            "code-analysis",
+            "dependency-analysis",
+            "benchmarking",
+            "documentation",
+            "testing",
+            "uberjar",
+            "docker"
+        )
 }
 
 // Publish with alias 'kradle-gradle-plugin' (optional)
