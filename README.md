@@ -23,36 +23,14 @@ So instead of fiddling with your build script, you just need to apply one plugin
 
 ## Quickstart
 
-`kradle` is currently not available at [Gradle Plugin Portal](https://plugins.gradle.org/), so you need to install it to
-your local Maven repository.
-
-```shell
-./gradlew publishToMavenLocal
-```
-
-In your project, add the local repository.
-
-_settings.gradle.kts_
-
-```kotlin
-pluginManagement {
-    repositories {
-        gradlePluginPortal()
-        mavenLocal()
-    }
-}
-
-rootProject.name = "demo"
-```
-
-And finally apply the plugin.
+Just add the `kradle` plugin to your build script.
 
 _build.gradle.kts_
 
 ```kotlin
 plugins {
     id("org.jetbrains.kotlin.jvm") version "1.5.21"
-    id("net.bnb1.kradle-app") version "main-SNAPSHOT"
+    id("net.bnb1.kradle-app") version "1.0.0"
 }
 
 group = "com.example"

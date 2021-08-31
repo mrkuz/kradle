@@ -11,7 +11,7 @@ plugins {
 }
 
 group = "net.bnb1.kradle"
-version = "main-SNAPSHOT"
+version = "1.0.0"
 
 repositories {
     mavenCentral()
