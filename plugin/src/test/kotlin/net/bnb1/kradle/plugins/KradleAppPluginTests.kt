@@ -52,7 +52,7 @@ class KradleAppPluginTests : PluginSpec({
             """
             plugins {
                id("org.jetbrains.kotlin.jvm") version "1.5.21"
-               id("net.bnb1.kradle-app") version "main-SNAPSHOT"
+               id("net.bitsandbobs.kradle-app") version "main-SNAPSHOT"
             }
             
             group = "com.test"

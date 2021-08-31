@@ -18,8 +18,8 @@ configuring them.
 
 So instead of fiddling with your build script, you just need to apply one plugin.
 
-- For Kotlin apps: `net.bnb1.kradle-app`
-- For Kotlin libs: `net.bnb1.kradle-lib`
+- For Kotlin apps: `net.bitsandbobs.kradle-app`
+- For Kotlin libs: `net.bitsandbobs.kradle-lib`
 
 ## Quickstart
 
@@ -30,7 +30,7 @@ _build.gradle.kts_
 ```kotlin
 plugins {
     id("org.jetbrains.kotlin.jvm") version "1.5.21"
-    id("net.bnb1.kradle-app") version "1.0.0"
+    id("net.bitsandbobs.kradle-app") version "1.0.0"
 }
 
 group = "com.example"
@@ -225,7 +225,7 @@ Package and module documentation can be placed in a file _package.md_ or _module
 
 ### ShadowBlueprint
 
-_net.bnb1.kradle-app only_
+_net.bitsandbobs.kradle-app only_
 
 Plugin: [Gradle Shadow Plugin](https://plugins.gradle.org/plugin/com.github.johnrengelman.shadow)
 
@@ -238,7 +238,7 @@ minimized, so only required classes are added.
 
 ### JibBlueprint
 
-_net.bnb1.kradle-app only_
+_net.bitsandbobs.kradle-app only_
 
 Plugin: [Jib Plugin](https://plugins.gradle.org/plugin/com.google.cloud.tools.jib)
 
@@ -305,7 +305,7 @@ _build.gradle.kts_
 ```kotlin
 plugins {
     id("org.jetbrains.kotlin.jvm") version "1.5.21"
-    id("net.bnb1.kradle-app") version "main-SNAPSHOT"
+    id("net.bitsandbobs.kradle-app") version "main-SNAPSHOT"
 }
 ```
 
@@ -313,7 +313,7 @@ The plugin also enables [opt-ins](https://kotlinlang.org/docs/opt-in-requirement
 
 ### ApplicationBlueprint
 
-_net.bnb1.kradle-app only_
+_net.bitsandbobs.kradle-app only_
 
 Plugin: [Application Plugin](https://docs.gradle.org/current/userguide/application_plugin.html)
 
@@ -328,7 +328,7 @@ Also adds the `Main-Class` entry to the manifest, so the JAR is runnable.
 
 ### MavenPublishBlueprint
 
-_net.bnb1.kradle-lib only_
+_net.bitsandbobs.kradle-lib only_
 
 Plugin: [Maven Publish Plugin](https://docs.gradle.org/current/userguide/publishing_maven.html)
 
@@ -351,7 +351,7 @@ These plugins are applied, but there are no blueprints for them.
 
 ### Java Library Plugin
 
-_net.bnb1.kradle-lib only_
+_net.bitsandbobs.kradle-lib only_
 
 Plugin: [Java Library Plugin](https://docs.gradle.org/current/userguide/java_library_plugin.html)
 

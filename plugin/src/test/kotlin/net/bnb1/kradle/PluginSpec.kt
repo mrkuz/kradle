@@ -54,7 +54,7 @@ abstract class PluginSpec(body: PluginSpec.() -> Unit) : FunSpec({}) {
             """
             plugins {
                 id("org.jetbrains.kotlin.jvm") version "1.4.31"
-                id("net.bnb1.kradle-app") version "main-SNAPSHOT"
+                id("net.bitsandbobs.kradle-app") version "main-SNAPSHOT"
             }
             
             group = "com.example"
@@ -95,7 +95,7 @@ abstract class PluginSpec(body: PluginSpec.() -> Unit) : FunSpec({}) {
             """
             plugins {
                 id("org.jetbrains.kotlin.jvm") version "1.4.31"
-                id("net.bnb1.kradle-lib") version "main-SNAPSHOT"
+                id("net.bitsandbobs.kradle-lib") version "main-SNAPSHOT"
             }
             
             group = "com.example"
