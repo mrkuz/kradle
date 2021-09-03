@@ -10,7 +10,7 @@ plugins {
     id("com.adarshr.test-logger") version "3.0.0"
 }
 
-group = "net.bnb1.kradle"
+group = "net.bitsandbobs.kradle"
 version = "main-SNAPSHOT"
 
 repositories {
@@ -67,13 +67,13 @@ tasks.withType<Test> {
 gradlePlugin {
     plugins {
         create("kradleApp") {
-            id = "net.bnb1.kradle-app"
+            id = "net.bitsandbobs.kradle-app"
             implementationClass = "net.bnb1.kradle.plugins.KradleAppPlugin"
             displayName = "Kradle App Plugin"
             description = "Swiss army knife for Kotlin development"
         }
         create("kradleLib") {
-            id = "net.bnb1.kradle-lib"
+            id = "net.bitsandbobs.kradle-lib"
             implementationClass = "net.bnb1.kradle.plugins.KradleLibPlugin"
             displayName = "Kradle Lib Plugin"
             description = "Swiss army knife for Kotlin development"
