@@ -10,7 +10,7 @@ plugins {
     id("com.adarshr.test-logger") version "3.0.0"
 }
 
-group = "net.bnb1.kradle"
+group = "net.bitsandbobs.kradle"
 version = "1.0.0"
 
 repositories {
