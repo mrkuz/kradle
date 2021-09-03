@@ -1,5 +1,6 @@
 package net.bnb1.kradle.plugins
 
+import io.kotest.matchers.file.shouldExist
 import io.kotest.matchers.string.shouldContain
 import net.bnb1.kradle.PluginSpec
 
@@ -22,5 +23,13 @@ class GitPluginTests : PluginSpec({
         val result = runTask("testTask")
 
         result.output shouldContain Regex("Result: [a-z0-9]{7}")
+    }
+
+    test("Generate .gitignore") {
+        bootstrapAppProject()
+
+        runTask("generateGitignore")
+
+        projectDir.resolve(".gitignore").shouldExist()
     }
 })

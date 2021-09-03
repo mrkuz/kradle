@@ -1,5 +1,7 @@
 package net.bnb1.kradle.plugins
 
+import net.bnb1.kradle.create
+import net.bnb1.kradle.tasks.GenerateGitignoreTask
 import org.eclipse.jgit.api.Git
 import org.eclipse.jgit.lib.Constants;
 import org.gradle.api.Plugin
@@ -16,5 +18,7 @@ class GitPlugin : Plugin<Project> {
                 project.extra["gitCommit"] = hash.substring(0, 7)
             }
         }
+
+        project.create("generateGitignore", "Generates .gitignore", GenerateGitignoreTask::class.java)
     }
 }

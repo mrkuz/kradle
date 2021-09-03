@@ -58,6 +58,7 @@ These are the tasks added by `kradle`.
 | [buildImage](#jibblueprint) | Builds Docker image (kradle-app only) | jibDockerBuild |
 | [uberJar](#shadowblueprint) | Creates Uber-JAR (kradle-app only) | shadowJar |
 | [install](#mavenpublishblueprint) | Installs JAR to local Maven repository (kradle-lib only) | publishToMavenLocal |
+| [generateGitignore](#gitplugin) | Generates _.gitignore_ | - |
 | [generateBuildProperties](#buildpropertiesblueprint) | Generates _build.properties_ | - |
 | [dev](#applicationblueprint) | Runs the application and stops it when sources change (use with `-t`, kradle-app only) | - |
 
@@ -386,7 +387,9 @@ Plugin: [Gradle Test Logger Plugin](https://plugins.gradle.org/plugin/com.adarsh
 
 Plugin: internal
 
-Adds `gitCommit` to the project properties.
+Adds the task `generateGitignore`, which generates _.gitignore_ with sane defaults.
+
+Also adds `gitCommit` to the project properties.
 
 ### Project Properties Plugin
 

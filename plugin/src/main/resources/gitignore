@@ -1,0 +1,26 @@
+# Gradle
+.gradle/
+build/
+
+# IntelliJ IDEA
+.idea/
+out/
+*.iml
+*.ipr
+*.iws
+
+# VS Code
+.vscode/
+
+# NetBeans
+nbproject/
+nbactions.xml
+nb-configuration.xml
+
+# Eclipse
+.settings/
+.classpath
+.project
+
+# Other
+*~
