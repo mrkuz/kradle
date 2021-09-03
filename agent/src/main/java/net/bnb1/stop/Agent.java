@@ -1,5 +1,7 @@
 package net.bnb1.stop;
 
+import net.bnb1.stop.annotations.VisibleForTesting;
+
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.lang.instrument.Instrumentation;
@@ -17,10 +19,10 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.regex.Pattern;
 
-public class Agent {
+public final class Agent {
 
     public static void premain(String args, Instrumentation instrumentation) throws IOException {
-        new Agent().start();
+        new Agent(System.getenv().get("PROJECT_ROOT")).start();
     }
 
     private final ExecutorService executor = Executors.newSingleThreadExecutor(runnable -> {
@@ -30,13 +32,24 @@ public class Agent {
         return thread;
     });
 
+    private final Path projectPath;
+
     private final List<Path> dirIncludes = new ArrayList<>();
     private final List<Pattern> fileIncludes = new ArrayList<>();
-
     private final List<WatchKey> keys = new ArrayList<>();
     private final Map<Path, String> hashes = new HashMap<>();
 
-    public Agent() {
+    public Agent(String projectRoot) {
+        if (projectRoot == null) {
+            throw new IllegalStateException("Project root not set");
+        }
+        projectPath = Path.of(projectRoot);
+        if (!projectPath.toFile().isDirectory()) {
+            throw new IllegalStateException("Project root is not a directory");
+        }
+
+        debug("Project root: " + projectPath);
+
         dirIncludes.add(Path.of("src/main/kotlin"));
         dirIncludes.add(Path.of("src/main/java"));
         dirIncludes.add(Path.of("src/main/resources"));
@@ -48,39 +61,14 @@ public class Agent {
         fileIncludes.add(Pattern.compile(".*\\.ya?ml", Pattern.CASE_INSENSITIVE));
     }
 
-    public void start() throws IOException {
-        var path = getProjectRoot();
+    @VisibleForTesting
+    WatchService initializeWatcher() throws IOException {
         var watcher = FileSystems.getDefault().newWatchService();
-        debug("Stop-Agent started: " + path);
-
-        registerRecursive(path, watcher);
-        executor.submit(() -> {
-            try {
-                watch(watcher);
-            } catch (Exception ex) {
-                System.err.println("ERROR Watch failed");
-                ex.printStackTrace();
-            }
-        });
-    }
-
-    private Path getProjectRoot() {
-        var path = Path.of(System.getenv().get("PROJECT_ROOT"));
-        if (path == null) {
-            throw new IllegalStateException("PROJECT_ROOT not set");
-        }
-        if (!path.toFile().isDirectory()) {
-            throw new IllegalStateException("PROJECT_ROOT is not a directory");
-        }
-        return path;
-    }
-
-    private void registerRecursive(Path path, WatchService watcher) throws IOException {
-        Files.walkFileTree(path, new SimpleFileVisitor<>() {
+        Files.walkFileTree(projectPath, new SimpleFileVisitor<>() {
 
             @Override
             public FileVisitResult preVisitDirectory(Path dir, BasicFileAttributes attrs) throws IOException {
-                if (shouldHandleDir(dir) || isParentWatched(dir)) {
+                if (shouldHandleDir(dir)) {
                     debug("Watching: " + dir.toAbsolutePath());
                     var key = dir.register(watcher,
                             StandardWatchEventKinds.ENTRY_CREATE,
@@ -101,52 +89,75 @@ public class Agent {
             }
         });
 
+        return watcher;
     }
 
-    private void watch(WatchService watcher) throws InterruptedException, IOException {
-        while (true) {
-            var key = watcher.take();
-            for (var event : key.pollEvents()) {
-                var kind = event.kind();
-                if (kind == StandardWatchEventKinds.OVERFLOW) {
-                    continue;
+    public void start() throws IOException {
+        var watcher = initializeWatcher();
+        executor.submit(() -> {
+            try {
+                while (true) {
+                    var key = watcher.take();
+                    if (detectChange(key)) {
+                        System.exit(0);
+                    }
                 }
+            } catch (Exception ex) {
+                System.err.println("ERROR Watch failed");
+                ex.printStackTrace();
+            }
+        });
+    }
 
-                // debug("Event: " + event.kind());
-                var directory = (Path) key.watchable();
-                var fileName = (Path) event.context();
-                var absolutePath = Path.of(directory.toString(), fileName.toString());
+    @VisibleForTesting
+    boolean detectChange(WatchKey key) throws IOException {
+        if (key == null) {
+            return false;
+        }
+        for (var event : key.pollEvents()) {
+            var kind = event.kind();
+            if (kind == StandardWatchEventKinds.OVERFLOW) {
+                continue;
+            }
 
-                if (!shouldHandleFile(absolutePath)) {
-                    continue;
-                }
-                if (kind == StandardWatchEventKinds.ENTRY_MODIFY && !compareAndUpdateHash(absolutePath)) {
-                    continue;
-                }
+            // debug("Event: " + event.kind());
+            var directory = (Path) key.watchable();
+            var fileName = (Path) event.context();
+            var absolutePath = Path.of(directory.toString(), fileName.toString());
 
-                if (kind == StandardWatchEventKinds.ENTRY_CREATE) {
-                    debug("File created: " + absolutePath);
-                } else if (kind == StandardWatchEventKinds.ENTRY_MODIFY) {
-                    debug("File modified: " + absolutePath);
-                } else if (kind == StandardWatchEventKinds.ENTRY_DELETE) {
-                    debug("File deleted: " + absolutePath);
-                }
+            if (!shouldHandleFile(absolutePath)) {
+                continue;
+            }
+            if (kind == StandardWatchEventKinds.ENTRY_MODIFY && !compareAndUpdateHash(absolutePath)) {
+                continue;
+            }
 
-                System.exit(0);
+            if (kind == StandardWatchEventKinds.ENTRY_CREATE) {
+                debug("File created: " + absolutePath);
+            } else if (kind == StandardWatchEventKinds.ENTRY_MODIFY) {
+                debug("File modified: " + absolutePath);
+            } else if (kind == StandardWatchEventKinds.ENTRY_DELETE) {
+                debug("File deleted: " + absolutePath);
             }
 
             key.reset();
+            return true;
         }
+
+        key.reset();
+        return false;
     }
 
-    private boolean shouldHandleDir(Path dir) {
+    @VisibleForTesting
+    boolean shouldHandleDir(Path dir) {
         if (dirIncludes.isEmpty()) {
             return true;
         }
-        return dirIncludes.stream().anyMatch(path -> dir.endsWith(path));
+        return dirIncludes.stream().anyMatch(path -> dir.endsWith(path)) || isParentWatched(dir);
     }
 
-    private boolean shouldHandleFile(Path file) {
+    @VisibleForTesting
+    boolean shouldHandleFile(Path file) {
         if (fileIncludes.isEmpty()) {
             return isParentWatched(file);
         }
@@ -157,12 +168,16 @@ public class Agent {
     }
 
     private boolean isParentWatched(Path path) {
+        if (path.getParent() == null) {
+            return false;
+        }
         return keys.stream()
                 .map(key -> (Path) key.watchable())
                 .anyMatch(p -> path.getParent().endsWith(p));
     }
 
-    private boolean compareAndUpdateHash(Path file) throws IOException {
+    @VisibleForTesting
+    boolean compareAndUpdateHash(Path file) throws IOException {
         var hash = md5(file);
         if (hash.equals(hashes.get(file))) {
             return false;
