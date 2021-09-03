@@ -69,12 +69,7 @@ public final class Agent {
             @Override
             public FileVisitResult preVisitDirectory(Path dir, BasicFileAttributes attrs) throws IOException {
                 if (shouldHandleDir(dir)) {
-                    debug("Watching: " + dir.toAbsolutePath());
-                    var key = dir.register(watcher,
-                            StandardWatchEventKinds.ENTRY_CREATE,
-                            StandardWatchEventKinds.ENTRY_DELETE,
-                            StandardWatchEventKinds.ENTRY_MODIFY);
-                    keys.add(key);
+                    registerDir(watcher, dir);
                 }
                 return FileVisitResult.CONTINUE;
             }
@@ -92,13 +87,22 @@ public final class Agent {
         return watcher;
     }
 
+    private void registerDir(WatchService watcher, Path dir) throws IOException {
+        debug("Watching: " + dir.toAbsolutePath());
+        var key = dir.register(watcher,
+                StandardWatchEventKinds.ENTRY_CREATE,
+                StandardWatchEventKinds.ENTRY_DELETE,
+                StandardWatchEventKinds.ENTRY_MODIFY);
+        keys.add(key);
+    }
+
     public void start() throws IOException {
         var watcher = initializeWatcher();
         executor.submit(() -> {
             try {
                 while (true) {
                     var key = watcher.take();
-                    if (detectChange(key)) {
+                    if (detectChange(watcher, key)) {
                         System.exit(0);
                     }
                 }
@@ -110,7 +114,7 @@ public final class Agent {
     }
 
     @VisibleForTesting
-    boolean detectChange(WatchKey key) throws IOException {
+    boolean detectChange(WatchService watcher, WatchKey key) throws IOException {
         if (key == null) {
             return false;
         }
@@ -125,19 +129,29 @@ public final class Agent {
             var fileName = (Path) event.context();
             var absolutePath = Path.of(directory.toString(), fileName.toString());
 
-            if (!shouldHandleFile(absolutePath)) {
-                continue;
-            }
-            if (kind == StandardWatchEventKinds.ENTRY_MODIFY && !compareAndUpdateHash(absolutePath)) {
-                continue;
-            }
+            if (absolutePath.toFile().isDirectory()) {
+                if (kind == StandardWatchEventKinds.ENTRY_CREATE) {
+                    registerDir(watcher, absolutePath);
+                } else if (kind == StandardWatchEventKinds.ENTRY_DELETE) {
+                    debug("Directory deleted: " + absolutePath);
+                } else {
+                    continue;
+                }
+            } else {
+                if (!shouldHandleFile(absolutePath)) {
+                    continue;
+                }
+                if (kind == StandardWatchEventKinds.ENTRY_MODIFY && !compareAndUpdateHash(absolutePath)) {
+                    continue;
+                }
 
-            if (kind == StandardWatchEventKinds.ENTRY_CREATE) {
-                debug("File created: " + absolutePath);
-            } else if (kind == StandardWatchEventKinds.ENTRY_MODIFY) {
-                debug("File modified: " + absolutePath);
-            } else if (kind == StandardWatchEventKinds.ENTRY_DELETE) {
-                debug("File deleted: " + absolutePath);
+                if (kind == StandardWatchEventKinds.ENTRY_CREATE) {
+                    debug("File created: " + absolutePath);
+                } else if (kind == StandardWatchEventKinds.ENTRY_MODIFY) {
+                    debug("File modified: " + absolutePath);
+                } else if (kind == StandardWatchEventKinds.ENTRY_DELETE) {
+                    debug("File deleted: " + absolutePath);
+                }
             }
 
             key.reset();
@@ -172,6 +186,7 @@ public final class Agent {
             return false;
         }
         return keys.stream()
+                .filter(key -> key.isValid())
                 .map(key -> (Path) key.watchable())
                 .anyMatch(p -> path.getParent().endsWith(p));
     }

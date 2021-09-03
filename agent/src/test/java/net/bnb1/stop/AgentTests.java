@@ -78,7 +78,7 @@ public class AgentTests {
 
         var file = projectPath("src/main/resources/config.properties");
         Files.write(file, "key = value".getBytes(Charset.forName("UTF-8")));
-        assertTrue(agent.detectChange(watcher.poll(1, TimeUnit.SECONDS)));
+        assertTrue(agent.detectChange(watcher, watcher.poll(1, TimeUnit.SECONDS)));
     }
 
     @Test
@@ -88,7 +88,7 @@ public class AgentTests {
         var watcher = agent.initializeWatcher();
 
         file.toFile().delete();
-        assertTrue(agent.detectChange(watcher.poll(1, TimeUnit.SECONDS)));
+        assertTrue(agent.detectChange(watcher, watcher.poll(1, TimeUnit.SECONDS)));
     }
 
     @Test
@@ -98,7 +98,7 @@ public class AgentTests {
         var watcher = agent.initializeWatcher();
 
         Files.write(file, "key = after".getBytes(Charset.forName("UTF-8")));
-        assertTrue(agent.detectChange(watcher.poll(1, TimeUnit.SECONDS)));
+        assertTrue(agent.detectChange(watcher, watcher.poll(1, TimeUnit.SECONDS)));
     }
 
     @Test
@@ -112,6 +112,16 @@ public class AgentTests {
         file = projectPath("src/test/kotlin/net/bnb1/demo/AppTests.kt");
         Files.write(file, new byte[]{});
 
-        assertFalse(agent.detectChange(watcher.poll(1, TimeUnit.SECONDS)));
+        assertFalse(agent.detectChange(watcher, watcher.poll(1, TimeUnit.SECONDS)));
+    }
+
+    @Test
+    void detectFileCreatedInNewDirectory() throws Exception {
+        var watcher = agent.initializeWatcher();
+
+        var file = projectPath("src/main/resources/extra/config.properties");
+        file.getParent().toFile().mkdirs();
+        Files.write(file, "key = value".getBytes(Charset.forName("UTF-8")));
+        assertTrue(agent.detectChange(watcher, watcher.poll(1, TimeUnit.SECONDS)));
     }
 }
