@@ -59,6 +59,7 @@ These are the tasks added by `kradle`.
 | [uberJar](#shadowblueprint) | Creates Uber-JAR (kradle-app only) | shadowJar |
 | [install](#mavenpublishblueprint) | Installs JAR to local Maven repository (kradle-lib only) | publishToMavenLocal |
 | [generateBuildProperties](#buildpropertiesblueprint) | Generates _build.properties_ | - |
+| [dev](#applicationblueprint) | Runs the application and stops it when sources change (use with `-t`, kradle-app only) | - |
 
 ## Configuration
 
@@ -274,7 +275,7 @@ Plugin: [Java Plugin](https://docs.gradle.org/current/userguide/java_plugin.html
 
 > The Java plugin adds Java compilation along with testing and bundling capabilities to a project.
 
-Adds the task `package`, which creates an JAR file. It also sets the `sourceCompatibility` and `targetCompatibility`
+Adds the task `package`, which creates a JAR file. It also sets the `sourceCompatibility` and `targetCompatibility`
 based on the extension property.
 
 ```kotlin
@@ -320,11 +321,13 @@ Plugin: [Application Plugin](https://docs.gradle.org/current/userguide/applicati
 > The Application plugin facilitates creating an executable JVM application.
 
 Sets the environment variable `DEV_MODE=true` when executing `gradle run`. So the application can easily figure out, if
-it is run in development environment.
+it is run in development environment. Speeds up application start with `gradle run` by using `-XX:TieredStopAtLevel=1`.
 
-Speeds up application start with `gradle run` by using `-XX:TieredStopAtLevel=1`.
+Also adds the task `dev`. Basically the same as `run`, but watches for changes in `src/main/kotlin`
+and `src/main/resources`. If changes are detected, the application will be stopped. Should be used with continuous build
+flag `-t` to archive automatic restarts.
 
-Also adds the `Main-Class` entry to the manifest, so the JAR is runnable.
+Adds the `Main-Class` entry to the manifest, so the JAR is runnable.
 
 ### MavenPublishBlueprint
 

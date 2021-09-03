@@ -1,2 +1,2 @@
 rootProject.name = "kradle"
-include("plugin")
+include("plugin", "agent")
