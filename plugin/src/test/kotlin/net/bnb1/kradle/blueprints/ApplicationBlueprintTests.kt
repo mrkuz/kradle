@@ -5,7 +5,9 @@ import io.kotest.matchers.file.shouldExist
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.string.shouldContain
 import net.bnb1.kradle.PluginSpec
+import kotlin.time.ExperimentalTime
 
+@OptIn(ExperimentalTime::class)
 class ApplicationBlueprintTests : PluginSpec({
 
     test("Check DEV_MODE environment variable") {
@@ -95,5 +97,14 @@ class ApplicationBlueprintTests : PluginSpec({
         val result = runTask("tasks")
 
         result.output shouldContain "WARNING: Group doesn't comply with Java's package name rules"
+    }
+
+    test("Run 'dev'") {
+        bootstrapAppProject()
+        writeAppKt("println(\"Hello World\")")
+
+        val result = runTask("dev")
+        result.output shouldContain "DEBUG Project root: ${projectDir.absolutePath}" // Agent output
+        result.output shouldContain "Hello World"
     }
 })
