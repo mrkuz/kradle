@@ -5,15 +5,16 @@ Swiss army knife for Kotlin development.
 This project aims to provide a solution for common Kotlin development tasks using Gradle.
 
 - [Check for dependency updates](#check-for-dependency-updates)
-- [Static code analyisis](#static-code-analysis)
+- [Static code analysis](#static-code-analysis)
 - [Scan for vulnerabilities in dependencies](#scan-for-vulnerabilities-in-dependencies)
 - [Run JMH benchmarks](#run-jmh-benchmarks)
 - [Testing](#testing)
 - [Generate documentation](#generate-documentation)
 - [Packaging](#packaging)
-- [Create Docker images](#create-docker-image)
+- [Create Docker images](#create-docker-images)
+- [Automatic restarts](#automatic-restarts)
 
-It utilizies many other Gradle plugins. We will refer to them as vendor plugins. `kradle` takes care of applying and
+It utilizes many other Gradle plugins. We will refer to them as vendor plugins. `kradle` takes care of applying and
 configuring them.
 
 So instead of fiddling with your build script, you just need to apply one plugin.
@@ -58,7 +59,7 @@ These are the tasks added by `kradle`.
 | [buildImage](#jibblueprint) | Builds Docker image (kradle-app only) | jibDockerBuild |
 | [uberJar](#shadowblueprint) | Creates Uber-JAR (kradle-app only) | shadowJar |
 | [install](#mavenpublishblueprint) | Installs JAR to local Maven repository (kradle-lib only) | publishToMavenLocal |
-| [generateGitignore](#gitplugin) | Generates _.gitignore_ | - |
+| [generateGitignore](#git-plugin) | Generates _.gitignore_ | - |
 | [generateBuildProperties](#buildpropertiesblueprint) | Generates _build.properties_ | - |
 | [dev](#applicationblueprint) | Runs the application and stops it when sources change (use with `-t`, kradle-app only) | - |
 
@@ -94,7 +95,7 @@ kradle {
 
 Configuration of vendor plugins is handled by classes called _blueprints_.
 
-If you want do manually configure a plugin, you should disable the blueprint to avoid conflicts.
+If you want to manually configure a plugin, you should disable the blueprint to avoid conflicts.
 
 Example:
 
@@ -115,7 +116,7 @@ Plugin: [Gradle Versions Plugin](https://plugins.gradle.org/plugin/com.github.be
 Adds the task `showDependencyUpdates`, which shows all available dependency updates. It only considers stable versions,
 no release candidates or milestone builds.
 
-## Static code analyisis
+## Static code analysis
 
 ### KtlintBlueprint
 
@@ -221,9 +222,11 @@ Plugin: [Dokka Plugin](https://plugins.gradle.org/plugin/org.jetbrains.dokka)
 > Dokka, the documentation engine for Kotlin.
 
 Adds the `generateDocumentation` task, which uses [Dokka](https://kotlin.github.io/dokka/) to generates a HTML
-documention based on KDoc comments. The documentation can be found under `build/docs`.
+documentation based on KDoc comments. The documentation can be found under `build/docs`.
 
 Package and module documentation can be placed in a file _package.md_ or _module.md_ in the project directory.
+
+## Packaging
 
 ### ShadowBlueprint
 
@@ -235,6 +238,25 @@ Plugin: [Gradle Shadow Plugin](https://plugins.gradle.org/plugin/com.github.john
 
 Adds the task `uberJar`, which creates an Uber-Jar. This is a JAR containing all dependencies. The resulting JAR is
 minimized, so only required classes are added.
+
+## Automatic restarts
+
+### ApplicationBlueprint
+
+_net.bitsandbobs.kradle-app only_
+
+Plugin: [Application Plugin](https://docs.gradle.org/current/userguide/application_plugin.html)
+
+> The Application plugin facilitates creating an executable JVM application.
+
+Adds the task `dev`. Basically the same as `run`, but watches for changes in `src/main/kotlin`
+and `src/main/resources`. If changes are detected, the application will be stopped. Should be used with continuous build
+flag `-t` to archive automatic restarts.
+
+Sets the environment variable `DEV_MODE=true` when executing `gradle run` or `gradle dev`. So the application can easily
+figure out, if it is run in development environment. Speeds up application start by using `-XX:TieredStopAtLevel=1`.
+
+Adds the `Main-Class` entry to the manifest, so the JAR is runnable.
 
 ## Create Docker images
 
@@ -312,23 +334,6 @@ plugins {
 ```
 
 The plugin also enables [opt-ins](https://kotlinlang.org/docs/opt-in-requirements.html).
-
-### ApplicationBlueprint
-
-_net.bitsandbobs.kradle-app only_
-
-Plugin: [Application Plugin](https://docs.gradle.org/current/userguide/application_plugin.html)
-
-> The Application plugin facilitates creating an executable JVM application.
-
-Sets the environment variable `DEV_MODE=true` when executing `gradle run`. So the application can easily figure out, if
-it is run in development environment. Speeds up application start with `gradle run` by using `-XX:TieredStopAtLevel=1`.
-
-Also adds the task `dev`. Basically the same as `run`, but watches for changes in `src/main/kotlin`
-and `src/main/resources`. If changes are detected, the application will be stopped. Should be used with continuous build
-flag `-t` to archive automatic restarts.
-
-Adds the `Main-Class` entry to the manifest, so the JAR is runnable.
 
 ### MavenPublishBlueprint
 
