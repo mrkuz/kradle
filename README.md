@@ -4,6 +4,7 @@ Swiss army knife for Kotlin development.
 
 This project aims to provide a solution for common Kotlin development tasks using Gradle.
 
+- [Bootstrap project](#bootstrap-project)
 - [Check for dependency updates](#check-for-dependency-updates)
 - [Static code analysis](#static-code-analysis)
 - [Scan for vulnerabilities in dependencies](#scan-for-vulnerabilities-in-dependencies)
@@ -42,13 +43,16 @@ application {
 }
 ```
 
+You can now use `gradle boostrap` to set up the project.
+
 ## Tasks
 
 These are the tasks added by `kradle`.
 
 | Task | Description | Alias for |
 |---|---|---
-| [showDependencyUpdates](#dependencyupdatesblueprint) | Displays dependency updates | dependencyUpdates
+| [bootstrap](#bootstrap-plugin) | Boostrap app/lib project | - |
+| [showDependencyUpdates](#dependencyupdatesblueprint) | Displays dependency updates | dependencyUpdates |
 | [lint](#ktlintblueprint) | Runs [ktlint](https://ktlint.github.io/) | ktlintCheck |
 | [analyzeCode](#detektblueprint) | Runs [detekt](https://detekt.github.io/detekt/) code analysis | detekt |
 | [generateDetektConfig](#detektblueprint) | Generates _detekt-config.yml_ | - |
@@ -104,6 +108,18 @@ kradle {
     disable(JibBlueprint::class.java)
 }
 ```
+
+## Bootstrap project
+
+### Bootstrap Plugin
+
+Plugin: internal
+
+Adds the task `bootstrap`, which
+
+- Initializes Git
+- Adds Gradle wrapper
+- Creates essentials directories and files
 
 ## Check for dependency updates
 

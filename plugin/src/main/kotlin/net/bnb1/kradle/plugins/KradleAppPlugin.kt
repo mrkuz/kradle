@@ -11,6 +11,7 @@ class KradleAppPlugin : Plugin<Project> {
 
     override fun apply(project: Project) {
         project.apply(KradleBasePlugin::class.java)
+        project.apply(BootstrapAppPlugin::class.java)
         project.apply(ApplicationBlueprint)
         project.apply(ShadowBlueprint)
         project.apply(JibBlueprint)
