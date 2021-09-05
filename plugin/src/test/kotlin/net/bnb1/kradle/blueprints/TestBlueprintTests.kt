@@ -1,9 +1,29 @@
 package net.bnb1.kradle.blueprints
 
+import io.kotest.matchers.shouldBe
 import io.kotest.matchers.string.shouldContain
 import net.bnb1.kradle.PluginSpec
+import org.gradle.testkit.runner.TaskOutcome
 
 class TestBlueprintTests : PluginSpec({
+
+    fun createAppTest(sourceSet: String) {
+        val sourceDir = projectDir.resolve("src/$sourceSet/kotlin/com/example")
+        sourceDir.mkdirs()
+        sourceDir.resolve("AppTest.kt").writeText(
+            """
+            package com.example
+            
+            import org.junit.jupiter.api.Test
+            
+            class AppTest {
+
+                @Test
+                fun doNothing() {}
+            }
+            """.trimIndent()
+        )
+    }
 
     test("Check JUnit dependencies") {
         bootstrapLibProject()
@@ -63,5 +83,32 @@ class TestBlueprintTests : PluginSpec({
         val result = runTask("dependencies", "--configuration", "testRuntimeClasspath")
 
         result.output shouldContain "io.mockk:mockk:1.12.0"
+    }
+
+    test("Run test") {
+        bootstrapAppProject()
+        createAppTest("test")
+
+        val result = runTask("test")
+
+        result.task(":test")!!.outcome shouldBe TaskOutcome.SUCCESS
+    }
+
+    test("Run integration test") {
+        bootstrapAppProject()
+        createAppTest("integrationTest")
+
+        val result = runTask("integrationTest")
+
+        result.task(":integrationTest")!!.outcome shouldBe TaskOutcome.SUCCESS
+    }
+
+    test("Run functional test") {
+        bootstrapAppProject()
+        createAppTest("functionalTest")
+
+        val result = runTask("functionalTest")
+
+        result.task(":functionalTest")!!.outcome shouldBe TaskOutcome.SUCCESS
     }
 })

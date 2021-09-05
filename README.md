@@ -59,6 +59,8 @@ These are the tasks added by `kradle`.
 | [analyzeDependencies](#dependencycheckblueprint) | Analyzes dependencies for vulnerabilities | dependencyCheckAnalyze |
 | [runBenchmarks](#benchmarksblueprint) | Runs all [JMH](https://github.com/openjdk/jmh) benchmarks | benchmark |
 | [generateDocumentation](#dokkablueprint) | Generates [Dokka](https://kotlin.github.io/dokka/) HTML documentation | dokkaHtml |
+| [integrationTest](#testblueprint) | Runs the integration tests | - |
+| [functionalTest](#testblueprint) | Runs the functional tests | - |
 | [package](#javablueprint) | Creates JAR | jar |
 | [buildImage](#jibblueprint) | Builds Docker image (kradle-app only) | jibDockerBuild |
 | [uberJar](#shadowblueprint) | Creates Uber-JAR (kradle-app only) | shadowJar |
@@ -212,6 +214,9 @@ kradle {
 ```
 
 Test code must reside under `src/test/` and the files must end with `Test` `Tests` or `IT`.
+
+Adds the tasks `integrationTest` and `functionalTest`, which run tests under `src/integrationTest`
+and `src/functionalTest`.
 
 ### JacocoBlueprint
 
