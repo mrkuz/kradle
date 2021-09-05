@@ -1,14 +1,13 @@
 package net.bnb1.kradle.tasks
 
-import org.gradle.api.plugins.JavaApplication
+import net.bnb1.kradle.KradleExtension
 import java.nio.file.Path
 
 open class BootstrapAppTask : AbstractBoostrapTask() {
 
     override fun stageTwo() {
-        val javaExtension = project.extensions.getByType(JavaApplication::class.java)
-        val mainClass = javaExtension.mainClass.get();
-        val path = Path.of(mainClass.replace(".", "/"))
+        val extension = project.extensions.getByType(KradleExtension::class.java)
+        val path = Path.of(extension.mainClass.replace(".", "/"))
         val mainClassName = path.last().toString().replace(Regex("Kt$"), "")
         val packagePath = path.parent.toString()
 

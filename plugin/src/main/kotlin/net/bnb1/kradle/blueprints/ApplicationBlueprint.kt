@@ -3,6 +3,7 @@ package net.bnb1.kradle.blueprints
 import net.bnb1.kradle.KradleExtension
 import net.bnb1.kradle.PluginBlueprint
 import net.bnb1.kradle.create
+import org.gradle.api.GradleException
 import org.gradle.api.Project
 import org.gradle.api.plugins.ApplicationPlugin
 import org.gradle.api.plugins.JavaApplication
@@ -28,13 +29,22 @@ object ApplicationBlueprint : PluginBlueprint<ApplicationPlugin> {
             project.logger.warn("WARNING: Version is not specified")
         }
 
-        project.tasks.named<JavaExec>("run").configure { configureExecTask(this) }
-
         val javaExtension = project.extensions.getByType(JavaApplication::class.java)
-        val mainClass = javaExtension.mainClass.get()
+        if (extension.mainClass.isEmpty()) {
+            // Backward compatibility: Allow setting main class in application extension
+            if (javaExtension.mainClass.isPresent) {
+                extension.mainClass(javaExtension.mainClass.get())
+            } else {
+                throw GradleException("Main class is not set")
+            }
+        } else {
+            javaExtension.mainClass.set(extension.mainClass)
+        }
+
+        project.tasks.named<JavaExec>("run").configure { configureExecTask(this) }
         project.tasks.named<Jar>("jar").configure {
             manifest {
-                attributes(Pair("Main-Class", mainClass))
+                attributes(Pair("Main-Class", extension.mainClass))
             }
         }
 
@@ -52,7 +62,7 @@ object ApplicationBlueprint : PluginBlueprint<ApplicationPlugin> {
                 agentFile.writeBytes(agentResource.readBytes())
             }
             configureExecTask(this)
-            getMainClass().set(mainClass)
+            mainClass.set(extension.mainClass)
             classpath = mainSourceSet.runtimeClasspath
             jvmArgs = jvmArgs + listOf("-javaagent:${agentFile.absolutePath}")
         }

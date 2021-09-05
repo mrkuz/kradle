@@ -38,8 +38,8 @@ plugins {
 group = "com.example"
 version = "1.0.0"
 
-application {
-    mainClass.set("com.example.DemoAppKt")
+kradle {
+    mainClass("com.example.App")
 }
 ```
 
@@ -75,6 +75,7 @@ represent the defaults.
 ```kotlin
 kradle {
     targetJvm("16")
+    // mainClass("com.example.App")
     kotlinxCoroutinesVersion("1.5.1")
     jacocoVersion("0.8.7")
     ktlintVersion("0.42.1")

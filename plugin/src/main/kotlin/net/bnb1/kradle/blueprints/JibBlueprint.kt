@@ -7,7 +7,6 @@ import net.bnb1.kradle.PluginBlueprint
 import net.bnb1.kradle.alias
 import net.bnb1.kradle.extraDir
 import org.gradle.api.Project
-import org.gradle.api.plugins.JavaApplication
 import org.gradle.kotlin.dsl.configure
 import java.net.URL
 import java.nio.file.Files
@@ -68,9 +67,7 @@ object JibBlueprint : PluginBlueprint<JibPlugin> {
                 }
 
                 if (withAppSh) {
-                    val javaExtension = project.extensions.getByType(JavaApplication::class.java)
-                    val mainClass = javaExtension.mainClass.get()
-                    environment = environment + mapOf("MAIN_CLASS" to mainClass)
+                    environment = environment + mapOf("MAIN_CLASS" to extension.mainClass)
                     entrypoint = listOf("/bin/sh", "/app/extra/app.sh")
                 }
             }
