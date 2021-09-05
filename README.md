@@ -74,19 +74,19 @@ represent the defaults.
 
 ```kotlin
 kradle {
-    targetJvm.set("16")
-    kotlinxCoroutinesVersion.set("1.5.1")
-    jacocoVersion.set("0.8.7")
-    ktlintVersion.set("0.42.1")
+    targetJvm("16")
+    kotlinxCoroutinesVersion("1.5.1")
+    jacocoVersion("0.8.7")
+    ktlintVersion("0.42.1")
     tests {
-        junitJupiterVersion.set("5.7.2")
+        junitJupiterVersion("5.7.2")
         // useKotest()
         // useMockk()
     }
     image {
-        baseImage.set("bellsoft/liberica-openjdk-alpine:16")
+        baseImage("bellsoft/liberica-openjdk-alpine:16")
         // ports.add(8080)
-        // jvmOpts.set("-Xmx512M")
+        // jvmOpts("-Xmx512M")
         // withAppSh()
         // withJvmKill("1.16.0")
     }
@@ -149,7 +149,7 @@ The `kradle` extension provides a property to configure the ktlint version.
 
 ```kotlin
 kradle {
-    ktlintVersion.set("0.42.1")
+    ktlintVersion("0.42.1")
 }
 ```
 
@@ -203,7 +203,7 @@ and [mockk](https://mockk.io/) dependencies.
 ```kotlin
 kradle {
     tests {
-        junitJupiterVersion.set("5.7.2")
+        junitJupiterVersion("5.7.2")
         useKotest("4.6.1")
         useMockk("1.12.0")
     }
@@ -225,7 +225,7 @@ The `kradle` extension provides a property to configure the JaCoCo version.
 
 ```kotlin
 kradle {
-    jacocoVersion.set("0.8.7")
+    jacocoVersion("0.8.7")
 }
 ```
 
@@ -291,9 +291,9 @@ The base image, exposed ports and JVM command-line options can be configured by 
 ```kotlin
 kradle {
     image {
-        baseImage.set("bellsoft/liberica-openjdk-alpine:16")
+        baseImage("bellsoft/liberica-openjdk-alpine:16")
         // ports.add(8080)
-        // jvmOpts.set("-Xmx512M")
+        // jvmOpts("-Xmx512M")
         // withAppSh()
         // withJvmKill("1.16.0")
     }
@@ -319,7 +319,7 @@ based on the extension property.
 
 ```kotlin
 kradle {
-    targetJvm.set("16")
+    targetJvm("16")
 }
 ```
 
@@ -334,7 +334,7 @@ with the `kradle` extension.
 
 ```kotlin
 kradle {
-    kotlinxCoroutinesVersion.set("1.5.1")
+    kotlinxCoroutinesVersion("1.5.1")
 }
 ```
 

@@ -8,7 +8,10 @@ import javax.inject.Inject
 open class KradleExtension @Inject constructor(factory: ObjectFactory) {
 
     val targetJvm = factory.property("16")
+    fun targetJvm(version: String) = targetJvm.set(version)
+
     val kotlinxCoroutinesVersion = factory.property("1.5.1")
+    fun kotlinxCoroutinesVersion(version: String) = kotlinxCoroutinesVersion.set(version)
 
     val tests = TestsExtension(factory)
     fun tests(configure: TestsExtension.() -> Unit) = configure(tests)
@@ -17,9 +20,13 @@ open class KradleExtension @Inject constructor(factory: ObjectFactory) {
     fun image(configure: ImageExtension.() -> Unit) = configure(image)
 
     val jacocoVersion = factory.property("0.8.7")
+    fun jacocoVersion(version: String) = jacocoVersion.set(version)
+
     val ktlintVersion = factory.property("0.42.1")
+    fun ktlintVersion(version: String) = ktlintVersion.set(version)
 
     val detektConfigFile = factory.property("detekt-config.yml")
+    fun detektConfigFile(name: String) = detektConfigFile.set(name)
 
     private val disabledBlueprints = factory.setProperty(Class::class.java)
     fun disable(blueprint: Class<out PluginBlueprint<Plugin<Project>>>) = disabledBlueprints.add(blueprint)
@@ -29,6 +36,8 @@ open class KradleExtension @Inject constructor(factory: ObjectFactory) {
     open class ImageExtension(factory: ObjectFactory) {
 
         val baseImage = factory.property("bellsoft/liberica-openjdk-alpine:16")
+        fun baseImage(name: String) = baseImage.set(name)
+
         val ports = factory.setProperty(Int::class.java)
 
         val jvmKillVersion = factory.empty<String>()
@@ -38,11 +47,13 @@ open class KradleExtension @Inject constructor(factory: ObjectFactory) {
         fun withAppSh() = withAppSh.set(true)
 
         val javaOpts = factory.empty<String>()
+        fun javaOpts(opts: String) = javaOpts.set(opts)
     }
 
     open class TestsExtension(factory: ObjectFactory) {
 
         val junitJupiterVersion = factory.property("5.7.2")
+        fun junitJupiterVersion(version: String) = junitJupiterVersion.set(version)
 
         val kotestVersion = factory.empty<String>()
         fun useKotest(version: String = "4.6.1") = kotestVersion.set(version)
