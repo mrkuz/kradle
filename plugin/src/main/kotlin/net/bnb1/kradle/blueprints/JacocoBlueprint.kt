@@ -16,7 +16,7 @@ object JacocoBlueprint : PluginBlueprint<JacocoPlugin> {
 
     override fun configure(project: Project, extension: KradleExtension) {
         project.configure<JacocoPluginExtension> {
-            toolVersion = extension.jacocoVersion.get()
+            toolVersion = extension.tests.jacocoVersion.get()
         }
 
         project.tasks.named<JacocoReport>("jacocoTestReport").configure {

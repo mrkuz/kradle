@@ -77,10 +77,10 @@ kradle {
     targetJvm("16")
     // mainClass("com.example.App")
     kotlinxCoroutinesVersion("1.5.1")
-    jacocoVersion("0.8.7")
     ktlintVersion("0.42.1")
     tests {
         junitJupiterVersion("5.7.2")
+        jacocoVersion("0.8.7")
         // useKotest()
         // useMockk()
     }
@@ -203,7 +203,9 @@ The JaCoCo version is configurable.
 
 ```kotlin
 kradle {
-    jacocoVersion("0.8.7")
+    tests {
+        jacocoVersion("0.8.7")
+    }
 }
 ```
 

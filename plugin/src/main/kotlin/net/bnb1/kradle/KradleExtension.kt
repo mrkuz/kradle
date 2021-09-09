@@ -30,8 +30,9 @@ open class KradleExtension @Inject constructor(factory: ObjectFactory) {
     val image = ImageExtension(factory)
     fun image(configure: ImageExtension.() -> Unit) = configure(image)
 
-    val jacocoVersion = factory.property("0.8.7")
-    fun jacocoVersion(version: String) = jacocoVersion.set(version)
+    // Keep for backward compatibility
+    val jacocoVersion = tests.jacocoVersion
+    fun jacocoVersion(version: String) = tests.jacocoVersion.set(version)
 
     val ktlintVersion = factory.property("0.42.1")
     fun ktlintVersion(version: String) = ktlintVersion.set(version)
@@ -65,6 +66,9 @@ open class KradleExtension @Inject constructor(factory: ObjectFactory) {
 
         val junitJupiterVersion = factory.property("5.7.2")
         fun junitJupiterVersion(version: String) = junitJupiterVersion.set(version)
+
+        val jacocoVersion = factory.property("0.8.7")
+        fun jacocoVersion(version: String) = jacocoVersion.set(version)
 
         val kotestVersion = factory.empty<String>()
         fun useKotest(version: String = "4.6.1") = kotestVersion.set(version)
