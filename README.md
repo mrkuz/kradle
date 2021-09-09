@@ -28,7 +28,7 @@ _build.gradle.kts_
 ```kotlin
 plugins {
     id("org.jetbrains.kotlin.jvm") version "1.5.21"
-    id("net.bitsandbobs.kradle-app") version "1.0.0"
+    id("net.bitsandbobs.kradle-app") version "1.1.0"
 }
 
 group = "com.example"
@@ -50,7 +50,7 @@ Many tasks are provided by 3rd party plugins. These plugins are applied and conf
 
 | Task | Description | Alias for |
 |---|---|---|
-| [bootstrap](#bootstrap-project) | Boostrap app/lib project | - |
+| [bootstrap](#bootstrap-project) | Bootstraps app/lib project | - |
 | [dev](#automatic-restarts) | Runs the application and stops it when sources change (use with `-t`, kradle-app only) | - |
 | [showDependencyUpdates](#check-for-dependency-updates) | Displays dependency updates | dependencyUpdates / [Gradle Versions Plugin](https://plugins.gradle.org/plugin/com.github.ben-manes.versions) |
 | [lint](#static-code-analysis) | Runs [ktlint](https://ktlint.github.io/) | ktlintCheck / [ktlint Plugin](https://plugins.gradle.org/plugin/org.jlleitschuh.gradle.ktlint) |
@@ -218,7 +218,8 @@ Plugins: [Java Plugin](https://docs.gradle.org/current/userguide/java_plugin.htm
 The `generateDocumentation` task uses [Dokka](https://kotlin.github.io/dokka/) to generate a HTML documentation based on
 KDoc comments. The documentation can be found under `build/docs`.
 
-Package and module documentation can be placed in files _package.md_ or _module.md_ in the project or source directory.
+Package and module documentation can be placed in files _package.md_ or _module.md_ in the project or any source
+directory.
 
 Plugins: [Dokka Plugin](https://plugins.gradle.org/plugin/org.jetbrains.dokka)
 
@@ -311,3 +312,69 @@ Plugins: [Java Library Plugin](https://docs.gradle.org/current/userguide/java_li
 , [kotlinx.serialization Plugin](https://plugins.gradle.org/plugin/org.jetbrains.kotlin.plugin.serialization)
 , [All-open Compiler Plugin](https://plugins.gradle.org/plugin/org.jetbrains.kotlin.plugin.allopen)
 , [Maven Publish Plugin](https://docs.gradle.org/current/userguide/publishing_maven.html)
+
+## Changelog
+
+### Version 1.1.0 (2020-09-09)
+
+- New task `bootstrap`: Bootstraps new app/lib project
+- New task `dev`: Runs the application and stops it when sources change (for automatic rebuilds and restarts)
+- New task `generateGitignore`: Generates _.gitignore_
+- Added source sets and tasks for integration and functional tests
+- module.md and package.md for Dokka can also be placed in any source directory
+- Syntactic sugar: Added methods for configuration
+
+  Before
+
+    ```kotlin
+    kradle {
+        targetJvm.set("16")
+    }
+    ```
+
+  After
+
+    ```kotlin
+    kradle {
+        targetJvm("16")
+    }
+    ```
+
+- Added configuration for main class
+
+  Before
+
+    ```kotlin
+    application {
+        mainClass.set("com.example.AppKt")
+    }
+    ```
+
+  After
+
+    ```kotlin
+    kradle {
+        mainClass("com.example.App")
+    }
+    ```
+
+
+- Moved JaCoCo version to `tests`
+
+  Before
+
+    ```kotlin
+    kradle {
+        jacocoVersion("0.8.7")
+    }
+    ```
+
+  After
+
+    ```kotlin
+    kradle {
+        tests {
+            jacocoVersion("0.8.7")
+        }
+    }
+    ```
