@@ -96,4 +96,13 @@ class ApplicationBlueprintTests : PluginSpec({
 
         result.output shouldContain "WARNING: Group doesn't comply with Java's package name rules"
     }
+
+    test("Run 'dev'") {
+        bootstrapAppProject()
+        writeAppKt("println(\"Hello World\")")
+
+        val result = runTask("dev")
+        result.output shouldContain "DEBUG Project root: ${projectDir.absolutePath}" // Agent output
+        result.output shouldContain "Hello World"
+    }
 })

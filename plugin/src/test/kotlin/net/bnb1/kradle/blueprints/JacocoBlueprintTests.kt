@@ -6,8 +6,8 @@ import org.gradle.testkit.runner.TaskOutcome
 
 class JacocoBlueprintTests : PluginSpec({
 
-    fun createAppTest() {
-        val sourceDir = projectDir.resolve("src/test/kotlin/com/example")
+    fun createAppTest(sourceSet: String) {
+        val sourceDir = projectDir.resolve("src/$sourceSet/kotlin/com/example")
         sourceDir.mkdirs()
         sourceDir.resolve("AppTest.kt").writeText(
             """
@@ -26,7 +26,7 @@ class JacocoBlueprintTests : PluginSpec({
 
     test("Generate report after test") {
         bootstrapAppProject()
-        createAppTest()
+        createAppTest("test")
 
         val result = runTask("test")
 
@@ -35,10 +35,28 @@ class JacocoBlueprintTests : PluginSpec({
 
     test("Run tests when generating report") {
         bootstrapAppProject()
-        createAppTest()
+        createAppTest("test")
 
         val result = runTask("jacocoTestReport")
 
         result.task(":test")!!.outcome shouldBe TaskOutcome.SUCCESS
+    }
+
+    test("Generate report after integration test") {
+        bootstrapAppProject()
+        createAppTest("integrationTest")
+
+        val result = runTask("integrationTest")
+
+        result.task(":jacocoIntegrationTestReport")!!.outcome shouldBe TaskOutcome.SUCCESS
+    }
+
+    test("Generate report after functional test") {
+        bootstrapAppProject()
+        createAppTest("functionalTest")
+
+        val result = runTask("functionalTest")
+
+        result.task(":jacocoFunctionalTestReport")!!.outcome shouldBe TaskOutcome.SUCCESS
     }
 })

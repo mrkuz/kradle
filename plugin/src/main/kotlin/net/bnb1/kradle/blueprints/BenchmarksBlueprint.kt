@@ -8,6 +8,7 @@ import net.bnb1.kradle.alias
 import org.gradle.api.Project
 import org.gradle.api.file.DuplicatesStrategy
 import org.gradle.api.plugins.JavaPluginConvention
+import org.gradle.api.tasks.SourceSet
 import org.gradle.jvm.tasks.Jar
 import org.gradle.kotlin.dsl.configure
 import org.gradle.kotlin.dsl.named
@@ -32,7 +33,7 @@ object BenchmarksBlueprint : PluginBlueprint<BenchmarksPlugin> {
 
     override fun configure(project: Project, extension: KradleExtension) {
         project.tasks.named<Jar>("${SOURCE_SET_NAME}BenchmarkJar").configure {
-            // Required workaround. Otherwise running the benchmarks will complain because of
+            // Required workaround. Otherwise, running the benchmarks will complain because of
             // duplicate META-INF/versions/9/module-info.class
             duplicatesStrategy = DuplicatesStrategy.INCLUDE
         }
@@ -43,13 +44,12 @@ object BenchmarksBlueprint : PluginBlueprint<BenchmarksPlugin> {
     @Suppress("DEPRECATION")
     private fun createSourceSet(project: Project) {
         val javaConvention = project.convention.getPlugin(JavaPluginConvention::class.java)
-        val mainSourceSet = javaConvention.sourceSets.getByName("main");
+        val mainSourceSet = javaConvention.sourceSets.getByName(SourceSet.MAIN_SOURCE_SET_NAME);
         val benchmarkSourceSet = javaConvention.sourceSets.create("$SOURCE_SET_NAME");
 
         benchmarkSourceSet.compileClasspath += mainSourceSet.output + mainSourceSet.compileClasspath
         benchmarkSourceSet.runtimeClasspath += mainSourceSet.output + mainSourceSet.runtimeClasspath
         benchmarkSourceSet.withConvention(KotlinSourceSet::class) {
-            kotlin.srcDirs("src/${SOURCE_SET_NAME}/kotlin")
             dependencies {
                 implementation("org.jetbrains.kotlinx:kotlinx-benchmark-runtime:0.3.1")
             }

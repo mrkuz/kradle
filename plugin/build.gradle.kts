@@ -11,7 +11,7 @@ plugins {
 }
 
 group = "net.bitsandbobs.kradle"
-version = "1.0.0"
+version = "main-SNAPSHOT"
 
 repositories {
     mavenCentral()
@@ -63,6 +63,15 @@ tasks.withType<Test> {
     testLogging.showStandardStreams = true
 }
 
+tasks.register<Copy>("buildAgent") {
+    dependsOn(":agent:jar")
+    from(project(":agent").buildDir.resolve("libs/agent.jar"))
+    into(project.buildDir.resolve("resources/main/"))
+}
+
+tasks.named("processResources").configure {
+    dependsOn("buildAgent")
+}
 
 gradlePlugin {
     plugins {

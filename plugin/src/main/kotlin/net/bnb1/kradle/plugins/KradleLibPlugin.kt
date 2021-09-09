@@ -10,6 +10,7 @@ class KradleLibPlugin : Plugin<Project> {
 
     override fun apply(project: Project) {
         project.apply(KradleBasePlugin::class.java)
+        project.apply(BootstrapLibPlugin::class.java)
         project.apply(JavaLibraryPlugin::class.java)
 
         project.apply(MavenPublishBlueprint)
