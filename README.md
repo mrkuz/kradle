@@ -191,7 +191,12 @@ kradle {
 
 Test file names can end with `Test`, `Tests` or `IT`.
 
-Running tests always generates a [JaCoCo](https://www.jacoco.org/jacoco/) code coverage report. It can be found
+`kradle` adds `integrationTest` and `functionalTest`, which run tests under `src/integrationTest`
+and `src/functionalTest`.
+
+Both are executed when running `check`.
+
+Running tests always generates [JaCoCo](https://www.jacoco.org/jacoco/) code coverage reports. They can be found
 under `build/reports/jacoco/`.
 
 The JaCoCo version is configurable.
@@ -201,11 +206,6 @@ kradle {
     jacocoVersion("0.8.7")
 }
 ```
-
-`kradle` adds `integrationTest` and `functionalTest`, which run tests under `src/integrationTest`
-and `src/functionalTest`.
-
-Both are executed when running `check`.
 
 Plugins: [Java Plugin](https://docs.gradle.org/current/userguide/java_plugin.html)
 , [JaCocCo Plugin](https://docs.gradle.org/current/userguide/jacoco_plugin.html),
