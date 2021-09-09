@@ -16,7 +16,7 @@ class DokkaBlueprintTests : PluginSpec({
     }
 
     // Raises OutOfMemoryError: Metaspace
-    xtest("Generate documentation with package.md") {
+    xtest("Generate documentation with package.md (project dir") {
         bootstrapAppProject()
         writeAppKt("println(\"Hello World\")")
         projectDir.resolve("package.md").writeText(
@@ -35,10 +35,49 @@ class DokkaBlueprintTests : PluginSpec({
     }
 
     // Raises OutOfMemoryError: Metaspace
-    xtest("Generate documentation with module.md") {
+    xtest("Generate documentation with package.md (source dir") {
+        bootstrapAppProject()
+        writeAppKt("println(\"Hello World\")")
+        projectDir.resolve("src/main/kotlin/com/example/package.md").writeText(
+            """
+            # Module app
+            
+            Hello package.md
+            """.trimIndent()
+        )
+
+        runTask("generateDocumentation")
+
+        val output = buildDir.resolve("docs/index.html")
+        output.shouldExist()
+        output.readText() shouldContain "Hello package.md"
+    }
+
+
+    // Raises OutOfMemoryError: Metaspace
+    xtest("Generate documentation with module.md (project dir)") {
         bootstrapAppProject()
         writeAppKt("println(\"Hello World\")")
         projectDir.resolve("module.md").writeText(
+            """
+            # Module app
+            
+            Hello module.md
+            """.trimIndent()
+        )
+
+        runTask("generateDocumentation")
+
+        val output = buildDir.resolve("docs/index.html")
+        output.shouldExist()
+        output.readText() shouldContain "Hello module.md"
+    }
+
+    // Raises OutOfMemoryError: Metaspace
+    xtest("Generate documentation with module.md (source dir)") {
+        bootstrapAppProject()
+        writeAppKt("println(\"Hello World\")")
+        projectDir.resolve("src/main/kotlin/com/example/module.md").writeText(
             """
             # Module app
             

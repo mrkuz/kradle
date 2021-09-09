@@ -216,7 +216,7 @@ Plugins: [Java Plugin](https://docs.gradle.org/current/userguide/java_plugin.htm
 The `generateDocumentation` task uses [Dokka](https://kotlin.github.io/dokka/) to generate a HTML documentation based on
 KDoc comments. The documentation can be found under `build/docs`.
 
-Package and module documentation can be placed in the files _package.md_ or _module.md_ in the project directory.
+Package and module documentation can be placed in files _package.md_ or _module.md_ in the project or source directory.
 
 Plugins: [Dokka Plugin](https://plugins.gradle.org/plugin/org.jetbrains.dokka)
 
