@@ -23,6 +23,7 @@ dependencies {
     implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
 
     // Plugins
+    implementation("org.jetbrains.kotlin:kotlin-gradle-plugin")
     implementation("org.jetbrains.dokka:dokka-gradle-plugin:1.4.30")
     implementation("org.jetbrains.kotlin:kotlin-allopen")
     implementation("org.jetbrains.kotlin:kotlin-serialization")
@@ -35,9 +36,6 @@ dependencies {
     implementation("io.gitlab.arturbosch.detekt:detekt-gradle-plugin:1.17.1")
     implementation("org.jlleitschuh.gradle:ktlint-gradle:10.1.0")
     implementation("org.owasp:dependency-check-gradle:6.2.2")
-
-    // Target project needs to apply the Kotlin plugin
-    implementation("org.jetbrains.kotlin:kotlin-gradle-plugin")
 
     // Miscellaneous
     implementation("org.eclipse.jgit:org.eclipse.jgit:5.12.0.202106070339-r")

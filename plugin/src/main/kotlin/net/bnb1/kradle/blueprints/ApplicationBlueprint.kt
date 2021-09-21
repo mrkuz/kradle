@@ -45,7 +45,7 @@ object ApplicationBlueprint : PluginBlueprint<ApplicationPlugin> {
         if (extension.mainClass.isEmpty()) {
             // Backward compatibility: Allow setting main class in application extension
             if (javaExtension.mainClass.isPresent) {
-                extension.mainClass(javaExtension.mainClass.get())
+                extension.mainClass(javaExtension.mainClass.get(), true)
             } else {
                 throw GradleException("Main class is not set")
             }

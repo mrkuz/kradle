@@ -75,7 +75,7 @@ This example configuration shows all available options. If __not__ commented, th
 ```kotlin
 kradle {
     targetJvm("16")
-    // mainClass("com.example.App")
+    // mainClass("com.example.App", jvmName = false)
     kotlinxCoroutinesVersion("1.5.1")
     ktlintVersion("0.42.1")
     detektVersion("1.18.1")
@@ -251,7 +251,14 @@ Plugins: [Dokka Plugin](https://plugins.gradle.org/plugin/org.jetbrains.dokka)
 
 _net.bitsandbobs.kradle-app only_
 
-The `Main-Class` entry will be added to the manifest, so the JAR is runnable.
+The `Main-Class` entry will be added to the manifest, so the JAR is runnable. If you use the `@JvmName` annotation, make
+sure to set the according flag in the configuration.
+
+```kotlin
+kradle {
+    mainClass("com.example.CustomApp", jvmName = true)
+}
+```
 
 The task `uberJar` creates an Uber-Jar. This is a JAR containing all dependencies.
 
@@ -349,6 +356,7 @@ Plugins: [Java Library Plugin](https://docs.gradle.org/current/userguide/java_li
 
 - The tasks `showDependencyUpdates`, `analyzeCode`, `analyzeDependencies`, `generateDocumentation`,
   `uberJar` and `buildImage` are no longer aliases. Instead, they are independent tasks.
+- Support use of `@JvmName`
 - __Breaking change__: `run` no longer sets `DEV_MODE=true`
 - JMH and detekt versions are now configurable
 - __Breaking change__: The JAR created by `uberJar` is no longer minimized by default

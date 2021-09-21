@@ -8,15 +8,16 @@ import javax.inject.Inject
 open class KradleExtension @Inject constructor(factory: ObjectFactory) {
 
     private val _mainClass = factory.empty<String>()
-    fun mainClass(name: String) = _mainClass.set(name)
-    val mainClass
-        get() = if (!_mainClass.isPresent) {
-            ""
-        } else if (_mainClass.get().endsWith("Kt")) {
-            _mainClass.get()
+    fun mainClass(name: String, jvmName: Boolean = false) {
+        if (jvmName) {
+            _mainClass.set(name)
         } else {
-            _mainClass.get() + "Kt"
+            _mainClass.set(name + "Kt")
         }
+    }
+
+    val mainClass
+        get() = _mainClass.getOrElse("")
 
     val targetJvm = factory.property("16")
     fun targetJvm(version: String) = targetJvm.set(version)
