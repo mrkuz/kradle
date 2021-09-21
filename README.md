@@ -322,8 +322,8 @@ kradle {
 }
 ```
 
-Kotlin Standard Library, kotlin.test library and coroutines dependencies are added. The coroutines version is
-configurable.
+Kotlin Standard Library, Kotlin reflection library, kotlin.test library and coroutines dependencies are added. The
+coroutines version is configurable.
 
 ```kotlin
 kradle {
@@ -357,6 +357,7 @@ Plugins: [Java Library Plugin](https://docs.gradle.org/current/userguide/java_li
 - The tasks `showDependencyUpdates`, `analyzeCode`, `analyzeDependencies`, `generateDocumentation`,
   `uberJar` and `buildImage` are no longer aliases. Instead, they are independent tasks.
 - Support use of `@JvmName`
+- Automatically add `kotlin-reflect` to project dependencies
 - __Breaking change__: `run` no longer sets `DEV_MODE=true`
 - JMH and detekt versions are now configurable
 - __Breaking change__: The JAR created by `uberJar` is no longer minimized by default

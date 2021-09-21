@@ -35,6 +35,7 @@ object KotlinBlueprint : PluginBlueprint<NoOpPlugin> {
         project.dependencies {
             implementation(platform("org.jetbrains.kotlin:kotlin-bom"))
             implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
+            implementation("org.jetbrains.kotlin:kotlin-reflect")
             implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:${extension.kotlinxCoroutinesVersion.get()}")
             testImplementation("org.jetbrains.kotlin:kotlin-test")
         }

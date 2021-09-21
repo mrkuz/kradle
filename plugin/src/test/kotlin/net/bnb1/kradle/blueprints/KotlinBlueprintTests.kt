@@ -21,6 +21,7 @@ class KotlinBlueprintTests : PluginSpec({
 
         result.output shouldContain "org.jetbrains.kotlin:kotlin-stdlib:1.4.31"
         result.output shouldContain "org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.4.31"
+        result.output shouldContain "org.jetbrains.kotlin:kotlin-reflect:1.4.31"
         result.output shouldContain "org.jetbrains.kotlinx:kotlinx-coroutines-core:1.5.1"
     }
 
