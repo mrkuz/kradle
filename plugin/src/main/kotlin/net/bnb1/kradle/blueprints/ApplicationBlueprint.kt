@@ -54,7 +54,6 @@ object ApplicationBlueprint : PluginBlueprint<ApplicationPlugin> {
         }
 
         project.tasks.named<JavaExec>("dev").configure { mainClass.set(extension.mainClass) }
-        project.tasks.named<JavaExec>("run").configure { configureTask(this) }
         project.tasks.named<Jar>("jar").configure {
             manifest {
                 attributes(Pair("Main-Class", extension.mainClass))
@@ -65,7 +64,6 @@ object ApplicationBlueprint : PluginBlueprint<ApplicationPlugin> {
     private fun configureTask(task: JavaExec) = task.apply {
         // Allows the application to figure out we are running in development mode
         environment("DEV_MODE", "true")
-        environment("BNB1_PROFILE", "dev")
         environment("PROJECT_ROOT", project.rootDir)
         // Speed up start when developing
         jvmArgs = listOf("-XX:TieredStopAtLevel=1")

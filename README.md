@@ -122,6 +122,9 @@ _net.bitsandbobs.kradle-app only_
 The task `dev` watches the directories `src/main/kotlin` and `src/main/resources`. If changes are detected, the
 application is stopped. Should be used with continuous build flag `-t` to archive automatic rebuilds and restarts.
 
+When launching the application with `dev`, the environment variable `DEV_MODE=true` is set. To speed up application
+start, the JVM flag `-XX:TieredStopAtLevel=1` is used.
+
 Plugins: [Application Plugin](https://docs.gradle.org/current/userguide/application_plugin.html)
 
 ## Check for dependency updates
@@ -282,7 +285,7 @@ kradle {
 }
 ```
 
-Kotlin Standard Library, kotlin.test library and coroutines dependencies are addedt. The coroutines version is
+Kotlin Standard Library, kotlin.test library and coroutines dependencies are added. The coroutines version is
 configurable.
 
 ```kotlin
@@ -303,9 +306,6 @@ The task `generateGitignore` generates _.gitignore_ with sane defaults.
 `kradle` looks for a file called _project.properties_ in the project directory. If found, the entries are added to the
 project properties.
 
-When launching the applicaton with `run` or `dev`, the environment variable `DEV_MODE=true` is set. To speed up
-application start, the JVM flag `-XX:TieredStopAtLevel=1` is used (kradle-app only).
-
 The task `install` installs the library to your local Maven repository (kradle-lib only).
 
 Plugins: [Java Library Plugin](https://docs.gradle.org/current/userguide/java_library_plugin.html)
@@ -319,6 +319,7 @@ Plugins: [Java Library Plugin](https://docs.gradle.org/current/userguide/java_li
 
 - The tasks `showDependencyUpdates`, `analyzeCode`, `analyzeDependencies`, `generateDocumentation`,
   `uberJar` and `buildImage` are no longer aliases. Instead, they are independent tasks.
+- __Breaking change__: `run` no longer sets `DEV_MODE=true`
 
 ### Version 1.1.0 (2021-09-09)
 

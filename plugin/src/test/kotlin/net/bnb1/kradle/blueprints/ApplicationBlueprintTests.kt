@@ -12,7 +12,7 @@ class ApplicationBlueprintTests : PluginSpec({
         bootstrapAppProject()
         writeAppKt("println(\"DEV_MODE=\" + System.getenv()[\"DEV_MODE\"])")
 
-        val result = runTask("run")
+        val result = runTask("dev")
         result.output shouldContain "DEV_MODE=true"
     }
 
