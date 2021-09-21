@@ -27,6 +27,9 @@ open class KradleExtension @Inject constructor(factory: ObjectFactory) {
     val tests = TestsExtension(factory)
     fun tests(configure: TestsExtension.() -> Unit) = configure(tests)
 
+    val uberJar = UberJarExtension(factory)
+    fun uberJar(configure: UberJarExtension.() -> Unit) = configure(uberJar)
+
     val image = ImageExtension(factory)
     fun image(configure: ImageExtension.() -> Unit) = configure(image)
 
@@ -49,6 +52,12 @@ open class KradleExtension @Inject constructor(factory: ObjectFactory) {
     fun disable(blueprint: Class<out PluginBlueprint<Plugin<Project>>>) = disabledBlueprints.add(blueprint)
     fun isDisabled(blueprint: PluginBlueprint<Plugin<Project>>) =
         disabledBlueprints.get().contains(blueprint::class.java)
+
+    open class UberJarExtension(factory: ObjectFactory) {
+
+        val minimize = factory.property(false)
+        fun minimize(enabled: Boolean) = minimize.set(enabled)
+    }
 
     open class ImageExtension(factory: ObjectFactory) {
 

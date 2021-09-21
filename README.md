@@ -86,6 +86,9 @@ kradle {
         // useKotest()
         // useMockk()
     }
+    uberJar {
+        minimize(false)
+    }
     image {
         baseImage("bellsoft/liberica-openjdk-alpine:16")
         // ports.add(8080)
@@ -250,8 +253,17 @@ _net.bitsandbobs.kradle-app only_
 
 The `Main-Class` entry will be added to the manifest, so the JAR is runnable.
 
-The task `uberJar` creates an Uber-Jar. This is a JAR containing all dependencies. The resulting JAR is minimized, so
-only required classes are added.
+The task `uberJar` creates an Uber-Jar. This is a JAR containing all dependencies.
+
+The resulting JAR can be minimized, so only required classes are added.
+
+```kotlin
+kradle {
+    uberJar {
+        minimize(true)
+    }
+}
+```
 
 Plugins: [Gradle Shadow Plugin](https://plugins.gradle.org/plugin/com.github.johnrengelman.shadow)
 
@@ -339,6 +351,7 @@ Plugins: [Java Library Plugin](https://docs.gradle.org/current/userguide/java_li
   `uberJar` and `buildImage` are no longer aliases. Instead, they are independent tasks.
 - __Breaking change__: `run` no longer sets `DEV_MODE=true`
 - JMH and detekt versions are now configurable
+- __Breaking change__: The JAR created by `uberJar` is no longer minimized by default
 
 ### Version 1.1.0 (2021-09-09)
 

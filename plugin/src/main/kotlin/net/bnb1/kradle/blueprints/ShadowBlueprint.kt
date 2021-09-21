@@ -36,8 +36,9 @@ object ShadowBlueprint : PluginBlueprint<NoOpPlugin> {
 
     override fun configure(project: Project, extension: KradleExtension) {
         project.tasks.named<ShadowJar>(TASK_NAME).configure {
-            // Remove unused dependencies
-            minimize()
+            if (extension.uberJar.minimize.get()) {
+                minimize()
+            }
         }
     }
 }
