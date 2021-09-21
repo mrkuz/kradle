@@ -26,7 +26,7 @@ object KotlinBlueprint : PluginBlueprint<NoOpPlugin> {
         project.tasks.withType<KotlinCompile> {
             kotlinOptions {
                 jvmTarget = extension.targetJvm.get()
-                freeCompilerArgs = listOf("-Xopt-in=kotlin.RequiresOptIn")
+                freeCompilerArgs = listOf("-Xopt-in=kotlin.RequiresOptIn", "-Xjsr305=strict")
             }
         }
     }
