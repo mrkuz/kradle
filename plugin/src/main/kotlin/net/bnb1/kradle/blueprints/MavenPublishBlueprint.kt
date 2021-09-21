@@ -1,6 +1,5 @@
 package net.bnb1.kradle.blueprints
 
-import net.bnb1.kradle.KradleExtension
 import net.bnb1.kradle.PluginBlueprint
 import net.bnb1.kradle.alias
 import org.gradle.api.Project
@@ -11,7 +10,7 @@ import org.gradle.kotlin.dsl.configure
 
 object MavenPublishBlueprint : PluginBlueprint<MavenPublishPlugin> {
 
-    override fun configure(project: Project, extension: KradleExtension) {
+    override fun configureEager(project: Project) {
         project.configure<PublishingExtension> {
             publications {
                 create("default", MavenPublication::class.java) {

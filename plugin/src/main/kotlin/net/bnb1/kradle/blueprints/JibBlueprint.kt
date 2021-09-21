@@ -1,40 +1,47 @@
 package net.bnb1.kradle.blueprints
 
+import com.google.cloud.tools.jib.gradle.BuildDockerTask
 import com.google.cloud.tools.jib.gradle.JibExtension
 import com.google.cloud.tools.jib.gradle.JibPlugin
 import net.bnb1.kradle.KradleExtension
 import net.bnb1.kradle.PluginBlueprint
-import net.bnb1.kradle.alias
+import net.bnb1.kradle.create
 import net.bnb1.kradle.extraDir
 import org.gradle.api.Project
-import org.gradle.kotlin.dsl.configure
+import org.gradle.kotlin.dsl.named
 import java.net.URL
 import java.nio.file.Files
 
 object JibBlueprint : PluginBlueprint<JibPlugin> {
 
+    private const val TASK_NAME = "buildImage"
+
+    override fun configureEager(project: Project) {
+        project.create<BuildDockerTask>(TASK_NAME, "Builds Docker image")
+    }
+
     override fun configure(project: Project, extension: KradleExtension) {
         val withJvmKill = extension.image.jvmKillVersion.isPresent
         val withAppSh = extension.image.withAppSh.get()
 
-        val jvmKillFileName = if (withJvmKill) {
-            "jvmkill-${extension.image.jvmKillVersion.get()}.so"
-        } else {
-            ""
-        }
-
-        project.tasks.named("jibDockerBuild").configure {
+        project.tasks.named<BuildDockerTask>(TASK_NAME).configure {
+            setJibExtension(createExtension(project, extension))
             doFirst {
                 if (withAppSh) {
                     createAppSh(project)
                 }
                 if (withJvmKill) {
-                    downloadJvmKill(project, extension.image.jvmKillVersion.get(), jvmKillFileName)
+                    downloadJvmKill(project, extension)
                 }
             }
         }
+    }
 
-        project.configure<JibExtension> {
+    private fun createExtension(project: Project, extension: KradleExtension): JibExtension {
+        val withJvmKill = extension.image.jvmKillVersion.isPresent
+        val withAppSh = extension.image.withAppSh.get()
+
+        val jibExtension = JibExtension(project).apply {
             from {
                 image = extension.image.baseImage.get()
             }
@@ -59,6 +66,7 @@ object JibBlueprint : PluginBlueprint<JibPlugin> {
                 }
 
                 if (withJvmKill) {
+                    val jvmKillFileName = getJvmKillFileName(extension)
                     if (withAppSh) {
                         environment = environment + mapOf("JAVA_AGENT" to "/app/extra/${jvmKillFileName}")
                     } else {
@@ -84,12 +92,13 @@ object JibBlueprint : PluginBlueprint<JibPlugin> {
                 }
             }
         }
-
-        project.alias("buildImage", "Builds Docker image", "jibDockerBuild")
+        return jibExtension
     }
 
-    private fun downloadJvmKill(project: Project, jvmKillVersion: String, jvmKillFileName: String) {
-        val jvmKillFile = project.extraDir.resolve(jvmKillFileName)
+    private fun getJvmKillFileName(extension: KradleExtension) = "jvmkill-${extension.image.jvmKillVersion.get()}.so"
+
+    private fun downloadJvmKill(project: Project, extension: KradleExtension) {
+        val jvmKillFile = project.extraDir.resolve(getJvmKillFileName(extension))
         if (jvmKillFile.exists()) {
             return
         }
@@ -97,7 +106,7 @@ object JibBlueprint : PluginBlueprint<JibPlugin> {
         jvmKillFile.parentFile.mkdirs()
 
         val jvmKillBaseUrl = "https://java-buildpack.cloudfoundry.org/jvmkill/bionic/x86_64"
-        val url = URL(jvmKillBaseUrl + "/jvmkill-${jvmKillVersion}-RELEASE.so")
+        val url = URL(jvmKillBaseUrl + "/jvmkill-${extension.image.jvmKillVersion.get()}-RELEASE.so")
         project.logger.lifecycle("Downloading $url")
         url.openStream().use { Files.copy(it, jvmKillFile.toPath()) }
     }

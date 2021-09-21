@@ -30,7 +30,7 @@ open class KradleExtension @Inject constructor(factory: ObjectFactory) {
     val image = ImageExtension(factory)
     fun image(configure: ImageExtension.() -> Unit) = configure(image)
 
-    // Keep for backward compatibility
+    // Backward compatibility
     val jacocoVersion = tests.jacocoVersion
     fun jacocoVersion(version: String) = tests.jacocoVersion.set(version)
 

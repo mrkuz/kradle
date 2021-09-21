@@ -5,6 +5,7 @@ import org.gradle.api.Project
 import org.gradle.api.Task
 import org.gradle.api.model.ObjectFactory
 import org.gradle.api.provider.Property
+import org.gradle.api.tasks.SourceSetContainer
 import org.gradle.kotlin.dsl.DependencyHandlerScope
 
 const val TASK_GROUP = "Kradle"
@@ -24,28 +25,32 @@ inline fun <reified T : Plugin<Project>> Project.apply(blueprint: PluginBlueprin
 
 fun <T : Plugin<Project>> Project.apply(type: Class<T>) = pluginManager.apply(type)
 
-fun <T : Task> Project.create(name: String, description: String, type: Class<T>): T {
-    val task = tasks.create(name, type)
-    task.group = TASK_GROUP
-    task.description = description
-    return task
+inline fun <reified T : Task> Project.create(
+    name: String,
+    description: String,
+    noinline configure: T.() -> Unit = {}
+): T {
+    return create(name, description, T::class.java, configure)
 }
 
-fun Project.create(name: String, description: String): Task {
-    val task = tasks.create(name)
+fun <T : Task> Project.create(name: String, description: String, type: Class<T>, configure: T.() -> Unit = {}): T {
+    val task = tasks.create(name, type) { configure() }
     task.group = TASK_GROUP
     task.description = description
     return task
 }
 
 fun Project.alias(name: String, description: String, targetTask: String): Task {
-    val task = create(name, description + " (alias for '${targetTask}')")
+    val task = create<Task>(name, description + " (alias for '${targetTask}')")
     task.dependsOn(targetTask)
     return task
 }
 
 val Project.extraDir
     get() = file(this.projectDir.resolve("src/main/extra"))
+
+val Project.sourceSets
+    get() = this.extensions.getByType(SourceSetContainer::class.java)
 
 // DependencyHandlerScope
 

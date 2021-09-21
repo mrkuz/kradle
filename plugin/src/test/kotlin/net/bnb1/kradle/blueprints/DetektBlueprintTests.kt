@@ -1,7 +1,9 @@
 package net.bnb1.kradle.blueprints
 
 import io.kotest.matchers.file.shouldExist
+import io.kotest.matchers.shouldBe
 import net.bnb1.kradle.PluginSpec
+import org.gradle.testkit.runner.TaskOutcome
 
 class DetektBlueprintTests : PluginSpec({
 
@@ -21,5 +23,14 @@ class DetektBlueprintTests : PluginSpec({
         runTask("generateDetektConfig")
 
         projectDir.resolve("detekt-config.yml").shouldExist()
+    }
+
+    test("Run detekt with 'check'") {
+        bootstrapAppProject()
+        writeAppKt("println(\"Hello World\")")
+
+        val result = runTask("check")
+
+        result.task(":analyzeCode")!!.outcome shouldBe TaskOutcome.SUCCESS
     }
 })

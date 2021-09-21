@@ -52,18 +52,18 @@ Many tasks are provided by 3rd party plugins. These plugins are applied and conf
 |---|---|---|
 | [bootstrap](#bootstrap-project) | Bootstraps app/lib project | - |
 | [dev](#automatic-restarts) | Runs the application and stops it when sources change (use with `-t`, kradle-app only) | - |
-| [showDependencyUpdates](#check-for-dependency-updates) | Displays dependency updates | dependencyUpdates / [Gradle Versions Plugin](https://plugins.gradle.org/plugin/com.github.ben-manes.versions) |
+| [showDependencyUpdates](#check-for-dependency-updates) | Displays dependency updates | - / [Gradle Versions Plugin](https://plugins.gradle.org/plugin/com.github.ben-manes.versions) |
 | [lint](#static-code-analysis) | Runs [ktlint](https://ktlint.github.io/) | ktlintCheck / [ktlint Plugin](https://plugins.gradle.org/plugin/org.jlleitschuh.gradle.ktlint) |
-| [analyzeCode](#static-code-analysis) | Runs [detekt](https://detekt.github.io/detekt/) code analysis | detekt / [detekt Plugin](https://plugins.gradle.org/plugin/io.gitlab.arturbosch.detekt) |
+| [analyzeCode](#static-code-analysis) | Runs [detekt](https://detekt.github.io/detekt/) code analysis | - / [detekt Plugin](https://plugins.gradle.org/plugin/io.gitlab.arturbosch.detekt) |
 | [generateDetektConfig](#static-code-analysis) | Generates _detekt-config.yml_ | - |
-| [analyzeDependencies](#scan-for-vulnerabilities-in-dependencies) | Analyzes dependencies for vulnerabilities | dependencyCheckAnalyze / [OWASP Dependency Check Plugin](https://plugins.gradle.org/plugin/org.owasp.dependencycheck) |
+| [analyzeDependencies](#scan-for-vulnerabilities-in-dependencies) | Analyzes dependencies for vulnerabilities | - / [OWASP Dependency Check Plugin](https://plugins.gradle.org/plugin/org.owasp.dependencycheck) |
 | [runBenchmarks](#run-jmh-benchmarks) | Runs all [JMH](https://github.com/openjdk/jmh) benchmarks | benchmark / [kotlinx.benchmark Plugin](https://plugins.gradle.org/plugin/org.jetbrains.kotlinx.benchmark) |
 | [integrationTest](#testing) | Runs the integration tests | - |
 | [functionalTest](#testing) | Runs the functional tests | - |
-| [generateDocumentation](#generate-documetnationo) | Generates [Dokka](https://kotlin.github.io/dokka/) HTML documentation | dokkaHtml / [Dokka Plugin](https://plugins.gradle.org/plugin/org.jetbrains.dokka) |
+| [generateDocumentation](#generate-documetnationo) | Generates [Dokka](https://kotlin.github.io/dokka/) HTML documentation | - / [Dokka Plugin](https://plugins.gradle.org/plugin/org.jetbrains.dokka) |
 | [package](#packaging) | Creates JAR | jar / [Java Plugin](https://docs.gradle.org/current/userguide/java_plugin.html) |
-| [uberJar](#packaging) | Creates Uber-JAR (kradle-app only) | shadowJar / [Gradle Shadow Plugin](https://plugins.gradle.org/plugin/com.github.johnrengelman.shadow) |
-| [buildImage](#generate-docker-image) | Builds Docker image (kradle-app only) | jibDockerBuild / [Jib Plugin](https://plugins.gradle.org/plugin/com.google.cloud.tools.jib) |
+| [uberJar](#packaging) | Creates Uber-JAR (kradle-app only) | - / [Gradle Shadow Plugin](https://plugins.gradle.org/plugin/com.github.johnrengelman.shadow) |
+| [buildImage](#generate-docker-image) | Builds Docker image (kradle-app only) | - / [Jib Plugin](https://plugins.gradle.org/plugin/com.google.cloud.tools.jib) |
 | [install](#quality-of-life-improvements) | Installs JAR to local Maven repository (kradle-lib only) |  publishToMavenLocal / [Maven Publish Plugin](https://docs.gradle.org/current/userguide/publishing_maven.html) |
 | [generateGitignore](#quality-of-life-improvements) | Generates _.gitignore_ | - |
 | [generateBuildProperties](#quality-of-life-improvements) | Generates _build.properties_ | - |
@@ -314,6 +314,11 @@ Plugins: [Java Library Plugin](https://docs.gradle.org/current/userguide/java_li
 , [Maven Publish Plugin](https://docs.gradle.org/current/userguide/publishing_maven.html)
 
 ## Changelog
+
+### Version 1.x
+
+- The tasks `showDependencyUpdates`, `analyzeCode`, `analyzeDependencies`, `generateDocumentation`,
+  `uberJar` and `buildImage` are no longer aliases. Instead, they are independent tasks.
 
 ### Version 1.1.0 (2020-09-09)
 

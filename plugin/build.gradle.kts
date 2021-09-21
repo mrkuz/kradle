@@ -23,17 +23,18 @@ dependencies {
     implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
 
     // Plugins
-    implementation("com.github.ben-manes:gradle-versions-plugin:0.39.0")
     implementation("org.jetbrains.dokka:dokka-gradle-plugin:1.4.30")
     implementation("org.jetbrains.kotlin:kotlin-allopen")
     implementation("org.jetbrains.kotlin:kotlin-serialization")
     implementation("org.jetbrains.kotlinx:kotlinx-benchmark-plugin:0.3.1")
+
     implementation("com.adarshr:gradle-test-logger-plugin:3.0.0")
-    implementation("org.owasp:dependency-check-gradle:6.2.2")
-    implementation("org.jlleitschuh.gradle:ktlint-gradle:10.1.0")
-    implementation("io.gitlab.arturbosch.detekt:detekt-gradle-plugin:1.17.1")
     implementation("gradle.plugin.com.github.jengelman.gradle.plugins:shadow:7.0.0")
     implementation("gradle.plugin.com.google.cloud.tools:jib-gradle-plugin:3.1.2")
+    implementation("com.github.ben-manes:gradle-versions-plugin:0.39.0")
+    implementation("io.gitlab.arturbosch.detekt:detekt-gradle-plugin:1.17.1")
+    implementation("org.jlleitschuh.gradle:ktlint-gradle:10.1.0")
+    implementation("org.owasp:dependency-check-gradle:6.2.2")
 
     // Target project needs to apply the Kotlin plugin
     implementation("org.jetbrains.kotlin:kotlin-gradle-plugin")

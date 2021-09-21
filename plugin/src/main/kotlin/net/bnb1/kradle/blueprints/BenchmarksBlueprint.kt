@@ -5,9 +5,9 @@ import kotlinx.benchmark.gradle.BenchmarksPlugin
 import net.bnb1.kradle.KradleExtension
 import net.bnb1.kradle.PluginBlueprint
 import net.bnb1.kradle.alias
+import net.bnb1.kradle.sourceSets
 import org.gradle.api.Project
 import org.gradle.api.file.DuplicatesStrategy
-import org.gradle.api.plugins.JavaPluginConvention
 import org.gradle.api.tasks.SourceSet
 import org.gradle.jvm.tasks.Jar
 import org.gradle.kotlin.dsl.configure
@@ -25,10 +25,11 @@ object BenchmarksBlueprint : PluginBlueprint<BenchmarksPlugin> {
         project.configure<AllOpenExtension> {
             annotation("org.openjdk.jmh.annotations.State")
         }
+
         createSourceSet(project)
-        project.configure<BenchmarksExtension> {
-            targets.register("$SOURCE_SET_NAME")
-        }
+
+        project.configure<BenchmarksExtension> { targets.register("$SOURCE_SET_NAME") }
+        project.alias("runBenchmarks", "Runs all JMH benchmarks", "benchmark")
     }
 
     override fun configure(project: Project, extension: KradleExtension) {
@@ -37,18 +38,15 @@ object BenchmarksBlueprint : PluginBlueprint<BenchmarksPlugin> {
             // duplicate META-INF/versions/9/module-info.class
             duplicatesStrategy = DuplicatesStrategy.INCLUDE
         }
-
-        project.alias("runBenchmarks", "Runs all JMH benchmarks", "benchmark")
     }
 
-    @Suppress("DEPRECATION")
     private fun createSourceSet(project: Project) {
-        val javaConvention = project.convention.getPlugin(JavaPluginConvention::class.java)
-        val mainSourceSet = javaConvention.sourceSets.getByName(SourceSet.MAIN_SOURCE_SET_NAME);
-        val benchmarkSourceSet = javaConvention.sourceSets.create("$SOURCE_SET_NAME");
+        val mainSourceSet = project.sourceSets.getByName(SourceSet.MAIN_SOURCE_SET_NAME);
+        val benchmarkSourceSet = project.sourceSets.create("$SOURCE_SET_NAME");
 
         benchmarkSourceSet.compileClasspath += mainSourceSet.output + mainSourceSet.compileClasspath
         benchmarkSourceSet.runtimeClasspath += mainSourceSet.output + mainSourceSet.runtimeClasspath
+        @Suppress("DEPRECATION")
         benchmarkSourceSet.withConvention(KotlinSourceSet::class) {
             dependencies {
                 implementation("org.jetbrains.kotlinx:kotlinx-benchmark-runtime:0.3.1")
