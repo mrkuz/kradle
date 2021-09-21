@@ -320,7 +320,7 @@ Plugins: [Java Library Plugin](https://docs.gradle.org/current/userguide/java_li
 - The tasks `showDependencyUpdates`, `analyzeCode`, `analyzeDependencies`, `generateDocumentation`,
   `uberJar` and `buildImage` are no longer aliases. Instead, they are independent tasks.
 
-### Version 1.1.0 (2020-09-09)
+### Version 1.1.0 (2021-09-09)
 
 - New task `bootstrap`: Bootstraps new app/lib project
 - New task `dev`: Runs the application and stops it when sources change (for automatic rebuilds and restarts)
