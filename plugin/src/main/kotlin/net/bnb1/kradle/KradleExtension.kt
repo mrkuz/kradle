@@ -34,11 +34,16 @@ open class KradleExtension @Inject constructor(factory: ObjectFactory) {
     val jacocoVersion = tests.jacocoVersion
     fun jacocoVersion(version: String) = tests.jacocoVersion.set(version)
 
+    val jmhVersion = factory.property("1.21")
+    fun jmhVersion(version: String) = jmhVersion.set(version)
+
     val ktlintVersion = factory.property("0.42.1")
     fun ktlintVersion(version: String) = ktlintVersion.set(version)
 
     val detektConfigFile = factory.property("detekt-config.yml")
     fun detektConfigFile(name: String) = detektConfigFile.set(name)
+    val detektVersion = factory.property("1.18.1")
+    fun detektVersion(version: String) = detektVersion.set(version)
 
     private val disabledBlueprints = factory.setProperty(Class::class.java)
     fun disable(blueprint: Class<out PluginBlueprint<Plugin<Project>>>) = disabledBlueprints.add(blueprint)

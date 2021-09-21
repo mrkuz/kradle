@@ -2,6 +2,8 @@ package net.bnb1.kradle.blueprints
 
 import kotlinx.benchmark.gradle.BenchmarksExtension
 import kotlinx.benchmark.gradle.BenchmarksPlugin
+import kotlinx.benchmark.gradle.JavaBenchmarkTarget
+import kotlinx.benchmark.gradle.processJavaSourceSet
 import net.bnb1.kradle.KradleExtension
 import net.bnb1.kradle.PluginBlueprint
 import net.bnb1.kradle.alias
@@ -28,11 +30,18 @@ object BenchmarksBlueprint : PluginBlueprint<BenchmarksPlugin> {
 
         createSourceSet(project)
 
-        project.configure<BenchmarksExtension> { targets.register("$SOURCE_SET_NAME") }
         project.alias("runBenchmarks", "Runs all JMH benchmarks", "benchmark")
     }
 
     override fun configure(project: Project, extension: KradleExtension) {
+        val javaBenchmarkTarget = JavaBenchmarkTarget(
+            project.extensions.getByType(BenchmarksExtension::class.java),
+            SOURCE_SET_NAME,
+            project.sourceSets.getByName(SOURCE_SET_NAME)
+        )
+        javaBenchmarkTarget.jmhVersion = extension.jmhVersion.get()
+        project.processJavaSourceSet(javaBenchmarkTarget)
+
         project.tasks.named<Jar>("${SOURCE_SET_NAME}BenchmarkJar").configure {
             // Required workaround. Otherwise, running the benchmarks will complain because of
             // duplicate META-INF/versions/9/module-info.class
@@ -42,14 +51,14 @@ object BenchmarksBlueprint : PluginBlueprint<BenchmarksPlugin> {
 
     private fun createSourceSet(project: Project) {
         val mainSourceSet = project.sourceSets.getByName(SourceSet.MAIN_SOURCE_SET_NAME);
-        val benchmarkSourceSet = project.sourceSets.create("$SOURCE_SET_NAME");
+        val benchmarkSourceSet = project.sourceSets.create(SOURCE_SET_NAME);
 
         benchmarkSourceSet.compileClasspath += mainSourceSet.output + mainSourceSet.compileClasspath
         benchmarkSourceSet.runtimeClasspath += mainSourceSet.output + mainSourceSet.runtimeClasspath
         @Suppress("DEPRECATION")
         benchmarkSourceSet.withConvention(KotlinSourceSet::class) {
             dependencies {
-                implementation("org.jetbrains.kotlinx:kotlinx-benchmark-runtime:0.3.1")
+                implementation("org.jetbrains.kotlinx:kotlinx-benchmark-runtime:${BenchmarksPlugin.PLUGIN_VERSION}")
             }
         }
     }

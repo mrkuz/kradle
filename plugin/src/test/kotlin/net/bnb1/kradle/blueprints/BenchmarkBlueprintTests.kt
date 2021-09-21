@@ -38,4 +38,27 @@ class BenchmarkBlueprintTests : PluginSpec({
 
         buildDir.resolve("reports/benchmarks").shouldExist()
     }
+
+    test("Check JMH dependencies") {
+        writeSettingsGradle("lib")
+        buildFile.writeText(
+            """
+            plugins {
+               id("org.jetbrains.kotlin.jvm") version "1.4.31"
+               id("net.bitsandbobs.kradle-lib") version "main-SNAPSHOT"
+            }
+            
+            group = "com.example"
+            version = "1.0.0"
+
+            kradle {
+                jmhVersion("1.20")
+            }
+            """.trimIndent()
+        )
+
+        val result = runTask("dependencies", "--configuration", "benchmarkImplementation")
+
+        result.output shouldContain "org.openjdk.jmh:jmh-core:1.20"
+    }
 })

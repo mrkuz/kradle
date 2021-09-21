@@ -19,7 +19,11 @@ object DetektBlueprint : PluginBlueprint<NoOpPlugin> {
         project.create<GenerateDetektConfigTask>("generateDetektConfig", "Generates detekt-config.yml")
 
         project.configurations.create(CONFIGURATION_NAME) {
-            dependencies.add(project.dependencies.create("io.gitlab.arturbosch.detekt:detekt-cli:1.18.1"))
+            val dependencyProvider = project.provider {
+                val extension = project.extensions.getByType(KradleExtension::class.java)
+                project.dependencies.create("io.gitlab.arturbosch.detekt:detekt-cli:${extension.detektVersion.get()}")
+            }
+            dependencies.addLater(dependencyProvider)
         }
 
         val kotlinExtension = project.extensions.getByType(KotlinProjectExtension::class.java)
@@ -27,17 +31,6 @@ object DetektBlueprint : PluginBlueprint<NoOpPlugin> {
             .asSequence()
             .map { it.kotlin.files }
             .toSet()
-
-        /*
-        // Alternative approach
-        @Suppress("DEPRECATION")
-        val sourceFiles = project.sourceSets
-            .asSequence()
-            .map { it as HasConvention }
-            .map { it.convention.getPlugin(KotlinSourceSet::class) }
-            .flatMap { it.kotlin.files }
-            .toSet()
-        */
 
         project.create<Detekt>(TASK_NAME, "Runs detekt code analysis") {
             setSource(sourceFiles)

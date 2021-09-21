@@ -78,6 +78,8 @@ kradle {
     // mainClass("com.example.App")
     kotlinxCoroutinesVersion("1.5.1")
     ktlintVersion("0.42.1")
+    detektVersion("1.18.1")
+    jmhVersion("1.21")
     tests {
         junitJupiterVersion("5.7.2")
         jacocoVersion("0.8.7")
@@ -151,6 +153,14 @@ The task `analyzeCode` runs [detekt](https://detekt.github.io/detekt/) static co
 with the file _detekt-config.yml_ in the project root directory. `generateDetektConfig` can be used to generate a
 configuration file with sane defaults.
 
+The detekt version is configurable.
+
+```kotlin
+kradle {
+    detektVersion("1.18.1")
+}
+```
+
 `lint` and `analyzeCode` are executed when running `check`.
 
 Plugins: [ktlint Plugin](https://plugins.gradle.org/plugin/org.jlleitschuh.gradle.ktlint)
@@ -165,6 +175,14 @@ Plugins: [OWASP Dependency Check Plugin](https://plugins.gradle.org/plugin/org.o
 ## Run JMH benchmarks
 
 The `runBenchmarks` task runs all [JMH](https://github.com/openjdk/jmh) benchmarks found under `src/benchmark/kotlin`.
+
+The JMH version is configurable.
+
+```kotlin
+kradle {
+    jmhVersion("1.21")
+}
+```
 
 Plugins: [kotlinx.benchmark Plugin](https://plugins.gradle.org/plugin/org.jetbrains.kotlinx.benchmark)
 
@@ -320,6 +338,7 @@ Plugins: [Java Library Plugin](https://docs.gradle.org/current/userguide/java_li
 - The tasks `showDependencyUpdates`, `analyzeCode`, `analyzeDependencies`, `generateDocumentation`,
   `uberJar` and `buildImage` are no longer aliases. Instead, they are independent tasks.
 - __Breaking change__: `run` no longer sets `DEV_MODE=true`
+- JMH and detekt versions are now configurable
 
 ### Version 1.1.0 (2021-09-09)
 
