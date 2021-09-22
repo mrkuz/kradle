@@ -16,7 +16,17 @@ Swiss army knife for Kotlin development.
 - [Create Docker image](#create-docker-image)
 - [Quality of life improvements](#quality-of-life-improvements)
 
-## Quickstart
+## (Very) Quick Start
+
+```shell
+mkdir demo && cd demo
+curl https://raw.githubusercontent.com/mrkuz/kradle/main/examples/demo/settings.gradle.kts -o settings.gradle.kts
+curl https://raw.githubusercontent.com/mrkuz/kradle/main/examples/demo/build.gradle.kts -o build.gradle.kts
+gradle bootstrap
+./gradlew run
+```
+
+## Quick Start
 
 Add the `kradle` plugin to your build script.
 
