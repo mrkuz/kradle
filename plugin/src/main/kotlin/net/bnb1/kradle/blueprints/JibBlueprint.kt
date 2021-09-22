@@ -2,17 +2,15 @@ package net.bnb1.kradle.blueprints
 
 import com.google.cloud.tools.jib.gradle.BuildDockerTask
 import com.google.cloud.tools.jib.gradle.JibExtension
-import com.google.cloud.tools.jib.gradle.JibPlugin
-import net.bnb1.kradle.KradleExtension
-import net.bnb1.kradle.PluginBlueprint
-import net.bnb1.kradle.create
-import net.bnb1.kradle.extraDir
+import net.bnb1.kradle.*
+import net.bnb1.kradle.plugins.NoOpPlugin
 import org.gradle.api.Project
+import org.gradle.api.tasks.SourceSet
 import org.gradle.kotlin.dsl.named
 import java.net.URL
 import java.nio.file.Files
 
-object JibBlueprint : PluginBlueprint<JibPlugin> {
+object JibBlueprint : PluginBlueprint<NoOpPlugin> {
 
     private const val TASK_NAME = "buildImage"
 
@@ -25,6 +23,8 @@ object JibBlueprint : PluginBlueprint<JibPlugin> {
         val withAppSh = extension.image.withAppSh.get()
 
         project.tasks.named<BuildDockerTask>(TASK_NAME).configure {
+            dependsOn(project.sourceSets.getByName(SourceSet.MAIN_SOURCE_SET_NAME).runtimeClasspath)
+            dependsOn(project.configurations.getByName("runtimeClasspath"))
             setJibExtension(createExtension(project, extension))
             doFirst {
                 if (withAppSh) {
