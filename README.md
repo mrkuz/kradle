@@ -27,7 +27,7 @@ _build.gradle.kts_
 
 ```kotlin
 plugins {
-    id("org.jetbrains.kotlin.jvm") version "1.5.21"
+    id("org.jetbrains.kotlin.jvm") version "1.5.31"
     id("net.bitsandbobs.kradle-app") version "1.1.0"
 }
 
