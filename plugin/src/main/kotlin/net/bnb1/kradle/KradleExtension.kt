@@ -22,7 +22,7 @@ open class KradleExtension @Inject constructor(factory: ObjectFactory) {
     val targetJvm = factory.property("16")
     fun targetJvm(version: String) = targetJvm.set(version)
 
-    val kotlinxCoroutinesVersion = factory.property("1.5.1")
+    val kotlinxCoroutinesVersion = factory.property("1.5.2")
     fun kotlinxCoroutinesVersion(version: String) = kotlinxCoroutinesVersion.set(version)
 
     val tests = TestsExtension(factory)
@@ -38,7 +38,7 @@ open class KradleExtension @Inject constructor(factory: ObjectFactory) {
     val jacocoVersion = tests.jacocoVersion
     fun jacocoVersion(version: String) = tests.jacocoVersion.set(version)
 
-    val jmhVersion = factory.property("1.21")
+    val jmhVersion = factory.property("1.33")
     fun jmhVersion(version: String) = jmhVersion.set(version)
 
     val ktlintVersion = factory.property("0.42.1")
@@ -62,7 +62,7 @@ open class KradleExtension @Inject constructor(factory: ObjectFactory) {
 
     open class ImageExtension(factory: ObjectFactory) {
 
-        val baseImage = factory.property("bellsoft/liberica-openjdk-alpine:16")
+        val baseImage = factory.property("bellsoft/liberica-openjdk-alpine:17")
         fun baseImage(name: String) = baseImage.set(name)
 
         val ports = factory.setProperty(Int::class.java)
@@ -79,14 +79,14 @@ open class KradleExtension @Inject constructor(factory: ObjectFactory) {
 
     open class TestsExtension(factory: ObjectFactory) {
 
-        val junitJupiterVersion = factory.property("5.7.2")
+        val junitJupiterVersion = factory.property("5.8.0")
         fun junitJupiterVersion(version: String) = junitJupiterVersion.set(version)
 
         val jacocoVersion = factory.property("0.8.7")
         fun jacocoVersion(version: String) = jacocoVersion.set(version)
 
         val kotestVersion = factory.empty<String>()
-        fun useKotest(version: String = "4.6.1") = kotestVersion.set(version)
+        fun useKotest(version: String = "4.6.3") = kotestVersion.set(version)
 
         val mockkVersion = factory.empty<String>()
         fun useMockk(version: String = "1.12.0") = mockkVersion.set(version)

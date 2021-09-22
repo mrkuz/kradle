@@ -35,7 +35,7 @@ group = "com.example"
 version = "1.0.0"
 
 kradle {
-    mainClass("com.example.App")
+    mainClass("com.example.demo.App")
 }
 ```
 
@@ -75,22 +75,22 @@ This example configuration shows all available options. If __not__ commented, th
 ```kotlin
 kradle {
     targetJvm("16")
-    // mainClass("com.example.App", jvmName = false)
-    kotlinxCoroutinesVersion("1.5.1")
+    // mainClass("com.example.demo.App", jvmName = false)
+    kotlinxCoroutinesVersion("1.5.2")
     ktlintVersion("0.42.1")
     detektVersion("1.18.1")
-    jmhVersion("1.21")
+    jmhVersion("1.33")
     tests {
-        junitJupiterVersion("5.7.2")
+        junitJupiterVersion("5.8.0")
         jacocoVersion("0.8.7")
-        // useKotest()
-        // useMockk()
+        // useKotest("4.6.3")
+        // useMockk("1.12.0")
     }
     uberJar {
         minimize(false)
     }
     image {
-        baseImage("bellsoft/liberica-openjdk-alpine:16")
+        baseImage("bellsoft/liberica-openjdk-alpine:17")
         // ports.add(8080)
         // jvmOpts("-Xmx512M")
         // withAppSh()
@@ -108,7 +108,7 @@ should disable the blueprint,
 
 ```kotlin
 kradle {
-    disable(JibBlueprint::class.java)
+    disable(BuildPropertiesBlueprint::class.java)
 }
 ```
 
@@ -183,7 +183,7 @@ The JMH version is configurable.
 
 ```kotlin
 kradle {
-    jmhVersion("1.21")
+    jmhVersion("1.33")
 }
 ```
 
@@ -196,7 +196,7 @@ Plugins: [kotlinx.benchmark Plugin](https://plugins.gradle.org/plugin/org.jetbra
 ```kotlin
 kradle {
     tests {
-        junitJupiterVersion("5.7.2")
+        junitJupiterVersion("5.8.0")
     }
 }
 ```
@@ -207,7 +207,7 @@ and [mockk](https://mockk.io/) dependencies.
 ```kotlin
 kradle {
     tests {
-        useKotest("4.6.1")
+        useKotest("4.6.3")
         useMockk("1.12.0")
     }
 }
@@ -256,7 +256,7 @@ sure to set the according flag in the configuration.
 
 ```kotlin
 kradle {
-    mainClass("com.example.CustomApp", jvmName = true)
+    mainClass("com.example.demo.CustomApp", jvmName = true)
 }
 ```
 
@@ -284,7 +284,7 @@ exposed ports and JVM command-line options are configurable.
 ```kotlin
 kradle {
     image {
-        baseImage("bellsoft/liberica-openjdk-alpine:16")
+        baseImage("bellsoft/liberica-openjdk-alpine:17")
         // ports.add(8080)
         // jvmOpts("-Xmx512M")
     }
@@ -327,7 +327,7 @@ coroutines version is configurable.
 
 ```kotlin
 kradle {
-    kotlinxCoroutinesVersion("1.5.1")
+    kotlinxCoroutinesVersion("1.5.2")
 }
 ```
 
@@ -423,7 +423,7 @@ Plugins: [Java Library Plugin](https://docs.gradle.org/current/userguide/java_li
 
     ```kotlin
     application {
-        mainClass.set("com.example.AppKt")
+        mainClass.set("com.example.demo.AppKt")
     }
     ```
 
@@ -431,7 +431,7 @@ Plugins: [Java Library Plugin](https://docs.gradle.org/current/userguide/java_li
 
     ```kotlin
     kradle {
-        mainClass("com.example.App")
+        mainClass("com.example.demo.App")
     }
     ```
 
