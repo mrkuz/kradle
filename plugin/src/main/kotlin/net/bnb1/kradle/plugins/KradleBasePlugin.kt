@@ -23,6 +23,8 @@ class KradleBasePlugin : Plugin<Project> {
             mavenLocal()
         }
 
+        // Order of applied plugins is important
+
         project.apply(JavaBlueprint)
         project.apply(KotlinBlueprint)
         project.apply(TestBlueprint)

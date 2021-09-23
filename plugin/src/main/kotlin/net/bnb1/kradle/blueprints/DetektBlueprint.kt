@@ -1,24 +1,40 @@
 package net.bnb1.kradle.blueprints
 
-import io.gitlab.arturbosch.detekt.DetektPlugin
-import io.gitlab.arturbosch.detekt.extensions.DetektExtension
+import io.gitlab.arturbosch.detekt.Detekt
 import net.bnb1.kradle.KradleExtension
 import net.bnb1.kradle.PluginBlueprint
-import net.bnb1.kradle.alias
 import net.bnb1.kradle.create
+import net.bnb1.kradle.plugins.NoOpPlugin
 import net.bnb1.kradle.tasks.GenerateDetektConfigTask
 import org.gradle.api.Project
-import org.gradle.kotlin.dsl.configure
+import org.gradle.kotlin.dsl.named
+import org.jetbrains.kotlin.gradle.dsl.KotlinProjectExtension
 
-object DetektBlueprint : PluginBlueprint<DetektPlugin> {
+object DetektBlueprint : PluginBlueprint<NoOpPlugin> {
 
-    override fun configure(project: Project, extension: KradleExtension) {
-        val configFile = project.rootDir.resolve(extension.detektConfigFile.get())
-        project.configure<DetektExtension> {
-            if (configFile.exists()) {
-                buildUponDefaultConfig = false
-                config.setFrom(configFile)
+    private const val CONFIGURATION_NAME = "kradleDetekt"
+    private const val TASK_NAME = "analyzeCode"
+
+    override fun configureEager(project: Project) {
+        project.create<GenerateDetektConfigTask>("generateDetektConfig", "Generates detekt-config.yml")
+
+        project.configurations.create(CONFIGURATION_NAME) {
+            val dependencyProvider = project.provider {
+                val extension = project.extensions.getByType(KradleExtension::class.java)
+                project.dependencies.create("io.gitlab.arturbosch.detekt:detekt-cli:${extension.detektVersion.get()}")
             }
+            dependencies.addLater(dependencyProvider)
+        }
+
+        val kotlinExtension = project.extensions.getByType(KotlinProjectExtension::class.java)
+        val sourceFiles = kotlinExtension.sourceSets
+            .asSequence()
+            .map { it.kotlin.files }
+            .toSet()
+
+        project.create<Detekt>(TASK_NAME, "Runs detekt code analysis") {
+            setSource(sourceFiles)
+            detektClasspath.setFrom(project.configurations.getAt(CONFIGURATION_NAME))
             reports {
                 html.enabled = true
                 xml.enabled = false
@@ -27,7 +43,16 @@ object DetektBlueprint : PluginBlueprint<DetektPlugin> {
             }
         }
 
-        project.create("generateDetektConfig", "Generates detekt-config.yml", GenerateDetektConfigTask::class.java)
-        project.alias("analyzeCode", "Runs detekt code analysis", "detekt")
+        project.tasks.getByName("check").dependsOn(TASK_NAME)
+    }
+
+    override fun configure(project: Project, extension: KradleExtension) {
+        val configFile = project.rootDir.resolve(extension.detektConfigFile.get())
+        project.tasks.named<Detekt>(TASK_NAME).configure {
+            if (configFile.exists()) {
+                buildUponDefaultConfig = false
+                config.setFrom(configFile)
+            }
+        }
     }
 }

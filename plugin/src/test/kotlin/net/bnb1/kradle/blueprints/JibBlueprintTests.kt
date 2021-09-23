@@ -153,7 +153,7 @@ class JibBlueprintTests : PluginSpec({
             kradle {
                 targetJvm.set("11")
                 image {
-                  withJvmKill()
+                  withJvmKill("1.16.0")
                 }
             }
             

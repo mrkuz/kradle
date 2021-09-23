@@ -12,7 +12,7 @@ class ApplicationBlueprintTests : PluginSpec({
         bootstrapAppProject()
         writeAppKt("println(\"DEV_MODE=\" + System.getenv()[\"DEV_MODE\"])")
 
-        val result = runTask("run")
+        val result = runTask("dev")
         result.output shouldContain "DEV_MODE=true"
     }
 
@@ -103,6 +103,47 @@ class ApplicationBlueprintTests : PluginSpec({
 
         val result = runTask("dev")
         result.output shouldContain "DEBUG Project root: ${projectDir.absolutePath}" // Agent output
+        result.output shouldContain "Hello World"
+    }
+
+    test("Run app with @JvmName") {
+        writeSettingsGradle("app")
+        buildFile.writeText(
+            """
+            plugins {
+               id("org.jetbrains.kotlin.jvm") version "1.4.31"
+               id("net.bitsandbobs.kradle-app") version "main-SNAPSHOT"
+            }
+            
+            group = "com.example"
+            version = "1.0.0"
+            
+            kradle {
+                targetJvm("11")
+                mainClass("com.example.CustomApp", jvmName = true)
+            }
+            
+            """.trimIndent()
+        )
+
+        val sourceDir = projectDir.resolve("src/main/kotlin/com/example")
+        sourceDir.mkdirs()
+        sourceDir.resolve("App.kt").writeText(
+            """
+            @file:JvmName("CustomApp")
+            package com.example
+            
+            class App
+            
+            fun main() {
+                println("Hello World")
+            }
+            
+            """.trimIndent()
+        )
+
+        val result = runTask("run")
+
         result.output shouldContain "Hello World"
     }
 })

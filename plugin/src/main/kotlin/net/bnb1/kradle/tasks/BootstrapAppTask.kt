@@ -7,6 +7,7 @@ open class BootstrapAppTask : AbstractBoostrapTask() {
 
     override fun stageTwo() {
         val extension = project.extensions.getByType(KradleExtension::class.java)
+        val packageName = extension.mainClass.replace(Regex(".[^.]+$"), "")
         val path = Path.of(extension.mainClass.replace(".", "/"))
         val mainClassName = path.last().toString().replace(Regex("Kt$"), "")
         val packagePath = path.parent.toString()
@@ -17,7 +18,7 @@ open class BootstrapAppTask : AbstractBoostrapTask() {
 
         project.rootDir.resolve("src/main/kotlin/$packagePath/${mainClassName}.kt").writeText(
             """
-            package com.example
+            package $packageName
             
             class $mainClassName
             

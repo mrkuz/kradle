@@ -21,9 +21,11 @@ class BuildPropertiesPluginTests : PluginSpec({
         output.shouldExist()
 
         val lines = output.readLines()
-        lines.shouldHaveSize(2)
-        lines.forOne { it shouldBe "version=1.0.0" }
-        lines.forOne { it shouldMatch Regex("timestamp=[0-9]{10}") }
+        lines.shouldHaveSize(4)
+        lines.forOne { it shouldBe "project.name=app" }
+        lines.forOne { it shouldBe "project.group=com.example" }
+        lines.forOne { it shouldBe "project.version=1.0.0" }
+        lines.forOne { it shouldMatch Regex("build.timestamp=[0-9]{10}") }
     }
 
     test("Generate build.properties with Git commit id") {
@@ -38,9 +40,11 @@ class BuildPropertiesPluginTests : PluginSpec({
         output.shouldExist()
 
         val lines = output.readLines()
-        lines.shouldHaveSize(3)
-        lines.forOne { it shouldBe "version=1.0.0" }
-        lines.forOne { it shouldMatch Regex("timestamp=[0-9]{10}") }
+        lines.shouldHaveSize(5)
+        lines.forOne { it shouldBe "project.name=app" }
+        lines.forOne { it shouldBe "project.group=com.example" }
+        lines.forOne { it shouldBe "project.version=1.0.0" }
+        lines.forOne { it shouldMatch Regex("build.timestamp=[0-9]{10}") }
         lines.forOne { it shouldMatch Regex("git.commit-id=[a-z0-9]{7}") }
     }
 })
