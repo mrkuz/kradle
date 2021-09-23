@@ -20,11 +20,14 @@ Swiss army knife for Kotlin development.
 
 ```shell
 mkdir demo && cd demo
-curl https://raw.githubusercontent.com/mrkuz/kradle/main/examples/demo/settings.gradle.kts -o settings.gradle.kts
-curl https://raw.githubusercontent.com/mrkuz/kradle/main/examples/demo/build.gradle.kts -o build.gradle.kts
+curl https://raw.githubusercontent.com/mrkuz/kradle/main/examples/app/settings.gradle.kts -o settings.gradle.kts
+curl https://raw.githubusercontent.com/mrkuz/kradle/main/examples/app/build.gradle.kts -o build.gradle.kts
 gradle bootstrap
-./gradlew run
 ```
+
+Package JAR and run application: `./gradlew uberJar && java -jar build/libs/demo-1.0.0-uber.jar`
+
+Build image and run container: `./gradlew buildImage && docker run --rm demo`
 
 ## Quick Start
 
