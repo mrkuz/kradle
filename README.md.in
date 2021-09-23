@@ -20,8 +20,8 @@ Swiss army knife for Kotlin development.
 
 ```shell
 mkdir demo && cd demo
-curl https://raw.githubusercontent.com/mrkuz/kradle/main/examples/app/settings.gradle.kts -o settings.gradle.kts
-curl https://raw.githubusercontent.com/mrkuz/kradle/main/examples/app/build.gradle.kts -o build.gradle.kts
+curl https://raw.githubusercontent.com/mrkuz/kradle/stable/examples/app/settings.gradle.kts -o settings.gradle.kts
+curl https://raw.githubusercontent.com/mrkuz/kradle/stable/examples/app/build.gradle.kts -o build.gradle.kts
 gradle bootstrap
 ```
 
@@ -375,7 +375,9 @@ Plugins: [Java Library Plugin](https://docs.gradle.org/current/userguide/java_li
 
 ## Changelog
 
-### Version 1.x
+### Version ${kradleVersion} (${new Date().format("YYYY-MM-dd")})
+
+### Version 1.2.0 (2021-09-23)
 
 - The tasks `showDependencyUpdates`, `analyzeCode`, `analyzeDependencies`, `generateDocumentation`,
   `uberJar` and `buildImage` are no longer aliases. Instead, they are independent tasks.
