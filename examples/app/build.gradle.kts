@@ -1,6 +1,6 @@
 plugins {
     id("org.jetbrains.kotlin.jvm") version "1.5.31"
-    id("net.bitsandbobs.kradle-app") version "main-SNAPSHOT"
+    id("net.bitsandbobs.kradle-app") version "1.2.0"
 }
 
 group = "com.example"

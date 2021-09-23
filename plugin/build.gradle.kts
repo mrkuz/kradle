@@ -15,7 +15,7 @@ plugins {
 }
 
 group = "net.bitsandbobs.kradle"
-version = "main-SNAPSHOT"
+version = "1.2.0"
 
 repositories {
     mavenCentral()
