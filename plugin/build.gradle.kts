@@ -1,5 +1,8 @@
 import com.github.benmanes.gradle.versions.updates.DependencyUpdatesTask
+import groovy.text.SimpleTemplateEngine
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
+import java.io.FileWriter
+import java.util.*
 
 plugins {
     `java-gradle-plugin`
@@ -85,6 +88,26 @@ tasks.register<Copy>("buildAgent") {
 
 tasks.named("processResources").configure {
     dependsOn("buildAgent")
+}
+
+tasks.register("renderTemplates").configure {
+    doFirst {
+        val properties = Properties()
+        project.rootDir.resolve("template.properties").inputStream().use { properties.load(it) }
+        properties["kradleVersion"] = version
+
+        val engine = SimpleTemplateEngine()
+        project.fileTree(project.rootDir)
+            .matching { include("**/*.in") }
+            .forEach { file ->
+                val name = file.name.replace(Regex("\\.in$"), "")
+                val output = file.parentFile.resolve(name)
+                println("Rendering ${output.absolutePath}")
+                FileWriter(output).use { writer ->
+                    engine.createTemplate(file).make(properties).writeTo(writer)
+                }
+            }
+    }
 }
 
 gradlePlugin {
