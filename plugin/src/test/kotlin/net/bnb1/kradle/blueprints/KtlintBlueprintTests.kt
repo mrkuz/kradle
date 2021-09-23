@@ -33,6 +33,6 @@ class KtlintBlueprintTests : PluginSpec({
 
         val result = runTask("dependencies", "--configuration", "ktlint")
 
-        result.output shouldContain "com.pinterest:ktlint:0.42.0"
+        result.output shouldContain "com.pinterest:ktlint"
     }
 })

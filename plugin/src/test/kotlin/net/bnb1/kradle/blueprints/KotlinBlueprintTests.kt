@@ -1,6 +1,8 @@
 package net.bnb1.kradle.blueprints
 
+import io.kotest.inspectors.forOne
 import io.kotest.matchers.string.shouldContain
+import io.kotest.matchers.string.shouldMatch
 import net.bnb1.kradle.PluginSpec
 
 class KotlinBlueprintTests : PluginSpec({
@@ -11,7 +13,7 @@ class KotlinBlueprintTests : PluginSpec({
 
         val result = runTask("testTask")
 
-        result.output shouldContain "Result: 1.4.31"
+        result.output.lines().forOne { it shouldMatch Regex("Result: [0-9]+\\.[0-9]+\\.[0-9]+") }
     }
 
     test("Check Kotlin dependencies") {
@@ -19,10 +21,10 @@ class KotlinBlueprintTests : PluginSpec({
 
         val result = runTask("dependencies", "--configuration", "runtimeClasspath")
 
-        result.output shouldContain "org.jetbrains.kotlin:kotlin-stdlib:1.4.31"
-        result.output shouldContain "org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.4.31"
-        result.output shouldContain "org.jetbrains.kotlin:kotlin-reflect:1.4.31"
-        result.output shouldContain "org.jetbrains.kotlinx:kotlinx-coroutines-core:1.5.1"
+        result.output shouldContain "org.jetbrains.kotlin:kotlin-stdlib"
+        result.output shouldContain "org.jetbrains.kotlin:kotlin-stdlib-jdk8"
+        result.output shouldContain "org.jetbrains.kotlin:kotlin-reflect"
+        result.output shouldContain "org.jetbrains.kotlinx:kotlinx-coroutines-core"
     }
 
     test("Check Kotlin test dependencies") {
@@ -30,6 +32,6 @@ class KotlinBlueprintTests : PluginSpec({
 
         val result = runTask("dependencies", "--configuration", "testRuntimeClasspath")
 
-        result.output shouldContain "org.jetbrains.kotlin:kotlin-test:1.4.31"
+        result.output shouldContain "org.jetbrains.kotlin:kotlin-test"
     }
 })

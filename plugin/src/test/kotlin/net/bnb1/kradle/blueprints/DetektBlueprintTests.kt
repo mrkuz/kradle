@@ -55,6 +55,6 @@ class DetektBlueprintTests : PluginSpec({
 
         val result = runTask("dependencies", "--configuration", "kradleDetekt")
 
-        result.output shouldContain "io.gitlab.arturbosch.detekt:detekt-cli:1.17.0"
+        result.output shouldContain "io.gitlab.arturbosch.detekt:detekt-cli"
     }
 })

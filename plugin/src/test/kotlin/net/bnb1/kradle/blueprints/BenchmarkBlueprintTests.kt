@@ -59,6 +59,6 @@ class BenchmarkBlueprintTests : PluginSpec({
 
         val result = runTask("dependencies", "--configuration", "benchmarkImplementation")
 
-        result.output shouldContain "org.openjdk.jmh:jmh-core:1.20"
+        result.output shouldContain "org.openjdk.jmh:jmh-core"
     }
 })
