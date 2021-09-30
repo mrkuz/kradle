@@ -3,6 +3,7 @@ package net.bnb1.kradle
 import io.kotest.core.spec.style.FunSpec
 import org.eclipse.jgit.api.Git
 import org.gradle.testkit.runner.GradleRunner
+import java.io.File
 import kotlin.io.path.ExperimentalPathApi
 import kotlin.io.path.createTempDirectory
 
@@ -50,8 +51,11 @@ abstract class PluginSpec(body: PluginSpec.() -> Unit) : FunSpec({}) {
 
     fun bootstrapAppProject() {
         writeSettingsGradle("app")
-        buildFile.writeText(
-            """
+        writeAppBuildFile(buildFile)
+    }
+
+    fun writeAppBuildFile(output: File) = output.writeText(
+        """
             plugins {
                 id("org.jetbrains.kotlin.jvm") version "1.4.31"
                 id("net.bitsandbobs.kradle-app") version "main-SNAPSHOT"
@@ -69,8 +73,7 @@ abstract class PluginSpec(body: PluginSpec.() -> Unit) : FunSpec({}) {
             }
             
             """.trimIndent()
-        )
-    }
+    )
 
     fun writeAppKt(main: String) {
         val sourceDir = projectDir.resolve("src/main/kotlin/com/example")
@@ -91,8 +94,11 @@ abstract class PluginSpec(body: PluginSpec.() -> Unit) : FunSpec({}) {
 
     fun bootstrapLibProject() {
         writeSettingsGradle("lib")
-        buildFile.writeText(
-            """
+        writeLibBuildFile(buildFile)
+    }
+
+    fun writeLibBuildFile(output: File) = output.writeText(
+        """
             plugins {
                 id("org.jetbrains.kotlin.jvm") version "1.4.31"
                 id("net.bitsandbobs.kradle-lib") version "main-SNAPSHOT"
@@ -106,13 +112,22 @@ abstract class PluginSpec(body: PluginSpec.() -> Unit) : FunSpec({}) {
             }
             
             """.trimIndent()
-        )
-    }
+    )
 
     fun writeSettingsGradle(name: String) {
         settingsFile.writeText(
             """
             rootProject.name = "$name"
+            
+            """.trimIndent()
+        )
+    }
+
+    fun writeMultiProjectSettingsGradle(rootProject: String, projects: Collection<String>) {
+        settingsFile.writeText(
+            """
+            rootProject.name = "$rootProject"
+            include(${projects.joinToString(" ", "\"", "\"")})
             
             """.trimIndent()
         )

@@ -7,7 +7,7 @@ import org.gradle.api.tasks.TaskAction
 abstract class AbstractBoostrapTask : DefaultTask() {
 
     init {
-        dependsOn("wrapper", "generateGitignore", "generateDetektConfig")
+        dependsOn(":wrapper", "generateGitignore", "generateDetektConfig")
     }
 
     @TaskAction

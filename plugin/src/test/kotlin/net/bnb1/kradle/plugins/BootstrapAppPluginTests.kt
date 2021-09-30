@@ -51,4 +51,32 @@ class BootstrapAppPluginTests : PluginSpec({
         val lines = appKt.readLines()
         lines.forOne { it shouldBe "package com.example.demo" }
     }
+
+    test("Bootstrap app project (multi-project)") {
+        writeMultiProjectSettingsGradle("demo", setOf("app"))
+        val buildFile = projectDir.resolve("app/build.gradle.kts")
+        buildFile.parentFile.mkdirs()
+        writeAppBuildFile(buildFile)
+
+        runTask("bootstrap")
+
+        projectDir.resolve(".git").shouldExist()
+        projectDir.resolve(".gitignore").shouldExist()
+        projectDir.resolve("gradlew").shouldExist()
+        projectDir.resolve("app/src/main/resources").shouldExist()
+        projectDir.resolve("app/src/main/extra").shouldExist()
+        projectDir.resolve("app/src/test/kotlin/com/example").shouldExist()
+        projectDir.resolve("app/src/test/resources").shouldExist()
+        projectDir.resolve("app/src/benchmark/kotlin").shouldExist()
+        projectDir.resolve("detekt-config.yml").shouldExist()
+        projectDir.resolve("README.md").shouldExist()
+        projectDir.resolve("LICENSE").shouldExist()
+        projectDir.resolve("project.properties").shouldExist()
+
+        val appKt = projectDir.resolve("app/src/main/kotlin/com/example/App.kt")
+        appKt.shouldExist()
+
+        val lines = appKt.readLines()
+        lines.forOne { it shouldBe "package com.example" }
+    }
 })

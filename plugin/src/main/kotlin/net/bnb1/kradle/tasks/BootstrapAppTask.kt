@@ -13,10 +13,10 @@ open class BootstrapAppTask : AbstractBoostrapTask() {
         val packagePath = path.parent.toString()
 
         listOf("main", "test").forEach {
-            project.rootDir.resolve("src/$it/kotlin/$packagePath").mkdirs()
+            project.projectDir.resolve("src/$it/kotlin/$packagePath").mkdirs()
         }
 
-        project.rootDir.resolve("src/main/kotlin/$packagePath/${mainClassName}.kt").writeText(
+        project.projectDir.resolve("src/main/kotlin/$packagePath/${mainClassName}.kt").writeText(
             """
             package $packageName
             

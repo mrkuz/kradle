@@ -29,26 +29,7 @@ class JibBlueprintTests : PluginSpec({
     // Requires Docker running
     xtest("Build image") {
         writeSettingsGradle(name)
-        buildFile.writeText(
-            """
-            plugins {
-               id("org.jetbrains.kotlin.jvm") version "1.4.31"
-               id("net.bitsandbobs.kradle-app") version "main-SNAPSHOT"
-            }
-            
-            group = "com.example"
-            version = "1.0.0"
-
-            kradle {
-                targetJvm.set("11")
-            }
-            
-            application {
-                mainClass.set("com.example.AppKt")
-            }
-            
-            """.trimIndent()
-        )
+        writeAppBuildFile(buildFile)
         writeAppKt("println(\"Hello World\")")
 
         runTask("buildImage")
@@ -62,26 +43,7 @@ class JibBlueprintTests : PluginSpec({
     // Requires Docker running
     xtest("Run container") {
         writeSettingsGradle(name)
-        buildFile.writeText(
-            """
-            plugins {
-               id("org.jetbrains.kotlin.jvm") version "1.4.31"
-               id("net.bitsandbobs.kradle-app") version "main-SNAPSHOT"
-            }
-            
-            group = "com.example"
-            version = "1.0.0"
-
-            kradle {
-                targetJvm.set("11")
-            }
-            
-            application {
-                mainClass.set("com.example.AppKt")
-            }
-            
-            """.trimIndent()
-        )
+        writeAppBuildFile(buildFile)
         writeAppKt("println(\"Hello World\")")
 
         runTask("buildImage")
