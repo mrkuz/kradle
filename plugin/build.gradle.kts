@@ -116,13 +116,13 @@ gradlePlugin {
             id = "net.bitsandbobs.kradle-app"
             implementationClass = "net.bnb1.kradle.plugins.KradleAppPlugin"
             displayName = "Kradle App Plugin"
-            description = "Swiss army knife for Kotlin development"
+            description = "Swiss army knife for Kotlin/JVM development"
         }
         create("kradleLib") {
             id = "net.bitsandbobs.kradle-lib"
             implementationClass = "net.bnb1.kradle.plugins.KradleLibPlugin"
             displayName = "Kradle Lib Plugin"
-            description = "Swiss army knife for Kotlin development"
+            description = "Swiss army knife for Kotlin/JVM development"
         }
     }
 }

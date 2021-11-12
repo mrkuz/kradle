@@ -1,6 +1,6 @@
 # Kradle
 
-Swiss army knife for Kotlin development.
+Swiss army knife for Kotlin/JVM development.
 
 `kradle` is a plugin for Gradle, supporting Kotlin developers with their day-to-day activities.
 
@@ -375,7 +375,7 @@ Plugins: [Java Library Plugin](https://docs.gradle.org/current/userguide/java_li
 
 ## Changelog
 
-### Version main-SNAPSHOT (2021-09-30)
+### Version main-SNAPSHOT (2021-11-12)
 
 - Fix `bootstrap` for multi-project builds
 
