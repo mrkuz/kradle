@@ -375,9 +375,10 @@ Plugins: [Java Library Plugin](https://docs.gradle.org/current/userguide/java_li
 
 ## Changelog
 
-### Version main-SNAPSHOT (2021-11-12)
+### Version main-SNAPSHOT (2021-11-20)
 
 - Fix `bootstrap` for multi-project builds
+- Fix exclusion of alpha versions and RCs in `showDependencyUpdates`
 
 ### Version 1.2.0 (2021-09-23)
 
