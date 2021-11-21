@@ -19,7 +19,7 @@ open class KradleExtension @Inject constructor(factory: ObjectFactory) {
     val mainClass
         get() = _mainClass.getOrElse("")
 
-    val targetJvm = factory.property("16")
+    val targetJvm = factory.property("17")
     fun targetJvm(version: String) = targetJvm.set(version)
 
     val kotlinxCoroutinesVersion = factory.property("1.5.2")
@@ -41,7 +41,7 @@ open class KradleExtension @Inject constructor(factory: ObjectFactory) {
     val jmhVersion = factory.property("1.33")
     fun jmhVersion(version: String) = jmhVersion.set(version)
 
-    val ktlintVersion = factory.property("0.42.1")
+    val ktlintVersion = factory.property("0.43.0")
     fun ktlintVersion(version: String) = ktlintVersion.set(version)
 
     val detektConfigFile = factory.property("detekt-config.yml")
@@ -79,7 +79,7 @@ open class KradleExtension @Inject constructor(factory: ObjectFactory) {
 
     open class TestsExtension(factory: ObjectFactory) {
 
-        val junitJupiterVersion = factory.property("5.8.0")
+        val junitJupiterVersion = factory.property("5.8.1")
         fun junitJupiterVersion(version: String) = junitJupiterVersion.set(version)
 
         val jacocoVersion = factory.property("0.8.7")
@@ -89,6 +89,6 @@ open class KradleExtension @Inject constructor(factory: ObjectFactory) {
         fun useKotest(version: String = "4.6.3") = kotestVersion.set(version)
 
         val mockkVersion = factory.empty<String>()
-        fun useMockk(version: String = "1.12.0") = mockkVersion.set(version)
+        fun useMockk(version: String = "1.12.1") = mockkVersion.set(version)
     }
 }

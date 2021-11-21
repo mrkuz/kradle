@@ -40,7 +40,7 @@ _build.gradle.kts_
 
 ```kotlin
 plugins {
-    id("org.jetbrains.kotlin.jvm") version "1.5.31"
+    id("org.jetbrains.kotlin.jvm") version "1.6.0"
     id("net.bitsandbobs.kradle-app") version "${kradleVersion}"
 }
 
@@ -87,17 +87,17 @@ This example configuration shows all available options. If __not__ commented, th
 
 ```kotlin
 kradle {
-    targetJvm("16")
+    targetJvm("17")
     // mainClass("com.example.demo.App", jvmName = false)
     kotlinxCoroutinesVersion("1.5.2")
-    ktlintVersion("0.42.1")
+    ktlintVersion("0.43.0")
     detektVersion("1.18.1")
     jmhVersion("1.33")
     tests {
-        junitJupiterVersion("5.8.0")
+        junitJupiterVersion("5.8.1")
         jacocoVersion("0.8.7")
         // useKotest("4.6.3")
-        // useMockk("1.12.0")
+        // useMockk("1.12.1")
     }
     uberJar {
         minimize(false)
@@ -161,7 +161,7 @@ The ktlint version is configurable.
 
 ```kotlin
 kradle {
-    ktlintVersion("0.42.1")
+    ktlintVersion("0.43.0")
 }
 ```
 
@@ -209,7 +209,7 @@ Plugins: [kotlinx.benchmark Plugin](https://plugins.gradle.org/plugin/org.jetbra
 ```kotlin
 kradle {
     tests {
-        junitJupiterVersion("5.8.0")
+        junitJupiterVersion("5.8.1")
     }
 }
 ```
@@ -221,7 +221,7 @@ and [mockk](https://mockk.io/) dependencies.
 kradle {
     tests {
         useKotest("4.6.3")
-        useMockk("1.12.0")
+        useMockk("1.12.1")
     }
 }
 ```
@@ -331,7 +331,7 @@ Plugins: [Jib Plugin](https://plugins.gradle.org/plugin/com.google.cloud.tools.j
 
 ```kotlin
 kradle {
-    targetJvm("16")
+    targetJvm("17")
 }
 ```
 
@@ -379,6 +379,7 @@ Plugins: [Java Library Plugin](https://docs.gradle.org/current/userguide/java_li
 
 - Fix `bootstrap` for multi-project builds
 - Fix exclusion of alpha versions and RCs in `showDependencyUpdates`
+- Set default target JVM to 17
 
 ### Version 1.2.0 (2021-09-23)
 
