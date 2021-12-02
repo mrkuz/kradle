@@ -30,8 +30,8 @@ class KradleAppPluginTests : PluginSpec({
 
         val result = runTask("dependencies", "--configuration", "runtimeClasspath")
 
-        result.output shouldContain "org.jetbrains.kotlin:kotlin-stdlib:1.5.21"
-        result.output shouldNotContain "org.jetbrains.kotlin:kotlin-stdlib:1.5.31"
+        result.output shouldContain "org.jetbrains.kotlin:kotlin-stdlib:1.5.31"
+        result.output shouldNotContain "org.jetbrains.kotlin:kotlin-stdlib:1.5.21"
     }
 
     // Requires latest version of kradle installed to your local repository
@@ -51,7 +51,7 @@ class KradleAppPluginTests : PluginSpec({
         buildFile.writeText(
             """
             plugins {
-               id("org.jetbrains.kotlin.jvm") version "1.5.31"
+               id("org.jetbrains.kotlin.jvm") version "1.6.0"
                id("net.bitsandbobs.kradle-app") version "main-SNAPSHOT"
             }
             
@@ -69,6 +69,6 @@ class KradleAppPluginTests : PluginSpec({
             .withArguments("dependencies", "--configuration", "runtimeClasspath")
             .build()
 
-        result.output shouldContain "org.jetbrains.kotlin:kotlin-stdlib:1.5.31"
+        result.output shouldContain "org.jetbrains.kotlin:kotlin-stdlib:1.6.0"
     }
 })
