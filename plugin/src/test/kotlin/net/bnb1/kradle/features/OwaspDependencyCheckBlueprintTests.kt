@@ -1,12 +1,12 @@
-package net.bnb1.kradle.blueprints
+package net.bnb1.kradle.features
 
 import io.kotest.matchers.file.shouldExist
 import net.bnb1.kradle.PluginSpec
 
-class DependencyCheckBlueprintTests : PluginSpec({
+class OwaspDependencyCheckBlueprintTests : PluginSpec({
 
     test("Run dependency check") {
-        bootstrapAppProject()
+        bootstrapCompatAppProject()
 
         runTask("analyzeDependencies")
 

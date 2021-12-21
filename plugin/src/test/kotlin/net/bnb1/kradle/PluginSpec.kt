@@ -49,15 +49,15 @@ abstract class PluginSpec(body: PluginSpec.() -> Unit) : FunSpec({}) {
         )
     }
 
-    fun bootstrapAppProject() {
+    fun bootstrapCompatAppProject() {
         writeSettingsGradle("app")
-        writeAppBuildFile(buildFile)
+        writeCompatAppBuildFile(buildFile)
     }
 
-    fun writeAppBuildFile(output: File) = output.writeText(
+    fun writeCompatAppBuildFile(output: File) = output.writeText(
         """
             plugins {
-                id("org.jetbrains.kotlin.jvm") version "1.4.31"
+                id("org.jetbrains.kotlin.jvm") version "1.6.0"
                 id("net.bitsandbobs.kradle-app") version "main-SNAPSHOT"
             }
             
@@ -65,22 +65,19 @@ abstract class PluginSpec(body: PluginSpec.() -> Unit) : FunSpec({}) {
             version = "1.0.0"
             
             kradle {
-                targetJvm.set("11")
-            }
-            
-            application {
-                mainClass.set("com.example.AppKt")
+                targetJvm("11")
+                mainClass("com.example.demo.App")
             }
             
             """.trimIndent()
     )
 
     fun writeAppKt(main: String) {
-        val sourceDir = projectDir.resolve("src/main/kotlin/com/example")
+        val sourceDir = projectDir.resolve("src/main/kotlin/com/example/demo")
         sourceDir.mkdirs()
         sourceDir.resolve("App.kt").writeText(
             """
-            package com.example
+            package com.example.demo
             
             class App
             
@@ -92,15 +89,15 @@ abstract class PluginSpec(body: PluginSpec.() -> Unit) : FunSpec({}) {
         )
     }
 
-    fun bootstrapLibProject() {
+    fun bootstrapCompatLibProject() {
         writeSettingsGradle("lib")
-        writeLibBuildFile(buildFile)
+        writeCompatLibBuildFile(buildFile)
     }
 
-    fun writeLibBuildFile(output: File) = output.writeText(
+    fun writeCompatLibBuildFile(output: File) = output.writeText(
         """
             plugins {
-                id("org.jetbrains.kotlin.jvm") version "1.4.31"
+                id("org.jetbrains.kotlin.jvm") version "1.6.0"
                 id("net.bitsandbobs.kradle-lib") version "main-SNAPSHOT"
             }
             
@@ -108,7 +105,7 @@ abstract class PluginSpec(body: PluginSpec.() -> Unit) : FunSpec({}) {
             version = "1.0.0"
             
             kradle {
-                targetJvm.set("11")
+                targetJvm("11")
             }
             
             """.trimIndent()

@@ -1,4 +1,4 @@
-package net.bnb1.kradle.blueprints
+package net.bnb1.kradle.features
 
 import io.kotest.matchers.file.shouldExist
 import io.kotest.matchers.string.shouldContain
@@ -8,7 +8,7 @@ import net.bnb1.kradle.execute
 class ShadowBlueprintTests : PluginSpec({
 
     test("Create uber JAR") {
-        bootstrapAppProject()
+        bootstrapCompatAppProject()
 
         runTask("uberJar")
 
@@ -16,7 +16,7 @@ class ShadowBlueprintTests : PluginSpec({
     }
 
     test("Create and run uber JAR") {
-        bootstrapAppProject()
+        bootstrapCompatAppProject()
         writeAppKt("println(\"Hello World\")")
 
         runTask("uberJar")

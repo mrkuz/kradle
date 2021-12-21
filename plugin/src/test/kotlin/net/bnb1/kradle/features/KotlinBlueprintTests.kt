@@ -1,4 +1,4 @@
-package net.bnb1.kradle.blueprints
+package net.bnb1.kradle.features
 
 import io.kotest.inspectors.forOne
 import io.kotest.matchers.string.shouldContain
@@ -8,7 +8,7 @@ import net.bnb1.kradle.PluginSpec
 class KotlinBlueprintTests : PluginSpec({
 
     test("Kotlin version property is set") {
-        bootstrapAppProject()
+        bootstrapCompatAppProject()
         addTask("testTask", "println(\"Result: \${project.properties[\"kotlinVersion\"]}\")")
 
         val result = runTask("testTask")
@@ -17,7 +17,7 @@ class KotlinBlueprintTests : PluginSpec({
     }
 
     test("Check Kotlin dependencies") {
-        bootstrapAppProject()
+        bootstrapCompatAppProject()
 
         val result = runTask("dependencies", "--configuration", "runtimeClasspath")
 
@@ -28,7 +28,7 @@ class KotlinBlueprintTests : PluginSpec({
     }
 
     test("Check Kotlin test dependencies") {
-        bootstrapAppProject()
+        bootstrapCompatAppProject()
 
         val result = runTask("dependencies", "--configuration", "testRuntimeClasspath")
 

@@ -1,4 +1,4 @@
-package net.bnb1.kradle.blueprints
+package net.bnb1.kradle.features
 
 import io.kotest.inspectors.forOne
 import io.kotest.matchers.file.shouldExist
@@ -9,7 +9,7 @@ import net.bnb1.kradle.PluginSpec
 class ApplicationBlueprintTests : PluginSpec({
 
     test("Check DEV_MODE environment variable") {
-        bootstrapAppProject()
+        bootstrapCompatAppProject()
         writeAppKt("println(\"DEV_MODE=\" + System.getenv()[\"DEV_MODE\"])")
 
         val result = runTask("dev")
@@ -17,14 +17,14 @@ class ApplicationBlueprintTests : PluginSpec({
     }
 
     test("Check MANIFEST.MF") {
-        bootstrapAppProject()
+        bootstrapCompatAppProject()
 
         runTask("jar")
 
         val output = buildDir.resolve("tmp/jar/MANIFEST.MF")
         output.shouldExist()
         val lines = output.readLines()
-        lines.forOne { it shouldBe "Main-Class: com.example.AppKt" }
+        lines.forOne { it shouldBe "Main-Class: com.example.demo.AppKt" }
     }
 
     test("Warn if version is missing") {
@@ -32,14 +32,14 @@ class ApplicationBlueprintTests : PluginSpec({
         buildFile.writeText(
             """
             plugins {
-               id("org.jetbrains.kotlin.jvm") version "1.4.31"
+               id("org.jetbrains.kotlin.jvm") version "1.6.0"
                id("net.bitsandbobs.kradle-app") version "main-SNAPSHOT"
             }
             
             group = "com.example"
 
-            application {
-                mainClass.set("com.example.AppKt")
+            kradle {
+                mainClass("com.example.demo.App")
             }
             
             """.trimIndent()
@@ -55,14 +55,14 @@ class ApplicationBlueprintTests : PluginSpec({
         buildFile.writeText(
             """
             plugins {
-               id("org.jetbrains.kotlin.jvm") version "1.4.31"
+               id("org.jetbrains.kotlin.jvm") version "1.6.0"
                id("net.bitsandbobs.kradle-app") version "main-SNAPSHOT"
             }
             
             version = "1.0.0"
 
-            application {
-                mainClass.set("com.example.AppKt")
+            kradle {
+                mainClass("com.example.demo.App")
             }
             
             """.trimIndent()
@@ -78,15 +78,15 @@ class ApplicationBlueprintTests : PluginSpec({
         buildFile.writeText(
             """
             plugins {
-               id("org.jetbrains.kotlin.jvm") version "1.4.31"
+               id("org.jetbrains.kotlin.jvm") version "1.6.0"
                id("net.bitsandbobs.kradle-app") version "main-SNAPSHOT"
             }
             
             version = "1.0.0"
             group = "not_a_valid_group"
 
-            application {
-                mainClass.set("com.example.AppKt")
+            kradle {
+                mainClass("com.example.demo.App")
             }
             
             """.trimIndent()
@@ -98,7 +98,7 @@ class ApplicationBlueprintTests : PluginSpec({
     }
 
     test("Run 'dev'") {
-        bootstrapAppProject()
+        bootstrapCompatAppProject()
         writeAppKt("println(\"Hello World\")")
 
         val result = runTask("dev")
@@ -111,7 +111,7 @@ class ApplicationBlueprintTests : PluginSpec({
         buildFile.writeText(
             """
             plugins {
-               id("org.jetbrains.kotlin.jvm") version "1.4.31"
+               id("org.jetbrains.kotlin.jvm") version "1.6.0"
                id("net.bitsandbobs.kradle-app") version "main-SNAPSHOT"
             }
             
@@ -120,18 +120,18 @@ class ApplicationBlueprintTests : PluginSpec({
             
             kradle {
                 targetJvm("11")
-                mainClass("com.example.CustomApp", jvmName = true)
+                mainClass("com.example.demo.CustomApp", jvmName = true)
             }
             
             """.trimIndent()
         )
 
-        val sourceDir = projectDir.resolve("src/main/kotlin/com/example")
+        val sourceDir = projectDir.resolve("src/main/kotlin/com/example/demo")
         sourceDir.mkdirs()
         sourceDir.resolve("App.kt").writeText(
             """
             @file:JvmName("CustomApp")
-            package com.example
+            package com.example.demo
             
             class App
             

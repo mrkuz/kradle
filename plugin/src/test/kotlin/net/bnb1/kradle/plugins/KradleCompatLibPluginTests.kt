@@ -4,10 +4,10 @@ import io.kotest.matchers.string.shouldContain
 import io.kotest.matchers.string.shouldNotContain
 import net.bnb1.kradle.PluginSpec
 
-class KradleLibPluginTests : PluginSpec({
+class KradleCompatLibPluginTests : PluginSpec({
 
     test("Check available tasks") {
-        bootstrapLibProject()
+        bootstrapCompatLibProject()
 
         val result = runTask("tasks")
 

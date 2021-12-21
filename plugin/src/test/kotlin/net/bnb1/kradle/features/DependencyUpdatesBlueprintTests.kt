@@ -1,7 +1,8 @@
-package net.bnb1.kradle.blueprints
+package net.bnb1.kradle.features
 
 import io.kotest.matchers.booleans.shouldBeTrue
 import net.bnb1.kradle.PluginSpec
+import net.bnb1.kradle.features.jvm.DependencyUpdatesBlueprint
 
 class DependencyUpdatesBlueprintTests : PluginSpec({
 

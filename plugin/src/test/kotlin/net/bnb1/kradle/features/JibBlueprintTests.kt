@@ -1,4 +1,4 @@
-package net.bnb1.kradle.blueprints
+package net.bnb1.kradle.features
 
 import com.github.dockerjava.api.DockerClient
 import com.github.dockerjava.api.async.ResultCallback
@@ -29,7 +29,7 @@ class JibBlueprintTests : PluginSpec({
     // Requires Docker running
     xtest("Build image") {
         writeSettingsGradle(name)
-        writeAppBuildFile(buildFile)
+        writeCompatAppBuildFile(buildFile)
         writeAppKt("println(\"Hello World\")")
 
         runTask("buildImage")
@@ -43,7 +43,7 @@ class JibBlueprintTests : PluginSpec({
     // Requires Docker running
     xtest("Run container") {
         writeSettingsGradle(name)
-        writeAppBuildFile(buildFile)
+        writeCompatAppBuildFile(buildFile)
         writeAppKt("println(\"Hello World\")")
 
         runTask("buildImage")
@@ -72,7 +72,7 @@ class JibBlueprintTests : PluginSpec({
         buildFile.writeText(
             """
             plugins {
-               id("org.jetbrains.kotlin.jvm") version "1.4.31"
+               id("org.jetbrains.kotlin.jvm") version "1.6.0"
                id("net.bitsandbobs.kradle-app") version "main-SNAPSHOT"
             }
             
@@ -80,14 +80,11 @@ class JibBlueprintTests : PluginSpec({
             version = "1.0.0"
 
             kradle {
-                targetJvm.set("11")
+                targetJvm("11")
+                mainClass("com.example.demo.App")
                 image {
                   withAppSh()
                 }
-            }
-            
-            application {
-                mainClass.set("com.example.AppKt")
             }
             
             """.trimIndent()
@@ -96,7 +93,7 @@ class JibBlueprintTests : PluginSpec({
 
         runTask("buildImage")
 
-        projectDir.resolve("extra/app.sh").shouldExist()
+        projectDir.resolve("src/main/extra/app.sh").shouldExist()
     }
 
     // Requires Docker running
@@ -105,7 +102,7 @@ class JibBlueprintTests : PluginSpec({
         buildFile.writeText(
             """
             plugins {
-               id("org.jetbrains.kotlin.jvm") version "1.4.31"
+               id("org.jetbrains.kotlin.jvm") version "1.6.0"
                id("net.bitsandbobs.kradle-app") version "main-SNAPSHOT"
             }
             
@@ -113,14 +110,11 @@ class JibBlueprintTests : PluginSpec({
             version = "1.0.0"
 
             kradle {
-                targetJvm.set("11")
+                targetJvm("11")
+                mainClass("com.example.demo.App")
                 image {
                   withJvmKill("1.16.0")
                 }
-            }
-            
-            application {
-                mainClass.set("com.example.AppKt")
             }
             
             """.trimIndent()
@@ -129,6 +123,6 @@ class JibBlueprintTests : PluginSpec({
 
         runTask("buildImage")
 
-        projectDir.resolve("extra/jvmkill-1.16.0.so").shouldExist()
+        projectDir.resolve("src/main/extra/jvmkill-1.16.0.so").shouldExist()
     }
 })

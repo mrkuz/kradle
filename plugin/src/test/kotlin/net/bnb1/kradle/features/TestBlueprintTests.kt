@@ -1,4 +1,4 @@
-package net.bnb1.kradle.blueprints
+package net.bnb1.kradle.features
 
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.string.shouldContain
@@ -26,7 +26,7 @@ class TestBlueprintTests : PluginSpec({
     }
 
     test("Check JUnit dependencies") {
-        bootstrapLibProject()
+        bootstrapCompatLibProject()
 
         val result = runTask("dependencies", "--configuration", "testRuntimeClasspath")
 
@@ -65,7 +65,7 @@ class TestBlueprintTests : PluginSpec({
         buildFile.writeText(
             """
             plugins {
-               id("org.jetbrains.kotlin.jvm") version "1.4.31"
+               id("org.jetbrains.kotlin.jvm") version "1.6.0"
                id("net.bitsandbobs.kradle-lib") version "main-SNAPSHOT"
             }
             
@@ -86,7 +86,7 @@ class TestBlueprintTests : PluginSpec({
     }
 
     test("Run test") {
-        bootstrapAppProject()
+        bootstrapCompatAppProject()
         createAppTest("test")
 
         val result = runTask("test")
@@ -95,7 +95,7 @@ class TestBlueprintTests : PluginSpec({
     }
 
     test("Run integration test") {
-        bootstrapAppProject()
+        bootstrapCompatAppProject()
         createAppTest("integrationTest")
 
         val result = runTask("integrationTest")
@@ -104,7 +104,7 @@ class TestBlueprintTests : PluginSpec({
     }
 
     test("Run functional test") {
-        bootstrapAppProject()
+        bootstrapCompatAppProject()
         createAppTest("functionalTest")
 
         val result = runTask("functionalTest")

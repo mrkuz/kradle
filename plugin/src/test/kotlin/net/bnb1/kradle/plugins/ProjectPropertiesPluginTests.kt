@@ -6,7 +6,7 @@ import net.bnb1.kradle.PluginSpec
 class ProjectPropertiesPluginTests : PluginSpec({
 
     test("Load project.properties") {
-        bootstrapAppProject()
+        bootstrapCompatAppProject()
         projectDir.resolve("project.properties").writeText(
             """
             newProperty = helloTest

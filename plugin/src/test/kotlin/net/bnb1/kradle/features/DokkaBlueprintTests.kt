@@ -1,4 +1,4 @@
-package net.bnb1.kradle.blueprints
+package net.bnb1.kradle.features
 
 import io.kotest.matchers.file.shouldExist
 import io.kotest.matchers.string.shouldContain
@@ -7,7 +7,7 @@ import net.bnb1.kradle.PluginSpec
 class DokkaBlueprintTests : PluginSpec({
 
     test("Generate documentation") {
-        bootstrapAppProject()
+        bootstrapCompatAppProject()
         writeAppKt("println(\"Hello World\")")
 
         runTask("generateDocumentation")
@@ -17,7 +17,7 @@ class DokkaBlueprintTests : PluginSpec({
 
     // Raises OutOfMemoryError: Metaspace
     xtest("Generate documentation with package.md (project dir") {
-        bootstrapAppProject()
+        bootstrapCompatAppProject()
         writeAppKt("println(\"Hello World\")")
         projectDir.resolve("package.md").writeText(
             """
@@ -36,7 +36,7 @@ class DokkaBlueprintTests : PluginSpec({
 
     // Raises OutOfMemoryError: Metaspace
     xtest("Generate documentation with package.md (source dir") {
-        bootstrapAppProject()
+        bootstrapCompatAppProject()
         writeAppKt("println(\"Hello World\")")
         projectDir.resolve("src/main/kotlin/com/example/package.md").writeText(
             """
@@ -56,7 +56,7 @@ class DokkaBlueprintTests : PluginSpec({
 
     // Raises OutOfMemoryError: Metaspace
     xtest("Generate documentation with module.md (project dir)") {
-        bootstrapAppProject()
+        bootstrapCompatAppProject()
         writeAppKt("println(\"Hello World\")")
         projectDir.resolve("module.md").writeText(
             """
@@ -75,7 +75,7 @@ class DokkaBlueprintTests : PluginSpec({
 
     // Raises OutOfMemoryError: Metaspace
     xtest("Generate documentation with module.md (source dir)") {
-        bootstrapAppProject()
+        bootstrapCompatAppProject()
         writeAppKt("println(\"Hello World\")")
         projectDir.resolve("src/main/kotlin/com/example/module.md").writeText(
             """

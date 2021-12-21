@@ -1,4 +1,4 @@
-package net.bnb1.kradle.blueprints
+package net.bnb1.kradle.features
 
 import io.kotest.matchers.shouldBe
 import net.bnb1.kradle.PluginSpec
@@ -25,7 +25,7 @@ class JacocoBlueprintTests : PluginSpec({
     }
 
     test("Generate report after test") {
-        bootstrapAppProject()
+        bootstrapCompatAppProject()
         createAppTest("test")
 
         val result = runTask("test")
@@ -34,7 +34,7 @@ class JacocoBlueprintTests : PluginSpec({
     }
 
     test("Run tests when generating report") {
-        bootstrapAppProject()
+        bootstrapCompatAppProject()
         createAppTest("test")
 
         val result = runTask("jacocoTestReport")
@@ -43,7 +43,7 @@ class JacocoBlueprintTests : PluginSpec({
     }
 
     test("Generate report after integration test") {
-        bootstrapAppProject()
+        bootstrapCompatAppProject()
         createAppTest("integrationTest")
 
         val result = runTask("integrationTest")
@@ -52,7 +52,7 @@ class JacocoBlueprintTests : PluginSpec({
     }
 
     test("Generate report after functional test") {
-        bootstrapAppProject()
+        bootstrapCompatAppProject()
         createAppTest("functionalTest")
 
         val result = runTask("functionalTest")

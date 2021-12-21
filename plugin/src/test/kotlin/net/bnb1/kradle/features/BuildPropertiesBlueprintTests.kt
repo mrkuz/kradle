@@ -1,13 +1,13 @@
-package net.bnb1.kradle.blueprints
+package net.bnb1.kradle.features
 
 import io.kotest.matchers.shouldBe
 import net.bnb1.kradle.PluginSpec
 import org.gradle.testkit.runner.TaskOutcome
 
-class BuildPropertyBlueprintTests : PluginSpec({
+class BuildPropertiesBlueprintTests : PluginSpec({
 
     test("Generate build.properties with 'processResources'") {
-        bootstrapAppProject()
+        bootstrapCompatAppProject()
 
         val result = runTask("processResources")
 

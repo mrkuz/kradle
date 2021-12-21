@@ -12,6 +12,7 @@ open class GenerateBuildPropertiesTask : DefaultTask() {
 
     @TaskAction
     fun run() {
+        // TODO: sourceSets.main.output.resourcesDir?
         val output = project.buildDir.resolve("resources/main/build.properties")
         output.parentFile.mkdirs()
         output.printWriter().use {

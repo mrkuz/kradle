@@ -1,13 +1,13 @@
-package net.bnb1.kradle.blueprints
+package net.bnb1.kradle.features
 
 import io.kotest.matchers.file.shouldExist
 import io.kotest.matchers.string.shouldContain
 import net.bnb1.kradle.PluginSpec
 
-class BenchmarkBlueprintTests : PluginSpec({
+class BenchmarksBlueprintTests : PluginSpec({
 
     test("Run benchmarks") {
-        bootstrapAppProject()
+        bootstrapCompatAppProject()
 
         val sourceDir = projectDir.resolve("src/benchmark/kotlin/com/example")
         sourceDir.mkdirs()
@@ -44,7 +44,7 @@ class BenchmarkBlueprintTests : PluginSpec({
         buildFile.writeText(
             """
             plugins {
-               id("org.jetbrains.kotlin.jvm") version "1.4.31"
+               id("org.jetbrains.kotlin.jvm") version "1.6.0"
                id("net.bitsandbobs.kradle-lib") version "main-SNAPSHOT"
             }
             

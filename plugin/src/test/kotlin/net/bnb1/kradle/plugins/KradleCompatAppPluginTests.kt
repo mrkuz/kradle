@@ -5,10 +5,10 @@ import io.kotest.matchers.string.shouldNotContain
 import net.bnb1.kradle.PluginSpec
 import org.gradle.testkit.runner.GradleRunner
 
-class KradleAppPluginTests : PluginSpec({
+class KradleCompatAppPluginTests : PluginSpec({
 
     test("Check available tasks") {
-        bootstrapAppProject()
+        bootstrapCompatAppProject()
 
         val result = runTask("tasks")
 
@@ -26,11 +26,11 @@ class KradleAppPluginTests : PluginSpec({
     }
 
     test("Check default Kotlin version") {
-        bootstrapAppProject()
+        bootstrapCompatAppProject()
 
         val result = runTask("dependencies", "--configuration", "runtimeClasspath")
 
-        result.output shouldContain "org.jetbrains.kotlin:kotlin-stdlib:1.5.21"
+        result.output shouldContain "org.jetbrains.kotlin:kotlin-stdlib:1.6.0"
         result.output shouldNotContain "org.jetbrains.kotlin:kotlin-stdlib:1.5.31"
     }
 
@@ -51,15 +51,15 @@ class KradleAppPluginTests : PluginSpec({
         buildFile.writeText(
             """
             plugins {
-               id("org.jetbrains.kotlin.jvm") version "1.5.31"
+               id("org.jetbrains.kotlin.jvm") version "1.6.10"
                id("net.bitsandbobs.kradle-app") version "main-SNAPSHOT"
             }
             
             group = "com.test"
             version = "1.0.0"
             
-            application {
-                mainClass.set("com.test.AppKt")
+            kradle {
+                mainClass("com.test.App")
             }
             """.trimIndent()
         )
@@ -69,6 +69,6 @@ class KradleAppPluginTests : PluginSpec({
             .withArguments("dependencies", "--configuration", "runtimeClasspath")
             .build()
 
-        result.output shouldContain "org.jetbrains.kotlin:kotlin-stdlib:1.5.31"
+        result.output shouldContain "org.jetbrains.kotlin:kotlin-stdlib:1.6.10"
     }
 })

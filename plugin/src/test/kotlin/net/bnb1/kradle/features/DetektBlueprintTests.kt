@@ -1,4 +1,4 @@
-package net.bnb1.kradle.blueprints
+package net.bnb1.kradle.features
 
 import io.kotest.matchers.file.shouldExist
 import io.kotest.matchers.shouldBe
@@ -9,7 +9,7 @@ import org.gradle.testkit.runner.TaskOutcome
 class DetektBlueprintTests : PluginSpec({
 
     test("Run detekt") {
-        bootstrapAppProject()
+        bootstrapCompatAppProject()
         writeAppKt("println(\"Hello World\")")
 
         runTask("analyzeCode")
@@ -18,7 +18,7 @@ class DetektBlueprintTests : PluginSpec({
     }
 
     test("Generate detekt-config.yml") {
-        bootstrapAppProject()
+        bootstrapCompatAppProject()
         writeAppKt("println(\"Hello World\")")
 
         runTask("generateDetektConfig")
@@ -27,7 +27,7 @@ class DetektBlueprintTests : PluginSpec({
     }
 
     test("Run detekt with 'check'") {
-        bootstrapAppProject()
+        bootstrapCompatAppProject()
         writeAppKt("println(\"Hello World\")")
 
         val result = runTask("check")
@@ -40,7 +40,7 @@ class DetektBlueprintTests : PluginSpec({
         buildFile.writeText(
             """
             plugins {
-               id("org.jetbrains.kotlin.jvm") version "1.4.31"
+               id("org.jetbrains.kotlin.jvm") version "1.6.0"
                id("net.bitsandbobs.kradle-lib") version "main-SNAPSHOT"
             }
             
