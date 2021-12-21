@@ -1,5 +1,7 @@
 package net.bnb1.kradle
 
+import net.bnb1.kradle.features.FeatureRegistry
+import net.bnb1.kradle.features.PropertiesRegistry
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.api.Task
@@ -7,21 +9,11 @@ import org.gradle.api.model.ObjectFactory
 import org.gradle.api.provider.Property
 import org.gradle.api.tasks.SourceSetContainer
 import org.gradle.kotlin.dsl.DependencyHandlerScope
+import org.gradle.kotlin.dsl.extra
 
 const val TASK_GROUP = "Kradle"
 
 // Project
-
-inline fun <reified T : Plugin<Project>> Project.apply(blueprint: PluginBlueprint<T>) {
-    pluginManager.apply(T::class.java)
-    blueprint.configureEager(this)
-    afterEvaluate {
-        val extension = project.extensions.getByType(KradleExtension::class.java)
-        if (!extension.isDisabled(blueprint)) {
-            blueprint.configure(this, extension)
-        }
-    }
-}
 
 fun <T : Plugin<Project>> Project.apply(type: Class<T>) = pluginManager.apply(type)
 
@@ -52,6 +44,12 @@ val Project.extraDir
 val Project.sourceSets
     get() = this.extensions.getByType(SourceSetContainer::class.java)
 
+val Project.featureRegistry
+    get() = this.extra.get("featureRegistry") as FeatureRegistry
+
+val Project.propertiesRegistry
+    get() = this.extra.get("propertiesRegistry") as PropertiesRegistry
+
 // DependencyHandlerScope
 
 fun DependencyHandlerScope.implementation(notation: Any) = add("implementation", notation)
@@ -67,3 +65,4 @@ inline fun <reified T> ObjectFactory.property(default: T): Property<T> {
 }
 
 inline fun <reified T> ObjectFactory.empty(): Property<T> = property(T::class.java)
+

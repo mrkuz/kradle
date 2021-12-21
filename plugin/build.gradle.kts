@@ -27,7 +27,7 @@ dependencies {
     implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
 
     // Plugins
-    implementation("org.jetbrains.kotlin:kotlin-gradle-plugin")
+    implementation("org.jetbrains.kotlin:kotlin-gradle-plugin:1.6.0")
     implementation("org.jetbrains.dokka:dokka-gradle-plugin:1.5.31")
     implementation("org.jetbrains.kotlin:kotlin-allopen")
     implementation("org.jetbrains.kotlin:kotlin-serialization")
@@ -112,15 +112,21 @@ tasks.register("renderTemplates").configure {
 
 gradlePlugin {
     plugins {
+        create("kradle") {
+            id = "net.bitsandbobs.kradle"
+            implementationClass = "net.bnb1.kradle.plugins.KradlePlugin"
+            displayName = "Kradle Plugin"
+            description = "Swiss army knife for Kotlin/JVM development"
+        }
         create("kradleApp") {
             id = "net.bitsandbobs.kradle-app"
-            implementationClass = "net.bnb1.kradle.plugins.KradleAppPlugin"
+            implementationClass = "net.bnb1.kradle.v1.KradleCompatAppPlugin"
             displayName = "Kradle App Plugin"
             description = "Swiss army knife for Kotlin/JVM development"
         }
         create("kradleLib") {
             id = "net.bitsandbobs.kradle-lib"
-            implementationClass = "net.bnb1.kradle.plugins.KradleLibPlugin"
+            implementationClass = "net.bnb1.kradle.v1.KradleCompatLibPlugin"
             displayName = "Kradle Lib Plugin"
             description = "Swiss army knife for Kotlin/JVM development"
         }
