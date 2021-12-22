@@ -34,7 +34,7 @@ fun <T : Task> Project.create(name: String, description: String, type: Class<T>,
 }
 
 fun Project.alias(name: String, description: String, targetTask: String): Task {
-    val task = create<Task>(name, description + " (alias for '${targetTask}')")
+    val task = create<Task>(name, "$description (alias for '$targetTask')")
     task.dependsOn(targetTask)
     return task
 }
@@ -69,4 +69,3 @@ inline fun <reified T> ObjectFactory.property(default: T): Property<T> {
 }
 
 inline fun <reified T> ObjectFactory.empty(): Property<T> = property(T::class.java)
-

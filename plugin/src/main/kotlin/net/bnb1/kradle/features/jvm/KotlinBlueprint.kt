@@ -18,7 +18,7 @@ class KotlinBlueprint(project: Project) : Blueprint(project) {
 
     override fun checkPreconditions() {
         if (project.extensions.findByType(KotlinJvmProjectExtension::class.java) == null) {
-            throw  GradleException("Kotlin JVM plugin has to be applied")
+            throw GradleException("Kotlin JVM plugin has to be applied")
         }
     }
 
@@ -47,7 +47,9 @@ class KotlinBlueprint(project: Project) : Blueprint(project) {
             implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
             implementation("org.jetbrains.kotlin:kotlin-reflect")
             if (properties.kotlinxCoroutinesVersion.hasValue) {
-                implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:${properties.kotlinxCoroutinesVersion.get()}")
+                implementation(
+                    "org.jetbrains.kotlinx:kotlinx-coroutines-core:${properties.kotlinxCoroutinesVersion.get()}"
+                )
             }
             testImplementation("org.jetbrains.kotlin:kotlin-test")
         }

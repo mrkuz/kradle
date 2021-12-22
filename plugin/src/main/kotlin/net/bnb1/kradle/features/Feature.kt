@@ -13,7 +13,7 @@ open class Feature {
 
     private var parent: KClass<out FeatureSet>? = null
     private var enabled = AtomicBoolean(false)
-    private val state = AtomicReference<State>(State.INACTIVE)
+    private val state = AtomicReference(State.INACTIVE)
     private val blueprints = CopyOnWriteArrayList<Blueprint>()
     private val listeners = CopyOnWriteArrayList<FeatureListener>()
 

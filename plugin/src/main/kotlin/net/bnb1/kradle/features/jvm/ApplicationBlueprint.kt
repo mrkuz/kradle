@@ -10,10 +10,9 @@ import org.gradle.api.tasks.JavaExec
 import org.gradle.api.tasks.SourceSet
 import org.gradle.kotlin.dsl.named
 
-class ApplicationBlueprint(project: Project) : Blueprint(project) {
+private val GROUP_PATTERN = Regex("^[a-z]+(\\.[a-z0-9]+)+$")
 
-    @Suppress("PrivatePropertyName")
-    private val GROUP_PATTERN = Regex("^[a-z]+(\\.[a-z0-9]+)+$")
+class ApplicationBlueprint(project: Project) : Blueprint(project) {
 
     override fun applyPlugins() {
         project.apply(ApplicationPlugin::class.java)
@@ -39,7 +38,8 @@ class ApplicationBlueprint(project: Project) : Blueprint(project) {
         val mainSourceSet = project.sourceSets.getByName(SourceSet.MAIN_SOURCE_SET_NAME)
         val agentResource = javaClass.getResource("/agent.jar")
         project.create<JavaExec>(
-            "dev", "Runs the application and stops it when sources change (use with -t)",
+            "dev",
+            "Runs the application and stops it when sources change (use with -t)"
         ) {
             val agentFile = project.rootDir.resolve(".gradle/kradle/agent.jar")
             doFirst {

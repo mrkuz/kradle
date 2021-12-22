@@ -5,7 +5,7 @@ import net.bnb1.kradle.features.Blueprint
 import net.bnb1.kradle.plugins.GitPlugin
 import org.gradle.api.Project
 
-class GitBlueprint(project : Project) : Blueprint(project) {
+class GitBlueprint(project: Project) : Blueprint(project) {
 
     override fun applyPlugins() {
         project.apply(GitPlugin::class.java)

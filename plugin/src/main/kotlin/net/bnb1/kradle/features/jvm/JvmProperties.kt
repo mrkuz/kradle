@@ -56,6 +56,8 @@ class JvmProperties(project: Project) : Properties(project) {
         .addBlueprint(BenchmarksBlueprint(project))
         .register(project)
         .asInterface()
+
+    @SuppressWarnings("VariableNaming")
     val `package` = ConfigurableFeatureImpl(PackageFeature(), PackageProperties(project))
         .setParent(JvmFeatureSet::class)
         .addBlueprint(PackageBlueprint(project))

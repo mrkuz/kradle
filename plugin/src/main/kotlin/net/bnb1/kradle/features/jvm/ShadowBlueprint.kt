@@ -10,10 +10,9 @@ import org.gradle.api.tasks.SourceSet
 import org.gradle.jvm.tasks.Jar
 import org.gradle.kotlin.dsl.named
 
-class ShadowBlueprint(project: Project) : Blueprint(project) {
+private const val TASK_NAME = "uberJar"
 
-    @Suppress("PrivatePropertyName")
-    private val TASK_NAME = "uberJar"
+class ShadowBlueprint(project: Project) : Blueprint(project) {
 
     override fun createTasks() {
         val jar = project.tasks.named<Jar>("jar").get()

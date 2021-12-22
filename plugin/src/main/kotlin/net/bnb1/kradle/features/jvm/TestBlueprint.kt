@@ -47,7 +47,7 @@ class TestBlueprint(project: Project) : Blueprint(project) {
             return
         }
 
-        val testSourceSet = project.sourceSets.getByName(SourceSet.TEST_SOURCE_SET_NAME);
+        val testSourceSet = project.sourceSets.getByName(SourceSet.TEST_SOURCE_SET_NAME)
         val sourceSet = project.sourceSets.create(name)
         sourceSet.compileClasspath += testSourceSet.compileClasspath
         sourceSet.runtimeClasspath += testSourceSet.runtimeClasspath

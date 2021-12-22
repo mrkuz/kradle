@@ -6,7 +6,7 @@ import org.gradle.api.Project
 import org.jetbrains.dokka.gradle.DokkaTask
 
 class DokkaBlueprint(project: Project) : Blueprint(project) {
-    
+
     override fun createTasks() {
         project.create<DokkaTask>("generateDocumentation", "Generates Dokka HTML documentation") {
             outputDirectory.set(project.buildDir.resolve("docs"))

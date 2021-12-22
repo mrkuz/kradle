@@ -11,10 +11,9 @@ import org.gradle.kotlin.dsl.named
 import java.net.URL
 import java.nio.file.Files
 
-class JibBlueprint(project: Project) : Blueprint(project) {
+private const val TASK_NAME = "buildImage"
 
-    @Suppress("PrivatePropertyName")
-    private val TASK_NAME = "buildImage"
+class JibBlueprint(project: Project) : Blueprint(project) {
 
     override fun checkPreconditions() {
         if (!project.featureRegistry.get<ApplicationFeature>().isEnabled()) {
@@ -73,9 +72,9 @@ class JibBlueprint(project: Project) : Blueprint(project) {
                 if (properties.jvmKillVersion.hasValue) {
                     val jvmKillFileName = "jvmkill-${properties.jvmKillVersion.get()}.so"
                     if (properties.withAppSh.get()) {
-                        environment = environment + mapOf("JAVA_AGENT" to "/app/extra/${jvmKillFileName}")
+                        environment = environment + mapOf("JAVA_AGENT" to "/app/extra/$jvmKillFileName")
                     } else {
-                        jvmFlags = jvmFlags + listOf("-agentpath:/app/extra/${jvmKillFileName}")
+                        jvmFlags = jvmFlags + listOf("-agentpath:/app/extra/$jvmKillFileName")
                     }
                 }
 

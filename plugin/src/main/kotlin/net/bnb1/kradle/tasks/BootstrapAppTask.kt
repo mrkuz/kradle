@@ -18,7 +18,7 @@ open class BootstrapAppTask : AbstractBoostrapTask() {
             project.projectDir.resolve("src/$it/kotlin/$packagePath").mkdirs()
         }
 
-        project.projectDir.resolve("src/main/kotlin/$packagePath/${mainClassName}.kt").writeText(
+        project.projectDir.resolve("src/main/kotlin/$packagePath/$mainClassName.kt").writeText(
             """
             package $packageName
             

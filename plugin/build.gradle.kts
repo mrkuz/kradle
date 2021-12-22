@@ -1,4 +1,3 @@
-import com.github.benmanes.gradle.versions.updates.DependencyUpdatesTask
 import groovy.text.SimpleTemplateEngine
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 import java.io.FileWriter
@@ -10,8 +9,7 @@ plugins {
     `maven-publish`
     id("com.gradle.plugin-publish") version "0.18.0"
     kotlin("jvm") version "1.5.31"
-    id("com.github.ben-manes.versions") version "0.39.0"
-    id("com.adarshr.test-logger") version "3.1.0"
+    // id("net.bitsandbobs.kradle") version "main-SNAPSHOT"
 }
 
 group = "net.bitsandbobs.kradle"
@@ -50,23 +48,28 @@ dependencies {
     testImplementation("io.kotest:kotest-property:4.6.3")
     testImplementation("com.github.docker-java:docker-java:3.2.12")
 }
+
+/*
+kradle {
+    jvm {
+        targetJvm("1.8")
+        kotlin.enable()
+        dependencyUpdates.enable()
+        vulnerabilityScan.enable()
+        lint.enable()
+        codeAnalysis.enable()
+        test {
+            prettyPrint(true)
+            withJunitJupiter()
+            withJacoco()
+        }
+    }
+}
+*/
+
 java {
     sourceCompatibility = JavaVersion.VERSION_1_8
     targetCompatibility = JavaVersion.VERSION_1_8
-}
-
-tasks.withType<DependencyUpdatesTask> {
-    revision = "release"
-    checkForGradleUpdate = true
-    // Exclude milestones and RCs
-    rejectVersionIf {
-        val alpha = "^.*[.-]alpha[.-]?[0-9]*$".toRegex()
-        val milestone = "^.*[.-]M[.-]?[0-9]+$".toRegex()
-        val releaseCandidate = "^.*[.-]RC[.-]?[0-9]*$".toRegex()
-        alpha.matches(candidate.version)
-                || milestone.matches(candidate.version)
-                || releaseCandidate.matches(candidate.version)
-    }
 }
 
 tasks.withType<KotlinCompile> {

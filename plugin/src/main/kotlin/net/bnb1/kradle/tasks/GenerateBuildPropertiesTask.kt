@@ -10,6 +10,7 @@ open class GenerateBuildPropertiesTask : DefaultTask() {
         outputs.upToDateWhen { false }
     }
 
+    @SuppressWarnings("MagicNumber")
     @TaskAction
     fun run() {
         // TODO: sourceSets.main.output.resourcesDir?

@@ -5,6 +5,5 @@ import org.gradle.api.Project
 
 class NoOpPlugin : Plugin<Project> {
 
-    override fun apply(target: Project) {
-    }
+    override fun apply(target: Project) = Unit
 }

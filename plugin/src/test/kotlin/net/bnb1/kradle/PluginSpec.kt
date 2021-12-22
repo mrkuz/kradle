@@ -69,7 +69,7 @@ abstract class PluginSpec(body: PluginSpec.() -> Unit) : FunSpec({}) {
                 mainClass("com.example.demo.App")
             }
             
-            """.trimIndent()
+        """.trimIndent()
     )
 
     fun writeAppKt(main: String) {
@@ -108,7 +108,7 @@ abstract class PluginSpec(body: PluginSpec.() -> Unit) : FunSpec({}) {
                 targetJvm("11")
             }
             
-            """.trimIndent()
+        """.trimIndent()
     )
 
     fun writeSettingsGradle(name: String) {

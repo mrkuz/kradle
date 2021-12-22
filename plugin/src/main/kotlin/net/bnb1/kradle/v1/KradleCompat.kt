@@ -34,10 +34,10 @@ class KradleCompat(private val project: Project, private val type: ProjectType) 
         TestBlueprint(project).createTasks()
     }
 
+    @SuppressWarnings("LongMethod")
     private fun configure() {
         val compatExtension = project.extensions.getByType(KradleCompatExtension::class.java)
         with(extension) {
-
             general {
                 bootstrap.enable()
                 git.enable()
@@ -47,7 +47,6 @@ class KradleCompat(private val project: Project, private val type: ProjectType) 
 
             jvm {
                 targetJvm.bind(compatExtension.targetJvm)
-
                 kotlin {
                     kotlinxCoroutinesVersion.bind(compatExtension.kotlinxCoroutinesVersion)
                     lint {
@@ -80,11 +79,9 @@ class KradleCompat(private val project: Project, private val type: ProjectType) 
                     junitJupiterVersion.bind(compatExtension.tests.junitJupiterVersion)
                     jacocoVersion.bind(compatExtension.tests.jacocoVersion)
                 }
-
                 benchmark {
                     jmhVersion.bind(compatExtension.jmhVersion)
                 }
-
                 `package` {
                     uberJar {
                         minimize.bind(compatExtension.uberJar.minimize)
@@ -100,11 +97,8 @@ class KradleCompat(private val project: Project, private val type: ProjectType) 
                         javaOpts.bind(compatExtension.image.javaOpts)
                     }
                 }
-
                 documentation.enable()
             }
         }
     }
-
-
 }

@@ -37,5 +37,5 @@ open class Blueprint(protected val project: Project) : FeatureListener {
     protected open fun configure() = Unit
     protected open fun onActivate() = Unit
 
-    override fun onFeatureActivate(feature: KClass<out Feature>) {}
+    override fun onFeatureActivate(feature: KClass<out Feature>) = Unit
 }

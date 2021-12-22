@@ -9,13 +9,10 @@ import org.gradle.api.Project
 import org.gradle.kotlin.dsl.named
 import org.jetbrains.kotlin.gradle.dsl.KotlinProjectExtension
 
+private const val CONFIGURATION_NAME = "kradleDetekt"
+private const val TASK_NAME = "analyzeCode"
+
 class DetektBlueprint(project: Project) : Blueprint(project) {
-
-    @Suppress("PrivatePropertyName")
-    private val CONFIGURATION_NAME = "kradleDetekt"
-
-    @Suppress("PrivatePropertyName")
-    private val TASK_NAME = "analyzeCode"
 
     override fun createTasks() {
         project.create<GenerateDetektConfigTask>("generateDetektConfig", "Generates detekt-config.yml")

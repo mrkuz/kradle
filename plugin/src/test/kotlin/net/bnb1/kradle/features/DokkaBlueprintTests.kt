@@ -53,7 +53,6 @@ class DokkaBlueprintTests : PluginSpec({
         output.readText() shouldContain "Hello package.md"
     }
 
-
     // Raises OutOfMemoryError: Metaspace
     xtest("Generate documentation with module.md (project dir)") {
         bootstrapCompatAppProject()
