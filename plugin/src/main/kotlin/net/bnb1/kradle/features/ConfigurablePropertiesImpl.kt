@@ -13,5 +13,5 @@ class ConfigurablePropertiesImpl<P : Properties>(private val properties: P) :
 
     fun asInterface() = this as ConfigurableProperties<P>
 
-    override fun configure(action: P.() -> Unit) =   action(properties)
+    override fun configure(action: P.() -> Unit) = action(properties)
 }

@@ -2,6 +2,7 @@ package net.bnb1.kradle
 
 import net.bnb1.kradle.features.FeatureRegistry
 import net.bnb1.kradle.features.PropertiesRegistry
+import net.bnb1.kradle.presets.PresetRegistry
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.api.Task
@@ -49,6 +50,9 @@ val Project.featureRegistry
 
 val Project.propertiesRegistry
     get() = this.extra.get("propertiesRegistry") as PropertiesRegistry
+
+val Project.presetRegistry
+    get() = this.extra.get("presetRegistry") as PresetRegistry
 
 // DependencyHandlerScope
 

@@ -11,7 +11,7 @@ open class Feature {
         INACTIVE, ACTIVATING, ACTIVATED
     }
 
-    private var parent: KClass<out Feature>? = null
+    private var parent: KClass<out FeatureSet>? = null
     private var enabled = AtomicBoolean(false)
     private val state = AtomicReference<State>(State.INACTIVE)
     private val blueprints = CopyOnWriteArrayList<Blueprint>()
@@ -33,11 +33,11 @@ open class Feature {
         }
     }
 
-    fun setParent(parent: KClass<out Feature>) {
+    fun setParent(parent: KClass<out FeatureSet>) {
         this.parent = parent
     }
 
-    fun isParent(parent: KClass<out Feature>) = this.parent == parent
+    fun isParent(parent: KClass<out FeatureSet>) = this.parent == parent
 
     fun activate() {
         if (!state.compareAndSet(State.INACTIVE, State.ACTIVATING)) {
@@ -56,10 +56,7 @@ open class Feature {
             return
         }
         // println("Enable feature: ${this::class.simpleName}")
-        onEnable()
     }
 
     fun isEnabled() = enabled.get()
-
-    protected open fun onEnable() {}
 }

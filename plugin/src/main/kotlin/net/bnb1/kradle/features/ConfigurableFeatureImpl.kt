@@ -10,18 +10,18 @@ class ConfigurableFeatureImpl<P : Properties>(
     private val properties: P,
 ) : ConfigurableFeature<P> {
 
-    fun register(project: Project) : ConfigurableFeatureImpl<P> {
+    fun register(project: Project): ConfigurableFeatureImpl<P> {
         project.featureRegistry.register(feature)
         project.propertiesRegistry.register(properties)
         return this
     }
 
-    fun setParent(parent : KClass<out Feature>): ConfigurableFeatureImpl<P> {
+    fun setParent(parent: KClass<out FeatureSet>): ConfigurableFeatureImpl<P> {
         feature.setParent(parent)
         return this
     }
 
-    fun addBlueprint(blueprint: Blueprint) : ConfigurableFeatureImpl<P> {
+    fun addBlueprint(blueprint: Blueprint): ConfigurableFeatureImpl<P> {
         feature.addBlueprint(blueprint)
         return this
     }
