@@ -1,5 +1,6 @@
 package net.bnb1.kradle.features.jvm
 
+import Catalog
 import net.bnb1.kradle.features.ConfigurableFeatureImpl
 import net.bnb1.kradle.features.EmptyProperties
 import net.bnb1.kradle.features.Properties
@@ -8,7 +9,7 @@ import org.gradle.api.Project
 
 class JvmProperties(project: Project) : Properties(project) {
 
-    val targetJvm = property(factory.property("17"))
+    val targetJvm = property(factory.property(Catalog.Versions.jvm))
 
     val kotlin = ConfigurableFeatureImpl(KotlinFeature(), KotlinProperties(project))
         .setParent(JvmFeatureSet::class)

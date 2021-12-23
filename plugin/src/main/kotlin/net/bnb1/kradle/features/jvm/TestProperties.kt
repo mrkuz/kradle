@@ -1,5 +1,6 @@
 package net.bnb1.kradle.features.jvm
 
+import Catalog
 import net.bnb1.kradle.empty
 import net.bnb1.kradle.features.Properties
 import net.bnb1.kradle.property
@@ -8,10 +9,10 @@ import org.gradle.api.Project
 class TestProperties(project: Project) : Properties(project) {
 
     val junitJupiterVersion = property(factory.empty<String>())
-    fun withJunitJupiter(version: String = "5.8.1") = junitJupiterVersion.set(version)
+    fun withJunitJupiter(version: String = Catalog.Versions.junit) = junitJupiterVersion.set(version)
 
     val jacocoVersion = property(factory.empty<String>())
-    fun withJacoco(version: String = "0.8.7") = jacocoVersion.set(version)
+    fun withJacoco(version: String = Catalog.Versions.jacoco) = jacocoVersion.set(version)
 
     val prettyPrint = property(factory.property(false))
 

@@ -7,9 +7,9 @@ plugins {
     `java-gradle-plugin`
     `kotlin-dsl`
     `maven-publish`
-    id("com.gradle.plugin-publish") version "0.18.0"
-    kotlin("jvm") version "1.5.31"
-    // id("net.bitsandbobs.kradle") version "main-SNAPSHOT"
+    id(Catalog.Plugins.gradlePublish.id) version Catalog.Plugins.gradlePublish.version
+    id(Catalog.Plugins.kotlinJvm.id) version Catalog.Plugins.kotlinJvm.version
+    id(Catalog.Plugins.testLogger.id) version Catalog.Plugins.testLogger.version
 }
 
 group = "net.bitsandbobs.kradle"
@@ -21,51 +21,36 @@ repositories {
 }
 
 dependencies {
-    implementation(platform("org.jetbrains.kotlin:kotlin-bom"))
-    implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
+    implementation(platform(Catalog.Dependencies.Platform.kotlin))
+    implementation(Catalog.Dependencies.kotlinStdlib)
+    implementation(Catalog.Dependencies.jgit)
 
     // Plugins
-    implementation("org.jetbrains.kotlin:kotlin-gradle-plugin:1.6.0")
-    implementation("org.jetbrains.dokka:dokka-gradle-plugin:1.5.31")
-    implementation("org.jetbrains.kotlin:kotlin-allopen")
-    implementation("org.jetbrains.kotlin:kotlin-serialization")
-    implementation("org.jetbrains.kotlinx:kotlinx-benchmark-plugin:0.3.1")
+    implementation(Catalog.Dependencies.Plugins.kotlin)
+    implementation(Catalog.Dependencies.Plugins.allOpen)
+    implementation(Catalog.Dependencies.Plugins.kotlinSerialization)
+    implementation(Catalog.Dependencies.Plugins.dokka)
+    implementation(Catalog.Dependencies.Plugins.kotlinBenchmark)
 
-    implementation("com.adarshr:gradle-test-logger-plugin:3.1.0")
-    implementation("gradle.plugin.com.github.jengelman.gradle.plugins:shadow:7.0.0")
-    implementation("gradle.plugin.com.google.cloud.tools:jib-gradle-plugin:3.1.4")
-    implementation("com.github.ben-manes:gradle-versions-plugin:0.39.0")
-    implementation("io.gitlab.arturbosch.detekt:detekt-gradle-plugin:1.18.1")
-    implementation("org.jlleitschuh.gradle:ktlint-gradle:10.2.0")
-    implementation("org.owasp:dependency-check-gradle:6.5.0.1")
-
-    // Miscellaneous
-    implementation("org.eclipse.jgit:org.eclipse.jgit:5.13.0.202109080827-r")
+    implementation(Catalog.Dependencies.Plugins.testLogger)
+    implementation(Catalog.Dependencies.Plugins.shadow)
+    implementation(Catalog.Dependencies.Plugins.jib)
+    implementation(Catalog.Dependencies.Plugins.versions)
+    implementation(Catalog.Dependencies.Plugins.detekt)
+    implementation(Catalog.Dependencies.Plugins.ktlint)
+    implementation(Catalog.Dependencies.Plugins.owaspDependencyCheck)
 
     // Testing
-    testImplementation("org.jetbrains.kotlin:kotlin-test")
-    testImplementation("io.kotest:kotest-runner-junit5:4.6.3")
-    testImplementation("io.kotest:kotest-property:4.6.3")
-    testImplementation("com.github.docker-java:docker-java:3.2.12")
+    testImplementation(Catalog.Dependencies.Test.kotlinTest)
+    testImplementation(Catalog.Dependencies.Test.dockerJava)
+    Catalog.Dependencies.Test.kotestBundle.forEach { testImplementation(it) }
 }
 
-/*
-kradle {
-    jvm {
-        targetJvm("1.8")
-        kotlin.enable()
-        dependencyUpdates.enable()
-        vulnerabilityScan.enable()
-        lint.enable()
-        codeAnalysis.enable()
-        test {
-            prettyPrint(true)
-            withJunitJupiter()
-            withJacoco()
-        }
+sourceSets {
+    main {
+        java.srcDirs(project.rootDir.resolve("buildSrc/src/main/kotlin"))
     }
 }
-*/
 
 java {
     sourceCompatibility = JavaVersion.VERSION_1_8
@@ -74,6 +59,7 @@ java {
 
 tasks.withType<KotlinCompile> {
     kotlinOptions {
+        jvmTarget = "1.8"
         freeCompilerArgs = listOf("-Xopt-in=kotlin.RequiresOptIn")
     }
 }
