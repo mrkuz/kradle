@@ -82,8 +82,8 @@ tasks.named("processResources").configure {
 tasks.register("renderTemplates").configure {
     doFirst {
         val properties = Properties()
-        project.rootDir.resolve("template.properties").inputStream().use { properties.load(it) }
         properties["kradleVersion"] = version
+        properties["versions"] = Catalog.Versions
 
         val engine = SimpleTemplateEngine()
         project.fileTree(project.rootDir)

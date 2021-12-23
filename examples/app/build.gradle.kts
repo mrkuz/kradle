@@ -9,14 +9,14 @@ version = "1.0.0"
 kradle {
     targetJvm("17")
     mainClass("com.example.demo.App", jvmName = false)
-    // kotlinxCoroutinesVersion("1.5.2")
-    // ktlintVersion("0.43.0")
-    // detektVersion("1.18.1")
-    // jmhVersion("1.33")
+    // kotlinxCoroutinesVersion("1.6.0")
+    // ktlintVersion("0.43.2")
+    // detektVersion("1.19.0")
+    // jmhVersion("1.34")
     tests {
-        // junitJupiterVersion("5.8.1")
+        // junitJupiterVersion("5.8.2")
         // jacocoVersion("0.8.7")
-        useKotest("4.6.3")
+        useKotest("5.0.3")
         useMockk("1.12.1")
     }
     uberJar {

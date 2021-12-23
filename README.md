@@ -40,7 +40,7 @@ _build.gradle.kts_
 
 ```kotlin
 plugins {
-    id("org.jetbrains.kotlin.jvm") version "1.6.0"
+    id("org.jetbrains.kotlin.jvm") version "17"
     id("net.bitsandbobs.kradle-app") version "main-SNAPSHOT"
 }
 
@@ -89,14 +89,14 @@ This example configuration shows all available options. If __not__ commented, th
 kradle {
     targetJvm("17")
     // mainClass("com.example.demo.App", jvmName = false)
-    kotlinxCoroutinesVersion("1.5.2")
-    ktlintVersion("0.43.0")
-    detektVersion("1.18.1")
-    jmhVersion("1.33")
+    kotlinxCoroutinesVersion("1.6.0")
+    ktlintVersion("0.43.2")
+    detektVersion("1.19.0")
+    jmhVersion("1.34")
     tests {
-        junitJupiterVersion("5.8.1")
+        junitJupiterVersion("5.8.2")
         jacocoVersion("0.8.7")
-        // useKotest("4.6.3")
+        // useKotest("5.0.3")
         // useMockk("1.12.1")
     }
     uberJar {
@@ -161,7 +161,7 @@ The ktlint version is configurable.
 
 ```kotlin
 kradle {
-    ktlintVersion("0.43.0")
+    ktlintVersion("0.43.2")
 }
 ```
 
@@ -173,7 +173,7 @@ The detekt version is configurable.
 
 ```kotlin
 kradle {
-    detektVersion("1.18.1")
+    detektVersion("1.19.0")
 }
 ```
 
@@ -196,7 +196,7 @@ The JMH version is configurable.
 
 ```kotlin
 kradle {
-    jmhVersion("1.33")
+    jmhVersion("1.34")
 }
 ```
 
@@ -209,7 +209,7 @@ Plugins: [kotlinx.benchmark Plugin](https://plugins.gradle.org/plugin/org.jetbra
 ```kotlin
 kradle {
     tests {
-        junitJupiterVersion("5.8.1")
+        junitJupiterVersion("5.8.2")
     }
 }
 ```
@@ -220,7 +220,7 @@ and [mockk](https://mockk.io/) dependencies.
 ```kotlin
 kradle {
     tests {
-        useKotest("4.6.3")
+        useKotest("5.0.3")
         useMockk("1.12.1")
     }
 }
@@ -340,7 +340,7 @@ coroutines version is configurable.
 
 ```kotlin
 kradle {
-    kotlinxCoroutinesVersion("1.5.2")
+    kotlinxCoroutinesVersion("1.6.0")
 }
 ```
 
@@ -375,7 +375,7 @@ Plugins: [Java Library Plugin](https://docs.gradle.org/current/userguide/java_li
 
 ## Changelog
 
-### Version main-SNAPSHOT (2021-11-21)
+### Version main-SNAPSHOT (2021-12-23)
 
 - Fix `bootstrap` for multi-project builds
 - Fix exclusion of alpha versions and RCs in `showDependencyUpdates`

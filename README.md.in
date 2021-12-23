@@ -40,7 +40,7 @@ _build.gradle.kts_
 
 ```kotlin
 plugins {
-    id("org.jetbrains.kotlin.jvm") version "1.6.0"
+    id("org.jetbrains.kotlin.jvm") version "${versions.kotlin}"
     id("net.bitsandbobs.kradle-app") version "${kradleVersion}"
 }
 
@@ -87,27 +87,27 @@ This example configuration shows all available options. If __not__ commented, th
 
 ```kotlin
 kradle {
-    targetJvm("17")
+    targetJvm("${versions.jvm}")
     // mainClass("com.example.demo.App", jvmName = false)
-    kotlinxCoroutinesVersion("1.5.2")
-    ktlintVersion("0.43.0")
-    detektVersion("1.18.1")
-    jmhVersion("1.33")
+    kotlinxCoroutinesVersion("${versions.kotlinCoroutines}")
+    ktlintVersion("${versions.ktlint}")
+    detektVersion("${versions.detekt}")
+    jmhVersion("${versions.jmh}")
     tests {
-        junitJupiterVersion("5.8.1")
-        jacocoVersion("0.8.7")
-        // useKotest("4.6.3")
-        // useMockk("1.12.1")
+        junitJupiterVersion("${versions.junit}")
+        jacocoVersion("${versions.jacoco}")
+        // useKotest("${versions.kotest}")
+        // useMockk("${versions.mockk}")
     }
     uberJar {
         minimize(false)
     }
     image {
-        baseImage("bellsoft/liberica-openjdk-alpine:17")
+        baseImage("bellsoft/liberica-openjdk-alpine:${versions.jvm}")
         // ports.add(8080)
         // jvmOpts("-Xmx512M")
         // withAppSh()
-        // withJvmKill("1.16.0")
+        // withJvmKill("${versions.jvmKill}")
     }
 
     // disable(BuildPropertiesBlueprint::class.java)
@@ -161,7 +161,7 @@ The ktlint version is configurable.
 
 ```kotlin
 kradle {
-    ktlintVersion("0.43.0")
+    ktlintVersion("${versions.ktlint}")
 }
 ```
 
@@ -173,7 +173,7 @@ The detekt version is configurable.
 
 ```kotlin
 kradle {
-    detektVersion("1.18.1")
+    detektVersion("${versions.detekt}")
 }
 ```
 
@@ -196,7 +196,7 @@ The JMH version is configurable.
 
 ```kotlin
 kradle {
-    jmhVersion("1.33")
+    jmhVersion("${versions.jmh}")
 }
 ```
 
@@ -209,7 +209,7 @@ Plugins: [kotlinx.benchmark Plugin](https://plugins.gradle.org/plugin/org.jetbra
 ```kotlin
 kradle {
     tests {
-        junitJupiterVersion("5.8.1")
+        junitJupiterVersion("${versions.junit}")
     }
 }
 ```
@@ -220,8 +220,8 @@ and [mockk](https://mockk.io/) dependencies.
 ```kotlin
 kradle {
     tests {
-        useKotest("4.6.3")
-        useMockk("1.12.1")
+        useKotest("${versions.kotest}")
+        useMockk("${versions.mockk}")
     }
 }
 ```
@@ -241,7 +241,7 @@ The JaCoCo version is configurable.
 ```kotlin
 kradle {
     tests {
-        jacocoVersion("0.8.7")
+        jacocoVersion("${versions.jacoco}")
     }
 }
 ```
@@ -297,7 +297,7 @@ exposed ports and JVM command-line options are configurable.
 ```kotlin
 kradle {
     image {
-        baseImage("bellsoft/liberica-openjdk-alpine:17")
+        baseImage("bellsoft/liberica-openjdk-alpine:${versions.jvm}")
         // ports.add(8080)
         // jvmOpts("-Xmx512M")
     }
@@ -318,7 +318,7 @@ unable to allocate memory.
 kradle {
     image {
         // withAppSh()
-        // withJvmKill("1.16.0")
+        // withJvmKill("${versions.jvmKill}")
     }
 }
 ```
@@ -331,7 +331,7 @@ Plugins: [Jib Plugin](https://plugins.gradle.org/plugin/com.google.cloud.tools.j
 
 ```kotlin
 kradle {
-    targetJvm("17")
+    targetJvm("${versions.jvm}")
 }
 ```
 
@@ -340,7 +340,7 @@ coroutines version is configurable.
 
 ```kotlin
 kradle {
-    kotlinxCoroutinesVersion("1.5.2")
+    kotlinxCoroutinesVersion("${versions.kotlinCoroutines}")
 }
 ```
 
