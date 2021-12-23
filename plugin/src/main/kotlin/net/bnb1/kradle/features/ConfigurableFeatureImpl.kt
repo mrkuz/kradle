@@ -21,6 +21,11 @@ class ConfigurableFeatureImpl<P : Properties>(
         return this
     }
 
+    fun after(vararg features: KClass<out Feature>): ConfigurableFeatureImpl<P> {
+        feature.after(*features)
+        return this
+    }
+
     fun addBlueprint(blueprint: Blueprint): ConfigurableFeatureImpl<P> {
         feature.addBlueprint(blueprint)
         return this

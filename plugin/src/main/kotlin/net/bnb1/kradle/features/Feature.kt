@@ -14,8 +14,17 @@ open class Feature {
     private var parent: KClass<out FeatureSet>? = null
     private var enabled = AtomicBoolean(false)
     private val state = AtomicReference(State.INACTIVE)
+    private val after = CopyOnWriteArrayList<KClass<out Feature>>()
     private val blueprints = CopyOnWriteArrayList<Blueprint>()
     private val listeners = CopyOnWriteArrayList<FeatureListener>()
+
+    fun after(vararg features: KClass<out Feature>) {
+        for (feature in features) {
+            if (this::class != feature) {
+                after.addIfAbsent(feature)
+            }
+        }
+    }
 
     fun addBlueprint(blueprint: Blueprint) {
         if (blueprints.addIfAbsent(blueprint)) {
@@ -38,11 +47,13 @@ open class Feature {
     }
 
     fun isParent(parent: KClass<out FeatureSet>) = this.parent == parent
+    fun shouldRunAfter() = after.toList()
 
     fun activate() {
         if (!state.compareAndSet(State.INACTIVE, State.ACTIVATING)) {
             return
         }
+
         // println("Activate feature: ${this::class.simpleName}")
         blueprints.forEach { it.activate() }
         // Run again to activate blueprints that were added in the first run
@@ -59,4 +70,5 @@ open class Feature {
     }
 
     fun isEnabled() = enabled.get()
+    fun isInactive() = state.get() == State.INACTIVE
 }

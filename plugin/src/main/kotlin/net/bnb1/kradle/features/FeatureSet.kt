@@ -19,10 +19,20 @@ open class FeatureSet(private val project: Project) {
         if (!activated.compareAndSet(false, true)) {
             return false
         }
-        project.featureRegistry.map.values
+        project.featureRegistry.map.values.asSequence()
             .filter { it.isEnabled() }
+            .filter { it.isInactive() }
             .filter { it.isParent(this::class) }
-            .forEach { it.activate() }
+            .forEach { activateOrdered(it) }
         return true
+    }
+
+    private fun activateOrdered(feature: Feature) {
+        feature.shouldRunAfter().asSequence()
+            .map { project.featureRegistry.map[it] as Feature }
+            .filter { it.isEnabled() }
+            .filter { it.isInactive() }
+            .forEach { activateOrdered(it) }
+        feature.activate()
     }
 }

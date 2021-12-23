@@ -28,7 +28,8 @@ class DetektBlueprint(project: Project) : Blueprint(project) {
         val kotlinExtension = project.extensions.getByType(KotlinProjectExtension::class.java)
         val sourceFiles = kotlinExtension.sourceSets
             .asSequence()
-            .map { it.kotlin.files }
+            .flatMap { it.kotlin.files }
+            .filter { it.extension.toLowerCase() == "kt" }
             .toSet()
 
         project.create<Detekt>(TASK_NAME, "Runs detekt code analysis") {
