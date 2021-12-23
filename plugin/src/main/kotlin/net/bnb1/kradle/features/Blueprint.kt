@@ -12,6 +12,9 @@ open class Blueprint(protected val project: Project) : FeatureListener {
         if (!activated.compareAndSet(false, true)) {
             return
         }
+        if (!shouldActivate()) {
+            return
+        }
         project.logger.info("Activate blueprint: ${this::class.simpleName}")
         checkPreconditions()
         applyPlugins()
@@ -25,9 +28,9 @@ open class Blueprint(protected val project: Project) : FeatureListener {
         onActivate()
     }
 
-    protected open fun applyPlugins() = Unit
-
+    protected open fun shouldActivate() = true
     protected open fun checkPreconditions() = Unit
+    protected open fun applyPlugins() = Unit
     protected open fun registerBlueprints() = Unit
     protected open fun createSourceSets() = Unit
     protected open fun createTasks() = Unit

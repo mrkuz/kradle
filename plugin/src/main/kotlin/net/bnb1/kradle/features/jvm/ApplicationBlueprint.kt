@@ -14,10 +14,6 @@ private val GROUP_PATTERN = Regex("^[a-z]+(\\.[a-z0-9]+)+$")
 
 class ApplicationBlueprint(project: Project) : Blueprint(project) {
 
-    override fun applyPlugins() {
-        project.apply(ApplicationPlugin::class.java)
-    }
-
     override fun checkPreconditions() {
         if (project.featureRegistry.get<LibraryFeature>().isEnabled()) {
             throw GradleException("You can only enable 'application' or 'library' feature")
@@ -32,6 +28,10 @@ class ApplicationBlueprint(project: Project) : Blueprint(project) {
         if (project.version == "unspecified") {
             project.logger.warn("WARNING: Version is not specified")
         }
+    }
+
+    override fun applyPlugins() {
+        project.apply(ApplicationPlugin::class.java)
     }
 
     override fun createTasks() {

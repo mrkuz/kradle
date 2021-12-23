@@ -16,6 +16,8 @@ import org.gradle.testing.jacoco.tasks.JacocoReportsContainer
 
 class JacocoBlueprint(project: Project) : Blueprint(project) {
 
+    override fun shouldActivate() = project.propertiesRegistry.get<TestProperties>().jacocoVersion.hasValue
+
     override fun applyPlugins() {
         project.apply(JacocoPlugin::class.java)
     }

@@ -7,6 +7,8 @@ import net.bnb1.kradle.features.jvm.TestBlueprint
 import net.bnb1.kradle.features.jvm.TestProperties
 import net.bnb1.kradle.propertiesRegistry
 import org.gradle.api.Project
+import org.gradle.kotlin.dsl.configure
+import org.jetbrains.kotlin.allopen.gradle.AllOpenExtension
 import org.jetbrains.kotlin.allopen.gradle.AllOpenGradleSubplugin
 
 class KradleCompat(private val project: Project, private val type: ProjectType) {
@@ -30,6 +32,12 @@ class KradleCompat(private val project: Project, private val type: ProjectType) 
             withIntegrationTests(true)
             withFunctionalTests(true)
         }
+
+        project.apply(AllOpenGradleSubplugin::class.java)
+        project.configure<AllOpenExtension> {
+            annotation("org.openjdk.jmh.annotations.State")
+        }
+
         BenchmarksBlueprint(project).createSourceSets()
         TestBlueprint(project).createTasks()
     }

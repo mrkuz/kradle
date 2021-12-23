@@ -19,13 +19,6 @@ class TestBlueprint(project: Project) : Blueprint(project) {
         }
     }
 
-    override fun registerBlueprints() {
-        val properties = project.propertiesRegistry.get<TestProperties>()
-        if (properties.jacocoVersion.hasValue) {
-            project.featureRegistry.get<TestFeature>().addBlueprint(JacocoBlueprint(project))
-        }
-    }
-
     // compat: Must be public we can create the tasks eagerly
     public override fun createTasks() {
         val properties = project.propertiesRegistry.get<TestProperties>()

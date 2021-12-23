@@ -5,7 +5,8 @@ import net.bnb1.kradle.PluginSpec
 
 class OwaspDependencyCheckBlueprintTests : PluginSpec({
 
-    test("Run dependency check") {
+    // Takes very long
+    xtest("Run dependency check") {
         bootstrapCompatAppProject()
 
         runTask("analyzeDependencies")

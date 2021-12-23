@@ -11,14 +11,6 @@ import org.gradle.kotlin.dsl.named
 
 class PackageBlueprint(project: Project) : Blueprint(project) {
 
-    override fun registerBlueprints() {
-        with(project.featureRegistry) {
-            if (get<ApplicationFeature>().isEnabled()) {
-                get<PackageFeature>().addBlueprint(ShadowBlueprint(project))
-            }
-        }
-    }
-
     override fun addAliases() {
         project.alias("package", "Creates JAR", "jar")
     }

@@ -18,8 +18,4 @@ class LibraryBlueprint(project: Project) : Blueprint(project) {
     override fun applyPlugins() {
         project.apply(JavaLibraryPlugin::class.java)
     }
-
-    override fun registerBlueprints() {
-        project.featureRegistry.get<LibraryFeature>().addBlueprint(MavenPublishBlueprint(project))
-    }
 }

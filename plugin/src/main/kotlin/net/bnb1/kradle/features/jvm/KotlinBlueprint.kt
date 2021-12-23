@@ -8,7 +8,6 @@ import org.gradle.api.Project
 import org.gradle.kotlin.dsl.dependencies
 import org.gradle.kotlin.dsl.extra
 import org.gradle.kotlin.dsl.withType
-import org.jetbrains.kotlin.allopen.gradle.AllOpenGradleSubplugin
 import org.jetbrains.kotlin.gradle.dsl.KotlinJvmProjectExtension
 import org.jetbrains.kotlin.gradle.plugin.getKotlinPluginVersion
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
@@ -32,7 +31,6 @@ class KotlinBlueprint(project: Project) : Blueprint(project) {
     }
 
     override fun applyPlugins() {
-        project.apply(AllOpenGradleSubplugin::class.java)
         project.apply(SerializationGradleSubplugin::class.java)
     }
 
