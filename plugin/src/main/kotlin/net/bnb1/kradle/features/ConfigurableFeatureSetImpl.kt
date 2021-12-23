@@ -5,7 +5,7 @@ import org.gradle.api.Project
 
 class ConfigurableFeatureSetImpl<P : Properties>(
     private val featureSet: FeatureSet,
-    private val properties: P,
+    private val properties: P
 ) : ConfigurableFeatureSet<P> {
 
     fun register(project: Project): ConfigurableFeatureSetImpl<P> {

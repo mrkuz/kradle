@@ -147,4 +147,3 @@ class ApplicationBlueprintTests : PluginSpec({
         result.output shouldContain "Hello World"
     }
 })
-

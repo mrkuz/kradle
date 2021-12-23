@@ -36,10 +36,10 @@ class DetektBlueprint(project: Project) : Blueprint(project) {
             setSource(sourceFiles)
             detektClasspath.setFrom(project.configurations.getAt(CONFIGURATION_NAME))
             reports {
-                html.enabled = true
-                xml.enabled = false
-                sarif.enabled = false
-                txt.enabled = false
+                html.required.set(true)
+                xml.required.set(false)
+                sarif.required.set(false)
+                txt.required.set(false)
             }
         }
 

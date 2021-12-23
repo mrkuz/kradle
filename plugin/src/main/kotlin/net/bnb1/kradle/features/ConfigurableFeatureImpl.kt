@@ -7,7 +7,7 @@ import kotlin.reflect.KClass
 
 class ConfigurableFeatureImpl<P : Properties>(
     private val feature: Feature,
-    private val properties: P,
+    private val properties: P
 ) : ConfigurableFeature<P> {
 
     fun register(project: Project): ConfigurableFeatureImpl<P> {
