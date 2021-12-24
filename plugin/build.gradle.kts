@@ -10,6 +10,7 @@ plugins {
     id(Catalog.Plugins.gradlePublish.id) version Catalog.Plugins.gradlePublish.version
     id(Catalog.Plugins.kotlinJvm.id) version Catalog.Plugins.kotlinJvm.version
     id(Catalog.Plugins.testLogger.id) version Catalog.Plugins.testLogger.version
+    // id("net.bitsandbobs.kradle") version "main-SNAPSHOT"
 }
 
 group = "net.bitsandbobs.kradle"
@@ -44,11 +45,41 @@ dependencies {
     testImplementation(Catalog.Dependencies.Test.kotlinTest)
     testImplementation(Catalog.Dependencies.Test.dockerJava)
     Catalog.Dependencies.Test.kotestBundle.forEach { testImplementation(it) }
+
+    constraints {
+        Catalog.Constraints.ids.forEach {
+            api(it)
+            implementation(it)
+        }
+    }
+}
+
+/*
+kradle {
+    jvm {
+        targetJvm("1.8")
+        kotlin.enable()
+        dependencyUpdates.enable()
+        vulnerabilityScan.enable()
+        lint.enable()
+        codeAnalysis.enable()
+        test {
+            prettyPrint(true)
+            withJunitJupiter()
+            withJacoco()
+        }
+    }
+}
+*/
+
+tasks.register<Copy>("copyCatalog") {
+    from(project.rootDir.resolve("buildSrc/src/main/kotlin/Catalog.kt"))
+    into(project.buildDir.resolve("generatedSources/main/kotlin"))
 }
 
 sourceSets {
     main {
-        java.srcDirs(project.rootDir.resolve("buildSrc/src/main/kotlin"))
+        java.srcDirs(project.buildDir.resolve("generatedSources/main/kotlin"))
     }
 }
 
@@ -58,6 +89,7 @@ java {
 }
 
 tasks.withType<KotlinCompile> {
+    dependsOn("copyCatalog")
     kotlinOptions {
         jvmTarget = "1.8"
         freeCompilerArgs = listOf("-Xopt-in=kotlin.RequiresOptIn")

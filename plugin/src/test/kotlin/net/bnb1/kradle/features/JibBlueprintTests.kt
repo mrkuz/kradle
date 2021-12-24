@@ -19,7 +19,7 @@ class JibBlueprintTests : PluginSpec({
     afterEach {
         val dockerClient: DockerClient = DockerClientBuilder.getInstance().build()
         dockerClient.listImagesCmd().exec()
-            .filter { it.repoTags.contains("${name}:latest") }
+            .filter { it.repoTags.contains("$name:latest") }
             .forEach {
                 println("Removing image ${it.id}")
                 dockerClient.removeImageCmd(it.id).withForce(true).exec()
@@ -36,8 +36,8 @@ class JibBlueprintTests : PluginSpec({
 
         val dockerClient: DockerClient = DockerClientBuilder.getInstance().build()
         val images = dockerClient.listImagesCmd().exec()
-        images.forOne { it.repoTags.shouldContain("${name}:latest") }
-        images.forOne { it.repoTags.shouldContain("${name}:1.0.0") }
+        images.forOne { it.repoTags.shouldContain("$name:latest") }
+        images.forOne { it.repoTags.shouldContain("$name:1.0.0") }
     }
 
     // Requires Docker running
@@ -49,7 +49,7 @@ class JibBlueprintTests : PluginSpec({
         runTask("buildImage")
 
         val dockerClient: DockerClient = DockerClientBuilder.getInstance().build()
-        val container = dockerClient.createContainerCmd("${name}:latest").exec().id
+        val container = dockerClient.createContainerCmd("$name:latest").exec().id
         dockerClient.startContainerCmd(container).exec()
         val waitCallback = WaitContainerResultCallback()
         dockerClient.waitContainerCmd(container).exec(waitCallback)

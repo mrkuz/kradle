@@ -9,7 +9,6 @@ import org.gradle.kotlin.dsl.repositories
 class KradlePlugin : Plugin<Project> {
 
     override fun apply(project: Project) {
-
         project.extensions.create<KradleExtension>("kradle")
 
         project.repositories {

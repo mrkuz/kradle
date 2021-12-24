@@ -35,7 +35,7 @@ object Catalog {
         const val jgit = "org.eclipse.jgit:org.eclipse.jgit:6.0.0.202111291000-r"
 
         object Plugins {
-            const val kotlin = "org.jetbrains.kotlin:kotlin-gradle-plugin:${Versions.kotlin}"
+            const val kotlin = "org.jetbrains.kotlin:kotlin-gradle-plugin:${BuildVersions.kotlin}"
             const val dokka = "org.jetbrains.dokka:dokka-gradle-plugin:1.5.31"
             const val allOpen = "org.jetbrains.kotlin:kotlin-allopen:${BuildVersions.kotlin}"
             const val kotlinSerialization = "org.jetbrains.kotlin:kotlin-serialization:${BuildVersions.kotlin}"
@@ -57,6 +57,22 @@ object Catalog {
 
             val kotestBundle = setOf(kotestJunit5, kotestProperty)
         }
+    }
+
+    object Constraints {
+
+        val ids = setOf(
+            "org.apache.ant:ant:1.10.12",
+            "org.apache.ant:ant-launcher:1.10.12",
+            "com.h2database:h2:2.0.204",
+            "org.apache.httpcomponents:httpclient:4.5.13",
+            "org.jdom:jdom2:2.0.6.1",
+            "com.google.guava:guava:30.0-jre",
+            "org.apache.logging.log4j:log4j-api:2.17.0",
+            "org.apache.logging.log4j:log4j-core:2.17.0",
+            "org.apache.maven:maven-model:3.0.5",
+            "com.thoughtworks.xstream:xstream:1.4.18"
+        )
     }
 
     data class Plugin(val id: String, val version: String)
