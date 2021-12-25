@@ -30,8 +30,8 @@ class KradleCompatAppPluginTests : PluginSpec({
 
         val result = runTask("dependencies", "--configuration", "runtimeClasspath")
 
-        result.output shouldContain "org.jetbrains.kotlin:kotlin-stdlib:1.6.0"
-        result.output shouldNotContain "org.jetbrains.kotlin:kotlin-stdlib:1.5.31"
+        result.output shouldContain "org.jetbrains.kotlin:kotlin-stdlib:1.5.31"
+        result.output shouldNotContain "org.jetbrains.kotlin:kotlin-stdlib:1.5.21"
     }
 
     // Requires latest version of kradle installed to your local repository

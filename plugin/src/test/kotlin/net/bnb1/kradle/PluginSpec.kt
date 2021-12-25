@@ -36,6 +36,13 @@ abstract class PluginSpec(body: PluginSpec.() -> Unit) : FunSpec({}) {
         .withArguments(listOf(task) + arguments)
         .build()
 
+    fun addHasPluginTask(clazz: KClass<*>) {
+        addTask(
+            "hasPlugin",
+            "println(\"hasPlugin: \" + project.plugins.hasPlugin(${clazz.java.name}::class))"
+        )
+    }
+
     fun addTask(name: String, doLast: String) {
         buildFile.appendText(
             """
@@ -48,6 +55,31 @@ abstract class PluginSpec(body: PluginSpec.() -> Unit) : FunSpec({}) {
             """.trimIndent()
         )
     }
+
+    fun bootstrapProject(kradleConfig: () -> String) {
+        writeSettingsGradle("test")
+        writeBuildFile(buildFile, kradleConfig)
+    }
+
+    fun writeBuildFile(output: File, kradleConfig: () -> String) = output.writeText(
+        """
+            plugins {
+                id("org.jetbrains.kotlin.jvm") version "1.6.0"
+                id("net.bitsandbobs.kradle") version "main-SNAPSHOT"
+            }
+            
+            group = "com.example"
+            version = "1.0.0"
+            
+            kradle {
+                jvm.configureOnly {
+                    targetJvm("11")
+                }
+                ${kradleConfig()}
+            }
+            
+        """.trimIndent()
+    )
 
     fun bootstrapCompatAppProject() {
         writeSettingsGradle("app")
