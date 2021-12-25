@@ -13,6 +13,7 @@ open class Feature {
 
     private var parent: KClass<out FeatureSet>? = null
     private var enabled = AtomicBoolean(false)
+    private var disabled = AtomicBoolean(false)
     private val state = AtomicReference(State.INACTIVE)
     private val after = CopyOnWriteArrayList<KClass<out Feature>>()
     private val blueprints = CopyOnWriteArrayList<Blueprint>()
@@ -69,6 +70,10 @@ open class Feature {
         // println("Enable feature: ${this::class.simpleName}")
     }
 
-    fun isEnabled() = enabled.get()
+    fun disable() {
+        disabled.set(true)
+    }
+
+    fun isEnabled() = enabled.get() && !disabled.get()
     fun isInactive() = state.get() == State.INACTIVE
 }

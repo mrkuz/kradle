@@ -37,4 +37,8 @@ class ConfigurableFeatureImpl<P : Properties>(
         action(properties)
         feature.enable()
     }
+
+    override fun disable() {
+        feature.disable()
+    }
 }
