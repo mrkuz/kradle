@@ -20,8 +20,8 @@ Swiss army knife for Kotlin/JVM development.
 
 ```shell
 mkdir demo && cd demo
-curl https://raw.githubusercontent.com/mrkuz/kradle/stable/examples/app/settings.gradle.kts -o settings.gradle.kts
-curl https://raw.githubusercontent.com/mrkuz/kradle/stable/examples/app/build.gradle.kts -o build.gradle.kts
+curl -O https://raw.githubusercontent.com/mrkuz/kradle/${gitBranch}/examples/app/settings.gradle.kts
+curl -O https://raw.githubusercontent.com/mrkuz/kradle/${gitBranch}/examples/app/build.gradle.kts
 gradle bootstrap
 ```
 

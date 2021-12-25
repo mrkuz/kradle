@@ -20,8 +20,8 @@ Swiss army knife for Kotlin/JVM development.
 
 ```shell
 mkdir demo && cd demo
-curl https://raw.githubusercontent.com/mrkuz/kradle/stable/examples/app/settings.gradle.kts -o settings.gradle.kts
-curl https://raw.githubusercontent.com/mrkuz/kradle/stable/examples/app/build.gradle.kts -o build.gradle.kts
+curl -O https://raw.githubusercontent.com/mrkuz/kradle/next/examples/app/settings.gradle.kts
+curl -O https://raw.githubusercontent.com/mrkuz/kradle/next/examples/app/build.gradle.kts
 gradle bootstrap
 ```
 
@@ -40,7 +40,7 @@ _build.gradle.kts_
 
 ```kotlin
 plugins {
-    id("org.jetbrains.kotlin.jvm") version "17"
+    id("org.jetbrains.kotlin.jvm") version "1.6.0"
     id("net.bitsandbobs.kradle-app") version "main-SNAPSHOT"
 }
 
@@ -375,7 +375,7 @@ Plugins: [Java Library Plugin](https://docs.gradle.org/current/userguide/java_li
 
 ## Changelog
 
-### Version main-SNAPSHOT (2021-12-23)
+### Version main-SNAPSHOT (2021-12-25)
 
 - Fix `bootstrap` for multi-project builds
 - Fix exclusion of alpha versions and RCs in `showDependencyUpdates`

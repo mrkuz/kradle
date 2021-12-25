@@ -1,4 +1,5 @@
 import groovy.text.SimpleTemplateEngine
+import org.eclipse.jgit.api.Git
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 import java.io.FileWriter
 import java.util.*
@@ -15,6 +16,12 @@ plugins {
 
 group = "net.bitsandbobs.kradle"
 version = "main-SNAPSHOT"
+
+buildscript {
+    dependencies {
+        classpath(Catalog.Dependencies.jgit)
+    }
+}
 
 repositories {
     mavenCentral()
@@ -114,6 +121,7 @@ tasks.named("processResources").configure {
 tasks.register("renderTemplates").configure {
     doFirst {
         val properties = Properties()
+        properties["gitBranch"] = Git.open(project.rootDir).repository.branch
         properties["kradleVersion"] = version
         properties["versions"] = Catalog.Versions
 
