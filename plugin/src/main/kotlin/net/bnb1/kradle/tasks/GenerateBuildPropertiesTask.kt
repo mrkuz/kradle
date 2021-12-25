@@ -13,7 +13,6 @@ open class GenerateBuildPropertiesTask : DefaultTask() {
     @SuppressWarnings("MagicNumber")
     @TaskAction
     fun run() {
-        // TODO: sourceSets.main.output.resourcesDir?
         val output = project.buildDir.resolve("resources/main/build.properties")
         output.parentFile.mkdirs()
         output.printWriter().use {

@@ -15,11 +15,14 @@ private const val TASK_NAME = "analyzeCode"
 class DetektBlueprint(project: Project) : Blueprint(project) {
 
     override fun createTasks() {
-        project.create<GenerateDetektConfigTask>("generateDetektConfig", "Generates detekt-config.yml")
+        val properties = project.propertiesRegistry.get<KotlinCodeAnalysisProperties>()
+
+        project.create<GenerateDetektConfigTask>("generateDetektConfig", "Generates detekt-config.yml") {
+            outputFile.set(project.rootDir.resolve(properties.detektConfigFile.get()))
+        }
 
         project.configurations.create(CONFIGURATION_NAME) {
             val dependencyProvider = project.provider {
-                val properties = project.propertiesRegistry.get<KotlinCodeAnalysisProperties>()
                 project.dependencies.create("io.gitlab.arturbosch.detekt:detekt-cli:${properties.detektVersion.get()}")
             }
             dependencies.addLater(dependencyProvider)

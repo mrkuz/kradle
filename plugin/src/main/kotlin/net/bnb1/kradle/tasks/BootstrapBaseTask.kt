@@ -4,7 +4,7 @@ import org.eclipse.jgit.api.Git
 import org.gradle.api.DefaultTask
 import org.gradle.api.tasks.TaskAction
 
-abstract class AbstractBoostrapTask : DefaultTask() {
+abstract class BootstrapBaseTask : DefaultTask() {
 
     init {
         dependsOn(":wrapper", "generateGitignore", "generateDetektConfig")
