@@ -1,6 +1,6 @@
 package net.bnb1.kradle.v1
 
-import net.bnb1.kradle.KradleExtension
+import net.bnb1.kradle.KradleExtensionBase
 import net.bnb1.kradle.apply
 import net.bnb1.kradle.features.jvm.BenchmarksBlueprint
 import net.bnb1.kradle.features.jvm.TestBlueprint
@@ -17,11 +17,17 @@ class KradleCompat(private val project: Project, private val type: ProjectType) 
         APPLICATION, LIBRARY
     }
 
-    private val extension = KradleExtension(project)
+    private val extension = KradleExtensionBase(project)
 
     fun activate() {
         configureEager()
-        project.afterEvaluate { configure() }
+        project.afterEvaluate {
+            configure()
+            extension.run {
+                general.activate()
+                jvm.activate()
+            }
+        }
     }
 
     private fun configureEager() {
@@ -45,15 +51,15 @@ class KradleCompat(private val project: Project, private val type: ProjectType) 
     @SuppressWarnings("LongMethod")
     private fun configure() {
         val compatExtension = project.extensions.getByType(KradleCompatExtension::class.java)
-        with(extension) {
-            general {
+        extension.apply {
+            general.configureOnly {
                 bootstrap.enable()
                 git.enable()
                 projectProperties.enable()
                 buildProperties.enable()
             }
 
-            jvm {
+            jvm.configureOnly {
                 targetJvm.bind(compatExtension.targetJvm)
                 kotlin {
                     kotlinxCoroutinesVersion.bind(compatExtension.kotlinxCoroutinesVersion)
