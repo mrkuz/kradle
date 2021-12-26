@@ -1,5 +1,6 @@
 package net.bnb1.kradle.features
 
+import io.kotest.matchers.ints.shouldBeLessThan
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.string.shouldContain
 import net.bnb1.kradle.PluginSpec
@@ -19,8 +20,9 @@ class TestBlueprintTests : PluginSpec({
             class AppTest {
 
                 @Test
-                fun doNothing() {}
+                fun doNothing() = Unit
             }
+            
             """.trimIndent()
         )
     }
@@ -32,57 +34,6 @@ class TestBlueprintTests : PluginSpec({
 
         result.output shouldContain "org.junit.jupiter:junit-jupiter-engine"
         result.output shouldContain "org.junit.jupiter:junit-jupiter-api"
-    }
-
-    test("Check kotest dependencies") {
-        writeSettingsGradle("lib")
-        buildFile.writeText(
-            """
-            plugins {
-               id("org.jetbrains.kotlin.jvm") version "1.4.31"
-               id("net.bitsandbobs.kradle-lib") version "main-SNAPSHOT"
-            }
-            
-            group = "com.example"
-            version = "1.0.0"
-
-            kradle {
-                tests {
-                    useKotest()
-                }
-            }
-            """.trimIndent()
-        )
-
-        val result = runTask("dependencies", "--configuration", "testRuntimeClasspath")
-
-        result.output shouldContain "io.kotest:kotest-runner-junit5"
-        result.output shouldContain "io.kotest:kotest-assertions-core"
-    }
-
-    test("Check mockk dependencies") {
-        writeSettingsGradle("lib")
-        buildFile.writeText(
-            """
-            plugins {
-               id("org.jetbrains.kotlin.jvm") version "1.6.0"
-               id("net.bitsandbobs.kradle-lib") version "main-SNAPSHOT"
-            }
-            
-            group = "com.example"
-            version = "1.0.0"
-
-            kradle {
-                tests {
-                    useMockk()
-                }
-            }
-            """.trimIndent()
-        )
-
-        val result = runTask("dependencies", "--configuration", "testRuntimeClasspath")
-
-        result.output shouldContain "io.mockk:mockk"
     }
 
     test("Run test") {
@@ -110,5 +61,21 @@ class TestBlueprintTests : PluginSpec({
         val result = runTask("functionalTest")
 
         result.task(":functionalTest")!!.outcome shouldBe TaskOutcome.SUCCESS
+    }
+
+    test("Check test ordering") {
+        bootstrapCompatAppProject()
+        createAppTest("functionalTest")
+        createAppTest("integrationTest")
+        createAppTest("test")
+
+        val result = runTask("check")
+
+        val test = result.output.indexOf("Task :test")
+        val integrationTest = result.output.indexOf("Task :integrationTest")
+        val functionalTest = result.output.indexOf("Task :functionalTest")
+
+        test shouldBeLessThan integrationTest
+        integrationTest shouldBeLessThan functionalTest
     }
 })

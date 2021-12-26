@@ -56,8 +56,8 @@ abstract class PluginSpec(body: PluginSpec.() -> Unit) : FunSpec({}) {
         )
     }
 
-    fun bootstrapProject(kradleConfig: () -> String) {
-        writeSettingsGradle("test")
+    fun bootstrapProject(name: String = "test", kradleConfig: () -> String) {
+        writeSettingsGradle(name)
         writeBuildFile(buildFile, kradleConfig)
     }
 
