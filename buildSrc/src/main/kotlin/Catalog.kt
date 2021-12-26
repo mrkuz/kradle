@@ -3,6 +3,7 @@ object Catalog {
     private object BuildVersions {
         const val kotlin = "1.5.31"
         const val kotest = "4.6.3"
+        const val mockk = "1.12.1"
     }
 
     object Versions {
@@ -14,7 +15,7 @@ object Catalog {
         const val ktlint = "0.43.2"
         const val kotlinCoroutines = "1.6.0"
         const val kotest = "5.0.3"
-        const val mockk = "1.12.1"
+        const val mockk = BuildVersions.mockk
         const val junit = "5.8.2"
         const val jacoco = "0.8.7"
     }
@@ -51,6 +52,7 @@ object Catalog {
 
         object Test {
             const val kotlinTest = "org.jetbrains.kotlin:kotlin-test:${BuildVersions.kotlin}"
+            const val mockk = "io.mockk:mockk:${BuildVersions.mockk}"
             const val kotestJunit5 = "io.kotest:kotest-runner-junit5:${BuildVersions.kotest}"
             const val kotestProperty = "io.kotest:kotest-property:${BuildVersions.kotest}"
             const val dockerJava = "com.github.docker-java:docker-java:3.2.12"

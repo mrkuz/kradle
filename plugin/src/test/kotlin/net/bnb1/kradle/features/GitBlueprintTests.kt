@@ -1,23 +1,22 @@
 package net.bnb1.kradle.features
 
-import io.kotest.matchers.string.shouldContain
-import net.bnb1.kradle.PluginSpec
+import io.kotest.core.spec.style.FunSpec
+import io.mockk.mockk
+import io.mockk.verify
+import net.bnb1.kradle.features.general.GitBlueprint
 import net.bnb1.kradle.plugins.GitPlugin
+import org.gradle.api.Project
 
-class GitBlueprintTests : PluginSpec({
+class GitBlueprintTests : FunSpec({
 
     test("Git plugin is applied") {
-        bootstrapProject {
-            """
-            general {
-                git.enable()
-            }
-            """.trimIndent()
+        val project = mockk<Project>(relaxed = true)
+        val blueprint = GitBlueprint(project)
+
+        blueprint.activate()
+
+        verify {
+            project.pluginManager.apply(GitPlugin::class.java)
         }
-        addHasPluginTask(GitPlugin::class)
-
-        val result = runTask("hasPlugin")
-
-        result.output shouldContain "hasPlugin: true"
     }
 })

@@ -50,6 +50,7 @@ dependencies {
 
     // Testing
     testImplementation(Catalog.Dependencies.Test.kotlinTest)
+    testImplementation(Catalog.Dependencies.Test.mockk)
     testImplementation(Catalog.Dependencies.Test.dockerJava)
     Catalog.Dependencies.Test.kotestBundle.forEach { testImplementation(it) }
 
