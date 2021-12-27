@@ -31,7 +31,7 @@ class BenchmarksBlueprint(project: Project) : Blueprint(project) {
             return
         }
 
-        if (project.featureRegistry.get<KotlinFeature>().isEnabled()) {
+        if (project.featureRegistry.get<KotlinFeature>().isEnabled) {
             // JMH requires benchmark classes to be open
             project.configure<AllOpenExtension> {
                 annotation("org.openjdk.jmh.annotations.State")

@@ -11,6 +11,9 @@ import org.gradle.kotlin.dsl.configure
 import org.jetbrains.kotlin.allopen.gradle.AllOpenExtension
 import org.jetbrains.kotlin.allopen.gradle.AllOpenGradleSubplugin
 
+/**
+ * Provides backwards-compatibility for Kradle v1.
+ */
 class KradleCompat(private val project: Project, private val type: ProjectType) {
 
     enum class ProjectType {

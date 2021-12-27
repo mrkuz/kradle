@@ -16,7 +16,7 @@ private const val TASK_NAME = "buildImage"
 class JibBlueprint(project: Project) : Blueprint(project) {
 
     override fun checkPreconditions() {
-        if (!project.featureRegistry.get<ApplicationFeature>().isEnabled()) {
+        if (!project.featureRegistry.get<ApplicationFeature>().isEnabled) {
             throw GradleException("'docker' requires 'application' feature")
         }
     }

@@ -4,6 +4,11 @@ import org.gradle.api.Project
 import java.util.concurrent.atomic.AtomicBoolean
 import kotlin.reflect.KClass
 
+/**
+ * Blueprints are used to implement logic for [features][Feature].
+ *
+ * They describe which plugins to apply and how to configure them.
+ */
 open class Blueprint(protected val project: Project) : FeatureListener {
 
     private val activated = AtomicBoolean(false)
@@ -25,7 +30,6 @@ open class Blueprint(protected val project: Project) : FeatureListener {
         addExtraProperties()
         addDependencies()
         configure()
-        onActivate()
     }
 
     protected open fun shouldActivate() = true
@@ -38,7 +42,6 @@ open class Blueprint(protected val project: Project) : FeatureListener {
     protected open fun addExtraProperties() = Unit
     protected open fun addDependencies() = Unit
     protected open fun configure() = Unit
-    protected open fun onActivate() = Unit
 
     override fun onFeatureActivate(feature: KClass<out Feature>) = Unit
 }

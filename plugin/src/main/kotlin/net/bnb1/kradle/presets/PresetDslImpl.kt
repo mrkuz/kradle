@@ -5,11 +5,11 @@ import net.bnb1.kradle.KradleExtensionBase
 import net.bnb1.kradle.presetRegistry
 import org.gradle.api.Project
 
-class ConfigurablePresetImpl(private val preset: Preset, private val project: Project) : ConfigurablePreset {
+class PresetDslImpl(private val preset: Preset, private val project: Project) : PresetDsl {
 
-    fun asInterface() = this as ConfigurablePreset
+    fun asInterface() = this as PresetDsl
 
-    fun register(project: Project): ConfigurablePresetImpl {
+    fun register(project: Project): PresetDslImpl {
         project.presetRegistry.register(preset)
         return this
     }

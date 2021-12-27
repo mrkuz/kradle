@@ -2,7 +2,7 @@ package net.bnb1.kradle.features
 
 import org.gradle.api.provider.Property
 
-class ConfigurableProperty<T : Any>(val property: Property<T>) {
+class PropertyDsl<T : Any>(val property: Property<T>) {
 
     operator fun invoke(value: T) = set(value)
 

@@ -3,15 +3,15 @@ package net.bnb1.kradle.features
 import net.bnb1.kradle.propertiesRegistry
 import org.gradle.api.Project
 
-class ConfigurablePropertiesImpl<P : Properties>(private val properties: P) :
-    ConfigurableProperties<P> {
+class PropertiesDslImpl<P : Properties>(private val properties: P) :
+    PropertiesDsl<P> {
 
-    fun register(project: Project): ConfigurablePropertiesImpl<P> {
+    fun register(project: Project): PropertiesDslImpl<P> {
         project.propertiesRegistry.register(properties)
         return this
     }
 
-    fun asInterface() = this as ConfigurableProperties<P>
+    fun asInterface() = this as PropertiesDsl<P>
 
     override fun configure(action: P.() -> Unit) = action(properties)
 }

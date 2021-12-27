@@ -5,33 +5,33 @@ import net.bnb1.kradle.propertiesRegistry
 import org.gradle.api.Project
 import kotlin.reflect.KClass
 
-class ConfigurableFeatureImpl<P : Properties>(
+class FeatureDslImpl<P : Properties>(
     private val feature: Feature,
     private val properties: P
-) : ConfigurableFeature<P> {
+) : FeatureDsl<P> {
 
-    fun register(project: Project): ConfigurableFeatureImpl<P> {
+    fun register(project: Project): FeatureDslImpl<P> {
         project.featureRegistry.register(feature)
         project.propertiesRegistry.register(properties)
         return this
     }
 
-    fun setParent(parent: KClass<out FeatureSet>): ConfigurableFeatureImpl<P> {
+    fun setParent(parent: KClass<out FeatureSet>): FeatureDslImpl<P> {
         feature.setParent(parent)
         return this
     }
 
-    fun after(vararg features: KClass<out Feature>): ConfigurableFeatureImpl<P> {
+    fun after(vararg features: KClass<out Feature>): FeatureDslImpl<P> {
         feature.after(*features)
         return this
     }
 
-    fun addBlueprint(blueprint: Blueprint): ConfigurableFeatureImpl<P> {
+    fun addBlueprint(blueprint: Blueprint): FeatureDslImpl<P> {
         feature.addBlueprint(blueprint)
         return this
     }
 
-    fun asInterface() = this as ConfigurableFeature<P>
+    fun asInterface() = this as FeatureDsl<P>
 
     override fun enable(action: P.() -> Unit) {
         action(properties)

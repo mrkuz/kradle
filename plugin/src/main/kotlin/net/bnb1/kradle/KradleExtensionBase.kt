@@ -1,7 +1,7 @@
 package net.bnb1.kradle
 
-import net.bnb1.kradle.features.ConfigurableFeatureSetImpl
 import net.bnb1.kradle.features.FeatureRegistry
+import net.bnb1.kradle.features.FeatureSetDslImpl
 import net.bnb1.kradle.features.PropertiesRegistry
 import net.bnb1.kradle.features.general.GeneralFeatureSet
 import net.bnb1.kradle.features.general.GeneralProperties
@@ -19,10 +19,10 @@ open class KradleExtensionBase(project: Project) {
         project.extra["presetRegistry"] = PresetRegistry()
     }
 
-    val general = ConfigurableFeatureSetImpl(GeneralFeatureSet(project), GeneralProperties(project))
+    val general = FeatureSetDslImpl(GeneralFeatureSet(project), GeneralProperties(project))
         .register(project)
         .asInterface()
-    val jvm = ConfigurableFeatureSetImpl(JvmFeatureSet(project), JvmProperties(project))
+    val jvm = FeatureSetDslImpl(JvmFeatureSet(project), JvmProperties(project))
         .register(project)
         .asInterface()
 }

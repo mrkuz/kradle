@@ -18,7 +18,7 @@ class PackageBlueprint(project: Project) : Blueprint(project) {
     override fun configure() {
         val properties = project.propertiesRegistry.get<ApplicationProperties>()
         val mainClass = properties.mainClass
-        if (project.featureRegistry.get<ApplicationFeature>().isEnabled()) {
+        if (project.featureRegistry.get<ApplicationFeature>().isEnabled) {
             project.tasks.named<Jar>("jar").configure {
                 manifest {
                     attributes(Pair("Main-Class", mainClass.get()))

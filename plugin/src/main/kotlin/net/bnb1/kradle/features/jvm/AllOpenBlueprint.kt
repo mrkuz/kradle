@@ -8,7 +8,7 @@ import org.jetbrains.kotlin.allopen.gradle.AllOpenGradleSubplugin
 
 class AllOpenBlueprint(project: Project) : Blueprint(project) {
 
-    override fun shouldActivate() = project.featureRegistry.get<KotlinFeature>().isEnabled()
+    override fun shouldActivate() = project.featureRegistry.get<KotlinFeature>().isEnabled
 
     override fun applyPlugins() {
         project.apply(AllOpenGradleSubplugin::class.java)

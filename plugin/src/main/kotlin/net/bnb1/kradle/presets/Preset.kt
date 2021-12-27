@@ -6,6 +6,11 @@ import org.gradle.api.GradleException
 import org.gradle.api.Project
 import java.util.concurrent.atomic.AtomicBoolean
 
+/**
+ * Preset are used to preconfigure Kradle for a specific use case.
+ *
+ * Only one preset can be active.
+ */
 open class Preset(private val project: Project) {
 
     private val activated = AtomicBoolean(false)
@@ -15,7 +20,7 @@ open class Preset(private val project: Project) {
     }
 
     fun activate(extension: KradleExtensionBase) {
-        val otherPresetActive = project.presetRegistry.map.values.count { p -> p.isActive() } > 0
+        val otherPresetActive = project.presetRegistry.map.values.count { p -> p.isActive } > 0
         if (otherPresetActive) {
             throw GradleException("You can only use one preset")
         }
@@ -26,7 +31,8 @@ open class Preset(private val project: Project) {
         onActivate(extension)
     }
 
-    fun isActive() = activated.get()
+    private val isActive
+        get() = activated.get()
 
     protected open fun onConfigure(extension: KradleExtensionBase) = Unit
     protected open fun onActivate(extension: KradleExtensionBase) = Unit

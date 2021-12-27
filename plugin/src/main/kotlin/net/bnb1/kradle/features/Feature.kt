@@ -5,6 +5,16 @@ import java.util.concurrent.atomic.AtomicBoolean
 import java.util.concurrent.atomic.AtomicReference
 import kotlin.reflect.KClass
 
+/**
+ * A Kradle feature.
+ *
+ * Feature classes don't implement the logic. This is the job of [blueprints][Blueprint]. A feature can have one or more
+ * [blueprints][Blueprint].
+ *
+ * Every feature has a parent [feature set][FeatureSet]. If the set is activated, the feature is also activated (unless
+ * disabled). This in turn activates assigned [blueprints][Blueprint] and notifies attached
+ * [listeners][FeatureListener].
+ */
 open class Feature {
 
     enum class State {
@@ -27,6 +37,8 @@ open class Feature {
         }
     }
 
+    fun shouldActivateAfter() = after.toList()
+
     fun addBlueprint(blueprint: Blueprint) {
         if (blueprints.addIfAbsent(blueprint)) {
             if (state.get() == State.ACTIVATED) {
@@ -48,9 +60,11 @@ open class Feature {
     }
 
     fun isParent(parent: KClass<out FeatureSet>) = this.parent == parent
-    fun shouldRunAfter() = after.toList()
 
     fun activate() {
+        if (!isEnabled) {
+            return
+        }
         if (!state.compareAndSet(State.INACTIVE, State.ACTIVATING)) {
             return
         }
@@ -74,6 +88,9 @@ open class Feature {
         disabled.set(true)
     }
 
-    fun isEnabled() = enabled.get() && !disabled.get()
-    fun isInactive() = state.get() == State.INACTIVE
+    val isEnabled
+        get() = enabled.get() && !disabled.get()
+
+    val isInactive
+        get() = state.get() == State.INACTIVE
 }

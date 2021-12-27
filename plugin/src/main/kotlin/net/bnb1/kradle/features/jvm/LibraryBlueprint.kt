@@ -10,7 +10,7 @@ import org.gradle.api.plugins.JavaLibraryPlugin
 class LibraryBlueprint(project: Project) : Blueprint(project) {
 
     override fun checkPreconditions() {
-        if (project.featureRegistry.get<ApplicationFeature>().isEnabled()) {
+        if (project.featureRegistry.get<ApplicationFeature>().isEnabled) {
             throw GradleException("You can only enable 'application' or 'library' feature")
         }
     }

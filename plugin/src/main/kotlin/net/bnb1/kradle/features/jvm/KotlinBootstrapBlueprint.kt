@@ -14,9 +14,9 @@ class KotlinBootstrapBlueprint(project: Project) : Blueprint(project) {
 
     override fun applyPlugins() {
         with(project.featureRegistry) {
-            if (get<ApplicationFeature>().isEnabled()) {
+            if (get<ApplicationFeature>().isEnabled) {
                 project.apply(BootstrapAppPlugin::class.java)
-            } else if (get<LibraryFeature>().isEnabled()) {
+            } else if (get<LibraryFeature>().isEnabled) {
                 project.apply(BootstrapLibPlugin::class.java)
             }
         }
@@ -24,7 +24,7 @@ class KotlinBootstrapBlueprint(project: Project) : Blueprint(project) {
 
     override fun configure() {
         with(project.featureRegistry) {
-            if (get<ApplicationFeature>().isEnabled()) {
+            if (get<ApplicationFeature>().isEnabled) {
                 val mainClass = project.propertiesRegistry.get<ApplicationProperties>().mainClass.get()
                 project.tasks.withType<BootstrapAppTask> {
                     this.mainClass.set(mainClass)

@@ -15,7 +15,7 @@ private const val TASK_NAME = "uberJar"
 
 class ShadowBlueprint(project: Project) : Blueprint(project) {
 
-    override fun shouldActivate() = project.featureRegistry.get<ApplicationFeature>().isEnabled()
+    override fun shouldActivate() = project.featureRegistry.get<ApplicationFeature>().isEnabled
 
     override fun createTasks() {
         val jar = project.tasks.named<Jar>("jar").get()
