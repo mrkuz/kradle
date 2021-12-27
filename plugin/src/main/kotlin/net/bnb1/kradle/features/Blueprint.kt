@@ -32,6 +32,9 @@ open class Blueprint(protected val project: Project) : FeatureListener {
         configure()
     }
 
+    val isActivated
+        get() = activated.get()
+
     protected open fun shouldActivate() = true
     protected open fun checkPreconditions() = Unit
     protected open fun applyPlugins() = Unit

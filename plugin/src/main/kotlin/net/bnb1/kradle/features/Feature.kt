@@ -72,7 +72,9 @@ open class Feature {
         // println("Activate feature: ${this::class.simpleName}")
         blueprints.forEach { it.activate() }
         // Run again to activate blueprints that were added in the first run
-        blueprints.forEach { it.activate() }
+        blueprints
+            .filter { !it.isActivated }
+            .forEach { it.activate() }
         listeners.forEach { it.onFeatureActivate(this::class) }
         state.set(State.ACTIVATED)
     }

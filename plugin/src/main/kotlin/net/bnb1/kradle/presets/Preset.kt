@@ -20,13 +20,14 @@ open class Preset(private val project: Project) {
     }
 
     fun activate(extension: KradleExtensionBase) {
-        val otherPresetActive = project.presetRegistry.map.values.count { p -> p.isActive } > 0
-        if (otherPresetActive) {
-            throw GradleException("You can only use one preset")
-        }
-
         if (!activated.compareAndSet(false, true)) {
             return
+        }
+        val otherPresetActive = project.presetRegistry.map.values
+            .filter { p -> p !== this }
+            .any { p -> p.isActive }
+        if (otherPresetActive) {
+            throw GradleException("You can only use one preset")
         }
         onActivate(extension)
     }

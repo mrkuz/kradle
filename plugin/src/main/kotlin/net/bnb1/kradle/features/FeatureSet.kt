@@ -24,20 +24,24 @@ open class FeatureSet(private val project: Project) {
         if (!activated.compareAndSet(false, true)) {
             return false
         }
+        val visited = mutableSetOf<Feature>()
         project.featureRegistry.map.values.asSequence()
             .filter { it.isEnabled }
             .filter { it.isInactive }
             .filter { it.isParent(this::class) }
-            .forEach { activateOrdered(it) }
+            .forEach { activateOrdered(visited, it) }
         return true
     }
 
-    private fun activateOrdered(feature: Feature) {
+    private fun activateOrdered(visited: MutableSet<Feature>, feature: Feature) {
+        if (!visited.add(feature)) {
+            throw GradleException("Dependency loop detected")
+        }
         feature.shouldActivateAfter().asSequence()
             .map { project.featureRegistry.map[it] as Feature }
             .filter { it.isEnabled }
             .filter { it.isInactive }
-            .forEach { activateOrdered(it) }
+            .forEach { activateOrdered(visited, it) }
         feature.activate()
     }
 }

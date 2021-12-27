@@ -6,6 +6,7 @@ import org.gradle.testkit.runner.GradleRunner
 import java.io.File
 import kotlin.io.path.ExperimentalPathApi
 import kotlin.io.path.createTempDirectory
+import kotlin.reflect.KClass
 
 abstract class PluginSpec(body: PluginSpec.() -> Unit) : FunSpec({}) {
 
