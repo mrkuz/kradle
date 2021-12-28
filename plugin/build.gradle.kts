@@ -152,20 +152,22 @@ gradlePlugin {
             id = "net.bitsandbobs.kradle-app"
             implementationClass = "net.bnb1.kradle.v1.KradleCompatAppPlugin"
             displayName = "Kradle App Plugin"
-            description = "Swiss army knife for Kotlin/JVM development"
+            description =
+                "Swiss army knife for Kotlin/JVM development (deprecated, consider using 'net.bitsandbobs.kradle' instead)"
         }
         create("kradleLib") {
             id = "net.bitsandbobs.kradle-lib"
             implementationClass = "net.bnb1.kradle.v1.KradleCompatLibPlugin"
             displayName = "Kradle Lib Plugin"
-            description = "Swiss army knife for Kotlin/JVM development"
+            description =
+                "Swiss army knife for Kotlin/JVM development (deprecated, consider using 'net.bitsandbobs.kradle' instead)"
         }
     }
 }
 
 pluginBundle {
-    website = "https://github.com/mrkuz/kradle"
-    vcsUrl = "https://github.com/mrkuz/kradle"
+    website = "https://github.com/mrkuz/kradle/tree/stable"
+    vcsUrl = "https://github.com/mrkuz/kradle/tree/stable"
     tags =
         listOf(
             "kotlin",
