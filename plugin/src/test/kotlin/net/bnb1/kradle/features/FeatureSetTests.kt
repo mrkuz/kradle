@@ -89,7 +89,7 @@ class FeatureSetTests : BehaviorSpec({
 
         When("Activate") {
             Then("Dependency loop is detected") {
-                shouldThrow<GradleException> { set.activate() }
+                shouldThrow<IllegalStateException> { set.activate() }
             }
         }
     }

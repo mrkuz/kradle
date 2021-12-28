@@ -35,7 +35,7 @@ open class FeatureSet(private val project: Project) {
 
     private fun activateOrdered(visited: MutableSet<Feature>, feature: Feature) {
         if (!visited.add(feature)) {
-            throw GradleException("Dependency loop detected")
+            throw IllegalStateException("Dependency loop detected")
         }
         feature.shouldActivateAfter().asSequence()
             .map { project.featureRegistry.map[it] as Feature }
