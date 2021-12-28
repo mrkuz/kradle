@@ -18,4 +18,5 @@ class DockerProperties(project: Project) : Properties(project) {
     val withAppSh = property(factory.property(false))
 
     val javaOpts = property(factory.empty<String>())
+    val jvmOpts = javaOpts
 }

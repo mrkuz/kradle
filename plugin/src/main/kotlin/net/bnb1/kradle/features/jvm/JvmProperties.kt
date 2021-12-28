@@ -66,6 +66,7 @@ class JvmProperties(project: Project) : Properties(project) {
         .after(ApplicationFeature::class)
         .addBlueprint(DevelopmentModeBlueprint(project))
         .build()
+    val devMode = developmentMode
     val test = FeatureDsl.Builder<TestProperties>(project)
         .feature { TestFeature() }
         .properties { TestProperties(it) }
