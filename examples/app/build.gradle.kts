@@ -40,6 +40,7 @@ kradle {
         vulnerabilityScan.enable()
         lint.enable()
         codeAnalysis.enable()
+        developmentMode.enable()
 
         test {
             prettyPrint(true)

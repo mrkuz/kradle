@@ -8,14 +8,6 @@ import net.bnb1.kradle.PluginSpec
 
 class ApplicationBlueprintTests : PluginSpec({
 
-    test("Check DEV_MODE environment variable") {
-        bootstrapCompatAppProject()
-        writeAppKt("println(\"DEV_MODE=\" + System.getenv()[\"DEV_MODE\"])")
-
-        val result = runTask("dev")
-        result.output shouldContain "DEV_MODE=true"
-    }
-
     test("Check MANIFEST.MF") {
         bootstrapCompatAppProject()
 
@@ -96,16 +88,7 @@ class ApplicationBlueprintTests : PluginSpec({
 
         result.output shouldContain "WARNING: Group doesn't comply with Java's package name rules"
     }
-
-    test("Run 'dev'") {
-        bootstrapCompatAppProject()
-        writeAppKt("println(\"Hello World\")")
-
-        val result = runTask("dev")
-        result.output shouldContain "DEBUG Project root: ${projectDir.absolutePath}" // Agent output
-        result.output shouldContain "Hello World"
-    }
-
+    
     test("Run app with @JvmName") {
         writeSettingsGradle("app")
         buildFile.writeText(

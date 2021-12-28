@@ -90,6 +90,9 @@ class KradleCompat(private val project: Project, private val type: ProjectType) 
                 vulnerabilityScan.enable()
                 lint.enable()
                 codeAnalysis.enable()
+                if (type == ProjectType.APPLICATION) {
+                    developmentMode.enable()
+                }
 
                 test {
                     prettyPrint(true)

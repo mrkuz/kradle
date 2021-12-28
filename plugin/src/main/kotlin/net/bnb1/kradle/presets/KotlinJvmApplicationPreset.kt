@@ -27,6 +27,7 @@ class KotlinJvmApplicationPreset(project: Project) : Preset(project) {
                 vulnerabilityScan.enable()
                 lint.enable()
                 codeAnalysis.enable()
+                developmentMode.enable()
 
                 test {
                     prettyPrint(true)
