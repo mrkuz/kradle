@@ -6,12 +6,12 @@ Swiss army knife for Kotlin/JVM development.
 
 With a few lines of configuration, you will be able to:
 
-- [Bootstrap new projects](#bootstraping)
+- [Bootstrap new projects](#bootstrapping)
 - [Check for dependency updates](#dependency-updates)
 - [Run vulnerability scans](#vulnerability-scans)
 - [Run static code analysis](#code-analysis)
 - [Add automatic restart on code change](#development-mode)
-- [Add support for integration and funtional testing](#test-improvements)
+- [Add support for integration and functional testing](#test-improvements)
 - [Run JMH benchmarks](#benchmarks)
 - [Create Uber-Jars](#packaging)
 - [Create Docker images](#docker)
@@ -80,7 +80,7 @@ The example above uses the Kotlin/JVM application [preset](#presets).
 
 | Task | Description | Alias for | Plugins used |
 |---|---|---|---|
-| [bootstrap](#bootstraping) | Bootstraps app/lib project | - | - |
+| [bootstrap](#bootstrapping) | Bootstraps app/lib project | - | - |
 | [showDependencyUpdates](#dependency-updates) | Displays dependency updates | - | [Gradle Versions Plugin](https://plugins.gradle.org/plugin/com.github.ben-manes.versions) |
 | [lint](#linting) | Runs [ktlint](https://ktlint.github.io/) | ktlintCheck | [ktlint Plugin](https://plugins.gradle.org/plugin/org.jlleitschuh.gradle.ktlint) |
 | [analyzeCode](#code-analysis) | Runs [detekt](https://detekt.github.io/detekt/) code analysis | - | [detekt Plugin](https://plugins.gradle.org/plugin/io.gitlab.arturbosch.detekt) |
@@ -92,7 +92,7 @@ The example above uses the Kotlin/JVM application [preset](#presets).
 | [functionalTest](#test-improvements) | Runs functional tests | - | - |
 | [generateDocumentation](#documentation) | Generates [Dokka](https://kotlin.github.io/dokka/) HTML documentation | - | [Dokka Plugin](https://plugins.gradle.org/plugin/org.jetbrains.dokka) |
 | [package](#packaging) | Creates JAR | jar | [Java Plugin](https://docs.gradle.org/current/userguide/java_plugin.html) |
-| [uberJar](#packaging) | Creates Uber-JAR (applicatons only) | - | [Gradle Shadow Plugin](https://plugins.gradle.org/plugin/com.github.johnrengelman.shadow) |
+| [uberJar](#packaging) | Creates Uber-JAR (applications only) | - | [Gradle Shadow Plugin](https://plugins.gradle.org/plugin/com.github.johnrengelman.shadow) |
 | [buildImage](#docker) | Builds Docker image (applications only) | - | [Jib Plugin](https://plugins.gradle.org/plugin/com.google.cloud.tools.jib) |
 | [install](#library-development) | Installs JAR to local Maven repository (libraries only) |  publishToMavenLocal | [Maven Publish Plugin](https://docs.gradle.org/current/userguide/publishing_maven.html) |
 | [generateGitignore](#git-integration) | Generates _.gitignore_ | - | - |
@@ -102,7 +102,29 @@ The example above uses the Kotlin/JVM application [preset](#presets).
 
 ## Features
 
-### Bootstraping
+Features provided by `kradle` must be enabled explicitly. For example to enable benchmarks:
+
+```kotlin
+kradle {
+    jvm {
+        benchmarks.enable()
+    }
+}
+```
+
+If the feature has options, you can pass in a configuration code block. This configures and enables the feature.
+
+```kotlin
+kradle {
+    jvm {
+        benchmark {
+            jmhVersion("${versions.jmh}")
+        }
+    }
+}
+```
+
+### Bootstrapping
 
 ```kotlin
 kradle {
@@ -404,7 +426,7 @@ kradle {
 - `withIntegrationTests`: Adds task `integrationTest`, which runs tests under _src/integrationTest_. The task is executed when running `check`.
 - `withFunctionalTests`: Adds task `functionalTest`, which runs tests under _src/functionalTest_. The task is executed when running `check`.
 - `withJunitJupiter`: Sets up [JUnit Jupiter](https://junit.org/junit5/) for running tests
-- `withJacococ`: Generates [JaCoCo](https://www.jacoco.org/jacoco/) code coverage reports after tests. They can be found under _build/reports/jacoco/_.
+- `withJacoco`: Generates [JaCoCo](https://www.jacoco.org/jacoco/) code coverage reports after tests. They can be found under _build/reports/jacoco/_.
 
 ### Benchmarks
 
@@ -541,7 +563,7 @@ kradle {
 }
 ```
 
-The overriden configuration must be placed inside the preset block. Following will **NOT** work:
+The overridden configuration must be placed inside the preset block. Following will **NOT** work:
 
 ```kotlin
 kradle {
@@ -735,7 +757,7 @@ kradle {
 
 ## Changelog
 
-### Version ${kradleVersion} (${new Date().format("YYYY-MM-dd")})
+### Version ${kradleVersion} (${new Date().format("yyyy-MM-dd")})
 
 - Fix `bootstrap` for multi-project builds
 - Fix exclusion of alpha versions and RCs in `showDependencyUpdates`
@@ -743,7 +765,7 @@ kradle {
 - Update plugins and dependencies
 - New plugin `net.bitsandbobs.kradle`, which combines the functionality of `kradle-app` and `kradle-lib`
 - New configuration DSL (see [Appendix A](#appendix-a-configuration-reference))
-- Deprecate `kradle-app` and `kradle-lib`
+- Deprecate `kradle-app` and `kradle-lib`, consider using `net.bitsandbobs.kradle` instead
 
 ### Version 1.2.0 (2021-09-23)
 
