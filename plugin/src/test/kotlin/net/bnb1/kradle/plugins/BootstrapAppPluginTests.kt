@@ -12,7 +12,7 @@ class BootstrapAppPluginTests : PluginSpec({
         buildFile.writeText(
             """
             plugins {
-                id("org.jetbrains.kotlin.jvm") version "1.4.31"
+                id("org.jetbrains.kotlin.jvm") version "1.6.0"
                 id("net.bitsandbobs.kradle-app") version "main-SNAPSHOT"
             }
             
@@ -20,11 +20,8 @@ class BootstrapAppPluginTests : PluginSpec({
             version = "1.0.0"
             
             kradle {
-                targetJvm.set("11")
-            }
-            
-            application {
-                mainClass.set("com.example.demo.AppKt")
+                targetJvm("11")
+                mainClass("com.example.demo.App")
             }
             
             """.trimIndent()
@@ -56,7 +53,7 @@ class BootstrapAppPluginTests : PluginSpec({
         writeMultiProjectSettingsGradle("demo", setOf("app"))
         val buildFile = projectDir.resolve("app/build.gradle.kts")
         buildFile.parentFile.mkdirs()
-        writeAppBuildFile(buildFile)
+        writeCompatAppBuildFile(buildFile)
 
         runTask("bootstrap")
 
@@ -73,10 +70,10 @@ class BootstrapAppPluginTests : PluginSpec({
         projectDir.resolve("LICENSE").shouldExist()
         projectDir.resolve("project.properties").shouldExist()
 
-        val appKt = projectDir.resolve("app/src/main/kotlin/com/example/App.kt")
+        val appKt = projectDir.resolve("app/src/main/kotlin/com/example/demo/App.kt")
         appKt.shouldExist()
 
         val lines = appKt.readLines()
-        lines.forOne { it shouldBe "package com.example" }
+        lines.forOne { it shouldBe "package com.example.demo" }
     }
 })

@@ -1,6 +1,6 @@
 package net.bnb1.kradle.tasks
 
-open class BootstrapLibTask : AbstractBoostrapTask() {
+open class BootstrapLibTask : BootstrapBaseTask() {
 
     override fun stageTwo() {
         if (project.group.toString().isNotEmpty()) {

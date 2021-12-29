@@ -15,7 +15,7 @@ class ProjectPropertiesPlugin : Plugin<Project> {
             properties.forEach { (k, v) ->
                 val key = k.toString()
                 if (project.hasProperty(key)) {
-                    project.logger.warn("WARNING: Property '${key}' already exists. Skipping.")
+                    project.logger.warn("WARNING: Property '$key' already exists. Skipping.")
                 } else {
                     project.extra[key] = v.toString()
                 }

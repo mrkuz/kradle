@@ -10,6 +10,7 @@ open class GenerateBuildPropertiesTask : DefaultTask() {
         outputs.upToDateWhen { false }
     }
 
+    @SuppressWarnings("MagicNumber")
     @TaskAction
     fun run() {
         val output = project.buildDir.resolve("resources/main/build.properties")

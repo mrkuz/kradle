@@ -7,7 +7,7 @@ import net.bnb1.kradle.PluginSpec
 class GitPluginTests : PluginSpec({
 
     test("Not a Git repository") {
-        bootstrapAppProject()
+        bootstrapCompatAppProject()
         addTask("testTask", "println(\"Result: \${project.properties[\"gitCommit\"]}\")")
 
         val result = runTask("testTask")
@@ -16,7 +16,7 @@ class GitPluginTests : PluginSpec({
     }
 
     test("Git commit id property is set") {
-        bootstrapAppProject()
+        bootstrapCompatAppProject()
         gitInit()
         addTask("testTask", "println(\"Result: \${project.properties[\"gitCommit\"]}\")")
 
@@ -26,7 +26,7 @@ class GitPluginTests : PluginSpec({
     }
 
     test("Generate .gitignore") {
-        bootstrapAppProject()
+        bootstrapCompatAppProject()
 
         runTask("generateGitignore")
 

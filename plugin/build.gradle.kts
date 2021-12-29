@@ -1,5 +1,5 @@
-import com.github.benmanes.gradle.versions.updates.DependencyUpdatesTask
 import groovy.text.SimpleTemplateEngine
+import org.eclipse.jgit.api.Git
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 import java.io.FileWriter
 import java.util.*
@@ -8,14 +8,20 @@ plugins {
     `java-gradle-plugin`
     `kotlin-dsl`
     `maven-publish`
-    id("com.gradle.plugin-publish") version "0.18.0"
-    kotlin("jvm") version "1.5.31"
-    id("com.github.ben-manes.versions") version "0.39.0"
-    id("com.adarshr.test-logger") version "3.1.0"
+    id(Catalog.Plugins.gradlePublish.id) version Catalog.Plugins.gradlePublish.version
+    id(Catalog.Plugins.kotlinJvm.id) version Catalog.Plugins.kotlinJvm.version
+    id(Catalog.Plugins.testLogger.id) version Catalog.Plugins.testLogger.version
+    // id("net.bitsandbobs.kradle") version "main-SNAPSHOT"
 }
 
 group = "net.bitsandbobs.kradle"
 version = "main-SNAPSHOT"
+
+buildscript {
+    dependencies {
+        classpath(Catalog.Dependencies.jgit)
+    }
+}
 
 repositories {
     mavenCentral()
@@ -23,54 +29,79 @@ repositories {
 }
 
 dependencies {
-    implementation(platform("org.jetbrains.kotlin:kotlin-bom"))
-    implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
+    implementation(platform(Catalog.Dependencies.Platform.kotlin))
+    implementation(Catalog.Dependencies.kotlinStdlib)
+    implementation(Catalog.Dependencies.jgit)
 
     // Plugins
-    implementation("org.jetbrains.kotlin:kotlin-gradle-plugin")
-    implementation("org.jetbrains.dokka:dokka-gradle-plugin:1.5.31")
-    implementation("org.jetbrains.kotlin:kotlin-allopen")
-    implementation("org.jetbrains.kotlin:kotlin-serialization")
-    implementation("org.jetbrains.kotlinx:kotlinx-benchmark-plugin:0.3.1")
+    implementation(Catalog.Dependencies.Plugins.kotlin)
+    implementation(Catalog.Dependencies.Plugins.allOpen)
+    implementation(Catalog.Dependencies.Plugins.kotlinSerialization)
+    implementation(Catalog.Dependencies.Plugins.dokka)
+    implementation(Catalog.Dependencies.Plugins.kotlinBenchmark)
 
-    implementation("com.adarshr:gradle-test-logger-plugin:3.1.0")
-    implementation("gradle.plugin.com.github.jengelman.gradle.plugins:shadow:7.0.0")
-    implementation("gradle.plugin.com.google.cloud.tools:jib-gradle-plugin:3.1.4")
-    implementation("com.github.ben-manes:gradle-versions-plugin:0.39.0")
-    implementation("io.gitlab.arturbosch.detekt:detekt-gradle-plugin:1.18.1")
-    implementation("org.jlleitschuh.gradle:ktlint-gradle:10.2.0")
-    implementation("org.owasp:dependency-check-gradle:6.5.0.1")
-
-    // Miscellaneous
-    implementation("org.eclipse.jgit:org.eclipse.jgit:5.13.0.202109080827-r")
+    implementation(Catalog.Dependencies.Plugins.testLogger)
+    implementation(Catalog.Dependencies.Plugins.shadow)
+    implementation(Catalog.Dependencies.Plugins.jib)
+    implementation(Catalog.Dependencies.Plugins.versions)
+    implementation(Catalog.Dependencies.Plugins.detekt)
+    implementation(Catalog.Dependencies.Plugins.ktlint)
+    implementation(Catalog.Dependencies.Plugins.owaspDependencyCheck)
 
     // Testing
-    testImplementation("org.jetbrains.kotlin:kotlin-test")
-    testImplementation("io.kotest:kotest-runner-junit5:4.6.3")
-    testImplementation("io.kotest:kotest-property:4.6.3")
-    testImplementation("com.github.docker-java:docker-java:3.2.12")
+    testImplementation(Catalog.Dependencies.Test.kotlinTest)
+    testImplementation(Catalog.Dependencies.Test.mockk)
+    testImplementation(Catalog.Dependencies.Test.dockerJava)
+    Catalog.Dependencies.Test.kotestBundle.forEach { testImplementation(it) }
+
+    constraints {
+        Catalog.Constraints.ids.forEach {
+            api(it)
+            implementation(it)
+        }
+    }
 }
+
+/*
+kradle {
+    jvm {
+        targetJvm("1.8")
+        kotlin.enable()
+        dependencyUpdates.enable()
+        vulnerabilityScan.enable()
+        lint.enable()
+        codeAnalysis.enable()
+        test {
+            prettyPrint(true)
+            withJunitJupiter()
+            withJacoco()
+        }
+    }
+}
+*/
+
+tasks.register<Copy>("copyCatalog") {
+    val outputFile = project.buildDir.resolve("generatedSources/main/kotlin/Catalog.kt")
+    outputs.files(outputFile)
+    from(project.rootDir.resolve("buildSrc/src/main/kotlin/Catalog.kt"))
+    into(outputFile.parentFile)
+}
+
+sourceSets {
+    main {
+        java.srcDirs(project.buildDir.resolve("generatedSources/main/kotlin"))
+    }
+}
+
 java {
     sourceCompatibility = JavaVersion.VERSION_1_8
     targetCompatibility = JavaVersion.VERSION_1_8
 }
 
-tasks.withType<DependencyUpdatesTask> {
-    revision = "release"
-    checkForGradleUpdate = true
-    // Exclude milestones and RCs
-    rejectVersionIf {
-        val alpha = "^.*[.-]alpha[.-]?[0-9]*$".toRegex()
-        val milestone = "^.*[.-]M[.-]?[0-9]+$".toRegex()
-        val releaseCandidate = "^.*[.-]RC[.-]?[0-9]*$".toRegex()
-        alpha.matches(candidate.version)
-                || milestone.matches(candidate.version)
-                || releaseCandidate.matches(candidate.version)
-    }
-}
-
 tasks.withType<KotlinCompile> {
+    dependsOn("copyCatalog")
     kotlinOptions {
+        jvmTarget = "1.8"
         freeCompilerArgs = listOf("-Xopt-in=kotlin.RequiresOptIn")
     }
 }
@@ -93,8 +124,9 @@ tasks.named("processResources").configure {
 tasks.register("renderTemplates").configure {
     doFirst {
         val properties = Properties()
-        project.rootDir.resolve("template.properties").inputStream().use { properties.load(it) }
+        properties["gitBranch"] = Git.open(project.rootDir).repository.branch
         properties["kradleVersion"] = version
+        properties["versions"] = Catalog.Versions
 
         val engine = SimpleTemplateEngine()
         project.fileTree(project.rootDir)
@@ -112,24 +144,32 @@ tasks.register("renderTemplates").configure {
 
 gradlePlugin {
     plugins {
+        create("kradle") {
+            id = "net.bitsandbobs.kradle"
+            implementationClass = "net.bnb1.kradle.plugins.KradlePlugin"
+            displayName = "Kradle Plugin"
+            description = "Swiss army knife for Kotlin/JVM development"
+        }
         create("kradleApp") {
             id = "net.bitsandbobs.kradle-app"
-            implementationClass = "net.bnb1.kradle.plugins.KradleAppPlugin"
+            implementationClass = "net.bnb1.kradle.v1.KradleCompatAppPlugin"
             displayName = "Kradle App Plugin"
-            description = "Swiss army knife for Kotlin/JVM development"
+            description =
+                "Swiss army knife for Kotlin/JVM development (deprecated, consider using 'net.bitsandbobs.kradle' instead)"
         }
         create("kradleLib") {
             id = "net.bitsandbobs.kradle-lib"
-            implementationClass = "net.bnb1.kradle.plugins.KradleLibPlugin"
+            implementationClass = "net.bnb1.kradle.v1.KradleCompatLibPlugin"
             displayName = "Kradle Lib Plugin"
-            description = "Swiss army knife for Kotlin/JVM development"
+            description =
+                "Swiss army knife for Kotlin/JVM development (deprecated, consider using 'net.bitsandbobs.kradle' instead)"
         }
     }
 }
 
 pluginBundle {
-    website = "https://github.com/mrkuz/kradle"
-    vcsUrl = "https://github.com/mrkuz/kradle"
+    website = "https://github.com/mrkuz/kradle/tree/stable"
+    vcsUrl = "https://github.com/mrkuz/kradle/tree/stable"
     tags =
         listOf(
             "kotlin",

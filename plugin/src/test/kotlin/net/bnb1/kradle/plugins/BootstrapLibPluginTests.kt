@@ -6,7 +6,7 @@ import net.bnb1.kradle.PluginSpec
 class BootstrapLibPluginTests : PluginSpec({
 
     test("Bootstrap lib project") {
-        bootstrapLibProject()
+        bootstrapCompatLibProject()
 
         runTask("bootstrap")
 
@@ -29,7 +29,7 @@ class BootstrapLibPluginTests : PluginSpec({
         writeMultiProjectSettingsGradle("demo", setOf("lib"))
         val buildFile = projectDir.resolve("lib/build.gradle.kts")
         buildFile.parentFile.mkdirs()
-        writeLibBuildFile(buildFile)
+        writeCompatLibBuildFile(buildFile)
 
         runTask("bootstrap")
 
