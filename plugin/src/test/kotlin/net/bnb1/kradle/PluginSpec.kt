@@ -3,8 +3,10 @@ package net.bnb1.kradle
 import io.kotest.core.spec.style.FunSpec
 import org.eclipse.jgit.api.Git
 import org.gradle.testkit.runner.GradleRunner
+import java.io.File
 import kotlin.io.path.ExperimentalPathApi
 import kotlin.io.path.createTempDirectory
+import kotlin.reflect.KClass
 
 abstract class PluginSpec(body: PluginSpec.() -> Unit) : FunSpec({}) {
 
@@ -35,6 +37,13 @@ abstract class PluginSpec(body: PluginSpec.() -> Unit) : FunSpec({}) {
         .withArguments(listOf(task) + arguments)
         .build()
 
+    fun addHasPluginTask(clazz: KClass<*>) {
+        addTask(
+            "hasPlugin",
+            "println(\"hasPlugin: \" + project.plugins.hasPlugin(${clazz.java.name}::class))"
+        )
+    }
+
     fun addTask(name: String, doLast: String) {
         buildFile.appendText(
             """
@@ -48,12 +57,40 @@ abstract class PluginSpec(body: PluginSpec.() -> Unit) : FunSpec({}) {
         )
     }
 
-    fun bootstrapAppProject() {
-        writeSettingsGradle("app")
-        buildFile.writeText(
-            """
+    fun bootstrapProject(name: String = "test", kradleConfig: () -> String) {
+        writeSettingsGradle(name)
+        writeBuildFile(buildFile, kradleConfig)
+    }
+
+    fun writeBuildFile(output: File, kradleConfig: () -> String) = output.writeText(
+        """
             plugins {
-                id("org.jetbrains.kotlin.jvm") version "1.4.31"
+                id("org.jetbrains.kotlin.jvm") version "1.6.0"
+                id("net.bitsandbobs.kradle") version "main-SNAPSHOT"
+            }
+            
+            group = "com.example"
+            version = "1.0.0"
+            
+            kradle {
+                jvm.configureOnly {
+                    targetJvm("11")
+                }
+                ${kradleConfig()}
+            }
+            
+        """.trimIndent()
+    )
+
+    fun bootstrapCompatAppProject() {
+        writeSettingsGradle("app")
+        writeCompatAppBuildFile(buildFile)
+    }
+
+    fun writeCompatAppBuildFile(output: File) = output.writeText(
+        """
+            plugins {
+                id("org.jetbrains.kotlin.jvm") version "1.6.0"
                 id("net.bitsandbobs.kradle-app") version "main-SNAPSHOT"
             }
             
@@ -61,23 +98,19 @@ abstract class PluginSpec(body: PluginSpec.() -> Unit) : FunSpec({}) {
             version = "1.0.0"
             
             kradle {
-                targetJvm.set("11")
+                targetJvm("11")
+                mainClass("com.example.demo.App")
             }
             
-            application {
-                mainClass.set("com.example.AppKt")
-            }
-            
-            """.trimIndent()
-        )
-    }
+        """.trimIndent()
+    )
 
     fun writeAppKt(main: String) {
-        val sourceDir = projectDir.resolve("src/main/kotlin/com/example")
+        val sourceDir = projectDir.resolve("src/main/kotlin/com/example/demo")
         sourceDir.mkdirs()
         sourceDir.resolve("App.kt").writeText(
             """
-            package com.example
+            package com.example.demo
             
             class App
             
@@ -89,12 +122,15 @@ abstract class PluginSpec(body: PluginSpec.() -> Unit) : FunSpec({}) {
         )
     }
 
-    fun bootstrapLibProject() {
+    fun bootstrapCompatLibProject() {
         writeSettingsGradle("lib")
-        buildFile.writeText(
-            """
+        writeCompatLibBuildFile(buildFile)
+    }
+
+    fun writeCompatLibBuildFile(output: File) = output.writeText(
+        """
             plugins {
-                id("org.jetbrains.kotlin.jvm") version "1.4.31"
+                id("org.jetbrains.kotlin.jvm") version "1.6.0"
                 id("net.bitsandbobs.kradle-lib") version "main-SNAPSHOT"
             }
             
@@ -102,17 +138,26 @@ abstract class PluginSpec(body: PluginSpec.() -> Unit) : FunSpec({}) {
             version = "1.0.0"
             
             kradle {
-                targetJvm.set("11")
+                targetJvm("11")
             }
             
-            """.trimIndent()
-        )
-    }
+        """.trimIndent()
+    )
 
     fun writeSettingsGradle(name: String) {
         settingsFile.writeText(
             """
             rootProject.name = "$name"
+            
+            """.trimIndent()
+        )
+    }
+
+    fun writeMultiProjectSettingsGradle(rootProject: String, projects: Collection<String>) {
+        settingsFile.writeText(
+            """
+            rootProject.name = "$rootProject"
+            include(${projects.joinToString(" ", "\"", "\"")})
             
             """.trimIndent()
         )

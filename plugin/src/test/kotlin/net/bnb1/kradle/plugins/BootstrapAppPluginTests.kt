@@ -12,7 +12,7 @@ class BootstrapAppPluginTests : PluginSpec({
         buildFile.writeText(
             """
             plugins {
-                id("org.jetbrains.kotlin.jvm") version "1.4.31"
+                id("org.jetbrains.kotlin.jvm") version "1.6.0"
                 id("net.bitsandbobs.kradle-app") version "main-SNAPSHOT"
             }
             
@@ -20,11 +20,8 @@ class BootstrapAppPluginTests : PluginSpec({
             version = "1.0.0"
             
             kradle {
-                targetJvm.set("11")
-            }
-            
-            application {
-                mainClass.set("com.example.demo.AppKt")
+                targetJvm("11")
+                mainClass("com.example.demo.App")
             }
             
             """.trimIndent()
@@ -46,6 +43,34 @@ class BootstrapAppPluginTests : PluginSpec({
         projectDir.resolve("project.properties").shouldExist()
 
         val appKt = projectDir.resolve("src/main/kotlin/com/example/demo/App.kt")
+        appKt.shouldExist()
+
+        val lines = appKt.readLines()
+        lines.forOne { it shouldBe "package com.example.demo" }
+    }
+
+    test("Bootstrap app project (multi-project)") {
+        writeMultiProjectSettingsGradle("demo", setOf("app"))
+        val buildFile = projectDir.resolve("app/build.gradle.kts")
+        buildFile.parentFile.mkdirs()
+        writeCompatAppBuildFile(buildFile)
+
+        runTask("bootstrap")
+
+        projectDir.resolve(".git").shouldExist()
+        projectDir.resolve(".gitignore").shouldExist()
+        projectDir.resolve("gradlew").shouldExist()
+        projectDir.resolve("app/src/main/resources").shouldExist()
+        projectDir.resolve("app/src/main/extra").shouldExist()
+        projectDir.resolve("app/src/test/kotlin/com/example").shouldExist()
+        projectDir.resolve("app/src/test/resources").shouldExist()
+        projectDir.resolve("app/src/benchmark/kotlin").shouldExist()
+        projectDir.resolve("detekt-config.yml").shouldExist()
+        projectDir.resolve("README.md").shouldExist()
+        projectDir.resolve("LICENSE").shouldExist()
+        projectDir.resolve("project.properties").shouldExist()
+
+        val appKt = projectDir.resolve("app/src/main/kotlin/com/example/demo/App.kt")
         appKt.shouldExist()
 
         val lines = appKt.readLines()

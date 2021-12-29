@@ -11,7 +11,7 @@ import org.gradle.testkit.runner.TaskOutcome
 class BuildPropertiesPluginTests : PluginSpec({
 
     test("Generate build.properties") {
-        bootstrapAppProject()
+        bootstrapCompatAppProject()
 
         val result = runTask("generateBuildProperties")
 
@@ -29,7 +29,7 @@ class BuildPropertiesPluginTests : PluginSpec({
     }
 
     test("Generate build.properties with Git commit id") {
-        bootstrapAppProject()
+        bootstrapCompatAppProject()
         gitInit()
 
         val result = runTask("generateBuildProperties")
