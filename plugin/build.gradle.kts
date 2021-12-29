@@ -81,8 +81,10 @@ kradle {
 */
 
 tasks.register<Copy>("copyCatalog") {
+    val outputFile = project.buildDir.resolve("generatedSources/main/kotlin/Catalog.kt")
+    outputs.files(outputFile)
     from(project.rootDir.resolve("buildSrc/src/main/kotlin/Catalog.kt"))
-    into(project.buildDir.resolve("generatedSources/main/kotlin"))
+    into(outputFile.parentFile)
 }
 
 sourceSets {
