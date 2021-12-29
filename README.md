@@ -23,8 +23,8 @@ With a few lines of configuration, you will be able to:
 
 ```shell
 mkdir demo && cd demo
-curl -O https://raw.githubusercontent.com/mrkuz/kradle/next/examples/app/settings.gradle.kts
-curl -O https://raw.githubusercontent.com/mrkuz/kradle/next/examples/app/build.gradle.kts
+curl -O https://raw.githubusercontent.com/mrkuz/kradle/stable/examples/app/settings.gradle.kts
+curl -O https://raw.githubusercontent.com/mrkuz/kradle/stable/examples/app/build.gradle.kts
 gradle bootstrap
 ```
 
@@ -50,7 +50,7 @@ _build.gradle.kts_
 ```kotlin
 plugins {
     id("org.jetbrains.kotlin.jvm") version "1.6.0"
-    id("net.bitsandbobs.kradle") version "main-SNAPSHOT"
+    id("net.bitsandbobs.kradle") version "2.0.0"
 }
 
 group = "com.example"
@@ -757,7 +757,7 @@ kradle {
 
 ## Changelog
 
-### Version main-SNAPSHOT (2021-12-29)
+### Version 2.0.0 (2021-12-29)
 
 - Fix `bootstrap` for multi-project builds
 - Fix exclusion of alpha versions and RCs in `showDependencyUpdates`
