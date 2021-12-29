@@ -9,15 +9,24 @@ import org.gradle.api.Project
 
 class JvmProperties(project: Project) : Properties(project) {
 
+    private val javaBlueprint = JavaBlueprint(project)
+    private val allOpenBlueprint = AllOpenBlueprint(project)
+
     val targetJvm = property(factory.property(Catalog.Versions.jvm))
 
     val kotlin = FeatureDsl.Builder<KotlinProperties>(project)
         .feature { KotlinFeature() }
         .properties { KotlinProperties(it) }
         .parent(JvmFeatureSet::class)
-        .addBlueprint(JavaBlueprint(project))
+        .addBlueprint(javaBlueprint)
         .addBlueprint(KotlinBlueprint(project))
-        .addBlueprint(AllOpenBlueprint(project))
+        .addBlueprint(allOpenBlueprint)
+        .build()
+    val java = FeatureDsl.Builder<EmptyProperties>(project)
+        .feature { JavaFeature() }
+        .properties { EmptyProperties(it) }
+        .parent(JvmFeatureSet::class)
+        .addBlueprint(javaBlueprint)
         .build()
     val application = FeatureDsl.Builder<ApplicationProperties>(project)
         .feature { ApplicationFeature() }
@@ -78,7 +87,7 @@ class JvmProperties(project: Project) : Properties(project) {
         .feature { BenchmarkFeature() }
         .properties { BenchmarkProperties(it) }
         .parent(JvmFeatureSet::class)
-        .addBlueprint(AllOpenBlueprint(project))
+        .addBlueprint(allOpenBlueprint)
         .addBlueprint(BenchmarksBlueprint(project))
         .build()
 

@@ -1,7 +1,9 @@
 package net.bnb1.kradle.features.jvm
 
 import net.bnb1.kradle.apply
+import net.bnb1.kradle.featureRegistry
 import net.bnb1.kradle.features.Blueprint
+import net.bnb1.kradle.features.general.BootstrapFeature
 import net.bnb1.kradle.propertiesRegistry
 import org.gradle.api.JavaVersion
 import org.gradle.api.Project
@@ -12,6 +14,17 @@ class JavaBlueprint(project: Project) : Blueprint(project) {
 
     override fun applyPlugins() {
         project.apply(JavaPlugin::class.java)
+    }
+
+    override fun registerBlueprints() {
+        with(project.featureRegistry) {
+            if (get<JavaFeature>().isEnabled) {
+                get<BootstrapFeature>().addBlueprint(JavaBootstrapBlueprint(project))
+                get<CodeAnalysisFeature>().addBlueprint(PmdBlueprint(project))
+                get<CodeAnalysisFeature>().addBlueprint(SpotBugsBlueprint(project))
+                get<LintFeature>().addBlueprint(CheckstyleBlueprint(project))
+            }
+        }
     }
 
     override fun configure() {
