@@ -88,7 +88,7 @@ class ApplicationBlueprintTests : PluginSpec({
 
         result.output shouldContain "WARNING: Group doesn't comply with Java's package name rules"
     }
-    
+
     test("Run app with @JvmName") {
         writeSettingsGradle("app")
         buildFile.writeText(

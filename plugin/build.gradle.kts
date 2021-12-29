@@ -10,8 +10,7 @@ plugins {
     `maven-publish`
     id(Catalog.Plugins.gradlePublish.id) version Catalog.Plugins.gradlePublish.version
     id(Catalog.Plugins.kotlinJvm.id) version Catalog.Plugins.kotlinJvm.version
-    id(Catalog.Plugins.testLogger.id) version Catalog.Plugins.testLogger.version
-    // id("net.bitsandbobs.kradle") version "main-SNAPSHOT"
+    id("net.bitsandbobs.kradle") version "2.0.0"
 }
 
 group = "net.bitsandbobs.kradle"
@@ -62,7 +61,6 @@ dependencies {
     }
 }
 
-/*
 kradle {
     jvm {
         targetJvm("1.8")
@@ -78,7 +76,6 @@ kradle {
         }
     }
 }
-*/
 
 tasks.register<Copy>("copyCatalog") {
     val outputFile = project.buildDir.resolve("generatedSources/main/kotlin/Catalog.kt")
@@ -93,22 +90,8 @@ sourceSets {
     }
 }
 
-java {
-    sourceCompatibility = JavaVersion.VERSION_1_8
-    targetCompatibility = JavaVersion.VERSION_1_8
-}
-
 tasks.withType<KotlinCompile> {
     dependsOn("copyCatalog")
-    kotlinOptions {
-        jvmTarget = "1.8"
-        freeCompilerArgs = listOf("-Xopt-in=kotlin.RequiresOptIn")
-    }
-}
-
-tasks.withType<Test> {
-    useJUnitPlatform()
-    testLogging.showStandardStreams = true
 }
 
 tasks.register<Copy>("buildAgent") {

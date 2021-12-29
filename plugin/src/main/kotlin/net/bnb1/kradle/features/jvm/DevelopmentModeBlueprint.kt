@@ -11,8 +11,6 @@ import org.gradle.api.tasks.JavaExec
 import org.gradle.api.tasks.SourceSet
 import org.gradle.kotlin.dsl.named
 
-private val GROUP_PATTERN = Regex("^[a-z]+(\\.[a-z0-9]+)+$")
-
 class DevelopmentModeBlueprint(project: Project) : Blueprint(project) {
 
     override fun checkPreconditions() {
