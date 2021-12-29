@@ -78,10 +78,10 @@ kradle {
 }
 
 tasks.register<Copy>("copyCatalog") {
-    val outputFile = project.buildDir.resolve("generatedSources/main/kotlin/Catalog.kt")
-    outputs.files(outputFile)
+    val output = project.buildDir.resolve("generatedSources/main/kotlin")
+    outputs.files(output)
     from(project.rootDir.resolve("buildSrc/src/main/kotlin/Catalog.kt"))
-    into(outputFile.parentFile)
+    into(output)
 }
 
 sourceSets {
@@ -91,6 +91,14 @@ sourceSets {
 }
 
 tasks.withType<KotlinCompile> {
+    dependsOn("copyCatalog")
+}
+
+tasks.withType<Jar> {
+    dependsOn("copyCatalog")
+}
+
+tasks.named("runKtlintCheckOverMainSourceSet") {
     dependsOn("copyCatalog")
 }
 
