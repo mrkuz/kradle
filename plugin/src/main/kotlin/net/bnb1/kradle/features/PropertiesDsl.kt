@@ -7,7 +7,7 @@ class PropertiesDsl<P : Properties> private constructor(private val properties: 
 
     operator fun invoke(action: P.() -> Unit = {}) = configure(action)
 
-    fun configure(action: P.() -> Unit) = action(properties)
+    fun configure(action: P.() -> Unit = {}) = action(properties)
 
     class Builder<P : Properties>(private val project: Project) {
 

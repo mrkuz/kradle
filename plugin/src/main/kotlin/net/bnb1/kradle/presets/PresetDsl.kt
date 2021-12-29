@@ -9,7 +9,7 @@ class PresetDsl private constructor(private val preset: Preset, private val proj
 
     operator fun invoke(action: KradleExtensionBase.() -> Unit = {}) = activate(action)
 
-    fun activate(action: KradleExtensionBase.() -> Unit) {
+    fun activate(action: KradleExtensionBase.() -> Unit = {}) {
         val extension = project.extensions.getByType(KradleExtension::class.java)
         preset.configure(extension)
         action(extension)

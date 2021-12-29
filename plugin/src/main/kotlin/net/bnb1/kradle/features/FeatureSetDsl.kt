@@ -10,7 +10,7 @@ class FeatureSetDsl<P : Properties> private constructor(
 
     operator fun invoke(action: P.() -> Unit = {}) = activate(action)
 
-    fun configureOnly(action: P.() -> Unit) {
+    fun configureOnly(action: P.() -> Unit = {}) {
         action(properties)
     }
 
