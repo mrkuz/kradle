@@ -35,6 +35,12 @@ kradle {
                 useMockk(/* "${versions.mockk}" */)
             }
         }
+        java {
+            lint {
+                // checkstyleConfigFile("checkstyle.xml")
+                // checkstyleVersion("${versions.checkstyle}")
+            }
+        }
 
         dependencyUpdates.enable()
         vulnerabilityScan.enable()

@@ -16,7 +16,7 @@ const val TASK_GROUP = "Kradle"
 
 // Project
 
-fun <T : Plugin<Project>> Project.apply(type: Class<T>) = pluginManager.apply(type)
+fun <T : Plugin<out Project>> Project.apply(type: Class<T>) = pluginManager.apply(type)
 
 inline fun <reified T : Task> Project.create(
     name: String,

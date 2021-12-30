@@ -6,6 +6,8 @@ import org.gradle.api.tasks.TaskAction
 
 abstract class BootstrapBaseTask : DefaultTask() {
 
+    // TODO: Revisit for java
+
     init {
         dependsOn(":wrapper", "generateGitignore", "generateDetektConfig")
     }

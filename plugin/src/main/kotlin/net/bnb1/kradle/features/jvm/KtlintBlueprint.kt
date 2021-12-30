@@ -1,6 +1,5 @@
 package net.bnb1.kradle.features.jvm
 
-import net.bnb1.kradle.alias
 import net.bnb1.kradle.apply
 import net.bnb1.kradle.features.Blueprint
 import net.bnb1.kradle.propertiesRegistry
@@ -15,10 +14,6 @@ class KtlintBlueprint(project: Project) : Blueprint(project) {
         project.apply(KtlintPlugin::class.java)
     }
 
-    override fun addAliases() {
-        project.alias("lint", "Runs ktlint", "ktlintCheck")
-    }
-
     override fun configure() {
         val properties = project.propertiesRegistry.get<KotlinLintProperties>()
         project.configure<KtlintExtension> {
@@ -26,5 +21,7 @@ class KtlintBlueprint(project: Project) : Blueprint(project) {
             disabledRules.set(setOf("no-wildcard-imports"))
             version.set(properties.ktlintVersion.get())
         }
+
+        project.tasks.getByName(LintFeature.MAIN_TASK).dependsOn("ktlintCheck")
     }
 }

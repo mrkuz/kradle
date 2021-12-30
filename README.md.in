@@ -82,7 +82,8 @@ The example above uses the Kotlin/JVM application [preset](#presets).
 |---|---|---|---|
 | [bootstrap](#bootstrapping) | Bootstraps app/lib project | - | - |
 | [showDependencyUpdates](#dependency-updates) | Displays dependency updates | - | [Gradle Versions Plugin](https://plugins.gradle.org/plugin/com.github.ben-manes.versions) |
-| [lint](#linting) | Runs [ktlint](https://ktlint.github.io/) | ktlintCheck | [ktlint Plugin](https://plugins.gradle.org/plugin/org.jlleitschuh.gradle.ktlint) |
+| [lint](#linting) | Runs [ktlint](https://ktlint.github.io/) (Kotlin) and [checkstyle](https://checkstyle.sourceforge.io/) (Java) | - | [ktlint Plugin](https://plugins.gradle.org/plugin/org.jlleitschuh.gradle.ktlint), [Checkstyle Plugin](https://docs.gradle.org/current/userguide/checkstyle_plugin.html) |
+| [generateCheckstyleConfig](#code-analysis) | Generates _checkstyle.xml_ | - | - |
 | [analyzeCode](#code-analysis) | Runs [detekt](https://detekt.github.io/detekt/) code analysis | - | [detekt Plugin](https://plugins.gradle.org/plugin/io.gitlab.arturbosch.detekt) |
 | [generateDetektConfig](#code-analysis) | Generates _detekt-config.yml_ | - | - |
 | [analyzeDependencies](#vulnerability-scans) | Analyzes dependencies for vulnerabilities | - | [OWASP Dependency Check Plugin](https://plugins.gradle.org/plugin/org.owasp.dependencycheck) |
@@ -233,7 +234,8 @@ Enables [Opt-ins](https://kotlinlang.org/docs/opt-in-requirements.html).
 [JSR-305](https://jcp.org/en/jsr/detail?id=305) nullability mismatches are reported as error (`"-Xjsr305=strict"`).
 
 Plugins used: [kotlinx.serialization Plugin](https://plugins.gradle.org/plugin/org.jetbrains.kotlin.plugin.serialization)
-, [All-open Compiler Plugin](https://plugins.gradle.org/plugin/org.jetbrains.kotlin.plugin.allopen)
+, [All-open Compiler Plugin](https://plugins.gradle.org/plugin/org.jetbrains.kotlin.plugin.allopen),
+ [Java Plugin](https://docs.gradle.org/current/userguide/java_plugin.html)
 
 #### Options
 
@@ -264,6 +266,36 @@ kradle {
 - `detectConfigFile`: [detekt](https://detekt.github.io/detekt/) configuration file used
 - `useKoTest`: Adds [kotest](https://kotest.io/) test dependencies (if [test improvements](#test-improvements) are enabled)
 - `useMockk`: Adds [mockk](https://mockk.io/) test dependency (if [test improvements](#test-improvements) are enabled)
+
+### Java development
+
+```kotlin
+kradle {
+    jvm {
+        java.enable()
+    }
+}
+```
+
+Plugins used: [Java Plugin](https://docs.gradle.org/current/userguide/java_plugin.html)
+
+#### Options
+
+```kotlin
+kradle {
+    jvm {
+        java {
+            lint {
+                checkstyleVersion("${versions.checkstyle}")
+                checkstyleConfigFile("checkstyle.xml")
+            }
+        }
+    }
+}
+```
+
+- `checkstyleVersion`: [checkstyle](https://checkstyle.sourceforge.io/) version used for [linting](#linting) (if enabled)
+- `checkstyleConfigFile`: [checkstyle](https://checkstyle.sourceforge.io/) configuration file used
 
 ### Application development
 
@@ -347,7 +379,11 @@ kradle {
 }
 ```
 
-Adds the task `lint`, which runs [ktlint](https://ktlint.github.io/) on the project. It uses the standard rule set (including experimental rules) with one exception: Wildcard imports are allowed.
+Adds the task `lint`, which runs:
+
+- [ktlint](https://ktlint.github.io/) on Kotlin source files. It uses the standard rule set (including experimental rules) with one exception: Wildcard imports are allowed.
+
+- [checkstyle](https://checkstyle.sourceforge.io/) on Java source files. Looks for the configuration file _checkstyle.xml_ in the project root. If not found, `kradle` generates one.
 
 `lint` is executed when running `check`.
 
@@ -713,6 +749,12 @@ kradle {
                 useMockk(/* "${versions.mockk}" */)
             }
         }
+        java {
+            lint {
+                checkstyleConfigFile("checkstyle.xml")
+                checkstyleVersion("${versions.checkstyle}")
+            }
+        }
         application {
             mainClass("...")
         }
@@ -758,6 +800,10 @@ kradle {
 ## Changelog
 
 ### Version ${kradleVersion} (${new Date().format("yyyy-MM-dd")})
+
+- Support for Java development
+
+### Version 2.0.0 (2021-12-29)
 
 - Fix `bootstrap` for multi-project builds
 - Fix exclusion of alpha versions and RCs in `showDependencyUpdates`

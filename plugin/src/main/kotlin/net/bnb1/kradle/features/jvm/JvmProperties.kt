@@ -22,9 +22,9 @@ class JvmProperties(project: Project) : Properties(project) {
         .addBlueprint(KotlinBlueprint(project))
         .addBlueprint(allOpenBlueprint)
         .build()
-    val java = FeatureDsl.Builder<EmptyProperties>(project)
+    val java = FeatureDsl.Builder<JavaProperties>(project)
         .feature { JavaFeature() }
-        .properties { EmptyProperties(it) }
+        .properties { JavaProperties(it) }
         .parent(JvmFeatureSet::class)
         .addBlueprint(javaBlueprint)
         .build()
