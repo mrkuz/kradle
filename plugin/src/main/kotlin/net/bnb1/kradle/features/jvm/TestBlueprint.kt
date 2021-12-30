@@ -54,7 +54,7 @@ class TestBlueprint(project: Project) : Blueprint(project) {
                 }
             }
 
-        project.create<Test>(name, description) {
+        project.createTask<Test>(name, description) {
             testClassesDirs = sourceSet.output.classesDirs
             classpath = sourceSet.runtimeClasspath
             mustRunAfter("test")

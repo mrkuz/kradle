@@ -1,7 +1,7 @@
 package net.bnb1.kradle.features.jvm
 
 import io.gitlab.arturbosch.detekt.Detekt
-import net.bnb1.kradle.create
+import net.bnb1.kradle.createTask
 import net.bnb1.kradle.features.Blueprint
 import net.bnb1.kradle.propertiesRegistry
 import net.bnb1.kradle.tasks.GenerateDetektConfigTask
@@ -17,7 +17,7 @@ class DetektBlueprint(project: Project) : Blueprint(project) {
     override fun createTasks() {
         val properties = project.propertiesRegistry.get<KotlinCodeAnalysisProperties>()
 
-        project.create<GenerateDetektConfigTask>("generateDetektConfig", "Generates detekt-config.yml") {
+        project.createTask<GenerateDetektConfigTask>("generateDetektConfig", "Generates detekt-config.yml") {
             outputFile.set(project.rootDir.resolve(properties.detektConfigFile.get()))
         }
 
@@ -35,7 +35,7 @@ class DetektBlueprint(project: Project) : Blueprint(project) {
             .filter { it.extension.toLowerCase() == "kt" }
             .toSet()
 
-        project.create<Detekt>(TASK_NAME, "Runs detekt code analysis") {
+        project.createTask<Detekt>(TASK_NAME, "Runs detekt code analysis") {
             setSource(sourceFiles)
             detektClasspath.setFrom(project.configurations.getAt(CONFIGURATION_NAME))
             reports {

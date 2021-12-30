@@ -1,6 +1,6 @@
 package net.bnb1.kradle.features.jvm
 
-import net.bnb1.kradle.create
+import net.bnb1.kradle.createTask
 import net.bnb1.kradle.featureRegistry
 import net.bnb1.kradle.features.Blueprint
 import net.bnb1.kradle.propertiesRegistry
@@ -22,7 +22,7 @@ class DevelopmentModeBlueprint(project: Project) : Blueprint(project) {
     override fun createTasks() {
         val mainSourceSet = project.sourceSets.getByName(SourceSet.MAIN_SOURCE_SET_NAME)
         val agentResource = javaClass.getResource("/agent.jar")
-        project.create<JavaExec>(
+        project.createTask<JavaExec>(
             "dev",
             "Runs the application and stops it when sources change (use with -t)"
         ) {

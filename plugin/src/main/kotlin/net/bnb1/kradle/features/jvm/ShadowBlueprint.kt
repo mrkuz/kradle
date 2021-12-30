@@ -1,7 +1,7 @@
 package net.bnb1.kradle.features.jvm
 
 import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
-import net.bnb1.kradle.create
+import net.bnb1.kradle.createTask
 import net.bnb1.kradle.featureRegistry
 import net.bnb1.kradle.features.Blueprint
 import net.bnb1.kradle.propertiesRegistry
@@ -21,7 +21,7 @@ class ShadowBlueprint(project: Project) : Blueprint(project) {
         val jar = project.tasks.named<Jar>("jar").get()
         val main = project.sourceSets.getByName(SourceSet.MAIN_SOURCE_SET_NAME)
         val classpath = project.configurations.getByName("runtimeClasspath")
-        project.create<ShadowJar>(TASK_NAME, "Creates Uber-JAR") {
+        project.createTask<ShadowJar>(TASK_NAME, "Creates Uber-JAR") {
             archiveClassifier.set("uber")
             manifest.inheritFrom(jar.manifest)
             from(main.output)

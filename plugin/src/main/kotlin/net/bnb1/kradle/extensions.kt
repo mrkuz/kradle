@@ -12,29 +12,44 @@ import org.gradle.api.tasks.SourceSetContainer
 import org.gradle.kotlin.dsl.DependencyHandlerScope
 import org.gradle.kotlin.dsl.extra
 
-const val TASK_GROUP = "Kradle"
+const val KRADLE_TASK_GROUP = "Kradle"
+const val HELPER_TASK_GROUP = "Kradle helper"
 
 // Project
 
 fun <T : Plugin<out Project>> Project.apply(type: Class<T>) = pluginManager.apply(type)
 
-inline fun <reified T : Task> Project.create(
+inline fun <reified T : Task> Project.createTask(
     name: String,
     description: String,
     noinline configure: T.() -> Unit = {}
 ): T {
-    return create(name, description, T::class.java, configure)
+    return createTask(KRADLE_TASK_GROUP, name, description, T::class.java, configure)
 }
 
-fun <T : Task> Project.create(name: String, description: String, type: Class<T>, configure: T.() -> Unit = {}): T {
+inline fun <reified T : Task> Project.createHelperTask(
+    name: String,
+    description: String,
+    noinline configure: T.() -> Unit = {}
+): T {
+    return createTask(HELPER_TASK_GROUP, name, description, T::class.java, configure)
+}
+
+fun <T : Task> Project.createTask(
+    group: String,
+    name: String,
+    description: String,
+    type: Class<T>,
+    configure: T.() -> Unit = {}
+): T {
     val task = tasks.create(name, type) { configure() }
-    task.group = TASK_GROUP
+    task.group = group
     task.description = description
     return task
 }
 
 fun Project.alias(name: String, description: String, targetTask: String): Task {
-    val task = create<Task>(name, "$description (alias for '$targetTask')")
+    val task = createTask<Task>(name, "$description (alias for '$targetTask')")
     task.dependsOn(targetTask)
     return task
 }

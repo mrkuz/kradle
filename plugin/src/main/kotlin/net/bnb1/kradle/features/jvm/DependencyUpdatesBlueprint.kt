@@ -3,14 +3,14 @@ package net.bnb1.kradle.features.jvm
 import com.github.benmanes.gradle.versions.updates.DependencyUpdatesTask
 import com.github.benmanes.gradle.versions.updates.resolutionstrategy.ComponentFilter
 import com.github.benmanes.gradle.versions.updates.resolutionstrategy.ComponentSelectionWithCurrent
-import net.bnb1.kradle.create
+import net.bnb1.kradle.createTask
 import net.bnb1.kradle.features.Blueprint
 import org.gradle.api.Project
 
 class DependencyUpdatesBlueprint(project: Project) : Blueprint(project) {
 
     override fun createTasks() {
-        project.create<DependencyUpdatesTask>("showDependencyUpdates", "Displays dependency updates") {
+        project.createTask<DependencyUpdatesTask>("showDependencyUpdates", "Displays dependency updates") {
             revision = "release"
             checkForGradleUpdate = true
             rejectVersionIf(VersionFilter)
