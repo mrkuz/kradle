@@ -759,6 +759,8 @@ kradle {
 
 ### Version ${kradleVersion} (${new Date().format("yyyy-MM-dd")})
 
+### Version 2.0.0 (2021-12-29)
+
 - Fix `bootstrap` for multi-project builds
 - Fix exclusion of alpha versions and RCs in `showDependencyUpdates`
 - Set default target JVM to 17
