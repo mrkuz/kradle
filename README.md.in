@@ -683,7 +683,7 @@ kradle {
 
 ```kotlin
 kradle {
-    kotlinLibraryApplication.activate()
+    kotlinJvmLibrary.activate()
 }
 ```
 
@@ -706,6 +706,102 @@ kradle {
                 useMockk()
             }
         }
+        library.enable()
+        dependencyUpdates.enable()
+        vulnerabilityScan.enable()
+        lint.enable()
+        codeAnalysis.enable()
+
+        test {
+            prettyPrint(true)
+            withIntegrationTests(true)
+            withFunctionalTests(true)
+            withJunitJupiter()
+            withJacoco()
+        }
+
+        benchmark.enable()
+        packaging.enable()
+        documentation.enable()
+    }
+}
+```
+
+### Java application
+
+```kotlin
+kradle {
+    javaApplication {
+        jvm {
+            application {
+                mainClass("...")
+            }
+        }
+    }
+}
+```
+
+Same as:
+
+```kotlin
+kradle {
+    general {
+        bootstrap.enable()
+        git.enable()
+        projectProperties.enable()
+        buildProperties.enable()
+    }
+
+    jvm {
+        java.enable()
+        application {
+            mainClass("...")
+        }
+        dependencyUpdates.enable()
+        vulnerabilityScan.enable()
+        lint.enable()
+        codeAnalysis.enable()
+        developmentMode.enable()
+
+        test {
+            prettyPrint(true)
+            withIntegrationTests(true)
+            withFunctionalTests(true)
+            withJunitJupiter()
+            withJacoco()
+        }
+
+        benchmark.enable()
+        packaging.enable()
+        docker {
+            withJvmKill()
+        }
+        documentation.enable()
+    }
+}
+```
+
+### Java library
+
+```kotlin
+kradle {
+    javaLibrary.activate()
+}
+```
+
+Same as:
+
+```kotlin
+kradle {
+    general {
+        bootstrap.enable()
+        git.enable()
+        projectProperties.enable()
+        buildProperties.enable()
+    }
+
+    jvm {
+        java.enable()
         library.enable()
         dependencyUpdates.enable()
         vulnerabilityScan.enable()

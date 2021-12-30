@@ -6,6 +6,6 @@ import org.gradle.api.Project
 class SpotBugsBlueprint(project: Project) : Blueprint(project) {
 
     override fun applyPlugins() {
-        println("SPOTBUGS")
+        // project.apply(SpotBug)
     }
 }
