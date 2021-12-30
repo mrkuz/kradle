@@ -8,7 +8,7 @@ import org.gradle.api.Task
 class LintBlueprint(project: Project) : Blueprint(project) {
 
     override fun createTasks() {
-        project.createTask<Task>(LintFeature.MAIN_TASK, "Run linters")
+        project.createTask<Task>(LintFeature.MAIN_TASK, "Runs linters")
         project.tasks.getByName("check").dependsOn(LintFeature.MAIN_TASK)
     }
 }

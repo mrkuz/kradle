@@ -4,13 +4,12 @@ import net.bnb1.kradle.createHelperTask
 import net.bnb1.kradle.createTask
 import net.bnb1.kradle.features.Blueprint
 import net.bnb1.kradle.propertiesRegistry
+import net.bnb1.kradle.sourceSets
 import net.bnb1.kradle.tasks.GenerateCheckstyleConfigTask
 import org.gradle.api.Project
-import org.gradle.api.plugins.JavaPluginExtension
 import org.gradle.api.plugins.quality.Checkstyle
 
 private const val CONFIGURATION_NAME = "kradleCheckstyle"
-private const val TASK_NAME = "checkstyle"
 
 class CheckstyleBlueprint(project: Project) : Blueprint(project) {
 
@@ -29,32 +28,33 @@ class CheckstyleBlueprint(project: Project) : Blueprint(project) {
             dependencies.addLater(dependencyProvider)
         }
 
-        val javaExtension = project.extensions.getByType(JavaPluginExtension::class.java)
-        val sourceFiles = javaExtension.sourceSets
-            .asSequence()
-            .flatMap { it.java.files }
-            .filter { it.extension.toLowerCase() == "java" }
-            .toSet()
+        project.sourceSets.forEach { sourceSet ->
+            val sourceFiles = sourceSet.allSource.files
+                .filter { it.extension.toLowerCase() == "java" }
+                .toSet()
 
-        project.createHelperTask<Checkstyle>(TASK_NAME, "Run checkstyle") {
-            setSource(sourceFiles)
-            checkstyleClasspath = project.configurations.getAt(CONFIGURATION_NAME)
-            classpath = project.objects.fileCollection()
-            configDirectory.set(project.rootDir)
-            setConfigFile(configFile)
-            maxErrors = 0
-            maxWarnings = 0
-            reports {
-                html.required.set(true)
-                xml.required.set(false)
+            val taskName = "checkstyle" + sourceSet.name[0].toUpperCase() + sourceSet.name.substring(1)
+
+            project.createHelperTask<Checkstyle>(taskName, "Runs checkstyle on '${sourceSet.name}'") {
+                setSource(sourceFiles)
+                checkstyleClasspath = project.configurations.getAt(CONFIGURATION_NAME)
+                classpath = sourceSet.compileClasspath
+                configDirectory.set(project.rootDir)
+                setConfigFile(configFile)
+                maxErrors = 0
+                maxWarnings = 0
+                reports {
+                    html.required.set(true)
+                    xml.required.set(false)
+                }
+                reports.forEach {
+                    it.outputLocation.set(project.buildDir.resolve("reports/checkstyle/${sourceSet.name}.${it.name}"))
+                }
+                if (!configFile.exists()) {
+                    dependsOn("generateCheckstyleConfig")
+                }
             }
-            reports.forEach {
-                it.outputLocation.set(project.buildDir.resolve("reports/checkstyle/checkstyle.${it.name}"))
-            }
-            if (!configFile.exists()) {
-                dependsOn("generateCheckstyleConfig")
-            }
+            project.tasks.getByName(LintFeature.MAIN_TASK).dependsOn(taskName)
         }
-        project.tasks.getByName(LintFeature.MAIN_TASK).dependsOn(TASK_NAME)
     }
 }
