@@ -19,9 +19,9 @@ class CheckstyleBlueprintTests : PluginSpec({
         }
         writeAppJava("System.out.println(\"Hello World\");")
 
-        runTask("checkstyle")
+        runTask("checkstyleMain")
 
-        buildDir.resolve("reports/checkstyle/checkstyle.html").shouldExist()
+        buildDir.resolve("reports/checkstyle/main.html").shouldExist()
     }
 
     test("Generate checkstyle.xml") {
@@ -52,7 +52,7 @@ class CheckstyleBlueprintTests : PluginSpec({
 
         val result = runTask("check")
 
-        result.task(":checkstyle")!!.outcome shouldBe TaskOutcome.SUCCESS
+        result.task(":checkstyleMain")!!.outcome shouldBe TaskOutcome.SUCCESS
     }
 
     test("Check checkstyle dependencies") {

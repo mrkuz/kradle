@@ -2,7 +2,7 @@
 
 Swiss army knife for Kotlin/JVM development.
 
-`kradle` is a plugin for Gradle, adding essential features for Kotlin/JVM development to your build.
+`kradle` is a plugin for Gradle, adding essential features for Kotlin/JVM (and also Java) development to your build.
 
 With a few lines of configuration, you will be able to:
 
@@ -84,7 +84,7 @@ The example above uses the Kotlin/JVM application [preset](#presets).
 | [showDependencyUpdates](#dependency-updates) | Displays dependency updates | - | [Gradle Versions Plugin](https://plugins.gradle.org/plugin/com.github.ben-manes.versions) |
 | [lint](#linting) | Runs [ktlint](https://ktlint.github.io/) (Kotlin) and [checkstyle](https://checkstyle.sourceforge.io/) (Java) | - | [ktlint Plugin](https://plugins.gradle.org/plugin/org.jlleitschuh.gradle.ktlint), [Checkstyle Plugin](https://docs.gradle.org/current/userguide/checkstyle_plugin.html) |
 | [generateCheckstyleConfig](#code-analysis) | Generates _checkstyle.xml_ | - | - |
-| [analyzeCode](#code-analysis) | Runs [detekt](https://detekt.github.io/detekt/) code analysis | - | [detekt Plugin](https://plugins.gradle.org/plugin/io.gitlab.arturbosch.detekt) |
+| [analyzeCode](#code-analysis) | Runs [detekt](https://detekt.github.io/detekt/) (Java) and [PMD](https://pmd.github.io/) (Java) code analysis | - | [detekt Plugin](https://plugins.gradle.org/plugin/io.gitlab.arturbosch.detekt), [PMD Plugin](https://docs.gradle.org/current/userguide/pmd_plugin.html) |
 | [generateDetektConfig](#code-analysis) | Generates _detekt-config.yml_ | - | - |
 | [analyzeDependencies](#vulnerability-scans) | Analyzes dependencies for vulnerabilities | - | [OWASP Dependency Check Plugin](https://plugins.gradle.org/plugin/org.owasp.dependencycheck) |
 | [dev](#development-mode) | Runs the application and stops it when sources change (use with `-t`, applications only) | - | - |
@@ -289,6 +289,9 @@ kradle {
                 checkstyleVersion("${versions.checkstyle}")
                 checkstyleConfigFile("checkstyle.xml")
             }
+            codeAnalysis {
+                pmdVersion("${versions.pmd}")
+            }
         }
     }
 }
@@ -296,6 +299,7 @@ kradle {
 
 - `checkstyleVersion`: [checkstyle](https://checkstyle.sourceforge.io/) version used for [linting](#linting) (if enabled)
 - `checkstyleConfigFile`: [checkstyle](https://checkstyle.sourceforge.io/) configuration file used
+- `pmdVersion`: [PMD](https://pmd.github.io/) version used for [code analysis](#code-analysis) (if enabled)
 
 ### Application development
 
@@ -399,13 +403,17 @@ kradle {
 }
 ```
 
-Adds the task `analyzeCode`, which runs [detekt](https://detekt.github.io/detekt/) static code analysis.
+Adds the task `analyzeCode`, which runs:
+
+- [detekt](https://detekt.github.io/detekt/) static code analysis for Kotlin
+
+- [PMD](https://pmd.github.io/) code analysis for Java
 
 Adds the tasks `generateDetektConfig`, which generates a configuration file with sane defaults.
 
 `analyzeCode` is executed when running `check`.
 
-Plugins used: [detekt Plugin](https://plugins.gradle.org/plugin/io.gitlab.arturbosch.detekt)
+Plugins used: [detekt Plugin](https://plugins.gradle.org/plugin/io.gitlab.arturbosch.detekt), , [PMD Plugin](https://docs.gradle.org/current/userguide/pmd_plugin.html)
 
 ### Development mode
 
@@ -753,6 +761,9 @@ kradle {
             lint {
                 checkstyleConfigFile("checkstyle.xml")
                 checkstyleVersion("${versions.checkstyle}")
+            }
+            codeAnalysis {
+                pmdVersion("${versions.pmd}")
             }
         }
         application {

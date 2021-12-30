@@ -19,6 +19,7 @@ object Catalog {
         const val junit = "5.8.2"
         const val jacoco = "0.8.7"
         const val checkstyle = "9.2.1"
+        const val pmd = "6.41.0"
     }
 
     object Plugins {

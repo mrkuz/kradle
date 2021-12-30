@@ -18,6 +18,7 @@ class KtlintBlueprint(project: Project) : Blueprint(project) {
         val properties = project.propertiesRegistry.get<KotlinLintProperties>()
         project.configure<KtlintExtension> {
             enableExperimentalRules.set(true)
+            // TODO: Make configurable
             disabledRules.set(setOf("no-wildcard-imports"))
             version.set(properties.ktlintVersion.get())
         }

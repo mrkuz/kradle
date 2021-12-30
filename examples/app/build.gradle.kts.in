@@ -40,6 +40,9 @@ kradle {
                 // checkstyleConfigFile("checkstyle.xml")
                 // checkstyleVersion("${versions.checkstyle}")
             }
+            codeAnalysis {
+                // pmdVersion("${versions.pmd}")
+            }
         }
 
         dependencyUpdates.enable()
