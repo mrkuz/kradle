@@ -5,9 +5,10 @@ import net.bnb1.kradle.createHelperTask
 import net.bnb1.kradle.createTask
 import net.bnb1.kradle.features.Blueprint
 import net.bnb1.kradle.propertiesRegistry
-import net.bnb1.kradle.sourceSets
 import net.bnb1.kradle.tasks.GenerateDetektConfigTask
 import org.gradle.api.Project
+import org.gradle.api.Task
+import org.jetbrains.kotlin.gradle.dsl.KotlinProjectExtension
 
 private const val CONFIGURATION_NAME = "kradleDetekt"
 
@@ -28,8 +29,12 @@ class DetektBlueprint(project: Project) : Blueprint(project) {
             dependencies.addLater(dependencyProvider)
         }
 
-        project.sourceSets.forEach { sourceSet ->
-            val sourceFiles = sourceSet.allSource.files
+        val detektTask = project.createHelperTask<Task>("detekt", "Runs detekt")
+        project.tasks.getByName(CodeAnalysisFeature.MAIN_TASK).dependsOn(detektTask)
+
+        val kotlinExtension = project.extensions.getByType(KotlinProjectExtension::class.java)
+        kotlinExtension.sourceSets.forEach { sourceSet ->
+            val sourceFiles = sourceSet.kotlin.files
                 .filter { it.extension.toLowerCase() == "kt" }
                 .toSet()
 
@@ -53,7 +58,7 @@ class DetektBlueprint(project: Project) : Blueprint(project) {
                 }
             }
 
-            project.tasks.getByName(CodeAnalysisFeature.MAIN_TASK).dependsOn(taskName)
+            detektTask.dependsOn(taskName)
         }
     }
 }

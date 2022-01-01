@@ -3,8 +3,9 @@ package net.bnb1.kradle.features.jvm
 import net.bnb1.kradle.createHelperTask
 import net.bnb1.kradle.features.Blueprint
 import net.bnb1.kradle.propertiesRegistry
-import net.bnb1.kradle.sourceSets
 import org.gradle.api.Project
+import org.gradle.api.Task
+import org.gradle.api.plugins.JavaPluginExtension
 import org.gradle.api.plugins.quality.Pmd
 import org.gradle.api.plugins.quality.TargetJdk
 
@@ -22,17 +23,17 @@ class PmdBlueprint(project: Project) : Blueprint(project) {
             dependencies.addLater(dependencyProvider)
         }
 
-        project.sourceSets.forEach { sourceSet ->
-            val sourceFiles = sourceSet.allSource.files
-                .filter { it.extension.toLowerCase() == "java" }
-                .toSet()
+        val pmdTask = project.createHelperTask<Task>("pmd", "Runs PMD")
+        project.tasks.getByName(CodeAnalysisFeature.MAIN_TASK).dependsOn(pmdTask)
 
+        val javaExtension = project.extensions.getByType(JavaPluginExtension::class.java)
+        javaExtension.sourceSets.forEach { sourceSet ->
             val taskName = "pmd" + sourceSet.name[0].toUpperCase() + sourceSet.name.substring(1)
 
             project.createHelperTask<Pmd>(taskName, "Runs PMD on '${sourceSet.name}'") {
-                setSource(sourceFiles)
+                setSource(sourceSet.java.files)
                 pmdClasspath = project.configurations.getAt(CONFIGURATION_NAME)
-                classpath = sourceSet.compileClasspath
+                classpath = project.objects.fileCollection().from(sourceSet.java.classesDirectory)
                 reports {
                     html.required.set(true)
                     xml.required.set(false)
@@ -58,7 +59,7 @@ class PmdBlueprint(project: Project) : Blueprint(project) {
                     it.outputLocation.set(project.buildDir.resolve("reports/pmd/${sourceSet.name}.${it.name}"))
                 }
             }
-            project.tasks.getByName(CodeAnalysisFeature.MAIN_TASK).dependsOn(taskName)
+            pmdTask.dependsOn(taskName)
         }
     }
 }

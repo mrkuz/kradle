@@ -4,9 +4,10 @@ import net.bnb1.kradle.createHelperTask
 import net.bnb1.kradle.createTask
 import net.bnb1.kradle.features.Blueprint
 import net.bnb1.kradle.propertiesRegistry
-import net.bnb1.kradle.sourceSets
 import net.bnb1.kradle.tasks.GenerateCheckstyleConfigTask
 import org.gradle.api.Project
+import org.gradle.api.Task
+import org.gradle.api.plugins.JavaPluginExtension
 import org.gradle.api.plugins.quality.Checkstyle
 
 private const val CONFIGURATION_NAME = "kradleCheckstyle"
@@ -28,18 +29,18 @@ class CheckstyleBlueprint(project: Project) : Blueprint(project) {
             dependencies.addLater(dependencyProvider)
         }
 
-        project.sourceSets.forEach { sourceSet ->
-            val sourceFiles = sourceSet.allSource.files
-                .filter { it.extension.toLowerCase() == "java" }
-                .toSet()
+        val checkstyleTask = project.createHelperTask<Task>("checkstyle", "Runs checkstyle")
+        project.tasks.getByName(LintFeature.MAIN_TASK).dependsOn(checkstyleTask)
 
+        val javaExtension = project.extensions.getByType(JavaPluginExtension::class.java)
+        javaExtension.sourceSets.forEach { sourceSet ->
             val taskName = "checkstyle" + sourceSet.name[0].toUpperCase() + sourceSet.name.substring(1)
 
             project.createHelperTask<Checkstyle>(taskName, "Runs checkstyle on '${sourceSet.name}'") {
-                setSource(sourceFiles)
+                setSource(sourceSet.java.files)
                 checkstyleClasspath = project.configurations.getAt(CONFIGURATION_NAME)
-                classpath = sourceSet.compileClasspath
-                configDirectory.set(project.rootDir)
+                classpath = project.objects.fileCollection().from(sourceSet.java.classesDirectory)
+                configDirectory.set(project.rootDir.resolve("config"))
                 setConfigFile(configFile)
                 maxErrors = 0
                 maxWarnings = 0
@@ -54,7 +55,7 @@ class CheckstyleBlueprint(project: Project) : Blueprint(project) {
                     dependsOn("generateCheckstyleConfig")
                 }
             }
-            project.tasks.getByName(LintFeature.MAIN_TASK).dependsOn(taskName)
+            checkstyleTask.dependsOn(taskName)
         }
     }
 }

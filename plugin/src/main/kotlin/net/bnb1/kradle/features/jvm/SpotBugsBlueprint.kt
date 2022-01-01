@@ -20,11 +20,10 @@ class SpotBugsBlueprint(project: Project) : Blueprint(project) {
     }
 
     override fun createTasks() {
-        val javaExtension = project.extensions.getByType(JavaPluginExtension::class.java)
-
         val spotbugsTask = project.createHelperTask<Task>("spotbugs", "Runs SpotBugs")
         project.tasks.getByName(CodeAnalysisFeature.MAIN_TASK).dependsOn(spotbugsTask)
 
+        val javaExtension = project.extensions.getByType(JavaPluginExtension::class.java)
         javaExtension.sourceSets
             .filter { it.java.files.isNotEmpty() }
             .forEach { sourceSet ->
