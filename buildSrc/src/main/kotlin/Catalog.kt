@@ -3,7 +3,7 @@ object Catalog {
     private object BuildVersions {
         const val kotlin = "1.5.31"
         const val kotest = "4.6.3"
-        const val mockk = "1.12.1"
+        const val mockk = "1.12.2"
     }
 
     object Versions {
@@ -22,7 +22,7 @@ object Catalog {
 
     object Plugins {
         val kotlinJvm = Plugin("org.jetbrains.kotlin.jvm", BuildVersions.kotlin)
-        val gradlePublish = Plugin("com.gradle.plugin-publish", "0.18.0")
+        val gradlePublish = Plugin("com.gradle.plugin-publish", "0.19.0")
         val testLogger = Plugin("com.adarshr.test-logger", "3.1.0")
     }
 
@@ -40,13 +40,13 @@ object Catalog {
             const val dokka = "org.jetbrains.dokka:dokka-gradle-plugin:1.5.31"
             const val allOpen = "org.jetbrains.kotlin:kotlin-allopen:${BuildVersions.kotlin}"
             const val kotlinSerialization = "org.jetbrains.kotlin:kotlin-serialization:${BuildVersions.kotlin}"
-            const val kotlinBenchmark = "org.jetbrains.kotlinx:kotlinx-benchmark-plugin:0.4.0"
+            const val kotlinBenchmark = "org.jetbrains.kotlinx:kotlinx-benchmark-plugin:0.4.1"
             const val testLogger = "com.adarshr:gradle-test-logger-plugin:3.1.0"
             const val shadow = "gradle.plugin.com.github.jengelman.gradle.plugins:shadow:7.0.0"
             const val jib = "gradle.plugin.com.google.cloud.tools:jib-gradle-plugin:3.1.4"
-            const val versions = "com.github.ben-manes:gradle-versions-plugin:0.39.0"
+            const val versions = "com.github.ben-manes:gradle-versions-plugin:0.40.0"
             const val detekt = "io.gitlab.arturbosch.detekt:detekt-gradle-plugin:1.19.0"
-            const val ktlint = "org.jlleitschuh.gradle:ktlint-gradle:10.2.0"
+            const val ktlint = "org.jlleitschuh.gradle:ktlint-gradle:10.2.1"
             const val owaspDependencyCheck = "org.owasp:dependency-check-gradle:6.5.1"
         }
 
@@ -70,8 +70,8 @@ object Catalog {
             "org.apache.httpcomponents:httpclient:4.5.13",
             "org.jdom:jdom2:2.0.6.1",
             "com.google.guava:guava:30.0-jre",
-            "org.apache.logging.log4j:log4j-api:2.17.0",
-            "org.apache.logging.log4j:log4j-core:2.17.0",
+            "org.apache.logging.log4j:log4j-api:2.17.1",
+            "org.apache.logging.log4j:log4j-core:2.17.1",
             "org.apache.maven:maven-model:3.0.5",
             "com.thoughtworks.xstream:xstream:1.4.18"
         )
