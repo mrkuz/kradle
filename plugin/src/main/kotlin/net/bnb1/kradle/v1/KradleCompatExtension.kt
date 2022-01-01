@@ -1,6 +1,6 @@
 package net.bnb1.kradle.v1
 
-import Catalog
+import net.bnb1.kradle.Catalog
 import net.bnb1.kradle.empty
 import net.bnb1.kradle.property
 import org.gradle.api.model.ObjectFactory
