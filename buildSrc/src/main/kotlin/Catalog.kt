@@ -66,7 +66,7 @@ object Catalog {
         val ids = setOf(
             "org.apache.ant:ant:1.10.12",
             "org.apache.ant:ant-launcher:1.10.12",
-            "com.h2database:h2:2.0.204",
+            // "com.h2database:h2:2.0.204" // Keep old version, the new one breaks OWASP dependency-check-gradle plugin
             "org.apache.httpcomponents:httpclient:4.5.13",
             "org.jdom:jdom2:2.0.6.1",
             "com.google.guava:guava:30.0-jre",
