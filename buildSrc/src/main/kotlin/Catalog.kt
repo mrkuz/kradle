@@ -75,7 +75,12 @@ object Catalog {
             "org.apache.logging.log4j:log4j-api:2.17.1",
             "org.apache.logging.log4j:log4j-core:2.17.1",
             "org.apache.maven:maven-model:3.0.5",
-            "com.thoughtworks.xstream:xstream:1.4.18"
+            "com.thoughtworks.xstream:xstream:1.4.18",
+            "org.jetbrains.kotlin:kotlin-stdlib:${BuildVersions.kotlin}!!",
+            "org.jetbrains.kotlin:kotlin-stdlib-common:${BuildVersions.kotlin}!!",
+            "org.jetbrains.kotlin:kotlin-stdlib-jdk7:${BuildVersions.kotlin}!!",
+            "org.jetbrains.kotlin:kotlin-stdlib-jdk8:${BuildVersions.kotlin}!!",
+            "org.jetbrains.kotlin:kotlin-reflect:${BuildVersions.kotlin}!!"
         )
     }
 
