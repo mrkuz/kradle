@@ -2,14 +2,21 @@ package net.bnb1.kradle.tasks
 
 import net.bnb1.kradle.empty
 import org.gradle.api.tasks.Input
+import org.gradle.api.tasks.TaskAction
 import java.nio.file.Path
 
-open class BootstrapAppTask : BootstrapBaseTask() {
+open class BootstrapKotlinAppTask : BootstrapBaseTask() {
 
     @Input
     val mainClass = project.objects.empty<String>()
 
-    override fun stageTwo() {
+    @TaskAction
+    fun run() {
+        initializeGit()
+        createDirectories("kotlin")
+        createFiles()
+        copyTextResource("detekt-config.yml")
+
         val packageName = mainClass.get().replace(Regex(".[^.]+$"), "")
         val path = Path.of(mainClass.get().replace(".", "/"))
         val mainClassName = path.last().toString().replace(Regex("Kt$"), "")
