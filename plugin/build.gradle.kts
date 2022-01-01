@@ -10,8 +10,7 @@ plugins {
     `maven-publish`
     id(Catalog.Plugins.gradlePublish.id) version Catalog.Plugins.gradlePublish.version
     id(Catalog.Plugins.kotlinJvm.id) version Catalog.Plugins.kotlinJvm.version
-    id(Catalog.Plugins.testLogger.id) version Catalog.Plugins.testLogger.version
-    // id("net.bitsandbobs.kradle") version "main-SNAPSHOT"
+    id("net.bitsandbobs.kradle") version "2.0.0"
 }
 
 group = "net.bitsandbobs.kradle"
@@ -62,7 +61,6 @@ dependencies {
     }
 }
 
-/*
 kradle {
     jvm {
         targetJvm("1.8")
@@ -73,18 +71,31 @@ kradle {
         codeAnalysis.enable()
         test {
             prettyPrint(true)
+            withIntegrationTests(true)
             withJunitJupiter()
             withJacoco()
         }
     }
 }
-*/
 
-tasks.register<Copy>("copyCatalog") {
-    val outputFile = project.buildDir.resolve("generatedSources/main/kotlin/Catalog.kt")
-    outputs.files(outputFile)
-    from(project.rootDir.resolve("buildSrc/src/main/kotlin/Catalog.kt"))
-    into(outputFile.parentFile)
+tasks.register("copyCatalog").configure {
+    val generatedSources = project.buildDir.resolve("generatedSources/main/kotlin")
+    outputs.dir(generatedSources)
+
+    doFirst {
+        val inputFile = project.rootDir.resolve("buildSrc/src/main/kotlin/Catalog.kt")
+        val outputFile = generatedSources.resolve("net/bnb1/kradle/Catalog.kt")
+
+        outputFile.parentFile.mkdirs()
+        outputFile.writeText(
+            """
+            package net.bnb1.kradle
+            
+            
+            """.trimIndent()
+        )
+        outputFile.appendText(inputFile.readText())
+    }
 }
 
 sourceSets {
@@ -93,22 +104,16 @@ sourceSets {
     }
 }
 
-java {
-    sourceCompatibility = JavaVersion.VERSION_1_8
-    targetCompatibility = JavaVersion.VERSION_1_8
-}
-
 tasks.withType<KotlinCompile> {
     dependsOn("copyCatalog")
-    kotlinOptions {
-        jvmTarget = "1.8"
-        freeCompilerArgs = listOf("-Xopt-in=kotlin.RequiresOptIn")
-    }
 }
 
-tasks.withType<Test> {
-    useJUnitPlatform()
-    testLogging.showStandardStreams = true
+tasks.withType<Jar> {
+    dependsOn("copyCatalog")
+}
+
+tasks.named("runKtlintCheckOverMainSourceSet") {
+    dependsOn("copyCatalog")
 }
 
 tasks.register<Copy>("buildAgent") {
