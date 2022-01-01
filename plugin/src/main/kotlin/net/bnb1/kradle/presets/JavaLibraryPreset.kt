@@ -15,7 +15,14 @@ class JavaLibraryPreset(project: Project) : Preset(project) {
             }
 
             jvm.configureOnly {
-                java.enable()
+                java {
+                    codeAnalysis {
+                        spotBugs {
+                            useFbContrib()
+                            useFindSecBugs()
+                        }
+                    }
+                }
                 library.enable()
                 dependencyUpdates.enable()
                 vulnerabilityScan.enable()

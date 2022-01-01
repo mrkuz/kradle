@@ -15,7 +15,14 @@ class JavaApplicationPreset(project: Project) : Preset(project) {
             }
 
             jvm.configureOnly {
-                java.enable()
+                java {
+                    codeAnalysis {
+                        spotBugs {
+                            useFbContrib()
+                            useFindSecBugs()
+                        }
+                    }
+                }
                 dependencyUpdates.enable()
                 vulnerabilityScan.enable()
                 lint.enable()

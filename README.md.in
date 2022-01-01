@@ -76,6 +76,8 @@ With `kradle` applied, many new [tasks](#tasks) become available.
 
 The example above uses the Kotlin/JVM application [preset](#presets).
 
+For full configuration reference see [Appendix A](#appendix-a-configuration-reference).
+
 ## Tasks
 
 | Task | Description | Alias for | Plugins used |
@@ -84,7 +86,7 @@ The example above uses the Kotlin/JVM application [preset](#presets).
 | [showDependencyUpdates](#dependency-updates) | Displays dependency updates | - | [Gradle Versions Plugin](https://plugins.gradle.org/plugin/com.github.ben-manes.versions) |
 | [lint](#linting) | Runs [ktlint](https://ktlint.github.io/) (Kotlin) and [checkstyle](https://checkstyle.sourceforge.io/) (Java) | - | [ktlint Plugin](https://plugins.gradle.org/plugin/org.jlleitschuh.gradle.ktlint), [Checkstyle Plugin](https://docs.gradle.org/current/userguide/checkstyle_plugin.html) |
 | [generateCheckstyleConfig](#code-analysis) | Generates _checkstyle.xml_ | - | - |
-| [analyzeCode](#code-analysis) | Runs [detekt](https://detekt.github.io/detekt/) (Java) and [PMD](https://pmd.github.io/) (Java) code analysis | - | [detekt Plugin](https://plugins.gradle.org/plugin/io.gitlab.arturbosch.detekt), [PMD Plugin](https://docs.gradle.org/current/userguide/pmd_plugin.html) |
+| [analyzeCode](#code-analysis) | Runs [detekt](https://detekt.github.io/detekt/) (Kotlin), [PMD](https://pmd.github.io/) (Java) and [SpotBugs](https://spotbugs.github.io/) (Java) code analysis | - | [detekt Plugin](https://plugins.gradle.org/plugin/io.gitlab.arturbosch.detekt), [PMD Plugin](https://docs.gradle.org/current/userguide/pmd_plugin.html), [SpotBugs Plugin](https://plugins.gradle.org/plugin/com.github.spotbugs) |
 | [generateDetektConfig](#code-analysis) | Generates _detekt-config.yml_ | - | - |
 | [analyzeDependencies](#vulnerability-scans) | Analyzes dependencies for vulnerabilities | - | [OWASP Dependency Check Plugin](https://plugins.gradle.org/plugin/org.owasp.dependencycheck) |
 | [dev](#development-mode) | Runs the application and stops it when sources change (use with `-t`, applications only) | - | - |
@@ -291,6 +293,11 @@ kradle {
             }
             codeAnalysis {
                 pmdVersion("${versions.pmd}")
+                spotBugs {
+                    version("${versions.spotbugs}")
+                    useFbContrib(/* ${versions.fbContrib} */)
+                    useFindSecBugs(/* ${versions.findSecBugs} */)
+                }
             }
         }
     }
@@ -300,6 +307,9 @@ kradle {
 - `checkstyleVersion`: [checkstyle](https://checkstyle.sourceforge.io/) version used for [linting](#linting) (if enabled)
 - `checkstyleConfigFile`: [checkstyle](https://checkstyle.sourceforge.io/) configuration file used
 - `pmdVersion`: [PMD](https://pmd.github.io/) version used for [code analysis](#code-analysis) (if enabled)
+- `spotBugs.version`: [SpotBugs](https://spotbugs.github.io/) used for [code analysis](#code-analysis) (if enabled)
+- `spotBugs.useFbContrib`: Use [fb-contrib](http://fb-contrib.sourceforge.net/) plugin
+- `spotBugs.useFbContrib`: Use [Find Security Bugs](https://find-sec-bugs.github.io/) plugin
 
 ### Application development
 
@@ -409,11 +419,13 @@ Adds the task `analyzeCode`, which runs:
 
 - [PMD](https://pmd.github.io/) code analysis for Java
 
+- [SpotBugs](https://spotbugs.github.io/) code analysis for Java
+
 Adds the tasks `generateDetektConfig`, which generates a configuration file with sane defaults.
 
 `analyzeCode` is executed when running `check`.
 
-Plugins used: [detekt Plugin](https://plugins.gradle.org/plugin/io.gitlab.arturbosch.detekt), , [PMD Plugin](https://docs.gradle.org/current/userguide/pmd_plugin.html)
+Plugins used: [detekt Plugin](https://plugins.gradle.org/plugin/io.gitlab.arturbosch.detekt), [PMD Plugin](https://docs.gradle.org/current/userguide/pmd_plugin.html), [SpotBugs Plugin](https://plugins.gradle.org/plugin/com.github.spotbugs)
 
 ### Development mode
 
@@ -753,7 +765,14 @@ kradle {
     }
 
     jvm {
-        java.enable()
+        java {
+            codeAnalysis {
+                spotBugs {
+                    useFbContrib()
+                    useFindSecBugs()
+                }
+            }
+        }
         application {
             mainClass("...")
         }
@@ -801,7 +820,14 @@ kradle {
     }
 
     jvm {
-        java.enable()
+        java {
+            codeAnalysis {
+                spotBugs {
+                    useFbContrib()
+                    useFindSecBugs()
+                }
+            }
+        }
         library.enable()
         dependencyUpdates.enable()
         vulnerabilityScan.enable()
@@ -860,6 +886,11 @@ kradle {
             }
             codeAnalysis {
                 pmdVersion("${versions.pmd}")
+                spotBugs {
+                    version("${versions.spotbugs}")
+                    useFbContrib(/* ${versions.fbContrib} */)
+                    useFindSecBugs(/* ${versions.findSecBugs} */)
+                }
             }
         }
         application {

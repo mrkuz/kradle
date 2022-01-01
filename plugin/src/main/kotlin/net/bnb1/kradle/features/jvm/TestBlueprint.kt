@@ -1,8 +1,13 @@
 package net.bnb1.kradle.features.jvm
 
 import com.adarshr.gradle.testlogger.TestLoggerPlugin
-import net.bnb1.kradle.*
+import net.bnb1.kradle.apply
+import net.bnb1.kradle.createTask
 import net.bnb1.kradle.features.Blueprint
+import net.bnb1.kradle.propertiesRegistry
+import net.bnb1.kradle.sourceSets
+import net.bnb1.kradle.testImplementation
+import net.bnb1.kradle.testRuntimeOnly
 import org.gradle.api.Project
 import org.gradle.api.tasks.SourceSet
 import org.gradle.api.tasks.testing.Test

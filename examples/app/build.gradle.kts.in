@@ -42,6 +42,11 @@ kradle {
             }
             codeAnalysis {
                 // pmdVersion("${versions.pmd}")
+                spotBugs {
+                    // version("${versions.spotbugs}")
+                    useFbContrib(/* ${versions.fbContrib} */)
+                    useFindSecBugs(/* ${versions.findSecBugs} */)
+                }
             }
         }
 
