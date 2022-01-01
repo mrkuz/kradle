@@ -32,7 +32,7 @@ kradle {
             }
             test {
                 useKotest(/* "5.0.3" */)
-                useMockk(/* "1.12.1" */)
+                useMockk(/* "1.12.2" */)
             }
         }
 

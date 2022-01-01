@@ -1,6 +1,6 @@
 package net.bnb1.kradle.features.jvm
 
-import Catalog
+import net.bnb1.kradle.Catalog
 import net.bnb1.kradle.features.EmptyProperties
 import net.bnb1.kradle.features.FeatureDsl
 import net.bnb1.kradle.features.Properties

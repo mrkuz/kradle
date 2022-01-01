@@ -78,11 +78,24 @@ kradle {
     }
 }
 
-tasks.register<Copy>("copyCatalog") {
-    val output = project.buildDir.resolve("generatedSources/main/kotlin")
-    outputs.dir(output)
-    from(project.rootDir.resolve("buildSrc/src/main/kotlin/Catalog.kt"))
-    into(output)
+tasks.register("copyCatalog").configure {
+    val generatedSources = project.buildDir.resolve("generatedSources/main/kotlin")
+    outputs.dir(generatedSources)
+
+    doFirst {
+        val inputFile = project.rootDir.resolve("buildSrc/src/main/kotlin/Catalog.kt")
+        val outputFile = generatedSources.resolve("net/bnb1/kradle/Catalog.kt")
+
+        outputFile.parentFile.mkdirs()
+        outputFile.writeText(
+            """
+            package net.bnb1.kradle
+            
+            
+            """.trimIndent()
+        )
+        outputFile.appendText(inputFile.readText())
+    }
 }
 
 sourceSets {
