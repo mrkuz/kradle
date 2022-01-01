@@ -759,6 +759,8 @@ kradle {
 
 ### Version ${kradleVersion} (${new Date().format("yyyy-MM-dd")})
 
+- `kradle` now works in combination with [Gradle toolchains](https://docs.gradle.org/current/userguide/toolchains.html)
+
 ### Version 2.0.0 (2021-12-29)
 
 - Fix `bootstrap` for multi-project builds
