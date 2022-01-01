@@ -50,7 +50,7 @@ _build.gradle.kts_
 ```kotlin
 plugins {
     id("org.jetbrains.kotlin.jvm") version "1.6.0"
-    id("net.bitsandbobs.kradle") version "2.0.0"
+    id("net.bitsandbobs.kradle") version "2.0.1"
 }
 
 group = "com.example"
@@ -251,7 +251,7 @@ kradle {
             }
             test {
                 useKotest(/* "5.0.3" */)
-                useMockk(/* "1.12.1" */)
+                useMockk(/* "1.12.2" */)
             }
         }
     }
@@ -639,7 +639,7 @@ kradle {
 
 ```kotlin
 kradle {
-    kotlinLibraryApplication.activate()
+    kotlinJvmLibrary.activate()
 }
 ```
 
@@ -710,7 +710,7 @@ kradle {
             }
             test {
                 useKotest(/* "5.0.3" */)
-                useMockk(/* "1.12.1" */)
+                useMockk(/* "1.12.2" */)
             }
         }
         application {
@@ -757,6 +757,11 @@ kradle {
 
 ## Changelog
 
+### Version 2.0.1 (2022-01-01)
+
+- `kradle` now works in combination with [Gradle toolchains](https://docs.gradle.org/current/userguide/toolchains.html)
+- Fix `analyzeDependencies`
+
 ### Version 2.0.0 (2021-12-29)
 
 - Fix `bootstrap` for multi-project builds
@@ -765,7 +770,8 @@ kradle {
 - Update plugins and dependencies
 - New plugin `net.bitsandbobs.kradle`, which combines the functionality of `kradle-app` and `kradle-lib`
 - New configuration DSL (see [Appendix A](#appendix-a-configuration-reference))
-- Deprecate `kradle-app` and `kradle-lib`, consider using `net.bitsandbobs.kradle` instead
+- Deprecate `kradle-app` and `kradle-lib`. They still work, but because of
+internal changes it is no longer possible to use [`disable`](https://github.com/mrkuz/kradle/tree/v1.2.0#blueprints). They won't receive any new features. Consider using `net.bitsandbobs.kradle` instead.
 
 ### Version 1.2.0 (2021-09-23)
 

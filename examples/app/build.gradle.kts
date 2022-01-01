@@ -1,6 +1,6 @@
 plugins {
     id("org.jetbrains.kotlin.jvm") version "1.6.0"
-    id("net.bitsandbobs.kradle") version "2.0.0"
+    id("net.bitsandbobs.kradle") version "2.0.1"
 }
 
 group = "com.example"
@@ -32,7 +32,7 @@ kradle {
             }
             test {
                 useKotest(/* "5.0.3" */)
-                useMockk(/* "1.12.1" */)
+                useMockk(/* "1.12.2" */)
             }
         }
 
