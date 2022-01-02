@@ -2,7 +2,7 @@
 
 Swiss army knife for Kotlin/JVM development.
 
-`kradle` is a plugin for Gradle, adding essential features for Kotlin/JVM development to your build.
+`kradle` is a Gradle plugin, which sets up your Kotlin/JVM (or Java) project in no time.
 
 With a few lines of configuration, you will be able to:
 
@@ -17,7 +17,7 @@ With a few lines of configuration, you will be able to:
 - [Create Docker images](#docker)
 - [Generate documentation](#documentation)
 
-`kradle` takes care of applying the required plugins and configuring them.
+Most of the functionality is provided by other well-known plugins. `kradle` just takes care of the setup and provides a unified configuration DSL.
 
 ## (Very) Quick Start
 
@@ -76,14 +76,17 @@ With `kradle` applied, many new [tasks](#tasks) become available.
 
 The example above uses the Kotlin/JVM application [preset](#presets).
 
+For full configuration reference see [Appendix A](#appendix-a-configuration-reference).
+
 ## Tasks
 
 | Task | Description | Alias for | Plugins used |
 |---|---|---|---|
 | [bootstrap](#bootstrapping) | Bootstraps app/lib project | - | - |
 | [showDependencyUpdates](#dependency-updates) | Displays dependency updates | - | [Gradle Versions Plugin](https://plugins.gradle.org/plugin/com.github.ben-manes.versions) |
-| [lint](#linting) | Runs [ktlint](https://ktlint.github.io/) | ktlintCheck | [ktlint Plugin](https://plugins.gradle.org/plugin/org.jlleitschuh.gradle.ktlint) |
-| [analyzeCode](#code-analysis) | Runs [detekt](https://detekt.github.io/detekt/) code analysis | - | [detekt Plugin](https://plugins.gradle.org/plugin/io.gitlab.arturbosch.detekt) |
+| [lint](#linting) | Runs [ktlint](https://ktlint.github.io/) (Kotlin) and [checkstyle](https://checkstyle.sourceforge.io/) (Java) | - | [ktlint Plugin](https://plugins.gradle.org/plugin/org.jlleitschuh.gradle.ktlint), [Checkstyle Plugin](https://docs.gradle.org/current/userguide/checkstyle_plugin.html) |
+| [generateCheckstyleConfig](#code-analysis) | Generates _checkstyle.xml_ | - | - |
+| [analyzeCode](#code-analysis) | Runs [detekt](https://detekt.github.io/detekt/) (Kotlin), [PMD](https://pmd.github.io/) (Java) and [SpotBugs](https://spotbugs.github.io/) (Java) code analysis | - | [detekt Plugin](https://plugins.gradle.org/plugin/io.gitlab.arturbosch.detekt), [PMD Plugin](https://docs.gradle.org/current/userguide/pmd_plugin.html), [SpotBugs Plugin](https://plugins.gradle.org/plugin/com.github.spotbugs) |
 | [generateDetektConfig](#code-analysis) | Generates _detekt-config.yml_ | - | - |
 | [analyzeDependencies](#vulnerability-scans) | Analyzes dependencies for vulnerabilities | - | [OWASP Dependency Check Plugin](https://plugins.gradle.org/plugin/org.owasp.dependencycheck) |
 | [dev](#development-mode) | Runs the application and stops it when sources change (use with `-t`, applications only) | - | - |
@@ -214,7 +217,7 @@ kradle {
 }
 ```
 
-- `targetJvm`: Sets `sourceCompatibility` and `targetCompatibility`
+- `targetJvm`: Sets target release (`"--release"`)
 
 ### Kotlin development
 
@@ -233,7 +236,8 @@ Enables [Opt-ins](https://kotlinlang.org/docs/opt-in-requirements.html).
 [JSR-305](https://jcp.org/en/jsr/detail?id=305) nullability mismatches are reported as error (`"-Xjsr305=strict"`).
 
 Plugins used: [kotlinx.serialization Plugin](https://plugins.gradle.org/plugin/org.jetbrains.kotlin.plugin.serialization)
-, [All-open Compiler Plugin](https://plugins.gradle.org/plugin/org.jetbrains.kotlin.plugin.allopen)
+, [All-open Compiler Plugin](https://plugins.gradle.org/plugin/org.jetbrains.kotlin.plugin.allopen),
+ [Java Plugin](https://docs.gradle.org/current/userguide/java_plugin.html)
 
 #### Options
 
@@ -264,6 +268,50 @@ kradle {
 - `detectConfigFile`: [detekt](https://detekt.github.io/detekt/) configuration file used
 - `useKoTest`: Adds [kotest](https://kotest.io/) test dependencies (if [test improvements](#test-improvements) are enabled)
 - `useMockk`: Adds [mockk](https://mockk.io/) test dependency (if [test improvements](#test-improvements) are enabled)
+
+### Java development
+
+```kotlin
+kradle {
+    jvm {
+        java.enable()
+    }
+}
+```
+
+Plugins used: [Java Plugin](https://docs.gradle.org/current/userguide/java_plugin.html)
+
+#### Options
+
+```kotlin
+kradle {
+    jvm {
+        java {
+            withPreviewFeatures(true)
+            lint {
+                checkstyleVersion("9.2.1")
+                checkstyleConfigFile("checkstyle.xml")
+            }
+            codeAnalysis {
+                pmdVersion("6.41.0")
+                spotBugs {
+                    version("4.5.2")
+                    useFbContrib(/* 7.4.7 */)
+                    useFindSecBugs(/* 1.11.0 */)
+                }
+            }
+        }
+    }
+}
+```
+
+- `withPreviewFeatures`: Enable preview features
+- `checkstyleVersion`: [checkstyle](https://checkstyle.sourceforge.io/) version used for [linting](#linting) (if enabled)
+- `checkstyleConfigFile`: [checkstyle](https://checkstyle.sourceforge.io/) configuration file used
+- `pmdVersion`: [PMD](https://pmd.github.io/) version used for [code analysis](#code-analysis) (if enabled)
+- `spotBugs.version`: [SpotBugs](https://spotbugs.github.io/) versionused for [code analysis](#code-analysis) (if enabled)
+- `spotBugs.useFbContrib`: Use [fb-contrib](http://fb-contrib.sourceforge.net/) plugin
+- `spotBugs.useFbContrib`: Use [Find Security Bugs](https://find-sec-bugs.github.io/) plugin
 
 ### Application development
 
@@ -347,7 +395,11 @@ kradle {
 }
 ```
 
-Adds the task `lint`, which runs [ktlint](https://ktlint.github.io/) on the project. It uses the standard rule set (including experimental rules) with one exception: Wildcard imports are allowed.
+Adds the task `lint`, which runs:
+
+- [ktlint](https://ktlint.github.io/) on Kotlin source files. It uses the standard rule set (including experimental rules) with one exception: Wildcard imports are allowed.
+
+- [checkstyle](https://checkstyle.sourceforge.io/) on Java source files. Looks for the configuration file _checkstyle.xml_ in the project root. If not found, `kradle` generates one.
 
 `lint` is executed when running `check`.
 
@@ -363,13 +415,19 @@ kradle {
 }
 ```
 
-Adds the task `analyzeCode`, which runs [detekt](https://detekt.github.io/detekt/) static code analysis.
+Adds the task `analyzeCode`, which runs:
+
+- [detekt](https://detekt.github.io/detekt/) static code analysis for Kotlin
+
+- [PMD](https://pmd.github.io/) code analysis for Java
+
+- [SpotBugs](https://spotbugs.github.io/) code analysis for Java
 
 Adds the tasks `generateDetektConfig`, which generates a configuration file with sane defaults.
 
 `analyzeCode` is executed when running `check`.
 
-Plugins used: [detekt Plugin](https://plugins.gradle.org/plugin/io.gitlab.arturbosch.detekt)
+Plugins used: [detekt Plugin](https://plugins.gradle.org/plugin/io.gitlab.arturbosch.detekt), [PMD Plugin](https://docs.gradle.org/current/userguide/pmd_plugin.html), [SpotBugs Plugin](https://plugins.gradle.org/plugin/com.github.spotbugs)
 
 ### Development mode
 
@@ -683,6 +741,116 @@ kradle {
 }
 ```
 
+### Java application
+
+```kotlin
+kradle {
+    javaApplication {
+        jvm {
+            application {
+                mainClass("...")
+            }
+        }
+    }
+}
+```
+
+Same as:
+
+```kotlin
+kradle {
+    general {
+        bootstrap.enable()
+        git.enable()
+        projectProperties.enable()
+        buildProperties.enable()
+    }
+
+    jvm {
+        java {
+            codeAnalysis {
+                spotBugs {
+                    useFbContrib()
+                    useFindSecBugs()
+                }
+            }
+        }
+        application {
+            mainClass("...")
+        }
+        dependencyUpdates.enable()
+        vulnerabilityScan.enable()
+        lint.enable()
+        codeAnalysis.enable()
+        developmentMode.enable()
+
+        test {
+            prettyPrint(true)
+            withIntegrationTests(true)
+            withFunctionalTests(true)
+            withJunitJupiter()
+            withJacoco()
+        }
+
+        benchmark.enable()
+        packaging.enable()
+        docker {
+            withJvmKill()
+        }
+        documentation.enable()
+    }
+}
+```
+
+### Java library
+
+```kotlin
+kradle {
+    javaLibrary.activate()
+}
+```
+
+Same as:
+
+```kotlin
+kradle {
+    general {
+        bootstrap.enable()
+        git.enable()
+        projectProperties.enable()
+        buildProperties.enable()
+    }
+
+    jvm {
+        java {
+            codeAnalysis {
+                spotBugs {
+                    useFbContrib()
+                    useFindSecBugs()
+                }
+            }
+        }
+        library.enable()
+        dependencyUpdates.enable()
+        vulnerabilityScan.enable()
+        lint.enable()
+        codeAnalysis.enable()
+
+        test {
+            prettyPrint(true)
+            withIntegrationTests(true)
+            withFunctionalTests(true)
+            withJunitJupiter()
+            withJacoco()
+        }
+
+        benchmark.enable()
+        packaging.enable()
+        documentation.enable()
+    }
+}
+```
+
 ## Appendix A: Configuration reference
 
 This example configuration shows all available options.
@@ -711,6 +879,21 @@ kradle {
             test {
                 useKotest(/* "5.0.3" */)
                 useMockk(/* "1.12.2" */)
+            }
+        }
+        java {
+            withPreviewFeatures(true)
+            lint {
+                checkstyleConfigFile("checkstyle.xml")
+                checkstyleVersion("9.2.1")
+            }
+            codeAnalysis {
+                pmdVersion("6.41.0")
+                spotBugs {
+                    version("4.5.2")
+                    useFbContrib(/* 7.4.7 */)
+                    useFindSecBugs(/* 1.11.0 */)
+                }
             }
         }
         application {
@@ -757,7 +940,10 @@ kradle {
 
 ## Changelog
 
-### Version main-SNAPSHOT (2022-01-01)
+### Version main-SNAPSHOT (2022-01-02)
+
+- Support for Java development (linting, code analysis, bootstrapping, preview features)
+- Fix `dev` in combination with Gradle toolchains
 
 ### Version 2.0.1 (2022-01-01)
 

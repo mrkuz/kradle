@@ -2,7 +2,7 @@
 
 Swiss army knife for Kotlin/JVM development.
 
-`kradle` is a plugin for Gradle, adding essential features for Kotlin/JVM (and also Java) development to your build.
+`kradle` is a Gradle plugin, which sets up your Kotlin/JVM (or Java) project in no time.
 
 With a few lines of configuration, you will be able to:
 
@@ -17,7 +17,7 @@ With a few lines of configuration, you will be able to:
 - [Create Docker images](#docker)
 - [Generate documentation](#documentation)
 
-`kradle` takes care of applying the required plugins and configuring them.
+Most of the functionality is provided by other well-known plugins. `kradle` just takes care of the setup and provides a unified configuration DSL.
 
 ## (Very) Quick Start
 
@@ -217,7 +217,7 @@ kradle {
 }
 ```
 
-- `targetJvm`: Sets `sourceCompatibility` and `targetCompatibility`
+- `targetJvm`: Sets target release (`"--release"`)
 
 ### Kotlin development
 
@@ -309,7 +309,7 @@ kradle {
 - `checkstyleVersion`: [checkstyle](https://checkstyle.sourceforge.io/) version used for [linting](#linting) (if enabled)
 - `checkstyleConfigFile`: [checkstyle](https://checkstyle.sourceforge.io/) configuration file used
 - `pmdVersion`: [PMD](https://pmd.github.io/) version used for [code analysis](#code-analysis) (if enabled)
-- `spotBugs.version`: [SpotBugs](https://spotbugs.github.io/) used for [code analysis](#code-analysis) (if enabled)
+- `spotBugs.version`: [SpotBugs](https://spotbugs.github.io/) versionused for [code analysis](#code-analysis) (if enabled)
 - `spotBugs.useFbContrib`: Use [fb-contrib](http://fb-contrib.sourceforge.net/) plugin
 - `spotBugs.useFbContrib`: Use [Find Security Bugs](https://find-sec-bugs.github.io/) plugin
 
