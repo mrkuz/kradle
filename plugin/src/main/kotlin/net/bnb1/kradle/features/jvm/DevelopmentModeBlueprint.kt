@@ -20,6 +20,7 @@ class DevelopmentModeBlueprint(project: Project) : Blueprint(project) {
     }
 
     override fun createTasks() {
+        val javaProperties = project.propertiesRegistry.get<JavaProperties>()
         val mainSourceSet = project.sourceSets.getByName(SourceSet.MAIN_SOURCE_SET_NAME)
         val agentResource = javaClass.getResource("/agent.jar")
         project.createTask<JavaExec>(
@@ -37,6 +38,9 @@ class DevelopmentModeBlueprint(project: Project) : Blueprint(project) {
             environment("PROJECT_ROOT", project.rootDir)
             // Speed up start when developing
             jvmArgs = listOf("-XX:TieredStopAtLevel=1")
+            if (javaProperties.withPreviewFeatures.get()) {
+                jvmArgs = jvmArgs + "--enable-preview"
+            }
             classpath = mainSourceSet.runtimeClasspath
             jvmArgs = jvmArgs + listOf("-javaagent:${agentFile.absolutePath}")
         }

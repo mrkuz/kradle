@@ -200,3 +200,12 @@ publishing {
         }
     }
 }
+
+/*
+// For testing only
+java {
+    toolchain {
+        languageVersion.set(JavaLanguageVersion.of(15))
+    }
+}
+*/

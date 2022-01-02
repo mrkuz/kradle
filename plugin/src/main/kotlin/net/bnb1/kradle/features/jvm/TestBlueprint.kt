@@ -79,10 +79,15 @@ class TestBlueprint(project: Project) : Blueprint(project) {
     }
 
     override fun configure() {
-        val properties = project.propertiesRegistry.get<TestProperties>()
+        val testProperties = project.propertiesRegistry.get<TestProperties>()
+        val javaProperties = project.propertiesRegistry.get<JavaProperties>()
+
         project.tasks.withType<Test> {
-            if (properties.junitJupiterVersion.hasValue) {
+            if (testProperties.junitJupiterVersion.hasValue) {
                 useJUnitPlatform()
+            }
+            if (javaProperties.withPreviewFeatures.get()) {
+                jvmArgs = jvmArgs + "--enable-preview"
             }
             testLogging {
                 showStandardStreams = true

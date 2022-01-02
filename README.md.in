@@ -287,6 +287,7 @@ Plugins used: [Java Plugin](https://docs.gradle.org/current/userguide/java_plugi
 kradle {
     jvm {
         java {
+            withPreviewFeatures(true)
             lint {
                 checkstyleVersion("${versions.checkstyle}")
                 checkstyleConfigFile("checkstyle.xml")
@@ -304,6 +305,7 @@ kradle {
 }
 ```
 
+- `withPreviewFeatures`: Enable preview features
 - `checkstyleVersion`: [checkstyle](https://checkstyle.sourceforge.io/) version used for [linting](#linting) (if enabled)
 - `checkstyleConfigFile`: [checkstyle](https://checkstyle.sourceforge.io/) configuration file used
 - `pmdVersion`: [PMD](https://pmd.github.io/) version used for [code analysis](#code-analysis) (if enabled)
@@ -880,6 +882,7 @@ kradle {
             }
         }
         java {
+            withPreviewFeatures(true)
             lint {
                 checkstyleConfigFile("checkstyle.xml")
                 checkstyleVersion("${versions.checkstyle}")
@@ -939,7 +942,7 @@ kradle {
 
 ### Version ${kradleVersion} (${new Date().format("yyyy-MM-dd")})
 
-- Support for Java development
+- Support for Java development (linting, code analysis, bootstrapping, preview features)
 
 ### Version 2.0.1 (2022-01-01)
 

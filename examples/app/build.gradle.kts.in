@@ -36,6 +36,7 @@ kradle {
             }
         }
         java {
+            // withPreviewFeatures(true)
             lint {
                 // checkstyleConfigFile("checkstyle.xml")
                 // checkstyleVersion("${versions.checkstyle}")

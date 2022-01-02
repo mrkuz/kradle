@@ -4,8 +4,12 @@ import kotlinx.benchmark.gradle.BenchmarksExtension
 import kotlinx.benchmark.gradle.BenchmarksPlugin
 import kotlinx.benchmark.gradle.JavaBenchmarkTarget
 import kotlinx.benchmark.gradle.processJavaSourceSet
-import net.bnb1.kradle.*
+import net.bnb1.kradle.alias
+import net.bnb1.kradle.apply
+import net.bnb1.kradle.featureRegistry
 import net.bnb1.kradle.features.Blueprint
+import net.bnb1.kradle.propertiesRegistry
+import net.bnb1.kradle.sourceSets
 import org.gradle.api.Project
 import org.gradle.api.file.DuplicatesStrategy
 import org.gradle.api.tasks.SourceSet
@@ -19,6 +23,15 @@ import org.jetbrains.kotlin.gradle.plugin.KotlinSourceSet
 private const val SOURCE_SET_NAME = "benchmark"
 
 class BenchmarksBlueprint(project: Project) : Blueprint(project) {
+
+    override fun shouldActivate(): Boolean {
+        val javaProperties = project.propertiesRegistry.get<JavaProperties>()
+        if (javaProperties.withPreviewFeatures.get()) {
+            project.logger.warn("WARNING: Benchmarks are currently not working with preview features enabled")
+            return false
+        }
+        return true
+    }
 
     override fun applyPlugins() {
         project.apply(BenchmarksPlugin::class.java)
