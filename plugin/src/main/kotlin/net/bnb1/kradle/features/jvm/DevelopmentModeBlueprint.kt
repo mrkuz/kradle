@@ -7,8 +7,10 @@ import net.bnb1.kradle.propertiesRegistry
 import net.bnb1.kradle.sourceSets
 import org.gradle.api.GradleException
 import org.gradle.api.Project
+import org.gradle.api.plugins.JavaPluginExtension
 import org.gradle.api.tasks.JavaExec
 import org.gradle.api.tasks.SourceSet
+import org.gradle.jvm.toolchain.JavaToolchainService
 import org.gradle.kotlin.dsl.named
 
 class DevelopmentModeBlueprint(project: Project) : Blueprint(project) {
@@ -23,6 +25,11 @@ class DevelopmentModeBlueprint(project: Project) : Blueprint(project) {
         val javaProperties = project.propertiesRegistry.get<JavaProperties>()
         val mainSourceSet = project.sourceSets.getByName(SourceSet.MAIN_SOURCE_SET_NAME)
         val agentResource = javaClass.getResource("/agent.jar")
+
+        val javaExtension = project.extensions.getByType(JavaPluginExtension::class.java)
+        val toolchainService = project.extensions.getByType(JavaToolchainService::class.java)
+        val launcher = toolchainService.launcherFor(javaExtension.toolchain)
+
         project.createTask<JavaExec>(
             "dev",
             "Runs the application and stops it when sources change (use with -t)"
@@ -42,7 +49,9 @@ class DevelopmentModeBlueprint(project: Project) : Blueprint(project) {
                 jvmArgs = jvmArgs + "--enable-preview"
             }
             classpath = mainSourceSet.runtimeClasspath
-            jvmArgs = jvmArgs + listOf("-javaagent:${agentFile.absolutePath}")
+            jvmArgs = jvmArgs + "-javaagent:${agentFile.absolutePath}"
+
+            javaLauncher.set(launcher)
         }
     }
 

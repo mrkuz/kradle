@@ -943,6 +943,7 @@ kradle {
 ### Version ${kradleVersion} (${new Date().format("yyyy-MM-dd")})
 
 - Support for Java development (linting, code analysis, bootstrapping, preview features)
+- Fix `dev` in combination with Gradle toolchains
 
 ### Version 2.0.1 (2022-01-01)
 
