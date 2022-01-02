@@ -18,6 +18,11 @@ object Catalog {
         const val mockk = BuildVersions.mockk
         const val junit = "5.8.2"
         const val jacoco = "0.8.7"
+        const val checkstyle = "9.2.1"
+        const val pmd = "6.41.0"
+        const val spotbugs = "4.5.2"
+        const val findSecBugs = "1.11.0"
+        const val fbContrib = "7.4.7"
     }
 
     object Plugins {
@@ -48,6 +53,9 @@ object Catalog {
             const val detekt = "io.gitlab.arturbosch.detekt:detekt-gradle-plugin:1.19.0"
             const val ktlint = "org.jlleitschuh.gradle:ktlint-gradle:10.2.1"
             const val owaspDependencyCheck = "org.owasp:dependency-check-gradle:6.5.1"
+
+            // Java
+            const val spotbugs = "com.github.spotbugs.snom:spotbugs-gradle-plugin:5.0.3"
         }
 
         object Test {
@@ -73,7 +81,12 @@ object Catalog {
             "org.apache.logging.log4j:log4j-api:2.17.1",
             "org.apache.logging.log4j:log4j-core:2.17.1",
             "org.apache.maven:maven-model:3.0.5",
-            "com.thoughtworks.xstream:xstream:1.4.18"
+            "com.thoughtworks.xstream:xstream:1.4.18",
+            "org.jetbrains.kotlin:kotlin-stdlib:${BuildVersions.kotlin}!!",
+            "org.jetbrains.kotlin:kotlin-stdlib-common:${BuildVersions.kotlin}!!",
+            "org.jetbrains.kotlin:kotlin-stdlib-jdk7:${BuildVersions.kotlin}!!",
+            "org.jetbrains.kotlin:kotlin-stdlib-jdk8:${BuildVersions.kotlin}!!",
+            "org.jetbrains.kotlin:kotlin-reflect:${BuildVersions.kotlin}!!"
         )
     }
 

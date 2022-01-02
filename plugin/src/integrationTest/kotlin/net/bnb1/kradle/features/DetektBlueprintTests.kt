@@ -12,9 +12,9 @@ class DetektBlueprintTests : PluginSpec({
         bootstrapCompatAppProject()
         writeAppKt("println(\"Hello World\")")
 
-        runTask("analyzeCode")
+        runTask("detektMain")
 
-        buildDir.resolve("reports/detekt/detekt.html").shouldExist()
+        buildDir.resolve("reports/detekt/main.html").shouldExist()
     }
 
     test("Generate detekt-config.yml") {
@@ -32,7 +32,7 @@ class DetektBlueprintTests : PluginSpec({
 
         val result = runTask("check")
 
-        result.task(":analyzeCode")!!.outcome shouldBe TaskOutcome.SUCCESS
+        result.task(":detektMain")!!.outcome shouldBe TaskOutcome.SUCCESS
     }
 
     test("Check detekt dependencies") {

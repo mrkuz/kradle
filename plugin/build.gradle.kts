@@ -10,7 +10,7 @@ plugins {
     `maven-publish`
     id(Catalog.Plugins.gradlePublish.id) version Catalog.Plugins.gradlePublish.version
     id(Catalog.Plugins.kotlinJvm.id) version Catalog.Plugins.kotlinJvm.version
-    id("net.bitsandbobs.kradle") version "2.0.0"
+    id("net.bitsandbobs.kradle") version "2.0.1"
 }
 
 group = "net.bitsandbobs.kradle"
@@ -46,6 +46,8 @@ dependencies {
     implementation(Catalog.Dependencies.Plugins.detekt)
     implementation(Catalog.Dependencies.Plugins.ktlint)
     implementation(Catalog.Dependencies.Plugins.owaspDependencyCheck)
+
+    implementation(Catalog.Dependencies.Plugins.spotbugs)
 
     // Testing
     testImplementation(Catalog.Dependencies.Test.kotlinTest)
@@ -198,3 +200,12 @@ publishing {
         }
     }
 }
+
+/*
+// For testing only
+java {
+    toolchain {
+        languageVersion.set(JavaLanguageVersion.of(15))
+    }
+}
+*/

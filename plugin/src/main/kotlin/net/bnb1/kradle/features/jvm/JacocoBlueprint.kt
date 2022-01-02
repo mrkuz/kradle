@@ -1,7 +1,7 @@
 package net.bnb1.kradle.features.jvm
 
 import net.bnb1.kradle.apply
-import net.bnb1.kradle.create
+import net.bnb1.kradle.createHelperTask
 import net.bnb1.kradle.features.Blueprint
 import net.bnb1.kradle.propertiesRegistry
 import org.gradle.api.Project
@@ -34,7 +34,7 @@ class JacocoBlueprint(project: Project) : Blueprint(project) {
 
     private fun createTask(taskName: String, description: String) {
         val reportTaskName = "jacoco" + taskName.capitalize() + "Report"
-        project.create(reportTaskName, description, JacocoReport::class.java).apply {
+        project.createHelperTask<JacocoReport>(reportTaskName, description) {
             dependsOn(taskName)
             sourceSets(
                 project.extensions.getByType(SourceSetContainer::class.java).getByName(SourceSet.MAIN_SOURCE_SET_NAME)

@@ -4,7 +4,7 @@ import java.util.concurrent.TimeUnit
 
 fun String.execute(timeout: Int = 5): String {
     val process = ProcessBuilder()
-        .command(*split(" ").toTypedArray())
+        .command(split(" "))
         .redirectError(ProcessBuilder.Redirect.PIPE)
         .redirectOutput(ProcessBuilder.Redirect.PIPE)
         .start()

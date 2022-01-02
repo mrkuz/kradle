@@ -1,7 +1,7 @@
 package net.bnb1.kradle.features.jvm
 
 import net.bnb1.kradle.apply
-import net.bnb1.kradle.create
+import net.bnb1.kradle.createTask
 import net.bnb1.kradle.features.Blueprint
 import org.gradle.api.Project
 import org.owasp.dependencycheck.gradle.DependencyCheckPlugin
@@ -15,7 +15,7 @@ class OwaspDependencyCheckBlueprint(project: Project) : Blueprint(project) {
     }
 
     override fun createTasks() {
-        project.create<Analyze>("analyzeDependencies", "Analyzes dependencies for vulnerabilities") {
+        project.createTask<Analyze>("analyzeDependencies", "Analyzes dependencies for vulnerabilities") {
             config = DependencyCheckExtension(project).apply {
                 scanConfigurations.add("compileClasspath")
                 scanConfigurations.add("runtimeClasspath")

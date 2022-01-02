@@ -35,6 +35,21 @@ kradle {
                 useMockk(/* "${versions.mockk}" */)
             }
         }
+        java {
+            // withPreviewFeatures(true)
+            lint {
+                // checkstyleConfigFile("checkstyle.xml")
+                // checkstyleVersion("${versions.checkstyle}")
+            }
+            codeAnalysis {
+                // pmdVersion("${versions.pmd}")
+                spotBugs {
+                    // version("${versions.spotbugs}")
+                    useFbContrib(/* ${versions.fbContrib} */)
+                    useFindSecBugs(/* ${versions.findSecBugs} */)
+                }
+            }
+        }
 
         dependencyUpdates.enable()
         vulnerabilityScan.enable()

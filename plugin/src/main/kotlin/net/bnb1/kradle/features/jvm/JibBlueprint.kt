@@ -22,7 +22,7 @@ class JibBlueprint(project: Project) : Blueprint(project) {
     }
 
     override fun createTasks() {
-        project.create<BuildDockerTask>(TASK_NAME, "Builds Docker image")
+        project.createTask<BuildDockerTask>(TASK_NAME, "Builds Docker image")
     }
 
     override fun configure() {
