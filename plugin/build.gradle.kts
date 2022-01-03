@@ -80,6 +80,17 @@ kradle {
     }
 }
 
+// Add configuration with dynamically added dependencies, so 'showDependencies' can check for updates
+configurations {
+    create("dynamic") {
+        isVisible = false
+        isTransitive = false
+        Catalog.Dependencies.artifacts.forEach {
+            dependencies.add(project.dependencies.create("${it.group}:${it.name}:${it.version}"))
+        }
+    }
+}
+
 tasks.register("copyCatalog").configure {
     val generatedSources = project.buildDir.resolve("generatedSources/main/kotlin")
     outputs.dir(generatedSources)

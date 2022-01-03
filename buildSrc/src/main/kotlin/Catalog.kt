@@ -23,7 +23,13 @@ object Catalog {
 
         private val _artifacts = mutableSetOf<Artifact>()
         val artifacts
-            get() = _artifacts.toSet()
+            get(): Set<Artifact> {
+                // Make sure objects are initialized
+                Platform
+                Tools
+                Test
+                return _artifacts.toSet()
+            }
 
         object Platform {
             val kotlin = artifact("org.jetbrains.kotlin", "kotlin-bom", Versions.kotlin)
