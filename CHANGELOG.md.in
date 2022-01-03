@@ -6,6 +6,7 @@
 
 - Support for Java development (linting, code analysis, bootstrapping, preview features)
 - Fix `dev` in combination with Gradle toolchains
+- ktlint rules are configurable
 - Add alternative configuration syntax for ktlint and detekt
 
   Before
