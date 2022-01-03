@@ -8,8 +8,8 @@ plugins {
     `java-gradle-plugin`
     `kotlin-dsl`
     `maven-publish`
-    id(Catalog.BuildPlugins.gradlePublish.id) version Catalog.BuildPlugins.gradlePublish.version
-    id(Catalog.BuildPlugins.kotlinJvm.id) version Catalog.BuildPlugins.kotlinJvm.version
+    id(Catalog.Build.Plugins.gradlePublish.id) version Catalog.Build.Plugins.gradlePublish.version
+    id(Catalog.Build.Plugins.kotlinJvm.id) version Catalog.Build.Plugins.kotlinJvm.version
     id("net.bitsandbobs.kradle") version "2.0.1"
 }
 
@@ -18,7 +18,7 @@ version = "main-SNAPSHOT"
 
 buildscript {
     dependencies {
-        classpath(Catalog.BuildDependencies.jgit)
+        classpath(Catalog.Build.Dependencies.jgit)
     }
 }
 
@@ -28,35 +28,35 @@ repositories {
 }
 
 dependencies {
-    implementation(platform(Catalog.BuildDependencies.Platform.kotlin))
-    implementation(Catalog.BuildDependencies.kotlinStdlib)
-    implementation(Catalog.BuildDependencies.jgit)
+    implementation(platform(Catalog.Build.Dependencies.Platform.kotlin))
+    implementation(Catalog.Build.Dependencies.kotlinStdlib)
+    implementation(Catalog.Build.Dependencies.jgit)
 
     // Plugins
-    implementation(Catalog.BuildDependencies.Plugins.kotlin)
-    implementation(Catalog.BuildDependencies.Plugins.allOpen)
-    implementation(Catalog.BuildDependencies.Plugins.kotlinSerialization)
-    implementation(Catalog.BuildDependencies.Plugins.dokka)
-    implementation(Catalog.BuildDependencies.Plugins.kotlinBenchmark)
+    implementation(Catalog.Build.Dependencies.Plugins.kotlin)
+    implementation(Catalog.Build.Dependencies.Plugins.allOpen)
+    implementation(Catalog.Build.Dependencies.Plugins.kotlinSerialization)
+    implementation(Catalog.Build.Dependencies.Plugins.dokka)
+    implementation(Catalog.Build.Dependencies.Plugins.kotlinBenchmark)
 
-    implementation(Catalog.BuildDependencies.Plugins.testLogger)
-    implementation(Catalog.BuildDependencies.Plugins.shadow)
-    implementation(Catalog.BuildDependencies.Plugins.jib)
-    implementation(Catalog.BuildDependencies.Plugins.versions)
-    implementation(Catalog.BuildDependencies.Plugins.detekt)
-    implementation(Catalog.BuildDependencies.Plugins.ktlint)
-    implementation(Catalog.BuildDependencies.Plugins.owaspDependencyCheck)
+    implementation(Catalog.Build.Dependencies.Plugins.testLogger)
+    implementation(Catalog.Build.Dependencies.Plugins.shadow)
+    implementation(Catalog.Build.Dependencies.Plugins.jib)
+    implementation(Catalog.Build.Dependencies.Plugins.versions)
+    implementation(Catalog.Build.Dependencies.Plugins.detekt)
+    implementation(Catalog.Build.Dependencies.Plugins.ktlint)
+    implementation(Catalog.Build.Dependencies.Plugins.owaspDependencyCheck)
 
-    implementation(Catalog.BuildDependencies.Plugins.spotbugs)
+    implementation(Catalog.Build.Dependencies.Plugins.spotbugs)
 
     // Testing
-    testImplementation(Catalog.BuildDependencies.Test.kotlinTest)
-    testImplementation(Catalog.BuildDependencies.Test.mockk)
-    testImplementation(Catalog.BuildDependencies.Test.dockerJava)
-    Catalog.BuildDependencies.Test.kotestBundle.forEach { testImplementation(it) }
+    testImplementation(Catalog.Build.Dependencies.Test.kotlinTest)
+    testImplementation(Catalog.Build.Dependencies.Test.mockk)
+    testImplementation(Catalog.Build.Dependencies.Test.dockerJava)
+    Catalog.Build.Dependencies.Test.kotestBundle.forEach { testImplementation(it) }
 
     constraints {
-        Catalog.Constraints.ids.forEach {
+        Catalog.Build.Constraints.ids.forEach {
             api(it)
             implementation(it)
         }
