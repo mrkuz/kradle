@@ -17,6 +17,13 @@ class KotlinJvmApplicationPreset(project: Project) : Preset(project) {
             jvm.configureOnly {
                 kotlin {
                     useCoroutines()
+                    lint {
+                        ktlint {
+                            rules {
+                                disable("no-wildcard-imports")
+                            }
+                        }
+                    }
                     test {
                         useKotest()
                         useMockk()

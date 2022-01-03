@@ -67,7 +67,12 @@ class KradleCompat(private val project: Project, private val type: ProjectType) 
                 kotlin {
                     kotlinxCoroutinesVersion.bind(compatExtension.kotlinxCoroutinesVersion)
                     lint {
-                        ktlintVersion.bind(compatExtension.ktlintVersion)
+                        ktlint {
+                            version.bind(compatExtension.ktlintVersion)
+                            rules {
+                                disable("no-wildcard-imports")
+                            }
+                        }
                     }
                     codeAnalysis {
                         detektConfigFile.bind(compatExtension.detektConfigFile)

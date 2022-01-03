@@ -15,12 +15,11 @@ class KtlintBlueprint(project: Project) : Blueprint(project) {
     }
 
     override fun configure() {
-        val properties = project.propertiesRegistry.get<KotlinLintProperties>()
+        val properties = project.propertiesRegistry.get<KtlintProperties>()
         project.configure<KtlintExtension> {
             enableExperimentalRules.set(true)
-            // TODO: Make configurable
-            disabledRules.set(setOf("no-wildcard-imports"))
-            version.set(properties.ktlintVersion.get())
+            disabledRules.set(properties.rules.disabled)
+            version.set(properties.version.get())
         }
 
         project.tasks.getByName(LintFeature.MAIN_TASK).dependsOn("ktlintCheck")

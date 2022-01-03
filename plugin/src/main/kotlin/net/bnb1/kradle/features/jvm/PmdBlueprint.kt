@@ -44,17 +44,7 @@ class PmdBlueprint(project: Project) : Blueprint(project) {
                 rulesMinimumPriority.set(5)
                 incrementalAnalysis.set(true)
                 ruleSetFiles = project.rootProject.files()
-                // TODO: Make configurable
-                ruleSets = listOf(
-                    // "category/java/bestpractices.xml",
-                    // "category/java/codestyle.xml",
-                    // "category/java/design.xml",
-                    // "category/java/documentation.xml",
-                    "category/java/errorprone.xml",
-                    "category/java/multithreading.xml",
-                    "category/java/performance.xml",
-                    "category/java/security.xml"
-                )
+                ruleSets = properties.ruleSets.enabled.toList()
                 targetJdk = TargetJdk.VERSION_1_7
                 reports.forEach {
                     it.outputLocation.set(project.buildDir.resolve("reports/pmd/${sourceSet.name}.${it.name}"))

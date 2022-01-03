@@ -253,6 +253,9 @@ kradle {
             lint {
                 ktlint {
                     version("${versions.ktlint}")
+                    rules {
+                        disable(...)
+                    }
                 }
             }
             codeAnalysis {
@@ -272,6 +275,7 @@ kradle {
 
 - `useCoroutines`: Adds Kotlin coroutines dependency
 - `ktlint.version`: [ktlint](https://ktlint.github.io/) version used for [linting](#linting) (if enabled)
+- `ktlint.disable`: Disable [ktlint](https://ktlint.github.io/) rule. Can be called multiple times
 - `detekt.version`: [detekt](https://detekt.github.io/detekt/) version used for [static code analysis](#code-analysis) (if enabled)
 - `detekt.configFile`: [detekt](https://detekt.github.io/detekt/) configuration file used
 - `useKoTest`: Adds [kotest](https://kotest.io/) test dependencies (if [test improvements](#test-improvements) are enabled)
@@ -305,6 +309,16 @@ kradle {
             codeAnalysis {
                 pmd {
                     version("${versions.pmd}")
+                    ruleSets {
+                        bestPractices(false)
+                        codeStyle(false)
+                        design(false)
+                        documentation(false)
+                        errorProne(true)
+                        multithreading(true)
+                        performance(true)
+                        security(true)
+                    }
                 }
                 spotBugs {
                     version("${versions.spotbugs}")
@@ -321,7 +335,8 @@ kradle {
 - `checkstyle.version`: [checkstyle](https://checkstyle.sourceforge.io/) version used for [linting](#linting) (if enabled)
 - `checkstyle.configFile`: [checkstyle](https://checkstyle.sourceforge.io/) configuration file used
 - `pmd.version`: [PMD](https://pmd.github.io/) version used for [code analysis](#code-analysis) (if enabled)
-- `spotBugs.version`: [SpotBugs](https://spotbugs.github.io/) versionused for [code analysis](#code-analysis) (if enabled)
+- `pmd.ruleSets.*`: Enable/disable [PMD](https://pmd.github.io/) rule sets
+- `spotBugs.version`: [SpotBugs](https://spotbugs.github.io/) version used for [code analysis](#code-analysis) (if enabled)
 - `spotBugs.useFbContrib`: Use [fb-contrib](http://fb-contrib.sourceforge.net/) plugin
 - `spotBugs.useFbContrib`: Use [Find Security Bugs](https://find-sec-bugs.github.io/) plugin
 
@@ -409,7 +424,7 @@ kradle {
 
 Adds the task `lint`, which runs:
 
-- [ktlint](https://ktlint.github.io/) on Kotlin source files. It uses the standard rule set (including experimental rules) with one exception: Wildcard imports are allowed.
+- [ktlint](https://ktlint.github.io/) on Kotlin source files. It uses all standard and experimental rules per default.
 
 - [checkstyle](https://checkstyle.sourceforge.io/) on Java source files. Looks for the configuration file _checkstyle.xml_ in the project root. If not found, `kradle` generates one.
 
@@ -431,7 +446,7 @@ Adds the task `analyzeCode`, which runs:
 
 - [detekt](https://detekt.github.io/detekt/) static code analysis for Kotlin
 
-- [PMD](https://pmd.github.io/) code analysis for Java
+- [PMD](https://pmd.github.io/) code analysis for Java. Enabled rule sets: `errorprone`, `multithreading`, `performance` and `security`
 
 - [SpotBugs](https://spotbugs.github.io/) code analysis for Java
 
@@ -672,6 +687,13 @@ kradle {
     jvm {
         kotlin {
             useCoroutines()
+            lint {
+                ktlint {
+                    rules {
+                        disable("no-wildcard-imports")
+                    }
+                }
+            }
             test {
                 useKotest()
                 useMockk()
@@ -727,6 +749,13 @@ kradle {
     jvm {
         kotlin {
             useCoroutines()
+            lint {
+                ktlint {
+                    rules {
+                        disable("no-wildcard-imports")
+                    }
+                }
+            }
             test {
                 useKotest()
                 useMockk()
@@ -884,6 +913,9 @@ kradle {
             lint {
                 ktlint {
                     version("${versions.ktlint}")
+                    rules {
+                        disable("...")
+                    }
                 }
             }
             codeAnalysis {
@@ -908,6 +940,16 @@ kradle {
             codeAnalysis {
                 pmd {
                     version("${versions.pmd}")
+                    ruleSets {
+                        bestPractices(false)
+                        codeStyle(false)
+                        design(false)
+                        documentation(false)
+                        errorProne(true)
+                        multithreading(true)
+                        performance(true)
+                        security(true)
+                    }
                 }
                 spotBugs {
                     version("${versions.spotbugs}")

@@ -26,6 +26,9 @@ kradle {
             lint {
                 ktlint {
                     // version("${versions.ktlint}")
+                    rules {
+                        disable("no-wildcard-imports")
+                    }
                 }
             }
             codeAnalysis {
@@ -50,6 +53,16 @@ kradle {
             codeAnalysis {
                 pmd {
                     // version("${versions.pmd}")
+                    ruleSets {
+                        // bestPractices(false)
+                        // codeStyle(false)
+                        // design(false)
+                        // documentation(false)
+                        // errorProne(true)
+                        // multithreading(true)
+                        // performance(true)
+                        // security(true)
+                    }
                 }
                 spotBugs {
                     // version("${versions.spotbugs}")

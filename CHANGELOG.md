@@ -6,6 +6,7 @@
 
 - Support for Java development (linting, code analysis, bootstrapping, preview features)
 - Fix `dev` in combination with Gradle toolchains
+- ktlint rules are configurable
 - Add alternative configuration syntax for ktlint and detekt
 
   Before
@@ -61,7 +62,9 @@
 - Update plugins and dependencies
 - New plugin `net.bitsandbobs.kradle`, which combines the functionality of `kradle-app` and `kradle-lib`
 - New configuration DSL (see [Appendix A](README.md#appendix-a-configuration-reference))
-- Deprecate `kradle-app` and `kradle-lib`. They still work, but because of internal changes it is no longer possible to use [`disable`](https://github.com/mrkuz/kradle/tree/v1.2.0#blueprints). They won't receive any new features. Consider using `net.bitsandbobs.kradle` instead.
+- Deprecate `kradle-app` and `kradle-lib`. They still work, but because of internal changes it is no longer possible to
+  use [`disable`](https://github.com/mrkuz/kradle/tree/v1.2.0#blueprints). They won't receive any new features. Consider
+  using `net.bitsandbobs.kradle` instead.
 
 ### Version 1.2.0 (2021-09-23)
 
