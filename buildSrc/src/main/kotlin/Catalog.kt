@@ -1,11 +1,5 @@
 object Catalog {
 
-    private object BuildVersions {
-        const val kotlin = "1.5.31"
-        const val kotest = "4.6.3"
-        const val mockk = "1.12.2"
-    }
-
     object Versions {
         const val jvm = "17"
         const val kotlin = "1.6.0"
@@ -15,7 +9,7 @@ object Catalog {
         const val ktlint = "0.43.2"
         const val kotlinCoroutines = "1.6.0"
         const val kotest = "5.0.3"
-        const val mockk = BuildVersions.mockk
+        const val mockk = "1.12.2"
         const val junit = "5.8.2"
         const val jacoco = "0.8.7"
         const val checkstyle = "9.2.1"
@@ -25,13 +19,68 @@ object Catalog {
         const val fbContrib = "7.4.7"
     }
 
-    object Plugins {
+    object Dependencies {
+
+        private val artifacts = mutableListOf<Artifact>()
+
+        fun artifact(id: String, version: String): String {
+            val artifact = Artifact(id, version)
+            artifacts.add(artifact)
+            return artifact.id
+        }
+
+        object Platform {
+            val kotlin = artifact("org.jetbrains.kotlin:kotlin-bom", Versions.kotlin)
+        }
+
+        val kotlinCoroutines = artifact("org.jetbrains.kotlinx:kotlinx-coroutines-core", Versions.kotlinCoroutines)
+        val kotlinStdlib = artifact("org.jetbrains.kotlin:kotlin-stdlib-jdk8", Versions.kotlin)
+        val kotlinReflect = artifact("org.jetbrains.kotlin:kotlin-reflect", Versions.kotlin)
+
+        object Tools {
+            val kotlinxBenchmarkRuntime = artifact(
+                "org.jetbrains.kotlinx:kotlinx-benchmark-runtime",
+                BuildVersions.kotlinxBenchmarkPlugin
+            )
+            val detekt = artifact("io.gitlab.arturbosch.detekt:detekt-cli", Versions.detekt)
+            val checkstyle = artifact("com.puppycrawl.tools:checkstyle", Versions.checkstyle)
+            val pmd = artifact("net.sourceforge.pmd:pmd-java", Versions.pmd)
+            val findSecBugs = artifact("com.h3xstream.findsecbugs:findsecbugs-plugin", Versions.findSecBugs)
+            val fbContrib = artifact("com.mebigfatguy.fb-contrib:fb-contrib", Versions.fbContrib)
+
+            // Not directly referred, but still used in kradle
+            val jvmKill = artifact("org.cloudfoundry:jvmkill", Versions.jvmKill)
+            val jmh = artifact("org.openjdk.jmh:jmh-core", Versions.jmh)
+            val jacoco = artifact("org.jacoco:org.jacoco.core", Versions.jacoco)
+            val ktlint = artifact("com.pinterest:ktlint", Versions.ktlint)
+            val spotbugs = artifact("com.github.spotbugs:spotbugs", Versions.spotbugs)
+        }
+
+        object Test {
+            val junitApi = artifact("org.junit.jupiter:junit-jupiter-api", Versions.junit)
+            val junitEngine = artifact("org.junit.jupiter:junit-jupiter-engine", Versions.junit)
+            val kotlinTest = artifact("org.jetbrains.kotlin:kotlin-test", Versions.kotlin)
+            val kotestJunit4 = artifact("io.kotest:kotest-runner-junit4", Versions.kotest)
+            val kotestJunit5 = artifact("io.kotest:kotest-runner-junit5", Versions.kotest)
+            val kotestAssertions = artifact("io.kotest:kotest-assertions-core", Versions.kotest)
+            val mockk = artifact("io.mockk:mockk", Versions.mockk)
+        }
+    }
+
+    private object BuildVersions {
+        const val kotlin = "1.5.31"
+        const val kotest = "4.6.3"
+        const val mockk = "1.12.2"
+        const val kotlinxBenchmarkPlugin = "0.4.1"
+    }
+
+    object BuildPlugins {
         val kotlinJvm = Plugin("org.jetbrains.kotlin.jvm", BuildVersions.kotlin)
         val gradlePublish = Plugin("com.gradle.plugin-publish", "0.19.0")
         val testLogger = Plugin("com.adarshr.test-logger", "3.1.0")
     }
 
-    object Dependencies {
+    object BuildDependencies {
 
         object Platform {
             const val kotlin = "org.jetbrains.kotlin:kotlin-bom:${BuildVersions.kotlin}"
@@ -45,7 +94,8 @@ object Catalog {
             const val dokka = "org.jetbrains.dokka:dokka-gradle-plugin:1.5.31"
             const val allOpen = "org.jetbrains.kotlin:kotlin-allopen:${BuildVersions.kotlin}"
             const val kotlinSerialization = "org.jetbrains.kotlin:kotlin-serialization:${BuildVersions.kotlin}"
-            const val kotlinBenchmark = "org.jetbrains.kotlinx:kotlinx-benchmark-plugin:0.4.1"
+            const val kotlinBenchmark =
+                "org.jetbrains.kotlinx:kotlinx-benchmark-plugin:${BuildVersions.kotlinxBenchmarkPlugin}"
             const val testLogger = "com.adarshr:gradle-test-logger-plugin:3.1.0"
             const val shadow = "gradle.plugin.com.github.jengelman.gradle.plugins:shadow:7.0.0"
             const val jib = "gradle.plugin.com.google.cloud.tools:jib-gradle-plugin:3.1.4"
@@ -91,4 +141,6 @@ object Catalog {
     }
 
     data class Plugin(val id: String, val version: String)
+
+    data class Artifact(val id: String, val version: String)
 }

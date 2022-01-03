@@ -4,6 +4,7 @@ import kotlinx.benchmark.gradle.BenchmarksExtension
 import kotlinx.benchmark.gradle.BenchmarksPlugin
 import kotlinx.benchmark.gradle.JavaBenchmarkTarget
 import kotlinx.benchmark.gradle.processJavaSourceSet
+import net.bnb1.kradle.Catalog
 import net.bnb1.kradle.alias
 import net.bnb1.kradle.apply
 import net.bnb1.kradle.featureRegistry
@@ -59,7 +60,7 @@ class BenchmarksBlueprint(project: Project) : Blueprint(project) {
         @Suppress("DEPRECATION")
         benchmarkSourceSet.withConvention(KotlinSourceSet::class) {
             dependencies {
-                implementation("org.jetbrains.kotlinx:kotlinx-benchmark-runtime:${BenchmarksPlugin.PLUGIN_VERSION}")
+                implementation("${Catalog.Dependencies.Tools.kotlinxBenchmarkRuntime}:${BenchmarksPlugin.PLUGIN_VERSION}")
             }
         }
     }

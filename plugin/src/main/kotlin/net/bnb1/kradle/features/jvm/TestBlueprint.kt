@@ -1,6 +1,7 @@
 package net.bnb1.kradle.features.jvm
 
 import com.adarshr.gradle.testlogger.TestLoggerPlugin
+import net.bnb1.kradle.Catalog
 import net.bnb1.kradle.apply
 import net.bnb1.kradle.createTask
 import net.bnb1.kradle.features.Blueprint
@@ -72,8 +73,8 @@ class TestBlueprint(project: Project) : Blueprint(project) {
         val properties = project.propertiesRegistry.get<TestProperties>()
         if (properties.junitJupiterVersion.hasValue) {
             project.dependencies {
-                testImplementation("org.junit.jupiter:junit-jupiter-api:${properties.junitJupiterVersion.get()}")
-                testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:${properties.junitJupiterVersion.get()}")
+                testImplementation("${Catalog.Dependencies.Test.junitApi}:${properties.junitJupiterVersion.get()}")
+                testRuntimeOnly("${Catalog.Dependencies.Test.junitEngine}:${properties.junitJupiterVersion.get()}")
             }
         }
     }

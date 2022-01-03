@@ -1,6 +1,7 @@
 package net.bnb1.kradle.features.jvm
 
 import io.gitlab.arturbosch.detekt.Detekt
+import net.bnb1.kradle.Catalog
 import net.bnb1.kradle.createHelperTask
 import net.bnb1.kradle.createTask
 import net.bnb1.kradle.features.Blueprint
@@ -24,7 +25,7 @@ class DetektBlueprint(project: Project) : Blueprint(project) {
 
         project.configurations.create(CONFIGURATION_NAME) {
             val dependencyProvider = project.provider {
-                project.dependencies.create("io.gitlab.arturbosch.detekt:detekt-cli:${properties.detektVersion.get()}")
+                project.dependencies.create("${Catalog.Dependencies.Tools.detekt}:${properties.detektVersion.get()}")
             }
             dependencies.addLater(dependencyProvider)
         }

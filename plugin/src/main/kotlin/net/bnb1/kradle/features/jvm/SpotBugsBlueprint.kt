@@ -3,6 +3,7 @@ package net.bnb1.kradle.features.jvm
 import com.github.spotbugs.snom.SpotBugsBasePlugin
 import com.github.spotbugs.snom.SpotBugsExtension
 import com.github.spotbugs.snom.SpotBugsTask
+import net.bnb1.kradle.Catalog
 import net.bnb1.kradle.apply
 import net.bnb1.kradle.createHelperTask
 import net.bnb1.kradle.features.Blueprint
@@ -46,10 +47,10 @@ class SpotBugsBlueprint(project: Project) : Blueprint(project) {
         val properties = project.propertiesRegistry.get<SpotBugsProperties>()
         project.dependencies {
             if (properties.findSecBugs.hasValue) {
-                add("spotbugsPlugins", "com.h3xstream.findsecbugs:findsecbugs-plugin:${properties.findSecBugs.get()}")
+                add("spotbugsPlugins", "${Catalog.Dependencies.Tools.findSecBugs}:${properties.findSecBugs.get()}")
             }
             if (properties.fbContrib.hasValue) {
-                add("spotbugsPlugins", "com.mebigfatguy.fb-contrib:fb-contrib:${properties.fbContrib.get()}")
+                add("spotbugsPlugins", "${Catalog.Dependencies.Tools.fbContrib}:${properties.fbContrib.get()}")
             }
         }
     }

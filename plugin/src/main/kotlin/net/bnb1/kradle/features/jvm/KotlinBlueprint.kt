@@ -1,8 +1,13 @@
 package net.bnb1.kradle.features.jvm
 
-import net.bnb1.kradle.*
+import net.bnb1.kradle.Catalog
+import net.bnb1.kradle.apply
+import net.bnb1.kradle.featureRegistry
 import net.bnb1.kradle.features.Blueprint
 import net.bnb1.kradle.features.general.BootstrapFeature
+import net.bnb1.kradle.implementation
+import net.bnb1.kradle.propertiesRegistry
+import net.bnb1.kradle.testImplementation
 import org.gradle.api.GradleException
 import org.gradle.api.Project
 import org.gradle.kotlin.dsl.dependencies
@@ -41,15 +46,15 @@ class KotlinBlueprint(project: Project) : Blueprint(project) {
     override fun addDependencies() {
         val properties = project.propertiesRegistry.get<KotlinProperties>()
         project.dependencies {
-            implementation(platform("org.jetbrains.kotlin:kotlin-bom"))
-            implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
-            implementation("org.jetbrains.kotlin:kotlin-reflect")
+            implementation(platform(Catalog.Dependencies.Platform.kotlin))
+            implementation(Catalog.Dependencies.kotlinStdlib)
+            implementation(Catalog.Dependencies.kotlinReflect)
             if (properties.kotlinxCoroutinesVersion.hasValue) {
                 implementation(
-                    "org.jetbrains.kotlinx:kotlinx-coroutines-core:${properties.kotlinxCoroutinesVersion.get()}"
+                    "${Catalog.Dependencies.kotlinCoroutines}:${properties.kotlinxCoroutinesVersion.get()}"
                 )
             }
-            testImplementation("org.jetbrains.kotlin:kotlin-test")
+            testImplementation(Catalog.Dependencies.Test.kotlinTest)
         }
     }
 

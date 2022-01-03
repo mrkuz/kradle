@@ -1,5 +1,6 @@
 package net.bnb1.kradle.features.jvm
 
+import net.bnb1.kradle.Catalog
 import net.bnb1.kradle.createHelperTask
 import net.bnb1.kradle.features.Blueprint
 import net.bnb1.kradle.propertiesRegistry
@@ -18,7 +19,7 @@ class PmdBlueprint(project: Project) : Blueprint(project) {
 
         project.configurations.create(CONFIGURATION_NAME) {
             val dependencyProvider = project.provider {
-                project.dependencies.create("net.sourceforge.pmd:pmd-java:${properties.pmdVersion.get()}")
+                project.dependencies.create("${Catalog.Dependencies.Tools.pmd}:${properties.pmdVersion.get()}")
             }
             dependencies.addLater(dependencyProvider)
         }
