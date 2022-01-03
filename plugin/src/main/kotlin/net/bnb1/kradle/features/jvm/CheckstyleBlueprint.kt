@@ -16,8 +16,8 @@ private const val CONFIGURATION_NAME = "kradleCheckstyle"
 class CheckstyleBlueprint(project: Project) : Blueprint(project) {
 
     override fun createTasks() {
-        val properties = project.propertiesRegistry.get<JavaLintProperties>()
-        val configFile = project.rootDir.resolve(properties.checkstyleConfigFile.get())
+        val properties = project.propertiesRegistry.get<CheckstyleProperties>()
+        val configFile = project.rootDir.resolve(properties.configFile.get())
 
         project.createTask<GenerateCheckstyleConfigTask>("generateCheckstyleConfig", "Generates checkstyle.xml") {
             outputFile.set(configFile)
@@ -25,7 +25,7 @@ class CheckstyleBlueprint(project: Project) : Blueprint(project) {
 
         project.configurations.create(CONFIGURATION_NAME) {
             val dependencyProvider = project.provider {
-                project.dependencies.create("${Catalog.Dependencies.Tools.checkstyle}:${properties.checkstyleVersion.get()}")
+                project.dependencies.create("${Catalog.Dependencies.Tools.checkstyle}:${properties.version.get()}")
             }
             dependencies.addLater(dependencyProvider)
         }

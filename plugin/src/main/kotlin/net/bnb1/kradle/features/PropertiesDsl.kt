@@ -13,6 +13,8 @@ class PropertiesDsl<P : Properties> private constructor(private val properties: 
 
         private var supplier: ((Project) -> P)? = null
 
+        fun properties(properties: P) = properties { properties }
+
         fun properties(supplier: (Project) -> P): Builder<P> {
             this.supplier = supplier
             return this

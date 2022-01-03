@@ -24,11 +24,15 @@ kradle {
         kotlin {
             useCoroutines(/* "${versions.kotlinCoroutines}" */)
             lint {
-                // ktlintVersion("${versions.ktlint}")
+                ktlint {
+                    // version("${versions.ktlint}")
+                }
             }
             codeAnalysis {
-                // detektConfigFile("detekt-config.yml")
-                // detektVersion("${versions.detekt}")
+                detekt {
+                    // version("${versions.detekt}")
+                    // configFile("detekt-config.yml")
+                }
             }
             test {
                 useKotest(/* "${versions.kotest}" */)
@@ -38,11 +42,15 @@ kradle {
         java {
             // withPreviewFeatures(true)
             lint {
-                // checkstyleConfigFile("checkstyle.xml")
-                // checkstyleVersion("${versions.checkstyle}")
+                checkstyle {
+                    // version("${versions.checkstyle}")
+                    // configFile("checkstyle.xml")
+                }
             }
             codeAnalysis {
-                // pmdVersion("${versions.pmd}")
+                pmd {
+                    // version("${versions.pmd}")
+                }
                 spotBugs {
                     // version("${versions.spotbugs}")
                     useFbContrib(/* ${versions.fbContrib} */)

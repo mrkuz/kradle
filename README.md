@@ -251,11 +251,15 @@ kradle {
         kotlin {
             useCoroutines(/* "1.6.0" */)
             lint {
-                ktlintVersion("0.43.2")
+                ktlint {
+                    version("0.43.2")
+                }
             }
             codeAnalysis {
-                detektVersion("1.19.0")
-                detektConfigFile("detekt-config.yml")
+                detekt {
+                    version("1.19.0")
+                    configFile("detekt-config.yml")
+                }
             }
             test {
                 useKotest(/* "5.0.3" */)
@@ -267,9 +271,9 @@ kradle {
 ```
 
 - `useCoroutines`: Adds Kotlin coroutines dependency
-- `ktlintVersion`: [ktlint](https://ktlint.github.io/) version used for [linting](#linting) (if enabled)
-- `detektVersion`: [detekt](https://detekt.github.io/detekt/) version used for [static code analysis](#code-analysis) (if enabled)
-- `detectConfigFile`: [detekt](https://detekt.github.io/detekt/) configuration file used
+- `ktlint.version`: [ktlint](https://ktlint.github.io/) version used for [linting](#linting) (if enabled)
+- `detekt.version`: [detekt](https://detekt.github.io/detekt/) version used for [static code analysis](#code-analysis) (if enabled)
+- `detekt.configFile`: [detekt](https://detekt.github.io/detekt/) configuration file used
 - `useKoTest`: Adds [kotest](https://kotest.io/) test dependencies (if [test improvements](#test-improvements) are enabled)
 - `useMockk`: Adds [mockk](https://mockk.io/) test dependency (if [test improvements](#test-improvements) are enabled)
 
@@ -293,11 +297,15 @@ kradle {
         java {
             withPreviewFeatures(true)
             lint {
-                checkstyleVersion("9.2.1")
-                checkstyleConfigFile("checkstyle.xml")
+                checkstyle {
+                    version("9.2.1")
+                    configFile("checkstyle.xml")
+                }
             }
             codeAnalysis {
-                pmdVersion("6.41.0")
+                pmd {
+                    version("6.41.0")
+                }
                 spotBugs {
                     version("4.5.2")
                     useFbContrib(/* 7.4.7 */)
@@ -310,9 +318,9 @@ kradle {
 ```
 
 - `withPreviewFeatures`: Enable preview features
-- `checkstyleVersion`: [checkstyle](https://checkstyle.sourceforge.io/) version used for [linting](#linting) (if enabled)
-- `checkstyleConfigFile`: [checkstyle](https://checkstyle.sourceforge.io/) configuration file used
-- `pmdVersion`: [PMD](https://pmd.github.io/) version used for [code analysis](#code-analysis) (if enabled)
+- `checkstyle.version`: [checkstyle](https://checkstyle.sourceforge.io/) version used for [linting](#linting) (if enabled)
+- `checkstyle.configFile`: [checkstyle](https://checkstyle.sourceforge.io/) configuration file used
+- `pmd.version`: [PMD](https://pmd.github.io/) version used for [code analysis](#code-analysis) (if enabled)
 - `spotBugs.version`: [SpotBugs](https://spotbugs.github.io/) versionused for [code analysis](#code-analysis) (if enabled)
 - `spotBugs.useFbContrib`: Use [fb-contrib](http://fb-contrib.sourceforge.net/) plugin
 - `spotBugs.useFbContrib`: Use [Find Security Bugs](https://find-sec-bugs.github.io/) plugin
@@ -874,11 +882,15 @@ kradle {
         kotlin {
             useCoroutines(/* "1.6.0" */)
             lint {
-                ktlintVersion("0.43.2")
+                ktlint {
+                    version("0.43.2")
+                }
             }
             codeAnalysis {
-                detektConfigFile("detekt-config.yml")
-                detektVersion("1.19.0")
+                detekt {
+                    version("1.19.0")
+                    configFile("detekt-config.yml")
+                }
             }
             test {
                 useKotest(/* "5.0.3" */)
@@ -888,11 +900,15 @@ kradle {
         java {
             withPreviewFeatures(true)
             lint {
-                checkstyleConfigFile("checkstyle.xml")
-                checkstyleVersion("9.2.1")
+                checkstyle {
+                    version("9.2.1")
+                    configFile("checkstyle.xml")
+                }
             }
             codeAnalysis {
-                pmdVersion("6.41.0")
+                pmd {
+                    version("6.41.0")
+                }
                 spotBugs {
                     version("4.5.2")
                     useFbContrib(/* 7.4.7 */)

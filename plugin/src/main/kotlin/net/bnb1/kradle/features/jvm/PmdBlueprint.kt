@@ -15,11 +15,11 @@ private const val CONFIGURATION_NAME = "kradlePmd"
 class PmdBlueprint(project: Project) : Blueprint(project) {
 
     override fun createTasks() {
-        val properties = project.propertiesRegistry.get<JavaCodeAnalysisProperties>()
+        val properties = project.propertiesRegistry.get<PmdProperties>()
 
         project.configurations.create(CONFIGURATION_NAME) {
             val dependencyProvider = project.provider {
-                project.dependencies.create("${Catalog.Dependencies.Tools.pmd}:${properties.pmdVersion.get()}")
+                project.dependencies.create("${Catalog.Dependencies.Tools.pmd}:${properties.version.get()}")
             }
             dependencies.addLater(dependencyProvider)
         }

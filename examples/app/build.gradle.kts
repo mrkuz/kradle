@@ -24,11 +24,15 @@ kradle {
         kotlin {
             useCoroutines(/* "1.6.0" */)
             lint {
-                // ktlintVersion("0.43.2")
+                ktlint {
+                    // version("0.43.2")
+                }
             }
             codeAnalysis {
-                // detektConfigFile("detekt-config.yml")
-                // detektVersion("1.19.0")
+                detekt {
+                    // version("1.19.0")
+                    // configFile("detekt-config.yml")
+                }
             }
             test {
                 useKotest(/* "5.0.3" */)
@@ -38,11 +42,15 @@ kradle {
         java {
             // withPreviewFeatures(true)
             lint {
-                // checkstyleConfigFile("checkstyle.xml")
-                // checkstyleVersion("9.2.1")
+                checkstyle {
+                    // version("9.2.1")
+                    // configFile("checkstyle.xml")
+                }
             }
             codeAnalysis {
-                // pmdVersion("6.41.0")
+                pmd {
+                    // version("6.41.0")
+                }
                 spotBugs {
                     // version("4.5.2")
                     useFbContrib(/* 7.4.7 */)

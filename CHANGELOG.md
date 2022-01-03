@@ -6,6 +6,47 @@
 
 - Support for Java development (linting, code analysis, bootstrapping, preview features)
 - Fix `dev` in combination with Gradle toolchains
+- Add alternative configuration syntax for ktlint and detekt
+
+  Before
+
+    ```kotlin
+    kradle {
+        jvm {
+            kotlin {
+                lint {
+                    ktlintVersion("0.43.2")
+                }
+                codeAnalysis {
+                    detektConfigFile("detekt-config.yml")
+                    detektVersion("1.19.0")
+                }
+            }
+        }
+    }
+    ```
+
+  After
+
+    ```kotlin
+    kradle {
+        jvm {
+            kotlin {
+                lint {
+                    ktlint {
+                        version("0.43.2")
+                    }
+                }
+                codeAnalysis {
+                    detekt {
+                        version("1.19.0")
+                        configFile("detekt-config.yml")
+                    }
+                }
+            }
+        }
+    }
+    ```
 
 ### Version 2.0.1 (2022-01-01)
 

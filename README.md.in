@@ -251,11 +251,15 @@ kradle {
         kotlin {
             useCoroutines(/* "${versions.kotlinCoroutines}" */)
             lint {
-                ktlintVersion("${versions.ktlint}")
+                ktlint {
+                    version("${versions.ktlint}")
+                }
             }
             codeAnalysis {
-                detektVersion("${versions.detekt}")
-                detektConfigFile("detekt-config.yml")
+                detekt {
+                    version("${versions.detekt}")
+                    configFile("detekt-config.yml")
+                }
             }
             test {
                 useKotest(/* "${versions.kotest}" */)
@@ -267,9 +271,9 @@ kradle {
 ```
 
 - `useCoroutines`: Adds Kotlin coroutines dependency
-- `ktlintVersion`: [ktlint](https://ktlint.github.io/) version used for [linting](#linting) (if enabled)
-- `detektVersion`: [detekt](https://detekt.github.io/detekt/) version used for [static code analysis](#code-analysis) (if enabled)
-- `detectConfigFile`: [detekt](https://detekt.github.io/detekt/) configuration file used
+- `ktlint.version`: [ktlint](https://ktlint.github.io/) version used for [linting](#linting) (if enabled)
+- `detekt.version`: [detekt](https://detekt.github.io/detekt/) version used for [static code analysis](#code-analysis) (if enabled)
+- `detekt.configFile`: [detekt](https://detekt.github.io/detekt/) configuration file used
 - `useKoTest`: Adds [kotest](https://kotest.io/) test dependencies (if [test improvements](#test-improvements) are enabled)
 - `useMockk`: Adds [mockk](https://mockk.io/) test dependency (if [test improvements](#test-improvements) are enabled)
 
@@ -293,11 +297,15 @@ kradle {
         java {
             withPreviewFeatures(true)
             lint {
-                checkstyleVersion("${versions.checkstyle}")
-                checkstyleConfigFile("checkstyle.xml")
+                checkstyle {
+                    version("${versions.checkstyle}")
+                    configFile("checkstyle.xml")
+                }
             }
             codeAnalysis {
-                pmdVersion("${versions.pmd}")
+                pmd {
+                    version("${versions.pmd}")
+                }
                 spotBugs {
                     version("${versions.spotbugs}")
                     useFbContrib(/* ${versions.fbContrib} */)
@@ -310,9 +318,9 @@ kradle {
 ```
 
 - `withPreviewFeatures`: Enable preview features
-- `checkstyleVersion`: [checkstyle](https://checkstyle.sourceforge.io/) version used for [linting](#linting) (if enabled)
-- `checkstyleConfigFile`: [checkstyle](https://checkstyle.sourceforge.io/) configuration file used
-- `pmdVersion`: [PMD](https://pmd.github.io/) version used for [code analysis](#code-analysis) (if enabled)
+- `checkstyle.version`: [checkstyle](https://checkstyle.sourceforge.io/) version used for [linting](#linting) (if enabled)
+- `checkstyle.configFile`: [checkstyle](https://checkstyle.sourceforge.io/) configuration file used
+- `pmd.version`: [PMD](https://pmd.github.io/) version used for [code analysis](#code-analysis) (if enabled)
 - `spotBugs.version`: [SpotBugs](https://spotbugs.github.io/) versionused for [code analysis](#code-analysis) (if enabled)
 - `spotBugs.useFbContrib`: Use [fb-contrib](http://fb-contrib.sourceforge.net/) plugin
 - `spotBugs.useFbContrib`: Use [Find Security Bugs](https://find-sec-bugs.github.io/) plugin
@@ -874,11 +882,15 @@ kradle {
         kotlin {
             useCoroutines(/* "${versions.kotlinCoroutines}" */)
             lint {
-                ktlintVersion("${versions.ktlint}")
+                ktlint {
+                    version("${versions.ktlint}")
+                }
             }
             codeAnalysis {
-                detektConfigFile("detekt-config.yml")
-                detektVersion("${versions.detekt}")
+                detekt {
+                    version("${versions.detekt}")
+                    configFile("detekt-config.yml")
+                }
             }
             test {
                 useKotest(/* "${versions.kotest}" */)
@@ -888,11 +900,15 @@ kradle {
         java {
             withPreviewFeatures(true)
             lint {
-                checkstyleConfigFile("checkstyle.xml")
-                checkstyleVersion("${versions.checkstyle}")
+                checkstyle {
+                    version("${versions.checkstyle}")
+                    configFile("checkstyle.xml")
+                }
             }
             codeAnalysis {
-                pmdVersion("${versions.pmd}")
+                pmd {
+                    version("${versions.pmd}")
+                }
                 spotBugs {
                     version("${versions.spotbugs}")
                     useFbContrib(/* ${versions.fbContrib} */)
