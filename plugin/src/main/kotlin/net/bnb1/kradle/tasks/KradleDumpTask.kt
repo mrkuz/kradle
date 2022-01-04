@@ -1,6 +1,7 @@
 package net.bnb1.kradle.tasks
 
 import net.bnb1.kradle.featureRegistry
+import net.bnb1.kradle.tracer
 import org.gradle.api.DefaultTask
 import org.gradle.api.tasks.TaskAction
 import org.gradle.util.GradleVersion
@@ -32,6 +33,7 @@ open class KradleDumpTask : DefaultTask() {
         )
 
         printEnabledFeatures()
+        printTrace()
         printAppliedPlugins()
         printTasks()
     }
@@ -41,13 +43,45 @@ open class KradleDumpTask : DefaultTask() {
             """
             
             Enabled features:
+            -----------------
             """.trimIndent()
         )
 
         project.featureRegistry.map.values.asSequence()
             .filter { it.isEnabled }
             .sortedBy { it::class.java.name }
-            .forEach { dump("- $${it::class.java.name} (active: ${!it.isInactive})") }
+            .forEach { dump("- ${it::class.java.name}") }
+    }
+
+    private fun printTrace() {
+        dump(
+            """
+            
+            Trace:
+            ------
+            """.trimIndent()
+        )
+        val entries = project.tracer.entries
+        entries.forEachIndexed { index, entry ->
+            if (entry.level == 0) {
+                if (index > 0) {
+                    dump("")
+                }
+                dump(entry.message)
+            } else {
+                var prefix = ""
+                for (i in 0 until entry.level - 1) {
+                    prefix += "│  "
+                }
+
+                prefix += if (index == (entries.size - 1) || entries[index + 1].level < entry.level) {
+                    "└─ "
+                } else {
+                    "├─ "
+                }
+                dump(prefix + entry.message)
+            }
+        }
     }
 
     private fun printTasks() {
@@ -55,6 +89,7 @@ open class KradleDumpTask : DefaultTask() {
             """
            
             Tasks:
+            ------
             """.trimIndent()
         )
         project.tasks.asSequence()
@@ -70,6 +105,7 @@ open class KradleDumpTask : DefaultTask() {
             """
             
             Applied plugins:
+            ----------------
             """.trimIndent()
         )
 

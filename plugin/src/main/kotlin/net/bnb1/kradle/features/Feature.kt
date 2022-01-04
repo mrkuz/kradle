@@ -69,7 +69,6 @@ open class Feature {
             return
         }
 
-        // println("Activate feature: ${this::class.simpleName}")
         blueprints.forEach { it.activate() }
         // Run again to activate blueprints that were added in the first run
         blueprints
@@ -83,7 +82,6 @@ open class Feature {
         if (!enabled.compareAndSet(false, true)) {
             return
         }
-        // println("Enable feature: ${this::class.simpleName}")
     }
 
     fun disable() {
