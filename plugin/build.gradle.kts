@@ -64,6 +64,9 @@ dependencies {
 }
 
 kradle {
+    general {
+        buildProperties.enable()
+    }
     jvm {
         targetJvm("1.8")
         kotlin.enable()
