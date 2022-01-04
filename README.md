@@ -511,7 +511,7 @@ kradle {
 - `prettyPrint`: Prettifies test output with [Gradle Test Logger Plugin](https://plugins.gradle.org/plugin/com.adarshr.test-logger)
 - `withIntegrationTests`: Adds task `integrationTest`, which runs tests under _src/integrationTest_. The task is executed when running `check`.
 - `withFunctionalTests`: Adds task `functionalTest`, which runs tests under _src/functionalTest_. The task is executed when running `check`.
-- `withCustomTests`: Adds task `<NAME>Test`, which runs tests under _src/<NAME>_. The task is executed when running `check`. Can be called multiple times.
+- `withCustomTests`: Adds task `<NAME>Test`, which runs tests under _src/&lt;NAME&gt;_. The task is executed when running `check`. Can be called multiple times.
 - `withJunitJupiter`: Sets up [JUnit Jupiter](https://junit.org/junit5/) for running tests
 - `withJacoco`: Generates [JaCoCo](https://www.jacoco.org/jacoco/) code coverage reports after tests. They can be found under _build/reports/jacoco/_.
 
