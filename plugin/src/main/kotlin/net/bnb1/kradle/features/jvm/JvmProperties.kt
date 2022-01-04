@@ -4,7 +4,6 @@ import net.bnb1.kradle.Catalog
 import net.bnb1.kradle.features.EmptyProperties
 import net.bnb1.kradle.features.FeatureDsl
 import net.bnb1.kradle.features.Properties
-import net.bnb1.kradle.property
 import org.gradle.api.Project
 
 class JvmProperties(project: Project) : Properties(project) {
@@ -12,7 +11,7 @@ class JvmProperties(project: Project) : Properties(project) {
     private val javaBlueprint = JavaBlueprint(project)
     private val allOpenBlueprint = AllOpenBlueprint(project)
 
-    val targetJvm = property(factory.property(Catalog.Versions.jvm))
+    val targetJvm = property(Catalog.Versions.jvm)
 
     val kotlin = FeatureDsl.Builder<KotlinProperties>(project)
         .feature { KotlinFeature() }

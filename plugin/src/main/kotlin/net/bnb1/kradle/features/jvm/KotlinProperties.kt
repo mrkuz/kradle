@@ -1,14 +1,13 @@
 package net.bnb1.kradle.features.jvm
 
 import net.bnb1.kradle.Catalog
-import net.bnb1.kradle.empty
 import net.bnb1.kradle.features.Properties
 import net.bnb1.kradle.features.PropertiesDsl
 import org.gradle.api.Project
 
 class KotlinProperties(project: Project) : Properties(project) {
 
-    val kotlinxCoroutinesVersion = property(factory.empty<String>())
+    val kotlinxCoroutinesVersion = property<String>()
     fun useCoroutines(version: String = Catalog.Versions.kotlinCoroutines) = kotlinxCoroutinesVersion.set(version)
 
     val lint = PropertiesDsl.Builder<KotlinLintProperties>(project)

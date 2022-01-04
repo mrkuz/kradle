@@ -2,7 +2,13 @@ package net.bnb1.kradle.features
 
 import org.gradle.api.provider.Property
 
-open class PropertyDsl<T : Any>(val property: Property<T>) {
+open class PropertyDsl<T : Any>(val property: Property<T>, private val defaultValue: T?) {
+
+    init {
+        if (defaultValue != null) {
+            property.convention(defaultValue)
+        }
+    }
 
     operator fun invoke(value: T) = set(value)
 
@@ -13,6 +19,10 @@ open class PropertyDsl<T : Any>(val property: Property<T>) {
     fun get() = property.get()
 
     fun get(default: T) = property.getOrElse(default)
+
+    fun reset() {
+        property.set(defaultValue)
+    }
 
     val hasValue
         get() = property.isPresent
