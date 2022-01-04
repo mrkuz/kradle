@@ -1,15 +1,26 @@
 package net.bnb1.kradle.tasks
 
 import net.bnb1.kradle.featureRegistry
+import net.bnb1.kradle.features.EmptyProperties
+import net.bnb1.kradle.features.FeatureDsl
+import net.bnb1.kradle.features.PropertiesDsl
+import net.bnb1.kradle.features.PropertyDsl
+import net.bnb1.kradle.propertiesRegistry
 import net.bnb1.kradle.tracer
 import org.gradle.api.DefaultTask
+import org.gradle.api.model.ObjectFactory
+import org.gradle.api.provider.Provider
 import org.gradle.api.tasks.TaskAction
 import org.gradle.util.GradleVersion
 import java.nio.file.Paths
-import java.util.*
 import java.util.zip.ZipFile
 import kotlin.reflect.KClass
+import kotlin.reflect.KVisibility
+import kotlin.reflect.full.isSubclassOf
+import kotlin.reflect.full.memberProperties
+import kotlin.reflect.jvm.jvmErasure
 import kotlin.streams.asSequence
+import java.util.Properties as JavaProperties
 
 open class KradleDumpTask : DefaultTask() {
 
@@ -20,7 +31,7 @@ open class KradleDumpTask : DefaultTask() {
 
     @TaskAction
     fun run() {
-        val properties = Properties()
+        val properties = JavaProperties()
         javaClass.getResource("/build.properties").openStream().use {
             properties.load(it)
         }
@@ -36,6 +47,7 @@ open class KradleDumpTask : DefaultTask() {
         printTrace()
         printAppliedPlugins()
         printTasks()
+        printProperties()
     }
 
     private fun printEnabledFeatures() {
@@ -49,8 +61,8 @@ open class KradleDumpTask : DefaultTask() {
 
         project.featureRegistry.map.values.asSequence()
             .filter { it.isEnabled }
-            .sortedBy { it::class.java.name }
-            .forEach { dump("- ${it::class.java.name}") }
+            .sortedBy { it::class.qualifiedName }
+            .forEach { dump("- ${it::class.qualifiedName}") }
     }
 
     private fun printTrace() {
@@ -96,7 +108,7 @@ open class KradleDumpTask : DefaultTask() {
             .sortedBy { it.name }
             .forEach {
                 val jar = getJar(it::class)
-                dump("- ${it.name} ($jar, ${it::class.java.name})")
+                dump("- ${it.name} ($jar, ${it::class.qualifiedName})")
             }
     }
 
@@ -131,16 +143,77 @@ open class KradleDumpTask : DefaultTask() {
             if (project.pluginManager.hasPlugin(it)) {
                 val plugin = project.plugins.getPlugin(it)
                 var jar = getJar(plugin::class)
-                dump("- $it ($jar, ${plugin::class.java.name})")
+                dump("- $it ($jar, ${plugin::class.qualifiedName})")
             }
         }
 
         plugins.forEach {
             if (project.pluginManager.hasPlugin(it.first)) {
                 val plugin = project.plugins.getPlugin(it.first)
-                dump("- ${it.first} (${it.second}, ${plugin::class.java.name})")
+                dump("- ${it.first} (${it.second}, ${plugin::class.qualifiedName})")
             }
         }
+    }
+
+    private fun printProperties() {
+        dump(
+            """
+            
+            Properties:
+            ----------------
+            """.trimIndent()
+        )
+
+        project.propertiesRegistry.map.values.asSequence()
+            .filterNot { it is EmptyProperties }
+            .sortedBy { it::class.qualifiedName }
+            .forEach {
+                dump("${it::class.qualifiedName} {")
+                printProperties(it, 1)
+                dump("}\n")
+            }
+    }
+
+    private fun printProperties(target: Any, level: Int) {
+        val prefix = " ".repeat(level * 2)
+        target::class.memberProperties
+            .filter { it.visibility == KVisibility.PUBLIC }
+            .forEach { member ->
+                val returnType = member.returnType.jvmErasure
+                val key = "${prefix}${member.name}"
+                if (returnType.isSubclassOf(PropertyDsl::class)) {
+                    val value = member.getter.call(target) as PropertyDsl<*>
+                    if (value.hasValue) {
+                        dump("$key = ${value.get()}")
+                    } else {
+                        dump("$key = NOT SET")
+                    }
+                } else if (returnType.isSubclassOf(Provider::class)) {
+                    val value = member.getter.call(target) as Provider<*>
+                    if (value.isPresent) {
+                        dump("$key = ${value.get()}")
+                    } else {
+                        dump("$key = NOT SET")
+                    }
+                } else if (returnType.isSubclassOf(Collection::class) &&
+                    member.typeParameters.all { it.javaClass.isPrimitive }
+                ) {
+                    val value = member.getter.call(target) as Collection<*>
+                    dump("$key = $value")
+                } else if (
+                    returnType.isSubclassOf(ObjectFactory::class) ||
+                    returnType.isSubclassOf(FeatureDsl::class) ||
+                    returnType.isSubclassOf(PropertiesDsl::class)
+                ) {
+                    // Ignore
+                } else {
+                    member.getter.call(target)?.let {
+                        dump("$key = {")
+                        printProperties(it, level + 1)
+                        dump("$prefix}")
+                    }
+                }
+            }
     }
 
     private fun getJar(clazz: KClass<*>) =
