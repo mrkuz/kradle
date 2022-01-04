@@ -28,13 +28,26 @@ class TestBlueprint(project: Project) : Blueprint(project) {
     // compat: Must be public we can create the tasks eagerly
     public override fun createTasks() {
         val properties = project.propertiesRegistry.get<TestProperties>()
-        if (properties.withIntegrationTests.get()) {
-            createTask("integrationTest", "Runs the integration tests")
-        }
+        val customTests = mutableListOf<String>()
+        customTests.addAll(properties.customTests)
+
         if (properties.withFunctionalTests.get()) {
-            createTask("functionalTest", "Runs the functional tests")
-            if (properties.withIntegrationTests.hasValue) {
-                project.tasks.getByName("functionalTest").shouldRunAfter("integrationTest")
+            customTests.remove("functional")
+            customTests.add(0, "functional")
+        }
+        if (properties.withIntegrationTests.get()) {
+            customTests.remove("integration")
+            customTests.add(0, "integration")
+        }
+
+        for (i in 0 until customTests.size) {
+            val name = customTests[i]
+            createTask("${name}Test", "Runs the $name tests")
+            if (i == 0) {
+                project.tasks.findByName("${name}Test")!!.shouldRunAfter("test")
+            } else {
+                val prevName = customTests[i - 1]
+                project.tasks.findByName("${name}Test")!!.shouldRunAfter("${prevName}Test")
             }
         }
     }

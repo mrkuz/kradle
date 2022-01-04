@@ -500,6 +500,7 @@ kradle {
             prettyPrint(true)
             withIntegrationTests(true)
             withFunctionalTests(true)
+            witchCustomTests("<NAME>")
             withJunitJupiter(/* "5.8.2" */)
             withJacoco(/* "0.8.7" */)
         }
@@ -510,6 +511,7 @@ kradle {
 - `prettyPrint`: Prettifies test output with [Gradle Test Logger Plugin](https://plugins.gradle.org/plugin/com.adarshr.test-logger)
 - `withIntegrationTests`: Adds task `integrationTest`, which runs tests under _src/integrationTest_. The task is executed when running `check`.
 - `withFunctionalTests`: Adds task `functionalTest`, which runs tests under _src/functionalTest_. The task is executed when running `check`.
+- `withCustomTests`: Adds task `<NAME>Test`, which runs tests under _src/<NAME>_. The task is executed when running `check`. Can be called multiple times.
 - `withJunitJupiter`: Sets up [JUnit Jupiter](https://junit.org/junit5/) for running tests
 - `withJacoco`: Generates [JaCoCo](https://www.jacoco.org/jacoco/) code coverage reports after tests. They can be found under _build/reports/jacoco/_.
 
@@ -600,8 +602,8 @@ kradle {
     jvm {
         docker {
             baseImage("bellsoft/liberica-openjdk-alpine:17")
-            ports.add(8080)
-            jvmOpts("-Xmx1G")
+            ports.add(...)
+            jvmOpts(...)
             withJvmKill(/* "1.16.0" */)
             withAppSh(true)
         }
@@ -961,7 +963,7 @@ kradle {
         application {
             mainClass("...")
         }
-        // library.enable() // Conflicts with application
+        library.enable() // Conflicts with application
 
         dependencyUpdates.enable()
         vulnerabilityScan.enable()
@@ -973,6 +975,7 @@ kradle {
             prettyPrint(true)
             withIntegrationTests(true)
             withFunctionalTests(true)
+            withCustomTests(...)
             withJunitJupiter(/* "5.8.2" */)
             withJacoco(/* "0.8.7" */)
         }
@@ -991,8 +994,8 @@ kradle {
             baseImage("bellsoft/liberica-openjdk-alpine:17")
             withJvmKill(/* "1.16.0" */)
             withAppSh(true)
-            ports.add(8080)
-            jvmOpts("-Xmx1G")
+            ports.add(...)
+            jvmOpts(...)
         }
 
         documentation.enable()

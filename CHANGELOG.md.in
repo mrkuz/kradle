@@ -4,9 +4,10 @@
 
 ### Version ${kradleVersion} (${new Date().format("yyyy-MM-dd")})
 
-- Support for Java development (linting, code analysis, bootstrapping, preview features)
+- Support for [Java development](README.md#java-development) (linting, code analysis, bootstrapping, preview features)
 - Fix `dev` in combination with Gradle toolchains
 - ktlint rules are configurable
+- Add [`withCustomTests`](README.md#test-improvements)
 - Add alternative configuration syntax for ktlint and detekt
 
   Before

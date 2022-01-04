@@ -18,4 +18,13 @@ class TestProperties(project: Project) : Properties(project) {
 
     val withIntegrationTests = property(factory.property(false))
     val withFunctionalTests = property(factory.property(false))
+
+    private val _customTests = mutableListOf<String>()
+    val customTests
+        get() = _customTests.toList()
+
+    fun withCustomTests(name: String) {
+        _customTests.remove(name)
+        _customTests.add(name)
+    }
 }

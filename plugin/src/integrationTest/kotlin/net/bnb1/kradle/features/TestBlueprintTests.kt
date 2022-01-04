@@ -78,4 +78,23 @@ class TestBlueprintTests : PluginSpec({
         test shouldBeLessThan integrationTest
         integrationTest shouldBeLessThan functionalTest
     }
+
+    test("Run custom test") {
+        bootstrapProject {
+            """
+            jvm {
+                kotlin.enable()
+                test {
+                    withJunitJupiter()
+                    withCustomTests("custom")
+                }
+            }
+            """.trimIndent()
+        }
+        createAppTest("customTest")
+
+        val result = runTask("customTest")
+
+        result.task(":customTest")!!.outcome shouldBe TaskOutcome.SUCCESS
+    }
 })

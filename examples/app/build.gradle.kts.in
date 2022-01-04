@@ -82,6 +82,7 @@ kradle {
             prettyPrint(true)
             withIntegrationTests(true)
             withFunctionalTests(true)
+            // withCustomTests("...")
             withJunitJupiter(/* "${versions.junit}" */)
             withJacoco(/* "${versions.jacoco}" */)
         }
