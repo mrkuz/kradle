@@ -8,6 +8,8 @@ version = "1.0.0"
 
 kradle {
 
+    // Defaults are commented out, but kept for reference
+
     general {
         bootstrap.enable()
         git.enable()
@@ -31,39 +33,45 @@ kradle {
                     }
                 }
             }
+            /*
             codeAnalysis {
                 detekt {
-                    // version("${versions.detekt}")
-                    // configFile("detekt-config.yml")
+                    version("${versions.detekt}")
+                    configFile("detekt-config.yml")
                 }
             }
+            */
             test {
                 useKotest(/* "${versions.kotest}" */)
                 useMockk(/* "${versions.mockk}" */)
             }
         }
         java {
-            // withPreviewFeatures(true)
+            /*
+            withPreviewFeatures(false)
             lint {
                 checkstyle {
-                    // version("${versions.checkstyle}")
-                    // configFile("checkstyle.xml")
+                    version("${versions.checkstyle}")
+                    configFile("checkstyle.xml")
                 }
             }
+            */
             codeAnalysis {
+                /*
                 pmd {
-                    // version("${versions.pmd}")
+                    version("${versions.pmd}")
                     ruleSets {
-                        // bestPractices(false)
-                        // codeStyle(false)
-                        // design(false)
-                        // documentation(false)
-                        // errorProne(true)
-                        // multithreading(true)
-                        // performance(true)
-                        // security(true)
+                        bestPractices(false)
+                        codeStyle(false)
+                        design(false)
+                        documentation(false)
+                        errorProne(true)
+                        multithreading(true)
+                        performance(true)
+                        security(true)
                     }
                 }
+                */
                 spotBugs {
                     // version("${versions.spotbugs}")
                     useFbContrib(/* ${versions.fbContrib} */)
@@ -98,10 +106,10 @@ kradle {
         }
 
         docker {
-            withJvmKill(/* "${versions.jvmKill}" */)
             // baseImage("bellsoft/liberica-openjdk-alpine:${versions.jvm}")
+            withJvmKill(/* "${versions.jvmKill}" */)
             // withAppSh(false)
-            // ports.add()
+            // ports.add(...)
             // javaOpts("")
         }
 

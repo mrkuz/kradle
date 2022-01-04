@@ -131,6 +131,8 @@ kradle {
 }
 ```
 
+The options shown represent the defaults.
+
 ### Bootstrapping
 
 ```kotlin
@@ -249,12 +251,12 @@ Plugins used: [kotlinx.serialization Plugin](https://plugins.gradle.org/plugin/o
 kradle {
     jvm {
         kotlin {
-            useCoroutines(/* "1.6.0" */)
+            // useCoroutines("1.6.0")
             lint {
                 ktlint {
                     version("0.43.2")
                     rules {
-                        disable(...)
+                        // disable(...)
                     }
                 }
             }
@@ -265,8 +267,8 @@ kradle {
                 }
             }
             test {
-                useKotest(/* "5.0.3" */)
-                useMockk(/* "1.12.2" */)
+                // useKotest("5.0.3")
+                // useMockk("1.12.2")
             }
         }
     }
@@ -299,7 +301,7 @@ Plugins used: [Java Plugin](https://docs.gradle.org/current/userguide/java_plugi
 kradle {
     jvm {
         java {
-            withPreviewFeatures(true)
+            withPreviewFeatures(false)
             lint {
                 checkstyle {
                     version("9.2.1")
@@ -322,8 +324,8 @@ kradle {
                 }
                 spotBugs {
                     version("4.5.2")
-                    useFbContrib(/* 7.4.7 */)
-                    useFindSecBugs(/* 1.11.0 */)
+                    // useFbContrib(7.4.7)
+                    // useFindSecBugs(1.11.0)
                 }
             }
         }
@@ -360,7 +362,7 @@ Plugins used: [Application Plugin](https://docs.gradle.org/current/userguide/app
 kradle {
     jvm {
         application {
-            mainClass("...")
+            // mainClass("...")
         }
     }
 }
@@ -497,12 +499,12 @@ Plugins used: [Java Plugin](https://docs.gradle.org/current/userguide/java_plugi
 kradle {
     jvm {
         test {
-            prettyPrint(true)
-            withIntegrationTests(true)
-            withFunctionalTests(true)
-            witchCustomTests("<NAME>")
-            withJunitJupiter(/* "5.8.2" */)
-            withJacoco(/* "0.8.7" */)
+            prettyPrint(false)
+            withIntegrationTests(false)
+            withFunctionalTests(false)
+            // witchCustomTests("<NAME>")
+            // withJunitJupiter("5.8.2")
+            // withJacoco(0.8.7")
         }
     }
 }
@@ -568,7 +570,7 @@ kradle {
     jvm {
         packaging {
             uberJar {
-                minimize(true)
+                minimize(false)
             }
         }
     }
@@ -602,10 +604,10 @@ kradle {
     jvm {
         docker {
             baseImage("bellsoft/liberica-openjdk-alpine:17")
-            ports.add(...)
-            jvmOpts(...)
-            withJvmKill(/* "1.16.0" */)
-            withAppSh(true)
+            withAppSh(false)
+            // withJvmKill(1.16.0")
+            // ports.add(...)
+            // jvmOpts(...)
         }
     }
 }
