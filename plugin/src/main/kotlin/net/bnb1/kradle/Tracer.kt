@@ -9,10 +9,9 @@ class Tracer {
         get() = _entries.toList()
 
     fun trace(message: String) {
-        if (!active) {
-            throw IllegalStateException("Tracer is deactivated")
+        if (active) {
+            _entries.add(Entry(level, message))
         }
-        _entries.add(Entry(level, message))
     }
 
     fun deactivate() {

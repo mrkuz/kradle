@@ -16,7 +16,6 @@ open class KradleExtensionBase(project: Project) {
 
     init {
         project.extra["tracer"] = Tracer()
-        project.afterEvaluate { project.tracer.deactivate() }
 
         project.extra["featureRegistry"] = FeatureRegistry()
         project.extra["propertiesRegistry"] = PropertiesRegistry()

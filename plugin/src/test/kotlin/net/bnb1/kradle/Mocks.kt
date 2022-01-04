@@ -3,6 +3,7 @@ package net.bnb1.kradle
 import io.mockk.every
 import io.mockk.mockk
 import net.bnb1.kradle.features.FeatureRegistry
+import net.bnb1.kradle.features.FeatureSetRegistry
 import net.bnb1.kradle.features.PropertiesRegistry
 import net.bnb1.kradle.presets.PresetRegistry
 import org.gradle.api.Project
@@ -16,9 +17,11 @@ import java.util.function.BiFunction
 object Mocks {
 
     fun project() = mockk<Project>(relaxed = true) {
+        every { extra.get("tracer") } returns Tracer()
         every { extra.get("featureRegistry") } returns FeatureRegistry()
         every { extra.get("propertiesRegistry") } returns PropertiesRegistry()
         every { extra.get("presetRegistry") } returns PresetRegistry()
+        every { extra.get("featureSetRegistry") } returns FeatureSetRegistry()
         every { objects } returns mockk {
             every { empty<String>() } returns SimpleProperty()
             every { empty<Boolean>() } returns SimpleProperty()

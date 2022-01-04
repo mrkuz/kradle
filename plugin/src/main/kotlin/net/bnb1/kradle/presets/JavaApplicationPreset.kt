@@ -31,8 +31,8 @@ class JavaApplicationPreset(project: Project) : Preset(project) {
 
                 test {
                     prettyPrint(true)
-                    withIntegrationTests(true)
-                    withFunctionalTests(true)
+                    integrationTests()
+                    functionalTests()
                     withJunitJupiter()
                     withJacoco()
                 }
