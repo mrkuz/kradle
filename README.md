@@ -500,8 +500,8 @@ kradle {
     jvm {
         test {
             prettyPrint(false)
-            withIntegrationTests(false)
-            withFunctionalTests(false)
+            integrationTests(false)
+            functionalTests(false)
             // witchCustomTests("<NAME>")
             // withJunitJupiter("5.8.2")
             // withJacoco(0.8.7")
@@ -511,8 +511,8 @@ kradle {
 ```
 
 - `prettyPrint`: Prettifies test output with [Gradle Test Logger Plugin](https://plugins.gradle.org/plugin/com.adarshr.test-logger)
-- `withIntegrationTests`: Adds task `integrationTest`, which runs tests under _src/integrationTest_. The task is executed when running `check`.
-- `withFunctionalTests`: Adds task `functionalTest`, which runs tests under _src/functionalTest_. The task is executed when running `check`.
+- `integrationTests`: Adds task `integrationTest`, which runs tests under _src/integrationTest_. The task is executed when running `check`.
+- `functionalTests`: Adds task `functionalTest`, which runs tests under _src/functionalTest_. The task is executed when running `check`.
 - `withCustomTests`: Adds task `<NAME>Test`, which runs tests under _src/&lt;NAME&gt;_. The task is executed when running `check`. Can be called multiple times.
 - `withJunitJupiter`: Sets up [JUnit Jupiter](https://junit.org/junit5/) for running tests
 - `withJacoco`: Generates [JaCoCo](https://www.jacoco.org/jacoco/) code coverage reports after tests. They can be found under _build/reports/jacoco/_.
@@ -604,9 +604,9 @@ kradle {
     jvm {
         docker {
             baseImage("bellsoft/liberica-openjdk-alpine:17")
-            withAppSh(false)
+            appSh(false)
             // withJvmKill(1.16.0")
-            // ports.add(...)
+            // ports(...)
             // jvmOpts(...)
         }
     }
@@ -617,7 +617,7 @@ kradle {
 - `ports`: List of exposed ports
 - `jvmOpts`: Options passed to the JVM
 - `withJvmKill`: Adds [jvmkill](https://github.com/airlift/jvmkill) to the image. [jvmkill](https://github.com/airlift/jvmkill) terminates the JVM if it is unable to allocate memory.
-- `withAppSh`: Uses a script as entrypoint for the container. You can provide your own script in _src/main/extra/app.sh_. If you don't, `kradle` will create one for you.
+- `appSh`: Uses a script as entrypoint for the container. You can provide your own script in _src/main/extra/app.sh_. If you don't, `kradle` will create one for you.
 
 ### Documentation
 
@@ -715,8 +715,8 @@ kradle {
 
         test {
             prettyPrint(true)
-            withIntegrationTests(true)
-            withFunctionalTests(true)
+            integrationTests(true)
+            functionalTests(true)
             withJunitJupiter()
             withJacoco()
         }
@@ -773,8 +773,8 @@ kradle {
 
         test {
             prettyPrint(true)
-            withIntegrationTests(true)
-            withFunctionalTests(true)
+            integrationTests(true)
+            functionalTests(true)
             withJunitJupiter()
             withJacoco()
         }
@@ -831,8 +831,8 @@ kradle {
 
         test {
             prettyPrint(true)
-            withIntegrationTests(true)
-            withFunctionalTests(true)
+            integrationTests(true)
+            functionalTests(true)
             withJunitJupiter()
             withJacoco()
         }
@@ -883,8 +883,8 @@ kradle {
 
         test {
             prettyPrint(true)
-            withIntegrationTests(true)
-            withFunctionalTests(true)
+            integrationTests(true)
+            functionalTests(true)
             withJunitJupiter()
             withJacoco()
         }
@@ -975,8 +975,8 @@ kradle {
 
         test {
             prettyPrint(true)
-            withIntegrationTests(true)
-            withFunctionalTests(true)
+            integrationTests(true)
+            functionalTests(true)
             withCustomTests(...)
             withJunitJupiter(/* "5.8.2" */)
             withJacoco(/* "0.8.7" */)
@@ -995,8 +995,8 @@ kradle {
         docker {
             baseImage("bellsoft/liberica-openjdk-alpine:17")
             withJvmKill(/* "1.16.0" */)
-            withAppSh(true)
-            ports.add(...)
+            appSh(true)
+            ports(...)
             jvmOpts(...)
         }
 

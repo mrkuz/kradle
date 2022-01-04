@@ -17,7 +17,10 @@ class TestProperties(project: Project) : Properties(project) {
     val prettyPrint = property(factory.property(false))
 
     val withIntegrationTests = property(factory.property(false))
+    fun integrationTests(enabled: Boolean = true) = withIntegrationTests(enabled)
+
     val withFunctionalTests = property(factory.property(false))
+    fun functionalTests(enabled: Boolean = true) = withFunctionalTests(enabled)
 
     private val _customTests = mutableListOf<String>()
     val customTests

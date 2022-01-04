@@ -49,6 +49,59 @@
         }
     }
     ```
+- More syntactic sugar:
+
+   Before
+
+       ```
+       kradle {
+           jvm {
+               test {
+                   withIntegrationTests(true)
+                   withFunctionalTests(true)
+               }
+           }
+       }
+       ```
+
+   After
+
+       ```
+       kradle {
+           jvm {
+               test {
+                   integrationTests(true)
+                   functionalTests(true)
+               }
+           }
+       }
+       ```
+
+   Before
+
+      ```
+      kradle {
+          jvm {
+            docker {
+                withAppSh(true)
+                ports.add(...)
+            }
+          }
+      }
+      ```
+
+   After
+
+      ```
+      kradle {
+          jvm {
+            docker {
+                appSh(true)
+                ports(...)
+            }
+          }
+      }
+      ```
 
 ### Version 2.0.1 (2022-01-01)
 

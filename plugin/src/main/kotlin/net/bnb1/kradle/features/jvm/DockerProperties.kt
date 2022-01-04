@@ -11,11 +11,13 @@ class DockerProperties(project: Project) : Properties(project) {
     val baseImage = property(factory.property("bellsoft/liberica-openjdk-alpine:${Catalog.Versions.jvm}"))
 
     val ports = factory.setProperty(Int::class.java)
+    fun ports(vararg elements: Int) = this.ports.addAll(elements.toSet())
 
     val jvmKillVersion = property(factory.empty<String>())
     fun withJvmKill(version: String = Catalog.Versions.jvmKill) = jvmKillVersion.set(version)
 
     val withAppSh = property(factory.property(false))
+    fun appSh(enabled: Boolean = true) = withAppSh(enabled)
 
     val javaOpts = property(factory.empty<String>())
     val jvmOpts = javaOpts

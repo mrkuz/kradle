@@ -88,8 +88,8 @@ kradle {
 
         test {
             prettyPrint(true)
-            withIntegrationTests(true)
-            withFunctionalTests(true)
+            integrationTests(true)
+            functionalTests(true)
             // withCustomTests("...")
             withJunitJupiter(/* "5.8.2" */)
             withJacoco(/* "0.8.7" */)
@@ -108,8 +108,8 @@ kradle {
         docker {
             // baseImage("bellsoft/liberica-openjdk-alpine:17")
             withJvmKill(/* "1.16.0" */)
-            // withAppSh(false)
-            // ports.add(...)
+            // appSh(false)
+            // ports(...)
             // javaOpts("")
         }
 
