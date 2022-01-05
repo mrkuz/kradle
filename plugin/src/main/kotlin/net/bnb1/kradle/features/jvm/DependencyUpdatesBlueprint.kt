@@ -23,10 +23,12 @@ class DependencyUpdatesBlueprint(project: Project) : Blueprint(project) {
         override fun reject(current: ComponentSelectionWithCurrent?) = reject(current!!.candidate.version)
 
         fun reject(version: String): Boolean {
-            val alpha = "^.*[.-]alpha[.-]?[0-9]*$".toRegex()
-            val milestone = "^.*[.-]M[.-]?[0-9]+$".toRegex()
-            val releaseCandidate = "^.*[.-]RC[.-]?[0-9]*$".toRegex()
+            val alpha = "^.*[.-]alpha[.-]?[0-9]*$".toRegex(RegexOption.IGNORE_CASE)
+            val beta = "^.*[.-]beta[.-]?[0-9]*$".toRegex(RegexOption.IGNORE_CASE)
+            val milestone = "^.*[.-]M[.-]?[0-9]+$".toRegex(RegexOption.IGNORE_CASE)
+            val releaseCandidate = "^.*[.-]RC[.-]?[0-9]*$".toRegex(RegexOption.IGNORE_CASE)
             return alpha.matches(version) ||
+                beta.matches(version) ||
                 milestone.matches(version) ||
                 releaseCandidate.matches(version)
         }
