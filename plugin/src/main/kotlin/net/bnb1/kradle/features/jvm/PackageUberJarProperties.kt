@@ -5,5 +5,5 @@ import org.gradle.api.Project
 
 class PackageUberJarProperties(project: Project) : Properties(project) {
 
-    val minimize = property(false)
+    val minimize = flag()
 }

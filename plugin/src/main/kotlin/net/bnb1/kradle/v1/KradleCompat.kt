@@ -82,8 +82,8 @@ class KradleCompat(private val project: Project, private val type: ProjectType) 
                         detektVersion.bind(compatExtension.detektVersion)
                     }
                     test {
-                        mockkVersion.bind(compatExtension.tests.mockkVersion)
-                        kotestVersion.bind(compatExtension.tests.kotestVersion)
+                        useMockk.bind(compatExtension.tests.mockkVersion)
+                        useKotest.bind(compatExtension.tests.kotestVersion)
                     }
                 }
 
@@ -104,8 +104,8 @@ class KradleCompat(private val project: Project, private val type: ProjectType) 
 
                 test {
                     prettyPrint(true)
-                    junitJupiterVersion.bind(compatExtension.tests.junitJupiterVersion)
-                    jacocoVersion.bind(compatExtension.tests.jacocoVersion)
+                    withJunitJupiter.bind(compatExtension.tests.junitJupiterVersion)
+                    withJacoco.bind(compatExtension.tests.jacocoVersion)
                 }
                 benchmark {
                     jmhVersion.bind(compatExtension.jmhVersion)
@@ -119,8 +119,8 @@ class KradleCompat(private val project: Project, private val type: ProjectType) 
                 if (type == ProjectType.APPLICATION) {
                     docker.enable {
                         baseImage.bind(compatExtension.image.baseImage)
-                        ports.set(compatExtension.image.ports)
-                        jvmKillVersion.bind(compatExtension.image.jvmKillVersion)
+                        ports.bind(compatExtension.image.ports)
+                        withJvmKill.bind(compatExtension.image.jvmKillVersion)
                         withAppSh.bind(compatExtension.image.withAppSh)
                         javaOpts.bind(compatExtension.image.javaOpts)
                     }

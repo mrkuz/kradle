@@ -6,11 +6,8 @@ import org.gradle.api.Project
 
 class SpotBugsProperties(project: Project) : Properties(project) {
 
-    val version = property(Catalog.Versions.spotbugs)
+    val version = version(Catalog.Versions.spotbugs)
 
-    val findSecBugs = property<String>()
-    fun useFindSecBugs(version: String = Catalog.Versions.findSecBugs) = findSecBugs.set(version)
-
-    val fbContrib = property<String>()
-    fun useFbContrib(version: String = Catalog.Versions.fbContrib) = fbContrib.set(version)
+    val useFindSecBugs = optionalVersion(Catalog.Versions.findSecBugs)
+    val useFbContrib = optionalVersion(Catalog.Versions.fbContrib)
 }

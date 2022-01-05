@@ -5,5 +5,5 @@ import org.gradle.api.Project
 
 class LintProperties(project: Project) : Properties(project) {
 
-    val ignoreFailures = property(false)
+    val ignoreFailures = flag()
 }

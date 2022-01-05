@@ -19,7 +19,7 @@ class KtlintBlueprint(project: Project) : Blueprint(project) {
         val properties = project.propertiesRegistry.get<KtlintProperties>()
         project.configure<KtlintExtension> {
             enableExperimentalRules.set(true)
-            disabledRules.set(properties.rules.disabled)
+            disabledRules.set(properties.rules.get())
             version.set(properties.version.get())
             ignoreFailures.set(lintProperties.ignoreFailures.get())
         }

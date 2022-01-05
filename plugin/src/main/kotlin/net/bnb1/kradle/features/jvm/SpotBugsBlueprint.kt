@@ -50,11 +50,11 @@ class SpotBugsBlueprint(project: Project) : Blueprint(project) {
         project.dependencies {
             add("compileOnly", "${Catalog.Dependencies.Tools.findBugsAnnotations}:${Catalog.Versions.findBugs}")
             add("spotbugsSlf4j", "${Catalog.Dependencies.Tools.slf4jSimple}:${Catalog.Versions.slf4j}")
-            if (properties.findSecBugs.hasValue) {
-                add("spotbugsPlugins", "${Catalog.Dependencies.Tools.findSecBugs}:${properties.findSecBugs.get()}")
+            if (properties.useFindSecBugs.hasValue) {
+                add("spotbugsPlugins", "${Catalog.Dependencies.Tools.findSecBugs}:${properties.useFindSecBugs.get()}")
             }
-            if (properties.fbContrib.hasValue) {
-                add("spotbugsPlugins", "${Catalog.Dependencies.Tools.fbContrib}:${properties.fbContrib.get()}")
+            if (properties.useFbContrib.hasValue) {
+                add("spotbugsPlugins", "${Catalog.Dependencies.Tools.fbContrib}:${properties.useFbContrib.get()}")
             }
         }
     }

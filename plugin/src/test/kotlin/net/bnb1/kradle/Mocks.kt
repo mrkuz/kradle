@@ -23,9 +23,10 @@ object Mocks {
         every { extra.get("presetRegistry") } returns PresetRegistry()
         every { extra.get("featureSetRegistry") } returns FeatureSetRegistry()
         every { objects } returns mockk {
-            every { empty<String>() } returns SimpleProperty()
-            every { empty<Boolean>() } returns SimpleProperty()
-            every { setProperty(Int::class.java) } returns SimpleSetProperty()
+            every { property(String::class.java) } returns SimpleProperty()
+            every { property(Boolean::class.java) } returns SimpleProperty()
+            every { setProperty(Integer::class.java) } returns SimpleSetProperty()
+            every { setProperty(String::class.java) } returns SimpleSetProperty()
         }
     }
 

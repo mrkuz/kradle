@@ -5,5 +5,5 @@ import org.gradle.api.Project
 
 class CodeAnalysisProperties(project: Project) : Properties(project) {
 
-    val ignoreFailures = property(false)
+    val ignoreFailures = flag()
 }

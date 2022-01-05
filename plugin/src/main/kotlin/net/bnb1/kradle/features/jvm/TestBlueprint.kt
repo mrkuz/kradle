@@ -29,7 +29,7 @@ class TestBlueprint(project: Project) : Blueprint(project) {
     public override fun createTasks() {
         val properties = project.propertiesRegistry.get<TestProperties>()
         val customTests = mutableListOf<String>()
-        customTests.addAll(properties.customTests)
+        customTests.addAll(properties.customTests.get())
 
         if (properties.withFunctionalTests.get()) {
             customTests.remove("functional")
@@ -84,10 +84,10 @@ class TestBlueprint(project: Project) : Blueprint(project) {
 
     override fun addDependencies() {
         val properties = project.propertiesRegistry.get<TestProperties>()
-        if (properties.junitJupiterVersion.hasValue) {
+        if (properties.withJunitJupiter.hasValue) {
             project.dependencies {
-                testImplementation("${Catalog.Dependencies.Test.junitApi}:${properties.junitJupiterVersion.get()}")
-                testRuntimeOnly("${Catalog.Dependencies.Test.junitEngine}:${properties.junitJupiterVersion.get()}")
+                testImplementation("${Catalog.Dependencies.Test.junitApi}:${properties.withJunitJupiter.get()}")
+                testRuntimeOnly("${Catalog.Dependencies.Test.junitEngine}:${properties.withJunitJupiter.get()}")
             }
         }
     }
@@ -97,7 +97,7 @@ class TestBlueprint(project: Project) : Blueprint(project) {
         val javaProperties = project.propertiesRegistry.get<JavaProperties>()
 
         project.tasks.withType<Test> {
-            if (testProperties.junitJupiterVersion.hasValue) {
+            if (testProperties.withJunitJupiter.hasValue) {
                 useJUnitPlatform()
             }
             if (javaProperties.previewFeatures.get()) {

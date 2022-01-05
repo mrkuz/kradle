@@ -11,7 +11,7 @@ class JvmProperties(project: Project) : Properties(project) {
     private val javaBlueprint = JavaBlueprint(project)
     private val allOpenBlueprint = AllOpenBlueprint(project)
 
-    val targetJvm = property(Catalog.Versions.jvm)
+    val targetJvm = version(Catalog.Versions.jvm)
 
     val kotlin = FeatureDsl.Builder<KotlinProperties>(project)
         .feature { KotlinFeature() }

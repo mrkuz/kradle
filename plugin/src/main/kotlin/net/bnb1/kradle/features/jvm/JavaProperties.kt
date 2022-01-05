@@ -6,7 +6,7 @@ import org.gradle.api.Project
 
 class JavaProperties(project: Project) : Properties(project) {
 
-    val previewFeatures = property(false)
+    val previewFeatures = flag()
 
     val lint = PropertiesDsl.Builder<JavaLintProperties>(project)
         .properties { JavaLintProperties(it) }

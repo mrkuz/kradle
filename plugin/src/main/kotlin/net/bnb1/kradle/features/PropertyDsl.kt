@@ -2,7 +2,7 @@ package net.bnb1.kradle.features
 
 import org.gradle.api.provider.Property
 
-open class PropertyDsl<T : Any>(val property: Property<T>, private val defaultValue: T?) {
+open class PropertyDsl<T : Any>(val property: Property<T>, private val defaultValue: T?) : PropertyWrapper<T> {
 
     init {
         if (defaultValue != null) {
@@ -10,22 +10,22 @@ open class PropertyDsl<T : Any>(val property: Property<T>, private val defaultVa
         }
     }
 
+    override val notNull: Boolean
+        get() = property.isPresent
+
+    override fun get() = property.get()
+
     operator fun invoke(value: T) = set(value)
 
     fun set(value: T) = property.set(value)
 
     fun bind(property: Property<T>) = this.property.set(property)
 
-    fun get() = property.get()
-
     fun get(default: T) = property.getOrElse(default)
 
-    fun reset() {
-        property.set(defaultValue)
-    }
+    fun reset() = property.set(defaultValue)
 
     fun unset() = property.set(null)
 
-    val hasValue
-        get() = property.isPresent
+    val hasValue = notNull
 }

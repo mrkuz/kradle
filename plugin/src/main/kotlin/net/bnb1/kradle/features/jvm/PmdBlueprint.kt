@@ -32,6 +32,18 @@ class PmdBlueprint(project: Project) : Blueprint(project) {
         javaExtension.sourceSets.forEach { sourceSet ->
             val taskName = "pmd" + sourceSet.name[0].toUpperCase() + sourceSet.name.substring(1)
 
+            val enabledRuleSets = mutableListOf<String>()
+            with(properties.ruleSets) {
+                if (bestPractices.get()) enabledRuleSets.add("category/java/bestpractices.xml")
+                if (codeStyle.get()) enabledRuleSets.add("category/java/codestyle.xml")
+                if (design.get()) enabledRuleSets.add("category/java/design.xml")
+                if (documentation.get()) enabledRuleSets.add("category/java/documentation.xml")
+                if (errorProne.get()) enabledRuleSets.add("category/java/errorprone.xml")
+                if (multithreading.get()) enabledRuleSets.add("category/java/multithreading.xml")
+                if (performance.get()) enabledRuleSets.add("category/java/performance.xml")
+                if (security.get()) enabledRuleSets.add("category/java/security.xml")
+            }
+
             project.createHelperTask<Pmd>(taskName, "Runs PMD on '${sourceSet.name}'") {
                 setSource(sourceSet.java.files)
                 pmdClasspath = project.configurations.getAt(CONFIGURATION_NAME)
@@ -45,7 +57,7 @@ class PmdBlueprint(project: Project) : Blueprint(project) {
                 rulesMinimumPriority.set(5)
                 incrementalAnalysis.set(true)
                 ruleSetFiles = project.rootProject.files()
-                ruleSets = properties.ruleSets.enabled.toList()
+                ruleSets = enabledRuleSets
                 targetJdk = TargetJdk.VERSION_1_7
                 reports.forEach {
                     it.outputLocation.set(project.buildDir.resolve("reports/pmd/${sourceSet.name}.${it.name}"))

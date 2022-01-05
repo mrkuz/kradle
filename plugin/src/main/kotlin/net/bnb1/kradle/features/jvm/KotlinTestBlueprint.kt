@@ -11,20 +11,20 @@ class KotlinTestBlueprint(project: Project) : Blueprint(project) {
 
     override fun addDependencies() {
         val properties = project.propertiesRegistry.get<KotlinTestProperties>()
-        val withJunitJupiter = project.propertiesRegistry.get<TestProperties>().junitJupiterVersion.hasValue
-        if (properties.kotestVersion.hasValue) {
+        val withJunitJupiter = project.propertiesRegistry.get<TestProperties>().withJunitJupiter.hasValue
+        if (properties.useKotest.hasValue) {
             project.dependencies {
-                testImplementation("${Catalog.Dependencies.Test.kotestAssertions}:${properties.kotestVersion.get()}")
+                testImplementation("${Catalog.Dependencies.Test.kotestAssertions}:${properties.useKotest.get()}")
                 if (withJunitJupiter) {
-                    testImplementation("${Catalog.Dependencies.Test.kotestJunit5}:${properties.kotestVersion.get()}")
+                    testImplementation("${Catalog.Dependencies.Test.kotestJunit5}:${properties.useKotest.get()}")
                 } else {
-                    testImplementation("${Catalog.Dependencies.Test.kotestJunit4}:${properties.kotestVersion.get()}")
+                    testImplementation("${Catalog.Dependencies.Test.kotestJunit4}:${properties.useKotest.get()}")
                 }
             }
         }
-        if (properties.mockkVersion.hasValue) {
+        if (properties.useMockk.hasValue) {
             project.dependencies {
-                testImplementation("${Catalog.Dependencies.Test.mockk}:${properties.mockkVersion.get()}")
+                testImplementation("${Catalog.Dependencies.Test.mockk}:${properties.useMockk.get()}")
             }
         }
     }

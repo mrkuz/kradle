@@ -2,8 +2,12 @@ package net.bnb1.kradle.features.jvm
 
 import com.google.cloud.tools.jib.gradle.BuildDockerTask
 import com.google.cloud.tools.jib.gradle.JibExtension
-import net.bnb1.kradle.*
+import net.bnb1.kradle.createTask
+import net.bnb1.kradle.extraDir
+import net.bnb1.kradle.featureRegistry
 import net.bnb1.kradle.features.Blueprint
+import net.bnb1.kradle.propertiesRegistry
+import net.bnb1.kradle.sourceSets
 import org.gradle.api.GradleException
 import org.gradle.api.Project
 import org.gradle.api.tasks.SourceSet
@@ -36,7 +40,7 @@ class JibBlueprint(project: Project) : Blueprint(project) {
                 if (properties.withAppSh.get()) {
                     createAppSh(project)
                 }
-                if (properties.jvmKillVersion.hasValue) {
+                if (properties.withJvmKill.hasValue) {
                     downloadJvmKill(project)
                 }
             }
@@ -57,9 +61,7 @@ class JibBlueprint(project: Project) : Blueprint(project) {
 
             container {
                 creationTime = "USE_CURRENT_TIMESTAMP"
-                if (properties.ports.isPresent) {
-                    ports = properties.ports.get().map { it.toString() }
-                }
+                ports = properties.ports.get().map { it.toString() }
 
                 if (properties.javaOpts.hasValue) {
                     if (properties.withAppSh.get()) {
@@ -69,8 +71,8 @@ class JibBlueprint(project: Project) : Blueprint(project) {
                     }
                 }
 
-                if (properties.jvmKillVersion.hasValue) {
-                    val jvmKillFileName = "jvmkill-${properties.jvmKillVersion.get()}.so"
+                if (properties.withJvmKill.hasValue) {
+                    val jvmKillFileName = "jvmkill-${properties.withJvmKill.get()}.so"
                     if (properties.withAppSh.get()) {
                         environment = environment + mapOf("JAVA_AGENT" to "/app/extra/$jvmKillFileName")
                     } else {
@@ -112,7 +114,7 @@ class JibBlueprint(project: Project) : Blueprint(project) {
 
     private fun downloadJvmKill(project: Project) {
         val properties = project.propertiesRegistry.get<DockerProperties>()
-        val jvmKillFile = project.extraDir.resolve("jvmkill-${properties.jvmKillVersion.get()}.so")
+        val jvmKillFile = project.extraDir.resolve("jvmkill-${properties.withJvmKill.get()}.so")
         if (jvmKillFile.exists()) {
             return
         }
@@ -120,7 +122,7 @@ class JibBlueprint(project: Project) : Blueprint(project) {
         jvmKillFile.parentFile.mkdirs()
 
         val jvmKillBaseUrl = "https://java-buildpack.cloudfoundry.org/jvmkill/bionic/x86_64"
-        val url = URL(jvmKillBaseUrl + "/jvmkill-${properties.jvmKillVersion.get()}-RELEASE.so")
+        val url = URL(jvmKillBaseUrl + "/jvmkill-${properties.withJvmKill.get()}-RELEASE.so")
         project.logger.lifecycle("Downloading $url")
         url.openStream().use { Files.copy(it, jvmKillFile.toPath()) }
     }

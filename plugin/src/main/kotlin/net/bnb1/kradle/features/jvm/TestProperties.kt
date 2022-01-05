@@ -6,26 +6,22 @@ import org.gradle.api.Project
 
 class TestProperties(project: Project) : Properties(project) {
 
-    val junitJupiterVersion = property<String>()
-    fun withJunitJupiter(version: String = Catalog.Versions.junit) = junitJupiterVersion.set(version)
+    val withJunitJupiter = optionalVersion(Catalog.Versions.junit)
+    val withJacoco = optionalVersion(Catalog.Versions.jacoco)
 
-    val jacocoVersion = property<String>()
-    fun withJacoco(version: String = Catalog.Versions.jacoco) = jacocoVersion.set(version)
+    val prettyPrint = flag()
 
-    val prettyPrint = property(false)
+    val withIntegrationTests = flag()
+    val integrationTests = withIntegrationTests
 
-    val withIntegrationTests = property(false)
-    fun integrationTests(enabled: Boolean = true) = withIntegrationTests(enabled)
+    val withFunctionalTests = flag()
+    val functionalTests = withFunctionalTests
 
-    val withFunctionalTests = property(false)
-    fun functionalTests(enabled: Boolean = true) = withFunctionalTests(enabled)
-
-    private val _customTests = mutableListOf<String>()
-    val customTests
-        get() = _customTests.toList()
-
-    fun withCustomTests(name: String) {
-        _customTests.remove(name)
-        _customTests.add(name)
+    val customTests = setProperty<String>()
+    fun withCustomTests(vararg names: String) {
+        names.forEach {
+            customTests.remove(it)
+            customTests.add(it)
+        }
     }
 }

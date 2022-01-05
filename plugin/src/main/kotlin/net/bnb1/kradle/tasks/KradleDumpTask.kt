@@ -1,10 +1,11 @@
 package net.bnb1.kradle.tasks
 
+import net.bnb1.kradle.Configurable
 import net.bnb1.kradle.featureRegistry
 import net.bnb1.kradle.features.EmptyProperties
 import net.bnb1.kradle.features.FeatureDsl
 import net.bnb1.kradle.features.PropertiesDsl
-import net.bnb1.kradle.features.PropertyDsl
+import net.bnb1.kradle.features.PropertyWrapper
 import net.bnb1.kradle.propertiesRegistry
 import net.bnb1.kradle.tracer
 import org.gradle.api.DefaultTask
@@ -181,9 +182,9 @@ open class KradleDumpTask : DefaultTask() {
             .forEach { member ->
                 val returnType = member.returnType.jvmErasure
                 val key = "${prefix}${member.name}"
-                if (returnType.isSubclassOf(PropertyDsl::class)) {
-                    val value = member.getter.call(target) as PropertyDsl<*>
-                    if (value.hasValue) {
+                if (returnType.isSubclassOf(PropertyWrapper::class)) {
+                    val value = member.getter.call(target) as PropertyWrapper<*>
+                    if (value.notNull) {
                         dump("$key = ${value.get()}")
                     } else {
                         dump("$key = NOT SET")
@@ -200,6 +201,12 @@ open class KradleDumpTask : DefaultTask() {
                 ) {
                     val value = member.getter.call(target) as Collection<*>
                     dump("$key = $value")
+                } else if (returnType.isSubclassOf(Configurable::class)) {
+                    member.getter.call(target)?.let {
+                        dump("$key = {")
+                        printProperties(it, level + 1)
+                        dump("$prefix}")
+                    }
                 } else if (
                     returnType.isSubclassOf(ObjectFactory::class) ||
                     returnType.isSubclassOf(FeatureDsl::class) ||
@@ -207,11 +214,7 @@ open class KradleDumpTask : DefaultTask() {
                 ) {
                     // Ignore
                 } else {
-                    member.getter.call(target)?.let {
-                        dump("$key = {")
-                        printProperties(it, level + 1)
-                        dump("$prefix}")
-                    }
+                    dump("$key = ${returnType::class.qualifiedName}")
                 }
             }
     }
