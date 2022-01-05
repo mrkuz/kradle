@@ -24,6 +24,8 @@ open class PropertyDsl<T : Any>(val property: Property<T>, private val defaultVa
         property.set(defaultValue)
     }
 
+    fun unset() = property.set(null)
+
     val hasValue
         get() = property.isPresent
 }
