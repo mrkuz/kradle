@@ -169,7 +169,7 @@ gradlePlugin {
             id = "net.bitsandbobs.kradle"
             implementationClass = "net.bnb1.kradle.plugins.KradlePlugin"
             displayName = "Kradle Plugin"
-            description = "Swiss army knife for Kotlin/JVM development"
+            description = "Swiss army knife for Kotlin/JVM (and also Java) development"
         }
         create("kradleApp") {
             id = "net.bitsandbobs.kradle-app"
@@ -194,6 +194,7 @@ pluginBundle {
     tags =
         listOf(
             "kotlin",
+            "java",
             "linting",
             "code-analysis",
             "dependency-analysis",

@@ -80,6 +80,8 @@ With `kradle` applied, many new [tasks](#tasks) become available.
 
 The example above uses the Kotlin/JVM application [preset](#presets).
 
+For pure Java projects, use the Java application preset `javaApplication` and apply the Java instead of the Kotlin plugin.
+
 For full configuration reference see [Appendix A](#appendix-a-configuration-reference).
 
 ## Tasks

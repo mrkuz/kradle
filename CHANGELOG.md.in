@@ -8,6 +8,7 @@
 - Fix `dev` in combination with Gradle toolchains
 - ktlint rules are configurable
 - Add [`withCustomTests`](README.md#test-improvements)
+- Add `kradleDump` for diagnostics
 - Add alternative configuration syntax for ktlint and detekt
 
   Before
