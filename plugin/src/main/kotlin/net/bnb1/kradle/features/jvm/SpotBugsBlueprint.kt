@@ -21,6 +21,7 @@ class SpotBugsBlueprint(project: Project) : Blueprint(project) {
     }
 
     override fun createTasks() {
+        val codeAnalysisProperties = project.propertiesRegistry.get<CodeAnalysisProperties>()
         val spotbugsTask = project.createHelperTask<Task>("spotbugs", "Runs SpotBugs")
         project.tasks.getByName(CodeAnalysisFeature.MAIN_TASK).dependsOn(spotbugsTask)
 
@@ -38,6 +39,7 @@ class SpotBugsBlueprint(project: Project) : Blueprint(project) {
                         required.set(true)
                         outputLocation.set(project.buildDir.resolve("reports/spotbugs/${sourceSet.name}.html"))
                     }
+                    ignoreFailures = codeAnalysisProperties.ignoreFailures.get()
                 }
                 spotbugsTask.dependsOn(taskName)
             }

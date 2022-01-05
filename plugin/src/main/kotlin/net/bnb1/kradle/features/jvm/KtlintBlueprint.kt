@@ -15,11 +15,13 @@ class KtlintBlueprint(project: Project) : Blueprint(project) {
     }
 
     override fun configure() {
+        val lintProperties = project.propertiesRegistry.get<LintProperties>()
         val properties = project.propertiesRegistry.get<KtlintProperties>()
         project.configure<KtlintExtension> {
             enableExperimentalRules.set(true)
             disabledRules.set(properties.rules.disabled)
             version.set(properties.version.get())
+            ignoreFailures.set(lintProperties.ignoreFailures.get())
         }
 
         project.tasks.getByName(LintFeature.MAIN_TASK).dependsOn("ktlintCheck")

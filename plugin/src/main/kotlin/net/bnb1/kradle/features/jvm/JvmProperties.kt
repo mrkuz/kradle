@@ -52,17 +52,17 @@ class JvmProperties(project: Project) : Properties(project) {
         .parent(JvmFeatureSet::class)
         .addBlueprint(OwaspDependencyCheckBlueprint(project))
         .build()
-    val lint = FeatureDsl.Builder<EmptyProperties>(project)
+    val lint = FeatureDsl.Builder<LintProperties>(project)
         .feature { LintFeature() }
-        .properties { EmptyProperties(it) }
+        .properties { LintProperties(it) }
         .parent(JvmFeatureSet::class)
         // Make sure test an benchmark source sets are available
         .after(TestFeature::class, BenchmarkFeature::class)
         .addBlueprint(LintBlueprint(project))
         .build()
-    val codeAnalysis = FeatureDsl.Builder<EmptyProperties>(project)
+    val codeAnalysis = FeatureDsl.Builder<CodeAnalysisProperties>(project)
         .feature { CodeAnalysisFeature() }
-        .properties { EmptyProperties(it) }
+        .properties { CodeAnalysisProperties(it) }
         .parent(JvmFeatureSet::class)
         .after(TestFeature::class, BenchmarkFeature::class)
         .addBlueprint(CodeAnalysisBlueprint(project))

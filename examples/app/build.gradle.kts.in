@@ -82,8 +82,12 @@ kradle {
 
         dependencyUpdates.enable()
         vulnerabilityScan.enable()
-        lint.enable()
-        codeAnalysis.enable()
+        lint {
+            // ignoreFailures(false)
+        }
+        codeAnalysis {
+            // ignoreFailures(false)
+        }
         developmentMode.enable()
 
         test {

@@ -10,6 +10,7 @@
 - Add [`withCustomTests`](README.md#test-improvements)
 - Add `kradleDump` for diagnostics
 - Exclude beta versions in `showDependencyUpdates`
+- Add option 'ignoreFailures' for linting and code analysis
 - Add alternative configuration syntax for ktlint and detekt
 
   Before

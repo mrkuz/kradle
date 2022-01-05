@@ -15,6 +15,7 @@ private const val CONFIGURATION_NAME = "kradlePmd"
 class PmdBlueprint(project: Project) : Blueprint(project) {
 
     override fun createTasks() {
+        val codeAnalysisProperties = project.propertiesRegistry.get<CodeAnalysisProperties>()
         val properties = project.propertiesRegistry.get<PmdProperties>()
 
         project.configurations.create(CONFIGURATION_NAME) {
@@ -49,6 +50,7 @@ class PmdBlueprint(project: Project) : Blueprint(project) {
                 reports.forEach {
                     it.outputLocation.set(project.buildDir.resolve("reports/pmd/${sourceSet.name}.${it.name}"))
                 }
+                ignoreFailures = codeAnalysisProperties.ignoreFailures.get()
             }
             pmdTask.dependsOn(taskName)
         }

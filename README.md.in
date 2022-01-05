@@ -453,6 +453,20 @@ Adds the task `lint`, which runs:
 
 Plugins used: [ktlint Plugin](https://plugins.gradle.org/plugin/org.jlleitschuh.gradle.ktlint)
 
+#### Options
+
+```kotlin
+kradle {
+    jvm {
+        lint {
+            ignoreFailures(false)
+        }
+    }
+}
+```
+
+- `ignoreFailures`: Build is successful, even if there are linting errors
+
 ### Code analysis
 
 ```kotlin
@@ -476,6 +490,20 @@ Adds the tasks `generateDetektConfig`, which generates a configuration file with
 `analyzeCode` is executed when running `check`.
 
 Plugins used: [detekt Plugin](https://plugins.gradle.org/plugin/io.gitlab.arturbosch.detekt), [PMD Plugin](https://docs.gradle.org/current/userguide/pmd_plugin.html), [SpotBugs Plugin](https://plugins.gradle.org/plugin/com.github.spotbugs)
+
+#### Options
+
+```kotlin
+kradle {
+    jvm {
+        codeAnalysis {
+            ignoreFailures(false)
+        }
+    }
+}
+```
+
+- `ignoreFailures`: Build is successful, even if there are code analysis errors
 
 ### Development mode
 
@@ -988,8 +1016,12 @@ kradle {
 
         dependencyUpdates.enable()
         vulnerabilityScan.enable()
-        lint.enable()
-        codeAnalysis.enable()
+        lint {
+            ignoreFailures(false)
+        }
+        codeAnalysis {
+            ignoreFailures(false)
+        }
         developmentMode.enable()
 
         test {

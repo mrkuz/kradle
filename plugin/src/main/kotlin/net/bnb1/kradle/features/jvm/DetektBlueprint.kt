@@ -16,6 +16,7 @@ private const val CONFIGURATION_NAME = "kradleDetekt"
 class DetektBlueprint(project: Project) : Blueprint(project) {
 
     override fun createTasks() {
+        val codeAnalysisProperties = project.propertiesRegistry.get<CodeAnalysisProperties>()
         val properties = project.propertiesRegistry.get<KotlinCodeAnalysisProperties>()
         val configFile = project.rootDir.resolve(properties.detektConfigFile.get())
 
@@ -57,6 +58,7 @@ class DetektBlueprint(project: Project) : Blueprint(project) {
                     buildUponDefaultConfig = false
                     config.setFrom(configFile)
                 }
+                ignoreFailures = codeAnalysisProperties.ignoreFailures.get()
             }
 
             detektTask.dependsOn(taskName)

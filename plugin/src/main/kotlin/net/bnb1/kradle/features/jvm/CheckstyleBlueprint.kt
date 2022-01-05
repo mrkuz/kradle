@@ -16,6 +16,7 @@ private const val CONFIGURATION_NAME = "kradleCheckstyle"
 class CheckstyleBlueprint(project: Project) : Blueprint(project) {
 
     override fun createTasks() {
+        val lintProperties = project.propertiesRegistry.get<LintProperties>()
         val properties = project.propertiesRegistry.get<CheckstyleProperties>()
         val configFile = project.rootDir.resolve(properties.configFile.get())
 
@@ -55,6 +56,7 @@ class CheckstyleBlueprint(project: Project) : Blueprint(project) {
                 if (!configFile.exists()) {
                     dependsOn("generateCheckstyleConfig")
                 }
+                ignoreFailures = lintProperties.ignoreFailures.get()
             }
             checkstyleTask.dependsOn(taskName)
         }
