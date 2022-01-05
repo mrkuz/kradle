@@ -105,6 +105,26 @@
       }
       ```
 
+   Before
+
+      ```
+      kradle {
+          jvm {
+            codeAnalysis.enable()
+          }
+      }
+      ```
+
+   After
+
+      ```
+      kradle {
+          jvm {
+            codeAnalysis(true)
+          }
+      }
+      ```
+
 ### Version 2.0.1 (2022-01-01)
 
 - `kradle` now works in combination with [Gradle toolchains](https://docs.gradle.org/current/userguide/toolchains.html)

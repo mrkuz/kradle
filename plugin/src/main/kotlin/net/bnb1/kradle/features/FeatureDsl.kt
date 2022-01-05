@@ -10,7 +10,15 @@ class FeatureDsl<P : Properties> private constructor(
     private val properties: P
 ) {
 
-    operator fun invoke(action: P.() -> Unit = {}) = enable(action)
+    operator fun invoke(enable: Boolean = true) {
+        if (enable) {
+            enable()
+        } else {
+            disable()
+        }
+    }
+
+    operator fun invoke(action: P.() -> Unit) = enable(action)
 
     fun enable(action: P.() -> Unit = {}) {
         action(properties)

@@ -116,12 +116,20 @@ Features provided by `kradle` must be enabled explicitly. For example to enable 
 ```kotlin
 kradle {
     jvm {
-        benchmarks.enable()
+        benchmark.enable()
     }
 }
 ```
 
-If the feature has options, you can pass in a configuration code block. This configures and enables the feature.
+You can use one of the following statements to enable features, whatever fits your taste.
+
+```kotlin
+benchmark.enable()
+benchmark(true)
+benchmark()
+```
+
+If the feature has options, you can pass in a configuration code block.
 
 ```kotlin
 kradle {
@@ -133,7 +141,16 @@ kradle {
 }
 ```
 
-The options shown represent the defaults.
+This configures and enables the feature. Alternatively you can use `benchmark.enable { ... }`.
+
+The options shown in this section of the documentation represent the defaults.
+
+It is also possible to deactivate features. This can be useful if you are using [presets](#presets).
+
+```kotlin
+benchmark.disable()
+benchmark(false)
+```
 
 ### Bootstrapping
 
@@ -524,7 +541,7 @@ kradle {
 ```kotlin
 kradle {
     jvm {
-        benchmarks.enable()
+        benchmark.enable()
     }
 }
 ```
