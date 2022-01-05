@@ -110,6 +110,7 @@ class TestBlueprint(project: Project) : Blueprint(project) {
             include("**/*Test.class")
             include("**/*Tests.class")
             include("**/*IT.class")
+            include("**/*Spec.class")
         }
     }
 }

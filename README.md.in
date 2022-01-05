@@ -534,7 +534,7 @@ kradle {
 }
 ```
 
-Test file names can end with `Test`, `Tests` or `IT`.
+Test file names can end with `Test`, `Tests`, `Spec` or `IT`.
 
 Plugins used: [Java Plugin](https://docs.gradle.org/current/userguide/java_plugin.html)
 , [JaCocCo Plugin](https://docs.gradle.org/current/userguide/jacoco_plugin.html),
