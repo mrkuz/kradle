@@ -75,6 +75,6 @@ class SpotBugsBlueprintTests : PluginSpec({
         val result = runTask("dependencies", "--configuration", "spotbugsPlugins")
 
         result.output shouldContain "com.h3xstream.findsecbugs:findsecbugs-plugin"
-        result.output shouldContain "com.mebigfatguy.fb-contrib:fb-contrib"
+        result.output shouldContain "com.mebigfatguy.sb-contrib:sb-contrib"
     }
 })
