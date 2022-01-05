@@ -16,6 +16,7 @@ class KradleCompatBasePlugin : Plugin<Project> {
 
         project.repositories {
             mavenCentral()
+            google()
             gradlePluginPortal()
             mavenLocal()
         }
