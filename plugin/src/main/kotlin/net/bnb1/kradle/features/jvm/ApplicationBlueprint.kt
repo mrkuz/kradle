@@ -51,7 +51,7 @@ class ApplicationBlueprint(project: Project) : Blueprint(project) {
         }
 
         val javaProperties = project.propertiesRegistry.get<JavaProperties>()
-        if (javaProperties.withPreviewFeatures.get()) {
+        if (javaProperties.previewFeatures.get()) {
             project.tasks.withType<JavaExec> {
                 jvmArgs = jvmArgs + "--enable-preview"
             }

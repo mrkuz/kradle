@@ -58,7 +58,7 @@ class JavaBlueprintTests : PluginSpec({
                     mainClass("com.example.demo.App")
                 }
                 java {
-                    withPreviewFeatures(true)
+                    previewFeatures(true)
                 }
             }
             """.trimIndent()

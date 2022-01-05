@@ -45,7 +45,7 @@ class DevelopmentModeBlueprint(project: Project) : Blueprint(project) {
             environment("PROJECT_ROOT", project.rootDir)
             // Speed up start when developing
             jvmArgs = listOf("-XX:TieredStopAtLevel=1")
-            if (javaProperties.withPreviewFeatures.get()) {
+            if (javaProperties.previewFeatures.get()) {
                 jvmArgs = jvmArgs + "--enable-preview"
             }
             classpath = mainSourceSet.runtimeClasspath

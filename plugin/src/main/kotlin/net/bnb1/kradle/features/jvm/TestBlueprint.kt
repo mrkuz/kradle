@@ -100,7 +100,7 @@ class TestBlueprint(project: Project) : Blueprint(project) {
             if (testProperties.junitJupiterVersion.hasValue) {
                 useJUnitPlatform()
             }
-            if (javaProperties.withPreviewFeatures.get()) {
+            if (javaProperties.previewFeatures.get()) {
                 jvmArgs = jvmArgs + "--enable-preview"
             }
             testLogging {

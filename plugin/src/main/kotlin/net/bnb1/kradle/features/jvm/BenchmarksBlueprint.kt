@@ -27,7 +27,7 @@ class BenchmarksBlueprint(project: Project) : Blueprint(project) {
 
     override fun shouldActivate(): Boolean {
         val javaProperties = project.propertiesRegistry.get<JavaProperties>()
-        if (javaProperties.withPreviewFeatures.get()) {
+        if (javaProperties.previewFeatures.get()) {
             project.logger.warn("WARNING: Benchmarks are currently not working with preview features enabled")
             return false
         }

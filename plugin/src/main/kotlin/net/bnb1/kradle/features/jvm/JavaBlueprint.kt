@@ -49,7 +49,7 @@ class JavaBlueprint(project: Project) : Blueprint(project) {
         }
 
         val javaProperties = project.propertiesRegistry.get<JavaProperties>()
-        if (javaProperties.withPreviewFeatures.get()) {
+        if (javaProperties.previewFeatures.get()) {
             project.tasks.withType<JavaCompile> {
                 options.compilerArgs.add("--enable-preview")
             }

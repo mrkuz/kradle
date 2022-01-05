@@ -48,7 +48,7 @@ kradle {
         }
         java {
             /*
-            withPreviewFeatures(false)
+            previewFeatures(false)
             lint {
                 checkstyle {
                     version("${versions.checkstyle}")
