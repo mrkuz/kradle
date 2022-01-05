@@ -46,6 +46,8 @@ class SpotBugsBlueprint(project: Project) : Blueprint(project) {
     override fun addDependencies() {
         val properties = project.propertiesRegistry.get<SpotBugsProperties>()
         project.dependencies {
+            add("compileOnly", "${Catalog.Dependencies.Tools.findBugsAnnotations}:${Catalog.Versions.findBugs}")
+            add("spotbugsSlf4j", "${Catalog.Dependencies.Tools.slf4jSimple}:${Catalog.Versions.slf4j}")
             if (properties.findSecBugs.hasValue) {
                 add("spotbugsPlugins", "${Catalog.Dependencies.Tools.findSecBugs}:${properties.findSecBugs.get()}")
             }

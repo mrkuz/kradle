@@ -17,6 +17,8 @@ object Catalog {
         const val spotbugs = "4.5.2"
         const val findSecBugs = "1.11.0"
         const val fbContrib = "7.4.7"
+        const val findBugs = "3.0.1"
+        const val slf4j = "1.7.32"
     }
 
     object Dependencies {
@@ -48,7 +50,9 @@ object Catalog {
             val checkstyle = artifact("com.puppycrawl.tools", "checkstyle", Versions.checkstyle)
             val pmd = artifact("net.sourceforge.pmd", "pmd-java", Versions.pmd)
             val findSecBugs = artifact("com.h3xstream.findsecbugs", "findsecbugs-plugin", Versions.findSecBugs)
-            val fbContrib = artifact("com.mebigfatguy.fb-contrib", "fb-contrib", Versions.fbContrib)
+            val fbContrib = artifact("com.mebigfatguy.sb-contrib", "sb-contrib", Versions.fbContrib)
+            val findBugsAnnotations = artifact("com.google.code.findbugs", "annotations", Versions.findBugs)
+            val slf4jSimple = artifact("org.slf4j", "slf4j-simple", Versions.slf4j)
 
             // Not directly referred, but still used in kradle
             val jvmKill = artifact("org.cloudfoundry", "jvmkill", Versions.jvmKill)
