@@ -112,7 +112,7 @@ kradle {
         docker {
             // baseImage("bellsoft/liberica-openjdk-alpine:${versions.jvm}")
             withJvmKill(/* "${versions.jvmKill}" */)
-            // appSh(false)
+            // startupScript(false)
             // ports(...)
             // javaOpts("")
         }

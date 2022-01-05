@@ -100,7 +100,7 @@
       kradle {
           jvm {
             docker {
-                appSh(true)
+                startupScript(true)
                 ports(...)
             }
           }

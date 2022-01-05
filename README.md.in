@@ -651,7 +651,7 @@ kradle {
     jvm {
         docker {
             baseImage("bellsoft/liberica-openjdk-alpine:${versions.jvm}")
-            appSh(false)
+            startupScript(false)
             // withJvmKill(${versions.jvmKill}")
             // ports(...)
             // jvmOpts(...)
@@ -664,7 +664,7 @@ kradle {
 - `ports`: List of exposed ports
 - `jvmOpts`: Options passed to the JVM
 - `withJvmKill`: Adds [jvmkill](https://github.com/airlift/jvmkill) to the image. [jvmkill](https://github.com/airlift/jvmkill) terminates the JVM if it is unable to allocate memory.
-- `appSh`: Uses a script as entrypoint for the container. You can provide your own script in _src/main/extra/app.sh_. If you don't, `kradle` will create one for you.
+- `startupScript`: Uses a script as entrypoint for the container. You can provide your own script in _src/main/extra/app.sh_. If you don't, `kradle` will create one for you.
 
 ### Documentation
 
@@ -1046,7 +1046,7 @@ kradle {
         docker {
             baseImage("bellsoft/liberica-openjdk-alpine:${versions.jvm}")
             withJvmKill(/* "${versions.jvmKill}" */)
-            appSh(true)
+            startupScript(true)
             ports(...)
             jvmOpts(...)
         }

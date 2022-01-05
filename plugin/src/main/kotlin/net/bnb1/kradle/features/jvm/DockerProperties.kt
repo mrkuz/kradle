@@ -15,7 +15,7 @@ class DockerProperties(project: Project) : Properties(project) {
     fun withJvmKill(version: String = Catalog.Versions.jvmKill) = jvmKillVersion.set(version)
 
     val withAppSh = property(false)
-    fun appSh(enabled: Boolean = true) = withAppSh(enabled)
+    fun startupScript(enabled: Boolean = true) = withAppSh(enabled)
 
     val javaOpts = property<String>()
     val jvmOpts = javaOpts
