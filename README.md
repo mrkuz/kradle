@@ -31,7 +31,7 @@ Most of the functionality is provided by other well-known plugins. `kradle` just
     - [`lint`](#task-lint)
     - [`analyzeCode`](#task-analyze-code)
     - [`dev`](#task-dev)
-    - [`runBenchmarks`](#task-run-benchmark)
+    - [`runBenchmarks`](#task-run-benchmarks)
     - [`integrationTest`](#task-integration-test)
     - [`functionalTest`](#task-functional-test)
     - [`generateDocumentation`](#task-generate-documentation)
@@ -41,6 +41,8 @@ Most of the functionality is provided by other well-known plugins. `kradle` just
     - [`install`](#task-install)
     - [`generateGitignore`](#task-generate-git-ignore)
     - [`generateBuildProperties`](#task-generate-build-properties)
+    - [`generateCheckstyleConfig`](#task-generate-checkstyle-config)
+    - [`generateDetektConfig`](#task-generate-detekt-config)
 
 - [Features](#features)
     - [Bootstrapping](#feature-bootstrap)
@@ -54,7 +56,7 @@ Most of the functionality is provided by other well-known plugins. `kradle` just
     - [Dependency updates](#feature-dependency-updates)
     - [Vulnerability scans](#feature-vulnerability-scan)
     - [Linting](#feature-lint)
-    - [Code analysis](#feauture-code-analysis)
+    - [Code analysis](#feature-code-analysis)
     - [Development mode](#feature-development-mode)
     - [Test improvements](#feature-test)
     - [Benchmarks](#feature-benchmark)
@@ -158,6 +160,9 @@ Which tasks are available, depends on the [features](#features) enabled.
 | <a id="task-install"></a>[install](#feature-library) | Installs JAR to local Maven repository (libraries only) |  publishToMavenLocal | [Maven Publish Plugin](https://docs.gradle.org/current/userguide/publishing_maven.html) |
 | <a id="task-generate-git-ignore"></a>[generateGitignore](#feature-git) | Generates _.gitignore_ | - | - |
 | <a id="task-generate-build-properties"></a>[generateBuildProperties](#feature-build-properties) | Generates _build.properties_ | - | - |
+| <a id="task-generate-detekt-config"></a>[generateDetektConfig](#feature-code-analysis) | Generates _detekt-config.yml_ | - | - |
+| <a id="task-generate-checkstyle-config"></a>[generateCheckstyleConfig](#feature-code-analysis) | Generates _checkstyle.xml_ | - | - |
+| kradleDump | Dumps kradle diagnostic information | - | - |
 
 <a id="features"></a>
 ## Features
@@ -643,7 +648,7 @@ kradle {
 - `withJunitJupiter`: Sets up [JUnit Jupiter](https://junit.org/junit5/) for running tests
 - `withJacoco`: Generates [JaCoCo](https://www.jacoco.org/jacoco/) code coverage reports after tests. They can be found under _build/reports/jacoco/_.
 
-<a id="feature-benchmarks"></a>
+<a id="feature-benchmark"></a>
 ### Benchmarks
 
 ```kotlin
@@ -748,7 +753,7 @@ kradle {
 - `withJvmKill`: Adds [jvmkill](https://github.com/airlift/jvmkill) to the image. [jvmkill](https://github.com/airlift/jvmkill) terminates the JVM if it is unable to allocate memory.
 - `startupScript`: Uses a script as entrypoint for the container. You can provide your own script at _src/main/extra/app.sh_. Otherwise `kradle` will create one.
 
-<a id="feature-docker"></a>
+<a id="feature-documentation"></a>
 ### Documentation
 
 ```kotlin
