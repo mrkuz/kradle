@@ -2,7 +2,7 @@ package net.bnb1.kradle.features.jvm
 
 import net.bnb1.kradle.Catalog
 import net.bnb1.kradle.Configurable
-import net.bnb1.kradle.features.FlagDsl
+import net.bnb1.kradle.dsl.FlagDsl
 import net.bnb1.kradle.features.Properties
 import org.gradle.api.Project
 import org.gradle.api.model.ObjectFactory

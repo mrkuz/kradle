@@ -1,4 +1,4 @@
-package net.bnb1.kradle.features
+package net.bnb1.kradle.dsl
 
 import org.gradle.api.provider.SetProperty
 

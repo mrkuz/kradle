@@ -1,5 +1,10 @@
 package net.bnb1.kradle.features
 
+import net.bnb1.kradle.dsl.FlagDsl
+import net.bnb1.kradle.dsl.FlagsDsl
+import net.bnb1.kradle.dsl.PropertyDsl
+import net.bnb1.kradle.dsl.SetPropertyDsl
+import net.bnb1.kradle.dsl.VersionDsl
 import org.gradle.api.Project
 
 /**

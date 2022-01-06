@@ -1,5 +1,6 @@
-package net.bnb1.kradle.features
+package net.bnb1.kradle.dsl
 
+import net.bnb1.kradle.features.Properties
 import net.bnb1.kradle.propertiesRegistry
 import org.gradle.api.Project
 
