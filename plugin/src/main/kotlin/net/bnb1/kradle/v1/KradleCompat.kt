@@ -6,6 +6,7 @@ import net.bnb1.kradle.features.jvm.BenchmarksBlueprint
 import net.bnb1.kradle.features.jvm.TestBlueprint
 import net.bnb1.kradle.features.jvm.TestProperties
 import net.bnb1.kradle.propertiesRegistry
+import net.bnb1.kradle.tracer
 import org.gradle.api.Project
 import org.gradle.kotlin.dsl.configure
 import org.jetbrains.kotlin.allopen.gradle.AllOpenExtension
@@ -30,6 +31,8 @@ class KradleCompat(private val project: Project, private val type: ProjectType) 
                 general.activate()
                 jvm.activate()
             }
+
+            project.tracer.deactivate()
         }
     }
 
@@ -67,15 +70,20 @@ class KradleCompat(private val project: Project, private val type: ProjectType) 
                 kotlin {
                     kotlinxCoroutinesVersion.bind(compatExtension.kotlinxCoroutinesVersion)
                     lint {
-                        ktlintVersion.bind(compatExtension.ktlintVersion)
+                        ktlint {
+                            version.bind(compatExtension.ktlintVersion)
+                            rules {
+                                disable("no-wildcard-imports")
+                            }
+                        }
                     }
                     codeAnalysis {
                         detektConfigFile.bind(compatExtension.detektConfigFile)
                         detektVersion.bind(compatExtension.detektVersion)
                     }
                     test {
-                        mockkVersion.bind(compatExtension.tests.mockkVersion)
-                        kotestVersion.bind(compatExtension.tests.kotestVersion)
+                        useMockk.bind(compatExtension.tests.mockkVersion)
+                        useKotest.bind(compatExtension.tests.kotestVersion)
                     }
                 }
 
@@ -96,8 +104,8 @@ class KradleCompat(private val project: Project, private val type: ProjectType) 
 
                 test {
                     prettyPrint(true)
-                    junitJupiterVersion.bind(compatExtension.tests.junitJupiterVersion)
-                    jacocoVersion.bind(compatExtension.tests.jacocoVersion)
+                    withJunitJupiter.bind(compatExtension.tests.junitJupiterVersion)
+                    withJacoco.bind(compatExtension.tests.jacocoVersion)
                 }
                 benchmark {
                     jmhVersion.bind(compatExtension.jmhVersion)
@@ -111,8 +119,8 @@ class KradleCompat(private val project: Project, private val type: ProjectType) 
                 if (type == ProjectType.APPLICATION) {
                     docker.enable {
                         baseImage.bind(compatExtension.image.baseImage)
-                        ports.set(compatExtension.image.ports)
-                        jvmKillVersion.bind(compatExtension.image.jvmKillVersion)
+                        ports.bind(compatExtension.image.ports)
+                        withJvmKill.bind(compatExtension.image.jvmKillVersion)
                         withAppSh.bind(compatExtension.image.withAppSh)
                         javaOpts.bind(compatExtension.image.javaOpts)
                     }

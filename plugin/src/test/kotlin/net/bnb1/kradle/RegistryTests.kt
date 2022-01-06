@@ -4,6 +4,7 @@ import io.kotest.core.spec.IsolationMode
 import io.kotest.core.spec.style.BehaviorSpec
 import io.kotest.matchers.shouldBe
 import net.bnb1.kradle.features.Properties
+import net.bnb1.kradle.support.Registry
 
 class RegistryTests : BehaviorSpec({
 

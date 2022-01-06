@@ -17,6 +17,13 @@ class KotlinJvmApplicationPreset(project: Project) : Preset(project) {
             jvm.configureOnly {
                 kotlin {
                     useCoroutines()
+                    lint {
+                        ktlint {
+                            rules {
+                                disable("no-wildcard-imports")
+                            }
+                        }
+                    }
                     test {
                         useKotest()
                         useMockk()
@@ -31,8 +38,8 @@ class KotlinJvmApplicationPreset(project: Project) : Preset(project) {
 
                 test {
                     prettyPrint(true)
-                    withIntegrationTests(true)
-                    withFunctionalTests(true)
+                    integrationTests()
+                    functionalTests()
                     withJunitJupiter()
                     withJacoco()
                 }

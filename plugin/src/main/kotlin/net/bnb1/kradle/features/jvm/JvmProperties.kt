@@ -1,23 +1,31 @@
 package net.bnb1.kradle.features.jvm
 
 import net.bnb1.kradle.Catalog
+import net.bnb1.kradle.dsl.FeatureDsl
 import net.bnb1.kradle.features.EmptyProperties
-import net.bnb1.kradle.features.FeatureDsl
 import net.bnb1.kradle.features.Properties
-import net.bnb1.kradle.property
 import org.gradle.api.Project
 
 class JvmProperties(project: Project) : Properties(project) {
 
-    val targetJvm = property(factory.property(Catalog.Versions.jvm))
+    private val javaBlueprint = JavaBlueprint(project)
+    private val allOpenBlueprint = AllOpenBlueprint(project)
+
+    val targetJvm = value(Catalog.Versions.jvm)
 
     val kotlin = FeatureDsl.Builder<KotlinProperties>(project)
         .feature { KotlinFeature() }
         .properties { KotlinProperties(it) }
         .parent(JvmFeatureSet::class)
-        .addBlueprint(JavaBlueprint(project))
+        .addBlueprint(javaBlueprint)
         .addBlueprint(KotlinBlueprint(project))
-        .addBlueprint(AllOpenBlueprint(project))
+        .addBlueprint(allOpenBlueprint)
+        .build()
+    val java = FeatureDsl.Builder<JavaProperties>(project)
+        .feature { JavaFeature() }
+        .properties { JavaProperties(it) }
+        .parent(JvmFeatureSet::class)
+        .addBlueprint(javaBlueprint)
         .build()
     val application = FeatureDsl.Builder<ApplicationProperties>(project)
         .feature { ApplicationFeature() }
@@ -44,17 +52,17 @@ class JvmProperties(project: Project) : Properties(project) {
         .parent(JvmFeatureSet::class)
         .addBlueprint(OwaspDependencyCheckBlueprint(project))
         .build()
-    val lint = FeatureDsl.Builder<EmptyProperties>(project)
+    val lint = FeatureDsl.Builder<LintProperties>(project)
         .feature { LintFeature() }
-        .properties { EmptyProperties(it) }
+        .properties { LintProperties(it) }
         .parent(JvmFeatureSet::class)
         // Make sure test an benchmark source sets are available
         .after(TestFeature::class, BenchmarkFeature::class)
         .addBlueprint(LintBlueprint(project))
         .build()
-    val codeAnalysis = FeatureDsl.Builder<EmptyProperties>(project)
+    val codeAnalysis = FeatureDsl.Builder<CodeAnalysisProperties>(project)
         .feature { CodeAnalysisFeature() }
-        .properties { EmptyProperties(it) }
+        .properties { CodeAnalysisProperties(it) }
         .parent(JvmFeatureSet::class)
         .after(TestFeature::class, BenchmarkFeature::class)
         .addBlueprint(CodeAnalysisBlueprint(project))
@@ -78,7 +86,7 @@ class JvmProperties(project: Project) : Properties(project) {
         .feature { BenchmarkFeature() }
         .properties { BenchmarkProperties(it) }
         .parent(JvmFeatureSet::class)
-        .addBlueprint(AllOpenBlueprint(project))
+        .addBlueprint(allOpenBlueprint)
         .addBlueprint(BenchmarksBlueprint(project))
         .build()
 

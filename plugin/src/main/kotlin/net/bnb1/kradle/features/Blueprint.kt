@@ -1,5 +1,6 @@
 package net.bnb1.kradle.features
 
+import net.bnb1.kradle.tracer
 import org.gradle.api.Project
 import java.util.concurrent.atomic.AtomicBoolean
 import kotlin.reflect.KClass
@@ -17,19 +18,27 @@ open class Blueprint(protected val project: Project) : FeatureListener {
         if (!activated.compareAndSet(false, true)) {
             return
         }
+
         if (!shouldActivate()) {
+            project.tracer.branch {
+                trace("${this@Blueprint::class.simpleName} (B, skipped)")
+            }
             return
         }
-        project.logger.info("Activate blueprint: ${this::class.simpleName}")
-        checkPreconditions()
-        applyPlugins()
-        registerBlueprints()
-        createSourceSets()
-        createTasks()
-        addAliases()
-        addExtraProperties()
-        addDependencies()
-        configure()
+
+        project.tracer.branch {
+            trace("${this@Blueprint::class.simpleName} (B)")
+
+            checkPreconditions()
+            applyPlugins()
+            registerBlueprints()
+            createSourceSets()
+            createTasks()
+            addAliases()
+            addExtraProperties()
+            addDependencies()
+            configure()
+        }
     }
 
     val isActivated

@@ -1,12 +1,14 @@
 plugins {
     id("org.jetbrains.kotlin.jvm") version "1.6.0"
-    id("net.bitsandbobs.kradle") version "2.0.1"
+    id("net.bitsandbobs.kradle") version "main-SNAPSHOT"
 }
 
 group = "com.example"
 version = "1.0.0"
 
 kradle {
+
+    // Defaults are commented out, but kept for reference
 
     general {
         bootstrap.enable()
@@ -24,28 +26,75 @@ kradle {
         kotlin {
             useCoroutines(/* "1.6.0" */)
             lint {
-                // ktlintVersion("0.43.2")
+                ktlint {
+                    // version("0.43.2")
+                    rules {
+                        disable("no-wildcard-imports")
+                    }
+                }
             }
+            /*
             codeAnalysis {
-                // detektConfigFile("detekt-config.yml")
-                // detektVersion("1.19.0")
+                detekt {
+                    version("1.19.0")
+                    configFile("detekt-config.yml")
+                }
             }
+            */
             test {
                 useKotest(/* "5.0.3" */)
                 useMockk(/* "1.12.2" */)
             }
         }
+        java {
+            /*
+            previewFeatures(false)
+            lint {
+                checkstyle {
+                    version("9.2.1")
+                    configFile("checkstyle.xml")
+                }
+            }
+            */
+            codeAnalysis {
+                /*
+                pmd {
+                    version("6.41.0")
+                    ruleSets {
+                        bestPractices(false)
+                        codeStyle(false)
+                        design(false)
+                        documentation(false)
+                        errorProne(true)
+                        multithreading(true)
+                        performance(true)
+                        security(true)
+                    }
+                }
+                */
+                spotBugs {
+                    // version("4.5.2")
+                    useFbContrib(/* 7.4.7 */)
+                    useFindSecBugs(/* 1.11.0 */)
+                }
+            }
+        }
 
         dependencyUpdates.enable()
         vulnerabilityScan.enable()
-        lint.enable()
-        codeAnalysis.enable()
+        lint {
+            // ignoreFailures(false)
+        }
+        codeAnalysis {
+            // ignoreFailures(false)
+        }
         developmentMode.enable()
 
         test {
             prettyPrint(true)
-            withIntegrationTests(true)
-            withFunctionalTests(true)
+            integrationTests(true)
+            functionalTests(true)
+            // customTests("...")
             withJunitJupiter(/* "5.8.2" */)
             withJacoco(/* "0.8.7" */)
         }
@@ -61,10 +110,10 @@ kradle {
         }
 
         docker {
-            withJvmKill(/* "1.16.0" */)
             // baseImage("bellsoft/liberica-openjdk-alpine:17")
-            // withAppSh(false)
-            // ports.add()
+            withJvmKill(/* "1.16.0" */)
+            // startupScript(false)
+            // ports(...)
             // javaOpts("")
         }
 

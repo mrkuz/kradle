@@ -1,6 +1,10 @@
-package net.bnb1.kradle.features
+package net.bnb1.kradle.dsl
 
 import net.bnb1.kradle.featureRegistry
+import net.bnb1.kradle.features.Blueprint
+import net.bnb1.kradle.features.Feature
+import net.bnb1.kradle.features.FeatureSet
+import net.bnb1.kradle.features.Properties
 import net.bnb1.kradle.propertiesRegistry
 import org.gradle.api.Project
 import kotlin.reflect.KClass
@@ -10,7 +14,15 @@ class FeatureDsl<P : Properties> private constructor(
     private val properties: P
 ) {
 
-    operator fun invoke(action: P.() -> Unit = {}) = enable(action)
+    operator fun invoke(enable: Boolean = true) {
+        if (enable) {
+            enable()
+        } else {
+            disable()
+        }
+    }
+
+    operator fun invoke(action: P.() -> Unit) = enable(action)
 
     fun enable(action: P.() -> Unit = {}) {
         action(properties)

@@ -1,8 +1,14 @@
 package net.bnb1.kradle.features.jvm
 
 import com.adarshr.gradle.testlogger.TestLoggerPlugin
-import net.bnb1.kradle.*
+import net.bnb1.kradle.Catalog
+import net.bnb1.kradle.apply
+import net.bnb1.kradle.createTask
 import net.bnb1.kradle.features.Blueprint
+import net.bnb1.kradle.propertiesRegistry
+import net.bnb1.kradle.sourceSets
+import net.bnb1.kradle.testImplementation
+import net.bnb1.kradle.testRuntimeOnly
 import org.gradle.api.Project
 import org.gradle.api.tasks.SourceSet
 import org.gradle.api.tasks.testing.Test
@@ -22,13 +28,29 @@ class TestBlueprint(project: Project) : Blueprint(project) {
     // compat: Must be public we can create the tasks eagerly
     public override fun createTasks() {
         val properties = project.propertiesRegistry.get<TestProperties>()
-        if (properties.withIntegrationTests.get()) {
-            createTask("integrationTest", "Runs the integration tests")
+        val customTests = mutableListOf<String>()
+        properties.customTests.get().forEach {
+            customTests.remove(it)
+            customTests.add(it)
         }
+
         if (properties.withFunctionalTests.get()) {
-            createTask("functionalTest", "Runs the functional tests")
-            if (properties.withIntegrationTests.hasValue) {
-                project.tasks.getByName("functionalTest").shouldRunAfter("integrationTest")
+            customTests.remove("functional")
+            customTests.add(0, "functional")
+        }
+        if (properties.withIntegrationTests.get()) {
+            customTests.remove("integration")
+            customTests.add(0, "integration")
+        }
+
+        for (i in 0 until customTests.size) {
+            val name = customTests[i]
+            createTask("${name}Test", "Runs the $name tests")
+            if (i == 0) {
+                project.tasks.findByName("${name}Test")!!.shouldRunAfter("test")
+            } else {
+                val prevName = customTests[i - 1]
+                project.tasks.findByName("${name}Test")!!.shouldRunAfter("${prevName}Test")
             }
         }
     }
@@ -54,7 +76,7 @@ class TestBlueprint(project: Project) : Blueprint(project) {
                 }
             }
 
-        project.create<Test>(name, description) {
+        project.createTask<Test>(name, description) {
             testClassesDirs = sourceSet.output.classesDirs
             classpath = sourceSet.runtimeClasspath
             mustRunAfter("test")
@@ -65,19 +87,24 @@ class TestBlueprint(project: Project) : Blueprint(project) {
 
     override fun addDependencies() {
         val properties = project.propertiesRegistry.get<TestProperties>()
-        if (properties.junitJupiterVersion.hasValue) {
+        if (properties.withJunitJupiter.hasValue) {
             project.dependencies {
-                testImplementation("org.junit.jupiter:junit-jupiter-api:${properties.junitJupiterVersion.get()}")
-                testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:${properties.junitJupiterVersion.get()}")
+                testImplementation("${Catalog.Dependencies.Test.junitApi}:${properties.withJunitJupiter.get()}")
+                testRuntimeOnly("${Catalog.Dependencies.Test.junitEngine}:${properties.withJunitJupiter.get()}")
             }
         }
     }
 
     override fun configure() {
-        val properties = project.propertiesRegistry.get<TestProperties>()
+        val testProperties = project.propertiesRegistry.get<TestProperties>()
+        val javaProperties = project.propertiesRegistry.get<JavaProperties>()
+
         project.tasks.withType<Test> {
-            if (properties.junitJupiterVersion.hasValue) {
+            if (testProperties.withJunitJupiter.hasValue) {
                 useJUnitPlatform()
+            }
+            if (javaProperties.previewFeatures.get()) {
+                jvmArgs = jvmArgs + "--enable-preview"
             }
             testLogging {
                 showStandardStreams = true
@@ -86,6 +113,7 @@ class TestBlueprint(project: Project) : Blueprint(project) {
             include("**/*Test.class")
             include("**/*Tests.class")
             include("**/*IT.class")
+            include("**/*Spec.class")
         }
     }
 }

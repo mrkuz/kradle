@@ -122,6 +122,23 @@ abstract class PluginSpec(body: PluginSpec.() -> Unit) : FunSpec({}) {
         )
     }
 
+    fun writeAppJava(main: String) {
+        val sourceDir = projectDir.resolve("src/main/java/com/example/demo")
+        sourceDir.mkdirs()
+        sourceDir.resolve("App.java").writeText(
+            """
+            package com.example.demo;
+            
+            public class App {
+            
+                public static void main(String[] args) {
+                    $main
+                }
+            }
+            """.trimIndent()
+        )
+    }
+
     fun bootstrapCompatLibProject() {
         writeSettingsGradle("lib")
         writeCompatLibBuildFile(buildFile)

@@ -1,8 +1,9 @@
-package net.bnb1.kradle.presets
+package net.bnb1.kradle.dsl
 
 import net.bnb1.kradle.KradleExtension
 import net.bnb1.kradle.KradleExtensionBase
 import net.bnb1.kradle.presetRegistry
+import net.bnb1.kradle.presets.Preset
 import org.gradle.api.Project
 
 class PresetDsl private constructor(private val preset: Preset, private val project: Project) {

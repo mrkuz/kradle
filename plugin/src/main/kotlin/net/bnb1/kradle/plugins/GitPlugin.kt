@@ -1,6 +1,6 @@
 package net.bnb1.kradle.plugins
 
-import net.bnb1.kradle.create
+import net.bnb1.kradle.createTask
 import net.bnb1.kradle.tasks.GenerateGitignoreTask
 import org.eclipse.jgit.api.Git
 import org.eclipse.jgit.lib.Constants
@@ -21,6 +21,6 @@ class GitPlugin : Plugin<Project> {
             }
         }
 
-        project.create("generateGitignore", "Generates .gitignore", GenerateGitignoreTask::class.java)
+        project.createTask<GenerateGitignoreTask>("generateGitignore", "Generates .gitignore")
     }
 }

@@ -8,6 +8,8 @@ import org.gradle.api.GradleException
 import org.gradle.api.Project
 import org.gradle.api.plugins.ApplicationPlugin
 import org.gradle.api.plugins.JavaApplication
+import org.gradle.api.tasks.JavaExec
+import org.gradle.kotlin.dsl.withType
 
 private val GROUP_PATTERN = Regex("^[a-z]+(\\.[a-z0-9]+)+$")
 
@@ -34,8 +36,8 @@ class ApplicationBlueprint(project: Project) : Blueprint(project) {
     }
 
     override fun configure() {
-        val properties = project.propertiesRegistry.get<ApplicationProperties>()
-        val mainClass = properties.mainClass
+        val applicationProperties = project.propertiesRegistry.get<ApplicationProperties>()
+        val mainClass = applicationProperties.mainClass
         val javaExtension = project.extensions.getByType(JavaApplication::class.java)
         if (!mainClass.hasValue) {
             // Backward compatibility: Allow setting main class in application extension
@@ -46,6 +48,13 @@ class ApplicationBlueprint(project: Project) : Blueprint(project) {
             }
         } else {
             javaExtension.mainClass.set(mainClass.get())
+        }
+
+        val javaProperties = project.propertiesRegistry.get<JavaProperties>()
+        if (javaProperties.previewFeatures.get()) {
+            project.tasks.withType<JavaExec> {
+                jvmArgs = jvmArgs + "--enable-preview"
+            }
         }
     }
 }

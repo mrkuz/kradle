@@ -1,22 +1,18 @@
 package net.bnb1.kradle.features.jvm
 
 import net.bnb1.kradle.Catalog
-import net.bnb1.kradle.empty
 import net.bnb1.kradle.features.Properties
-import net.bnb1.kradle.property
 import org.gradle.api.Project
 
 class DockerProperties(project: Project) : Properties(project) {
 
-    val baseImage = property(factory.property("bellsoft/liberica-openjdk-alpine:${Catalog.Versions.jvm}"))
+    val baseImage = value("bellsoft/liberica-openjdk-alpine:${Catalog.Versions.jvm}")
+    val ports = valueSet<Int>()
+    val withJvmKill = optional(Catalog.Versions.jvmKill)
 
-    val ports = factory.setProperty(Int::class.java)
+    val withAppSh = flag()
+    val startupScript = withAppSh
 
-    val jvmKillVersion = property(factory.empty<String>())
-    fun withJvmKill(version: String = Catalog.Versions.jvmKill) = jvmKillVersion.set(version)
-
-    val withAppSh = property(factory.property(false))
-
-    val javaOpts = property(factory.empty<String>())
+    val javaOpts = value<String>()
     val jvmOpts = javaOpts
 }

@@ -8,9 +8,9 @@ plugins {
     `java-gradle-plugin`
     `kotlin-dsl`
     `maven-publish`
-    id(Catalog.Plugins.gradlePublish.id) version Catalog.Plugins.gradlePublish.version
-    id(Catalog.Plugins.kotlinJvm.id) version Catalog.Plugins.kotlinJvm.version
-    id("net.bitsandbobs.kradle") version "2.0.0"
+    id(Catalog.Build.Plugins.gradlePublish.id) version Catalog.Build.Plugins.gradlePublish.version
+    id(Catalog.Build.Plugins.kotlinJvm.id) version Catalog.Build.Plugins.kotlinJvm.version
+    id("net.bitsandbobs.kradle") version "2.0.1"
 }
 
 group = "net.bitsandbobs.kradle"
@@ -18,7 +18,7 @@ version = "2.0.1"
 
 buildscript {
     dependencies {
-        classpath(Catalog.Dependencies.jgit)
+        classpath(Catalog.Build.Dependencies.jgit)
     }
 }
 
@@ -28,33 +28,35 @@ repositories {
 }
 
 dependencies {
-    implementation(platform(Catalog.Dependencies.Platform.kotlin))
-    implementation(Catalog.Dependencies.kotlinStdlib)
-    implementation(Catalog.Dependencies.jgit)
+    implementation(platform(Catalog.Build.Dependencies.Platform.kotlin))
+    implementation(Catalog.Build.Dependencies.kotlinStdlib)
+    implementation(Catalog.Build.Dependencies.jgit)
 
     // Plugins
-    implementation(Catalog.Dependencies.Plugins.kotlin)
-    implementation(Catalog.Dependencies.Plugins.allOpen)
-    implementation(Catalog.Dependencies.Plugins.kotlinSerialization)
-    implementation(Catalog.Dependencies.Plugins.dokka)
-    implementation(Catalog.Dependencies.Plugins.kotlinBenchmark)
+    implementation(Catalog.Build.Dependencies.Plugins.kotlin)
+    implementation(Catalog.Build.Dependencies.Plugins.allOpen)
+    implementation(Catalog.Build.Dependencies.Plugins.kotlinSerialization)
+    implementation(Catalog.Build.Dependencies.Plugins.dokka)
+    implementation(Catalog.Build.Dependencies.Plugins.kotlinBenchmark)
 
-    implementation(Catalog.Dependencies.Plugins.testLogger)
-    implementation(Catalog.Dependencies.Plugins.shadow)
-    implementation(Catalog.Dependencies.Plugins.jib)
-    implementation(Catalog.Dependencies.Plugins.versions)
-    implementation(Catalog.Dependencies.Plugins.detekt)
-    implementation(Catalog.Dependencies.Plugins.ktlint)
-    implementation(Catalog.Dependencies.Plugins.owaspDependencyCheck)
+    implementation(Catalog.Build.Dependencies.Plugins.testLogger)
+    implementation(Catalog.Build.Dependencies.Plugins.shadow)
+    implementation(Catalog.Build.Dependencies.Plugins.jib)
+    implementation(Catalog.Build.Dependencies.Plugins.versions)
+    implementation(Catalog.Build.Dependencies.Plugins.detekt)
+    implementation(Catalog.Build.Dependencies.Plugins.ktlint)
+    implementation(Catalog.Build.Dependencies.Plugins.owaspDependencyCheck)
+
+    implementation(Catalog.Build.Dependencies.Plugins.spotbugs)
 
     // Testing
-    testImplementation(Catalog.Dependencies.Test.kotlinTest)
-    testImplementation(Catalog.Dependencies.Test.mockk)
-    testImplementation(Catalog.Dependencies.Test.dockerJava)
-    Catalog.Dependencies.Test.kotestBundle.forEach { testImplementation(it) }
+    testImplementation(Catalog.Build.Dependencies.Test.kotlinTest)
+    testImplementation(Catalog.Build.Dependencies.Test.mockk)
+    testImplementation(Catalog.Build.Dependencies.Test.dockerJava)
+    Catalog.Build.Dependencies.Test.kotestBundle.forEach { testImplementation(it) }
 
     constraints {
-        Catalog.Constraints.ids.forEach {
+        Catalog.Build.Constraints.ids.forEach {
             api(it)
             implementation(it)
         }
@@ -62,6 +64,9 @@ dependencies {
 }
 
 kradle {
+    general {
+        buildProperties.enable()
+    }
     jvm {
         targetJvm("1.8")
         kotlin.enable()
@@ -74,6 +79,17 @@ kradle {
             withIntegrationTests(true)
             withJunitJupiter()
             withJacoco()
+        }
+    }
+}
+
+// Add configuration with dynamically added dependencies, so 'showDependencies' can check for updates
+configurations {
+    create("dynamic") {
+        isVisible = false
+        isTransitive = false
+        Catalog.Dependencies.artifacts.forEach {
+            dependencies.add(project.dependencies.create("${it.group}:${it.name}:${it.version}"))
         }
     }
 }
@@ -153,7 +169,7 @@ gradlePlugin {
             id = "net.bitsandbobs.kradle"
             implementationClass = "net.bnb1.kradle.plugins.KradlePlugin"
             displayName = "Kradle Plugin"
-            description = "Swiss army knife for Kotlin/JVM development"
+            description = "Swiss army knife for Kotlin/JVM (and also Java) development"
         }
         create("kradleApp") {
             id = "net.bitsandbobs.kradle-app"
@@ -178,6 +194,7 @@ pluginBundle {
     tags =
         listOf(
             "kotlin",
+            "java",
             "linting",
             "code-analysis",
             "dependency-analysis",
@@ -198,3 +215,12 @@ publishing {
         }
     }
 }
+
+/*
+// For testing only
+java {
+    toolchain {
+        languageVersion.set(JavaLanguageVersion.of(15))
+    }
+}
+*/
