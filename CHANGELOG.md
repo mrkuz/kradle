@@ -4,6 +4,10 @@
 
 ### Version main-SNAPSHOT (2022-01-06)
 
+- Fix support for target JVM 8
+
+### Version 2.1.0 (2022-01-06)
+
 - Support for [Java development](README.md#feature-java) (linting, code analysis, bootstrapping, preview features)
 - Fix `dev` in combination with Gradle toolchains
 - ktlint rules are configurable

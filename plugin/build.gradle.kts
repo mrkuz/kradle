@@ -10,7 +10,7 @@ plugins {
     `maven-publish`
     id(Catalog.Build.Plugins.gradlePublish.id) version Catalog.Build.Plugins.gradlePublish.version
     id(Catalog.Build.Plugins.kotlinJvm.id) version Catalog.Build.Plugins.kotlinJvm.version
-    id("net.bitsandbobs.kradle") version "2.0.1"
+    id("net.bitsandbobs.kradle") version "2.1.0"
 }
 
 group = "net.bitsandbobs.kradle"
@@ -68,7 +68,7 @@ kradle {
         buildProperties.enable()
     }
     jvm {
-        targetJvm("1.8")
+        targetJvm("11")
         kotlin.enable()
         dependencyUpdates.enable()
         vulnerabilityScan.enable()
@@ -76,9 +76,18 @@ kradle {
         codeAnalysis.enable()
         test {
             prettyPrint(true)
-            withIntegrationTests(true)
+            integrationTests(true)
             withJunitJupiter()
-            withJacoco()
+        }
+    }
+}
+
+// Not sure why this hack is needed
+afterEvaluate {
+
+    tasks.withType<KotlinCompile> {
+        kotlinOptions {
+            jvmTarget = "11"
         }
     }
 }
