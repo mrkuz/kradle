@@ -117,7 +117,7 @@ object Catalog {
                 const val versions = "com.github.ben-manes:gradle-versions-plugin:0.41.0"
                 const val detekt = "io.gitlab.arturbosch.detekt:detekt-gradle-plugin:1.19.0"
                 const val ktlint = "org.jlleitschuh.gradle:ktlint-gradle:10.2.1"
-                const val owaspDependencyCheck = "org.owasp:dependency-check-gradle:6.5.2.1"
+                const val owaspDependencyCheck = "org.owasp:dependency-check-gradle:6.5.1"
 
                 // Java
                 const val spotbugs = "com.github.spotbugs.snom:spotbugs-gradle-plugin:5.0.4"
