@@ -3,7 +3,6 @@ package net.bnb1.kradle.features.jvm
 import io.gitlab.arturbosch.detekt.Detekt
 import net.bnb1.kradle.Catalog
 import net.bnb1.kradle.createHelperTask
-import net.bnb1.kradle.createTask
 import net.bnb1.kradle.features.Blueprint
 import net.bnb1.kradle.propertiesRegistry
 import net.bnb1.kradle.tasks.GenerateDetektConfigTask
@@ -20,7 +19,7 @@ class DetektBlueprint(project: Project) : Blueprint(project) {
         val properties = project.propertiesRegistry.get<KotlinCodeAnalysisProperties>()
         val configFile = project.rootDir.resolve(properties.detektConfigFile.get())
 
-        project.createTask<GenerateDetektConfigTask>("generateDetektConfig", "Generates detekt-config.yml") {
+        project.createHelperTask<GenerateDetektConfigTask>("generateDetektConfig", "Generates detekt-config.yml") {
             outputFile.set(project.rootDir.resolve(properties.detektConfigFile.get()))
         }
 

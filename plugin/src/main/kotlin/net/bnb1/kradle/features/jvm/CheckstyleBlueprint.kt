@@ -2,7 +2,6 @@ package net.bnb1.kradle.features.jvm
 
 import net.bnb1.kradle.Catalog
 import net.bnb1.kradle.createHelperTask
-import net.bnb1.kradle.createTask
 import net.bnb1.kradle.features.Blueprint
 import net.bnb1.kradle.propertiesRegistry
 import net.bnb1.kradle.tasks.GenerateCheckstyleConfigTask
@@ -20,7 +19,7 @@ class CheckstyleBlueprint(project: Project) : Blueprint(project) {
         val properties = project.propertiesRegistry.get<CheckstyleProperties>()
         val configFile = project.rootDir.resolve(properties.configFile.get())
 
-        project.createTask<GenerateCheckstyleConfigTask>("generateCheckstyleConfig", "Generates checkstyle.xml") {
+        project.createHelperTask<GenerateCheckstyleConfigTask>("generateCheckstyleConfig", "Generates checkstyle.xml") {
             outputFile.set(configFile)
         }
 
