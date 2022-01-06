@@ -9,7 +9,7 @@ import org.gradle.api.model.ObjectFactory
 
 class PmdProperties(project: Project) : Properties(project) {
 
-    val version = version(Catalog.Versions.pmd)
+    val version = value(Catalog.Versions.pmd)
     val ruleSets = RuleSets(project.objects)
 
     class RuleSets(factory: ObjectFactory) : Configurable<RuleSets> {

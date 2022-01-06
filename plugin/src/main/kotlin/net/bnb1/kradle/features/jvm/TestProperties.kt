@@ -6,8 +6,8 @@ import org.gradle.api.Project
 
 class TestProperties(project: Project) : Properties(project) {
 
-    val withJunitJupiter = optionalVersion(Catalog.Versions.junit)
-    val withJacoco = optionalVersion(Catalog.Versions.jacoco)
+    val withJunitJupiter = optional(Catalog.Versions.junit)
+    val withJacoco = optional(Catalog.Versions.jacoco)
 
     val prettyPrint = flag()
 

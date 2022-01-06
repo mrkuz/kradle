@@ -6,6 +6,6 @@ import org.gradle.api.Project
 
 class DetektProperties(project: Project) : Properties(project) {
 
-    val version = version(Catalog.Versions.detekt)
+    val version = value(Catalog.Versions.detekt)
     val configFile = value("detekt-config.yml")
 }

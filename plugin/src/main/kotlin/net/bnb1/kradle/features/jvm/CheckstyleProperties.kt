@@ -6,6 +6,6 @@ import org.gradle.api.Project
 
 class CheckstyleProperties(project: Project) : Properties(project) {
 
-    val version = version(Catalog.Versions.checkstyle)
+    val version = value(Catalog.Versions.checkstyle)
     val configFile = value("checkstyle.xml")
 }

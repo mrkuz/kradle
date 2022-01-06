@@ -8,7 +8,7 @@ class DockerProperties(project: Project) : Properties(project) {
 
     val baseImage = value("bellsoft/liberica-openjdk-alpine:${Catalog.Versions.jvm}")
     val ports = valueSet<Int>()
-    val withJvmKill = optionalVersion(Catalog.Versions.jvmKill)
+    val withJvmKill = optional(Catalog.Versions.jvmKill)
 
     val withAppSh = flag()
     val startupScript = withAppSh

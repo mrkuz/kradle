@@ -6,6 +6,6 @@ import org.gradle.api.Project
 
 class KtlintProperties(project: Project) : Properties(project) {
 
-    val version = version(Catalog.Versions.ktlint)
+    val version = value(Catalog.Versions.ktlint)
     val rules = flags(true)
 }

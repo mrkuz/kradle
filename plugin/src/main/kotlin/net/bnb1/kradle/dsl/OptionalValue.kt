@@ -2,9 +2,9 @@ package net.bnb1.kradle.dsl
 
 import org.gradle.api.provider.Property
 
-open class OptionalVersion(
+open class OptionalValue(
     private val property: Property<String>,
-    private val suggestedVersion: String
+    private val suggestion: String
 ) : PropertyWrapper<String> {
 
     override val notNull: Boolean
@@ -12,9 +12,9 @@ open class OptionalVersion(
 
     override fun get() = property.get()
 
-    operator fun invoke(version: String = suggestedVersion) = set(version)
+    operator fun invoke(version: String = suggestion) = set(version)
 
-    fun set(version: String = suggestedVersion) = property.set(version)
+    fun set(version: String = suggestion) = property.set(version)
 
     fun bind(property: Property<String>) = this.property.set(property)
 

@@ -6,5 +6,5 @@ import org.gradle.api.Project
 
 class BenchmarkProperties(project: Project) : Properties(project) {
 
-    val jmhVersion = version(Catalog.Versions.jmh)
+    val jmhVersion = value(Catalog.Versions.jmh)
 }

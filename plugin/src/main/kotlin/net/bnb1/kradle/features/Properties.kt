@@ -2,10 +2,9 @@ package net.bnb1.kradle.features
 
 import net.bnb1.kradle.dsl.Flag
 import net.bnb1.kradle.dsl.Flags
-import net.bnb1.kradle.dsl.OptionalVersion
+import net.bnb1.kradle.dsl.OptionalValue
 import net.bnb1.kradle.dsl.Value
 import net.bnb1.kradle.dsl.ValueSet
-import net.bnb1.kradle.dsl.Version
 import org.gradle.api.Project
 
 /**
@@ -19,15 +18,12 @@ open class Properties(protected val project: Project) {
 
     fun flags(invert: Boolean = false) = Flags(factory.setProperty(String::class.java), invert)
 
-    fun version(defaultVersion: String) = Version(factory.property(String::class.java), defaultVersion)
-
-    fun optionalVersion(suggestedVersion: String) =
-        OptionalVersion(factory.property(String::class.java), suggestedVersion)
-
     inline fun <reified T : Any> value(defaultValue: T?) =
         Value<T>(factory.property(T::class.java), defaultValue)
 
     inline fun <reified T : Any> value() = Value<T>(factory.property(T::class.java), null)
+
+    fun optional(suggestion: String) = OptionalValue(factory.property(String::class.java), suggestion)
 
     inline fun <reified T : Any> valueSet() =
         ValueSet<T>(factory.setProperty(T::class.java))

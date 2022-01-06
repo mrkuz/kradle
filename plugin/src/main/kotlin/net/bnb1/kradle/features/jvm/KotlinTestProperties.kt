@@ -6,6 +6,6 @@ import org.gradle.api.Project
 
 class KotlinTestProperties(project: Project) : Properties(project) {
 
-    val useKotest = optionalVersion(Catalog.Versions.kotest)
-    val useMockk = optionalVersion(Catalog.Versions.kotest)
+    val useKotest = optional(Catalog.Versions.kotest)
+    val useMockk = optional(Catalog.Versions.kotest)
 }
