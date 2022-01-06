@@ -15,13 +15,15 @@ class KotlinBootstrapBlueprint(project: Project) : Blueprint(project) {
     override fun createTasks() {
         if (project.featureRegistry.get<ApplicationFeature>().isEnabled) {
             project.createHelperTask<BootstrapKotlinAppTask>(
-                "bootstrapKotlinApp", "Bootstrap Kotlin application project"
+                "bootstrapKotlinApp",
+                "Bootstrap Kotlin application project"
             ).also {
                 project.tasks.getByName(BootstrapFeature.MAIN_TASK).dependsOn(it)
             }
         } else if (project.featureRegistry.get<LibraryFeature>().isEnabled) {
             project.createHelperTask<BootstrapKotlinLibTask>(
-                "bootstrapKotlinLib", "Bootstrap Kotlin library project"
+                "bootstrapKotlinLib",
+                "Bootstrap Kotlin library project"
             ).also {
                 project.tasks.getByName(BootstrapFeature.MAIN_TASK).dependsOn(it)
             }

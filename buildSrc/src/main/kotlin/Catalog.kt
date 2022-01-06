@@ -43,7 +43,8 @@ object Catalog {
 
         object Tools {
             val kotlinxBenchmarkRuntime = artifact(
-                "org.jetbrains.kotlinx", "kotlinx-benchmark-runtime",
+                "org.jetbrains.kotlinx",
+                "kotlinx-benchmark-runtime",
                 Build.Versions.kotlinxBenchmarkPlugin
             )
             val detekt = artifact("io.gitlab.arturbosch.detekt", "detekt-cli", Versions.detekt)

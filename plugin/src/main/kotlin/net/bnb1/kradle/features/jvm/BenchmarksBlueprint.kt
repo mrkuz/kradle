@@ -60,7 +60,10 @@ class BenchmarksBlueprint(project: Project) : Blueprint(project) {
         @Suppress("DEPRECATION")
         benchmarkSourceSet.withConvention(KotlinSourceSet::class) {
             dependencies {
-                implementation("${Catalog.Dependencies.Tools.kotlinxBenchmarkRuntime}:${BenchmarksPlugin.PLUGIN_VERSION}")
+                implementation(
+                    "${Catalog.Dependencies.Tools.kotlinxBenchmarkRuntime}:" +
+                        "${BenchmarksPlugin.PLUGIN_VERSION}"
+                )
             }
         }
     }

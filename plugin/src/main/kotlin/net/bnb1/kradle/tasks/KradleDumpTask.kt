@@ -83,7 +83,8 @@ open class KradleDumpTask : DefaultTask() {
                 dump(entry.message)
             } else {
                 var prefix = ""
-                for (i in 0 until entry.level - 1) {
+
+                repeat(entry.level - 1) {
                     prefix += "│  "
                 }
 

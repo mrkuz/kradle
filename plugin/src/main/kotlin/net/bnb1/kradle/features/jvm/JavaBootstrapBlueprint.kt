@@ -15,13 +15,15 @@ class JavaBootstrapBlueprint(project: Project) : Blueprint(project) {
     override fun createTasks() {
         if (project.featureRegistry.get<ApplicationFeature>().isEnabled) {
             project.createHelperTask<BootstrapJavaAppTask>(
-                "bootstrapJavaApp", "Bootstrap Java application project"
+                "bootstrapJavaApp",
+                "Bootstrap Java application project"
             ).also {
                 project.tasks.getByName(BootstrapFeature.MAIN_TASK).dependsOn(it)
             }
         } else if (project.featureRegistry.get<LibraryFeature>().isEnabled) {
             project.createHelperTask<BootstrapJavaLibTask>(
-                "bootstrapJavaLib", "Bootstrap Java library project"
+                "bootstrapJavaLib",
+                "Bootstrap Java library project"
             ).also {
                 project.tasks.getByName(BootstrapFeature.MAIN_TASK).dependsOn(it)
             }

@@ -11,6 +11,7 @@ import org.gradle.api.plugins.quality.Pmd
 import org.gradle.api.plugins.quality.TargetJdk
 
 private const val CONFIGURATION_NAME = "kradlePmd"
+private const val DEFAULT_MINIMUM_PRIORITY = 5
 
 class PmdBlueprint(project: Project) : Blueprint(project) {
 
@@ -54,7 +55,7 @@ class PmdBlueprint(project: Project) : Blueprint(project) {
                 }
                 isConsoleOutput = true
                 maxFailures.set(0)
-                rulesMinimumPriority.set(5)
+                rulesMinimumPriority.set(DEFAULT_MINIMUM_PRIORITY)
                 incrementalAnalysis.set(true)
                 ruleSetFiles = project.rootProject.files()
                 ruleSets = enabledRuleSets
