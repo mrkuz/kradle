@@ -31,5 +31,5 @@ open class VersionDsl(
 
     fun unset() = property.set(null)
 
-    val hasValue = notNull
+    val hasValue by ::notNull
 }

@@ -27,5 +27,5 @@ open class PropertyDsl<T : Any>(val property: Property<T>, private val defaultVa
 
     fun unset() = property.set(null)
 
-    val hasValue = notNull
+    val hasValue by ::notNull
 }
