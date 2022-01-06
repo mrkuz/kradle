@@ -8,7 +8,7 @@
 - Fix `dev` in combination with Gradle toolchains
 - ktlint rules are configurable
 - __Defaults change__:  ktlint rule 'no-wildcard-imports' no longer disabled (it still is disabled in presets)
-- Add [`withCustomTests`](README.md#test-improvements)
+- Add [`customTests`](README.md#test-improvements)
 - Add `kradleDump` for diagnostics
 - Exclude beta versions in `showDependencyUpdates`
 - Add option 'ignoreFailures' for linting and code analysis

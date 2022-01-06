@@ -86,7 +86,7 @@ class TestBlueprintTests : PluginSpec({
                 kotlin.enable()
                 test {
                     withJunitJupiter()
-                    withCustomTests("custom")
+                    customTests("custom")
                 }
             }
             """.trimIndent()

@@ -549,7 +549,7 @@ kradle {
             prettyPrint(false)
             integrationTests(false)
             functionalTests(false)
-            // witchCustomTests("<NAME>")
+            // customTests("<NAME>")
             // withJunitJupiter("${versions.junit}")
             // withJacoco(${versions.jacoco}")
         }
@@ -560,7 +560,7 @@ kradle {
 - `prettyPrint`: Prettifies test output with [Gradle Test Logger Plugin](https://plugins.gradle.org/plugin/com.adarshr.test-logger)
 - `integrationTests`: Adds task `integrationTest`, which runs tests under _src/integrationTest_. The task is executed when running `check`.
 - `functionalTests`: Adds task `functionalTest`, which runs tests under _src/functionalTest_. The task is executed when running `check`.
-- `withCustomTests`: Adds task `<NAME>Test`, which runs tests under _src/&lt;NAME&gt;_. The task is executed when running `check`. Can be called multiple times.
+- `customTests`: Adds task `<NAME>Test`, which runs tests under _src/&lt;NAME&gt;_. The task is executed when running `check`. Can be called multiple times.
 - `withJunitJupiter`: Sets up [JUnit Jupiter](https://junit.org/junit5/) for running tests
 - `withJacoco`: Generates [JaCoCo](https://www.jacoco.org/jacoco/) code coverage reports after tests. They can be found under _build/reports/jacoco/_.
 
@@ -1028,7 +1028,7 @@ kradle {
             prettyPrint(true)
             integrationTests(true)
             functionalTests(true)
-            withCustomTests(...)
+            customTests(...)
             withJunitJupiter(/* "${versions.junit}" */)
             withJacoco(/* "${versions.jacoco}" */)
         }

@@ -18,10 +18,4 @@ class TestProperties(project: Project) : Properties(project) {
     val functionalTests = withFunctionalTests
 
     val customTests = valueSet<String>()
-    fun withCustomTests(vararg names: String) {
-        names.forEach {
-            customTests.remove(it)
-            customTests.add(it)
-        }
-    }
 }

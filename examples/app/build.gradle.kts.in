@@ -94,7 +94,7 @@ kradle {
             prettyPrint(true)
             integrationTests(true)
             functionalTests(true)
-            // withCustomTests("...")
+            // customTests("...")
             withJunitJupiter(/* "${versions.junit}" */)
             withJacoco(/* "${versions.jacoco}" */)
         }

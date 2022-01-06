@@ -29,7 +29,10 @@ class TestBlueprint(project: Project) : Blueprint(project) {
     public override fun createTasks() {
         val properties = project.propertiesRegistry.get<TestProperties>()
         val customTests = mutableListOf<String>()
-        customTests.addAll(properties.customTests.get())
+        properties.customTests.get().forEach {
+            customTests.remove(it)
+            customTests.add(it)
+        }
 
         if (properties.withFunctionalTests.get()) {
             customTests.remove("functional")
