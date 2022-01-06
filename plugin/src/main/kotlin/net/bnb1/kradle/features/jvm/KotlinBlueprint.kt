@@ -62,7 +62,11 @@ class KotlinBlueprint(project: Project) : Blueprint(project) {
         val properties = project.propertiesRegistry.get<JvmProperties>()
         project.tasks.withType<KotlinCompile> {
             kotlinOptions {
-                jvmTarget = properties.targetJvm.get()
+                jvmTarget = if (properties.targetJvm.get() == "8") {
+                    "1.8"
+                } else {
+                    properties.targetJvm.get()
+                }
                 freeCompilerArgs = listOf("-Xopt-in=kotlin.RequiresOptIn", "-Xjsr305=strict")
             }
         }
