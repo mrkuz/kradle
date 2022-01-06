@@ -1,6 +1,6 @@
 package net.bnb1.kradle.tasks
 
-import net.bnb1.kradle.Configurable
+import net.bnb1.kradle.dsl.Configurable
 import net.bnb1.kradle.dsl.FeatureDsl
 import net.bnb1.kradle.dsl.PropertiesDsl
 import net.bnb1.kradle.dsl.PropertyWrapper

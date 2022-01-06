@@ -1,4 +1,4 @@
-package net.bnb1.kradle
+package net.bnb1.kradle.dsl
 
 interface Configurable<T : Configurable<T>> {
 
