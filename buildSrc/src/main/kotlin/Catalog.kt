@@ -14,7 +14,7 @@ object Catalog {
         const val jacoco = "0.8.7"
         const val checkstyle = "9.2.1"
         const val pmd = "6.41.0"
-        const val spotbugs = "4.5.2"
+        const val spotbugs = "4.5.3"
         const val findSecBugs = "1.11.0"
         const val fbContrib = "7.4.7"
         const val findBugs = "3.0.1"
@@ -114,13 +114,13 @@ object Catalog {
                 const val testLogger = "com.adarshr:gradle-test-logger-plugin:3.1.0"
                 const val shadow = "gradle.plugin.com.github.jengelman.gradle.plugins:shadow:7.0.0"
                 const val jib = "gradle.plugin.com.google.cloud.tools:jib-gradle-plugin:3.1.4"
-                const val versions = "com.github.ben-manes:gradle-versions-plugin:0.40.0"
+                const val versions = "com.github.ben-manes:gradle-versions-plugin:0.41.0"
                 const val detekt = "io.gitlab.arturbosch.detekt:detekt-gradle-plugin:1.19.0"
                 const val ktlint = "org.jlleitschuh.gradle:ktlint-gradle:10.2.1"
-                const val owaspDependencyCheck = "org.owasp:dependency-check-gradle:6.5.1"
+                const val owaspDependencyCheck = "org.owasp:dependency-check-gradle:6.5.2.1"
 
                 // Java
-                const val spotbugs = "com.github.spotbugs.snom:spotbugs-gradle-plugin:5.0.3"
+                const val spotbugs = "com.github.spotbugs.snom:spotbugs-gradle-plugin:5.0.4"
             }
 
             object Test {
