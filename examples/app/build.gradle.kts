@@ -48,7 +48,7 @@ kradle {
         }
         java {
             /*
-            withPreviewFeatures(false)
+            previewFeatures(false)
             lint {
                 checkstyle {
                     version("9.2.1")
@@ -82,8 +82,12 @@ kradle {
 
         dependencyUpdates.enable()
         vulnerabilityScan.enable()
-        lint.enable()
-        codeAnalysis.enable()
+        lint {
+            // ignoreFailures(false)
+        }
+        codeAnalysis {
+            // ignoreFailures(false)
+        }
         developmentMode.enable()
 
         test {
@@ -108,7 +112,7 @@ kradle {
         docker {
             // baseImage("bellsoft/liberica-openjdk-alpine:17")
             withJvmKill(/* "1.16.0" */)
-            // appSh(false)
+            // startupScript(false)
             // ports(...)
             // javaOpts("")
         }

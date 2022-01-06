@@ -4,15 +4,15 @@
 
 ### Version ${kradleVersion} (${new Date().format("yyyy-MM-dd")})
 
-- Support for [Java development](README.md#java-development) (linting, code analysis, bootstrapping, preview features)
+- Support for [Java development](README.md#feature-java) (linting, code analysis, bootstrapping, preview features)
 - Fix `dev` in combination with Gradle toolchains
 - ktlint rules are configurable
 - __Defaults change__:  ktlint rule 'no-wildcard-imports' no longer disabled (it still is disabled in presets)
-- Add [`customTests`](README.md#test-improvements)
-- Add `kradleDump` for diagnostics
+- Add [`customTests`](README.md#feature-test) option
+- Add `kradleDump` task for diagnostics
 - Exclude beta versions in `showDependencyUpdates`
-- Add option 'ignoreFailures' for linting and code analysis
-- Add `Spec` to recognized test class suffixes
+- Add option `ignoreFailures` for linting and code analysis
+- Files ending with `Spec` are recognized as tests
 - Add alternative configuration syntax for ktlint and detekt
 
   Before
@@ -140,7 +140,7 @@
 - Set default target JVM to 17
 - Update plugins and dependencies
 - New plugin `net.bitsandbobs.kradle`, which combines the functionality of `kradle-app` and `kradle-lib`
-- New configuration DSL (see [Appendix A](README.md#appendix-a-configuration-reference))
+- New configuration DSL (see [configuration reference](README.md#configuration-reference))
 - Deprecate `kradle-app` and `kradle-lib`. They still work, but won't receive any new features. Consider using `net.bitsandbobs.kradle` instead.
 - __Breaking change__: [`disable`](https://github.com/mrkuz/kradle/tree/v1.2.0#blueprints) for `kradle-app` and `kradle-lib` removed
 
