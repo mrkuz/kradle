@@ -5,5 +5,5 @@ import org.gradle.api.Project
 
 class ApplicationProperties(project: Project) : Properties(project) {
 
-    val mainClass = property<String>()
+    val mainClass = value<String>()
 }

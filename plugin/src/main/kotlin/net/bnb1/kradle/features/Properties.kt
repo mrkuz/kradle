@@ -1,10 +1,11 @@
 package net.bnb1.kradle.features
 
-import net.bnb1.kradle.dsl.FlagDsl
-import net.bnb1.kradle.dsl.FlagsDsl
-import net.bnb1.kradle.dsl.PropertyDsl
-import net.bnb1.kradle.dsl.SetPropertyDsl
-import net.bnb1.kradle.dsl.VersionDsl
+import net.bnb1.kradle.dsl.Flag
+import net.bnb1.kradle.dsl.Flags
+import net.bnb1.kradle.dsl.OptionalVersion
+import net.bnb1.kradle.dsl.Value
+import net.bnb1.kradle.dsl.ValueSet
+import net.bnb1.kradle.dsl.Version
 import org.gradle.api.Project
 
 /**
@@ -14,23 +15,20 @@ open class Properties(protected val project: Project) {
 
     val factory = project.objects
 
-    fun flag() = FlagDsl(factory.property(Boolean::class.java))
+    fun flag() = Flag(factory.property(Boolean::class.java))
 
-    fun flags(invert: Boolean = false) = FlagsDsl(factory.setProperty(String::class.java), invert)
+    fun flags(invert: Boolean = false) = Flags(factory.setProperty(String::class.java), invert)
 
-    fun version(defaultVersion: String) = VersionDsl(
-        factory.property(String::class.java), defaultVersion, defaultVersion
-    )
+    fun version(defaultVersion: String) = Version(factory.property(String::class.java), defaultVersion)
 
-    fun optionalVersion(suggestedVersion: String) = VersionDsl(
-        factory.property(String::class.java), null, suggestedVersion
-    )
+    fun optionalVersion(suggestedVersion: String) =
+        OptionalVersion(factory.property(String::class.java), suggestedVersion)
 
-    inline fun <reified T : Any> property(defaultValue: T?) =
-        PropertyDsl<T>(factory.property(T::class.java), defaultValue)
+    inline fun <reified T : Any> value(defaultValue: T?) =
+        Value<T>(factory.property(T::class.java), defaultValue)
 
-    inline fun <reified T : Any> property() = PropertyDsl<T>(factory.property(T::class.java), null)
+    inline fun <reified T : Any> value() = Value<T>(factory.property(T::class.java), null)
 
-    inline fun <reified T : Any> setProperty() =
-        SetPropertyDsl<T>(factory.setProperty(T::class.java))
+    inline fun <reified T : Any> valueSet() =
+        ValueSet<T>(factory.setProperty(T::class.java))
 }

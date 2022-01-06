@@ -6,13 +6,13 @@ import org.gradle.api.Project
 
 class DockerProperties(project: Project) : Properties(project) {
 
-    val baseImage = property("bellsoft/liberica-openjdk-alpine:${Catalog.Versions.jvm}")
-    val ports = setProperty<Int>()
+    val baseImage = value("bellsoft/liberica-openjdk-alpine:${Catalog.Versions.jvm}")
+    val ports = valueSet<Int>()
     val withJvmKill = optionalVersion(Catalog.Versions.jvmKill)
 
     val withAppSh = flag()
     val startupScript = withAppSh
 
-    val javaOpts = property<String>()
+    val javaOpts = value<String>()
     val jvmOpts = javaOpts
 }

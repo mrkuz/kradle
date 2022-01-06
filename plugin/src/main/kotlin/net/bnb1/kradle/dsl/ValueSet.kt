@@ -2,7 +2,7 @@ package net.bnb1.kradle.dsl
 
 import org.gradle.api.provider.SetProperty
 
-open class SetPropertyDsl<T : Any>(private val property: SetProperty<T>) : PropertyWrapper<Set<T>> {
+open class ValueSet<T : Any>(private val property: SetProperty<T>) : PropertyWrapper<Set<T>> {
 
     override val notNull: Boolean
         get() = true

@@ -2,17 +2,10 @@ package net.bnb1.kradle.dsl
 
 import org.gradle.api.provider.Property
 
-open class VersionDsl(
+open class OptionalVersion(
     private val property: Property<String>,
-    private val defaultVersion: String?,
     private val suggestedVersion: String
 ) : PropertyWrapper<String> {
-
-    init {
-        if (defaultVersion != null) {
-            property.convention(defaultVersion)
-        }
-    }
 
     override val notNull: Boolean
         get() = property.isPresent
@@ -27,7 +20,7 @@ open class VersionDsl(
 
     fun get(default: String) = property.getOrElse(default)
 
-    fun reset() = property.set(defaultVersion)
+    fun reset() = property.set(null)
 
     fun unset() = property.set(null)
 

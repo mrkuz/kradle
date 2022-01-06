@@ -17,7 +17,7 @@ class TestProperties(project: Project) : Properties(project) {
     val withFunctionalTests = flag()
     val functionalTests = withFunctionalTests
 
-    val customTests = setProperty<String>()
+    val customTests = valueSet<String>()
     fun withCustomTests(vararg names: String) {
         names.forEach {
             customTests.remove(it)

@@ -2,7 +2,7 @@ package net.bnb1.kradle.dsl
 
 import org.gradle.api.provider.Property
 
-open class PropertyDsl<T : Any>(val property: Property<T>, private val defaultValue: T?) : PropertyWrapper<T> {
+open class Value<T : Any>(val property: Property<T>, private val defaultValue: T?) : PropertyWrapper<T> {
 
     init {
         if (defaultValue != null) {

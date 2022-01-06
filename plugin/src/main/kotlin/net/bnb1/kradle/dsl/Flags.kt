@@ -2,7 +2,7 @@ package net.bnb1.kradle.dsl
 
 import org.gradle.api.provider.SetProperty
 
-open class FlagsDsl(private val property: SetProperty<String>, private val invert: Boolean) :
+open class Flags(private val property: SetProperty<String>, private val invert: Boolean) :
     PropertyWrapper<Set<String>> {
 
     override val notNull: Boolean
@@ -10,7 +10,7 @@ open class FlagsDsl(private val property: SetProperty<String>, private val inver
 
     override fun get(): Set<String> = property.get()
 
-    operator fun invoke(action: FlagsDsl.() -> Unit = {}) = action(this)
+    operator fun invoke(action: Flags.() -> Unit = {}) = action(this)
 
     fun bind(property: SetProperty<String>) = this.property.set(property)
 
