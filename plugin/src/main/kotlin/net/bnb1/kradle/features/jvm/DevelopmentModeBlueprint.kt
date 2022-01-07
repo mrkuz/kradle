@@ -3,7 +3,6 @@ package net.bnb1.kradle.features.jvm
 import net.bnb1.kradle.createTask
 import net.bnb1.kradle.featureRegistry
 import net.bnb1.kradle.features.Blueprint
-import net.bnb1.kradle.propertiesRegistry
 import net.bnb1.kradle.sourceSets
 import org.gradle.api.GradleException
 import org.gradle.api.Project
@@ -15,6 +14,9 @@ import org.gradle.kotlin.dsl.named
 
 class DevelopmentModeBlueprint(project: Project) : Blueprint(project) {
 
+    lateinit var applicationProperties: ApplicationProperties
+    lateinit var javaProperties: JavaProperties
+
     override fun checkPreconditions() {
         if (!project.featureRegistry.get<ApplicationFeature>().isEnabled) {
             throw GradleException("'developmentMode' requires 'application' feature")
@@ -22,7 +24,6 @@ class DevelopmentModeBlueprint(project: Project) : Blueprint(project) {
     }
 
     override fun createTasks() {
-        val javaProperties = project.propertiesRegistry.get<JavaProperties>()
         val mainSourceSet = project.sourceSets.getByName(SourceSet.MAIN_SOURCE_SET_NAME)
         val agentResource = javaClass.getResource("/agent.jar")
 
@@ -56,8 +57,7 @@ class DevelopmentModeBlueprint(project: Project) : Blueprint(project) {
     }
 
     override fun configure() {
-        val properties = project.propertiesRegistry.get<ApplicationProperties>()
-        val mainClass = properties.mainClass
+        val mainClass = applicationProperties.mainClass
         project.tasks.named<JavaExec>("dev").configure { this.mainClass.set(mainClass.get()) }
     }
 }

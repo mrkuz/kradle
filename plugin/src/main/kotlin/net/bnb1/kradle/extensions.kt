@@ -64,9 +64,6 @@ val Project.tracer
 val Project.featureRegistry
     get() = this.extra.get("context") as KradleContext
 
-val Project.propertiesRegistry
-    get() = this.extra.get("context") as KradleContext
-
 // DependencyHandlerScope
 
 fun DependencyHandlerScope.implementation(notation: Any) = add("implementation", notation)
@@ -82,3 +79,10 @@ inline fun <reified T> ObjectFactory.property(default: T): Property<T> {
 }
 
 inline fun <reified T> ObjectFactory.empty(): Property<T> = property(T::class.java)
+
+// Miscellaneous
+
+inline fun <T> T.inject(block: T.() -> Unit): T {
+    block()
+    return this
+}

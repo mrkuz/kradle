@@ -5,6 +5,7 @@ import net.bnb1.kradle.KradleContext
 import net.bnb1.kradle.dsl.FeatureDsl
 import net.bnb1.kradle.features.EmptyProperties
 import net.bnb1.kradle.features.Properties
+import net.bnb1.kradle.inject
 import org.gradle.api.Project
 
 class JvmProperties(context: KradleContext, project: Project) : Properties() {
@@ -19,24 +20,84 @@ class JvmProperties(context: KradleContext, project: Project) : Properties() {
     private val _packageProperties by context { PackageProperties(context) }
     private val _dockerProperties by context { DockerProperties() }
 
-    private val _javaBlueprint by context { JavaBlueprint(project) }
-    private val _kotlinBlueprint by context { KotlinBlueprint(project) }
+    private val _javaBlueprint by context {
+        JavaBlueprint(project).inject {
+            javaProperties = _javaProperties
+            jvmProperties = this@JvmProperties
+            applicationProperties = _applicationProperties
+            lintProperties = _lintProperties
+            codeAnalysisProperties = _codeAnalysisProperties
+            checkstyleProperties = context.get()
+            pmdProperties = context.get()
+            spotBugsProperties = context.get()
+        }
+    }
+    private val _kotlinBlueprint by context {
+        KotlinBlueprint(project).inject {
+            kotlinProperties = _kotlinProperties
+            jvmProperties = this@JvmProperties
+            applicationProperties = _applicationProperties
+            lintProperties = _lintProperties
+            codeAnalysisProperties = _codeAnalysisProperties
+            testProperties = _testProperties
+            detektProperties = context.get()
+            ktlintProperties = context.get()
+            kotlinTestProperties = context.get()
+        }
+    }
     private val _allOpenBlueprint by context { AllOpenBlueprint(project) }
-    private val _applicationBlueprint by context { ApplicationBlueprint(project) }
+    private val _applicationBlueprint by context {
+        ApplicationBlueprint(project).inject {
+            applicationProperties = _applicationProperties
+            javaProperties = _javaProperties
+        }
+    }
     private val _libraryBlueprint by context { LibraryBlueprint(project) }
     private val _mavenPublishBlueprint by context { MavenPublishBlueprint(project) }
     private val _dependencyUpdatesBlueprint by context { DependencyUpdatesBlueprint(project) }
     private val _owaspDependencyCheckBlueprint by context { OwaspDependencyCheckBlueprint(project) }
     private val _lintBlueprint by context { LintBlueprint(project) }
     private val _codeAnalysisBlueprint by context { CodeAnalysisBlueprint(project) }
-    private val _developmentModeBlueprint by context { DevelopmentModeBlueprint(project) }
-    private val _testBlueprint by context { TestBlueprint(project) }
-    private val _jacocoBlueprint by context { JacocoBlueprint(project) }
-    private val _benchmarksBlueprint by context { BenchmarksBlueprint(project) }
-    private val _packageBlueprint by context { PackageBlueprint(project) }
-    private val _shadowBlueprint by context { ShadowBlueprint(project) }
+    private val _developmentModeBlueprint by context {
+        DevelopmentModeBlueprint(project).inject {
+            applicationProperties = _applicationProperties
+            javaProperties = _javaProperties
+        }
+    }
+    private val _testBlueprint by context {
+        TestBlueprint(project).inject {
+            testProperties = _testProperties
+            javaProperties = _javaProperties
+        }
+    }
+    private val _jacocoBlueprint by context {
+        JacocoBlueprint(project).inject {
+            testProperties = _testProperties
+        }
+    }
+    private val _benchmarksBlueprint by context {
+        BenchmarksBlueprint(project).inject {
+            benchmarkProperties = _benchmarkProperties
+            javaProperties = _javaProperties
+        }
+    }
+    private val _packageBlueprint by context {
+        PackageBlueprint(project).inject {
+            applicationProperties = _applicationProperties
+        }
+    }
+    private val _shadowBlueprint by context {
+        ShadowBlueprint(project).inject {
+            uberJarProperties = context.get()
+        }
+    }
     private val _dokkaBlueprint by context { DokkaBlueprint(project) }
-    private val _jibBlueprint by context { JibBlueprint(project) }
+    private val _jibBlueprint by context {
+        JibBlueprint(project).inject {
+            dockerProperties = _dockerProperties
+            applicationProperties = _applicationProperties
+        }
+    }
 
     private val _kotlin by context { KotlinFeature() }
     private val _java by context { JavaFeature() }

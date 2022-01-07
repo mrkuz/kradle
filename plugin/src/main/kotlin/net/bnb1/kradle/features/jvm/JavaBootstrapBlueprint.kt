@@ -4,13 +4,14 @@ import net.bnb1.kradle.createHelperTask
 import net.bnb1.kradle.featureRegistry
 import net.bnb1.kradle.features.Blueprint
 import net.bnb1.kradle.features.general.BootstrapFeature
-import net.bnb1.kradle.propertiesRegistry
 import net.bnb1.kradle.tasks.BootstrapJavaAppTask
 import net.bnb1.kradle.tasks.BootstrapJavaLibTask
 import org.gradle.api.Project
 import org.gradle.kotlin.dsl.withType
 
 class JavaBootstrapBlueprint(project: Project) : Blueprint(project) {
+
+    lateinit var applicationProperties: ApplicationProperties
 
     override fun createTasks() {
         if (project.featureRegistry.get<ApplicationFeature>().isEnabled) {
@@ -32,7 +33,7 @@ class JavaBootstrapBlueprint(project: Project) : Blueprint(project) {
 
     override fun configure() {
         if (project.featureRegistry.get<ApplicationFeature>().isEnabled) {
-            val mainClass = project.propertiesRegistry.get<ApplicationProperties>().mainClass.get()
+            val mainClass = applicationProperties.mainClass.get()
             project.tasks.withType<BootstrapJavaAppTask> {
                 this.mainClass.set(mainClass)
             }

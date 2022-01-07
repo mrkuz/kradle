@@ -3,7 +3,6 @@ package net.bnb1.kradle.features.jvm
 import net.bnb1.kradle.apply
 import net.bnb1.kradle.featureRegistry
 import net.bnb1.kradle.features.Blueprint
-import net.bnb1.kradle.propertiesRegistry
 import org.gradle.api.GradleException
 import org.gradle.api.Project
 import org.gradle.api.plugins.ApplicationPlugin
@@ -14,6 +13,9 @@ import org.gradle.kotlin.dsl.withType
 private val GROUP_PATTERN = Regex("^[a-z]+(\\.[a-z0-9]+)+$")
 
 class ApplicationBlueprint(project: Project) : Blueprint(project) {
+
+    lateinit var applicationProperties: ApplicationProperties
+    lateinit var javaProperties: JavaProperties
 
     override fun checkPreconditions() {
         if (project.featureRegistry.get<LibraryFeature>().isEnabled) {
@@ -36,7 +38,6 @@ class ApplicationBlueprint(project: Project) : Blueprint(project) {
     }
 
     override fun configure() {
-        val applicationProperties = project.propertiesRegistry.get<ApplicationProperties>()
         val mainClass = applicationProperties.mainClass
         val javaExtension = project.extensions.getByType(JavaApplication::class.java)
         if (!mainClass.hasValue) {
@@ -50,7 +51,6 @@ class ApplicationBlueprint(project: Project) : Blueprint(project) {
             javaExtension.mainClass.set(mainClass.get())
         }
 
-        val javaProperties = project.propertiesRegistry.get<JavaProperties>()
         if (javaProperties.previewFeatures.get()) {
             project.tasks.withType<JavaExec> {
                 jvmArgs = jvmArgs + "--enable-preview"

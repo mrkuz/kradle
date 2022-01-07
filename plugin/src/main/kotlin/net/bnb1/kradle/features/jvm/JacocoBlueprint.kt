@@ -3,7 +3,6 @@ package net.bnb1.kradle.features.jvm
 import net.bnb1.kradle.apply
 import net.bnb1.kradle.createHelperTask
 import net.bnb1.kradle.features.Blueprint
-import net.bnb1.kradle.propertiesRegistry
 import org.gradle.api.Project
 import org.gradle.api.tasks.SourceSet
 import org.gradle.api.tasks.SourceSetContainer
@@ -16,18 +15,19 @@ import org.gradle.testing.jacoco.tasks.JacocoReportsContainer
 
 class JacocoBlueprint(project: Project) : Blueprint(project) {
 
-    override fun shouldActivate() = project.propertiesRegistry.get<TestProperties>().withJacoco.hasValue
+    lateinit var testProperties: TestProperties
+
+    override fun shouldActivate() = testProperties.withJacoco.hasValue
 
     override fun applyPlugins() {
         project.apply(JacocoPlugin::class.java)
     }
 
     override fun createTasks() {
-        val properties = project.propertiesRegistry.get<TestProperties>()
-        if (properties.withIntegrationTests.get()) {
+        if (testProperties.withIntegrationTests.get()) {
             createTask("integrationTest", "Generates code coverage report for integration tests")
         }
-        if (properties.withFunctionalTests.get()) {
+        if (testProperties.withFunctionalTests.get()) {
             createTask("functionalTest", "Generates code coverage report for functional tests")
         }
     }
@@ -48,9 +48,8 @@ class JacocoBlueprint(project: Project) : Blueprint(project) {
     }
 
     override fun configure() {
-        val properties = project.propertiesRegistry.get<TestProperties>()
         project.configure<JacocoPluginExtension> {
-            toolVersion = properties.withJacoco.get()
+            toolVersion = testProperties.withJacoco.get()
         }
 
         project.tasks.named<JacocoReport>("jacocoTestReport").configure {

@@ -4,7 +4,6 @@ import io.gitlab.arturbosch.detekt.Detekt
 import net.bnb1.kradle.Catalog
 import net.bnb1.kradle.createHelperTask
 import net.bnb1.kradle.features.Blueprint
-import net.bnb1.kradle.propertiesRegistry
 import net.bnb1.kradle.tasks.GenerateDetektConfigTask
 import org.gradle.api.Project
 import org.gradle.api.Task
@@ -14,18 +13,19 @@ private const val CONFIGURATION_NAME = "kradleDetekt"
 
 class DetektBlueprint(project: Project) : Blueprint(project) {
 
+    lateinit var detektProperties: DetektProperties
+    lateinit var codeAnalysisProperties: CodeAnalysisProperties
+
     override fun createTasks() {
-        val codeAnalysisProperties = project.propertiesRegistry.get<CodeAnalysisProperties>()
-        val properties = project.propertiesRegistry.get<KotlinCodeAnalysisProperties>()
-        val configFile = project.rootDir.resolve(properties.detektConfigFile.get())
+        val configFile = project.rootDir.resolve(detektProperties.configFile.get())
 
         project.createHelperTask<GenerateDetektConfigTask>("generateDetektConfig", "Generates detekt-config.yml") {
-            outputFile.set(project.rootDir.resolve(properties.detektConfigFile.get()))
+            outputFile.set(project.rootDir.resolve(detektProperties.configFile.get()))
         }
 
         project.configurations.create(CONFIGURATION_NAME) {
             val dependencyProvider = project.provider {
-                project.dependencies.create("${Catalog.Dependencies.Tools.detekt}:${properties.detektVersion.get()}")
+                project.dependencies.create("${Catalog.Dependencies.Tools.detekt}:${detektProperties.version.get()}")
             }
             dependencies.addLater(dependencyProvider)
         }

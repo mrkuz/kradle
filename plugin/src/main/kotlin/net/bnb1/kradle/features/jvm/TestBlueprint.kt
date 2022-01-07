@@ -5,7 +5,6 @@ import net.bnb1.kradle.Catalog
 import net.bnb1.kradle.apply
 import net.bnb1.kradle.createTask
 import net.bnb1.kradle.features.Blueprint
-import net.bnb1.kradle.propertiesRegistry
 import net.bnb1.kradle.sourceSets
 import net.bnb1.kradle.testImplementation
 import net.bnb1.kradle.testRuntimeOnly
@@ -18,27 +17,28 @@ import org.gradle.kotlin.dsl.withType
 
 class TestBlueprint(project: Project) : Blueprint(project) {
 
+    lateinit var testProperties: TestProperties
+    lateinit var javaProperties: JavaProperties
+
     override fun applyPlugins() {
-        val properties = project.propertiesRegistry.get<TestProperties>()
-        if (properties.prettyPrint.get()) {
+        if (testProperties.prettyPrint.get()) {
             project.apply(TestLoggerPlugin::class.java)
         }
     }
 
     // compat: Must be public we can create the tasks eagerly
     public override fun createTasks() {
-        val properties = project.propertiesRegistry.get<TestProperties>()
         val customTests = mutableListOf<String>()
-        properties.customTests.get().forEach {
+        testProperties.customTests.get().forEach {
             customTests.remove(it)
             customTests.add(it)
         }
 
-        if (properties.withFunctionalTests.get()) {
+        if (testProperties.withFunctionalTests.get()) {
             customTests.remove("functional")
             customTests.add(0, "functional")
         }
-        if (properties.withIntegrationTests.get()) {
+        if (testProperties.withIntegrationTests.get()) {
             customTests.remove("integration")
             customTests.add(0, "integration")
         }
@@ -86,19 +86,21 @@ class TestBlueprint(project: Project) : Blueprint(project) {
     }
 
     override fun addDependencies() {
-        val properties = project.propertiesRegistry.get<TestProperties>()
-        if (properties.withJunitJupiter.hasValue) {
+        if (testProperties.withJunitJupiter.hasValue) {
             project.dependencies {
-                testImplementation("${Catalog.Dependencies.Test.junitApi}:${properties.withJunitJupiter.get()}")
-                testRuntimeOnly("${Catalog.Dependencies.Test.junitEngine}:${properties.withJunitJupiter.get()}")
+                testImplementation(
+                    "${Catalog.Dependencies.Test.junitApi}:" +
+                        "${testProperties.withJunitJupiter.get()}"
+                )
+                testRuntimeOnly(
+                    "${Catalog.Dependencies.Test.junitEngine}:" +
+                        "${testProperties.withJunitJupiter.get()}"
+                )
             }
         }
     }
 
     override fun configure() {
-        val testProperties = project.propertiesRegistry.get<TestProperties>()
-        val javaProperties = project.propertiesRegistry.get<JavaProperties>()
-
         project.tasks.withType<Test> {
             if (testProperties.withJunitJupiter.hasValue) {
                 useJUnitPlatform()

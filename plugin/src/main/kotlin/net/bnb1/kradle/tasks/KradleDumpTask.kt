@@ -1,18 +1,18 @@
 package net.bnb1.kradle.tasks
 
+import net.bnb1.kradle.KradleContext
 import net.bnb1.kradle.dsl.Configurable
 import net.bnb1.kradle.dsl.FeatureDsl
 import net.bnb1.kradle.dsl.PropertiesDsl
 import net.bnb1.kradle.dsl.SimpleProvider
-import net.bnb1.kradle.featureRegistry
 import net.bnb1.kradle.features.EmptyProperties
 import net.bnb1.kradle.features.Feature
 import net.bnb1.kradle.features.Properties
-import net.bnb1.kradle.propertiesRegistry
 import net.bnb1.kradle.tracer
 import org.gradle.api.DefaultTask
 import org.gradle.api.model.ObjectFactory
 import org.gradle.api.provider.Provider
+import org.gradle.api.tasks.Internal
 import org.gradle.api.tasks.TaskAction
 import org.gradle.util.GradleVersion
 import java.nio.file.Paths
@@ -26,6 +26,9 @@ import kotlin.streams.asSequence
 import java.util.Properties as JavaProperties
 
 open class KradleDumpTask : DefaultTask() {
+
+    @Internal
+    lateinit var context: KradleContext
 
     init {
         // Ensure that this task is always executed
@@ -62,7 +65,7 @@ open class KradleDumpTask : DefaultTask() {
             """.trimIndent()
         )
 
-        project.featureRegistry.getSubclassOf(Feature::class).asSequence()
+        context.getSubclassOf(Feature::class).asSequence()
             .filter { it.isEnabled }
             .sortedBy { it::class.qualifiedName }
             .forEach { dump("- ${it::class.qualifiedName}") }
@@ -168,7 +171,7 @@ open class KradleDumpTask : DefaultTask() {
             """.trimIndent()
         )
 
-        project.propertiesRegistry.getSubclassOf(Properties::class).asSequence()
+        context.getSubclassOf(Properties::class).asSequence()
             .filterNot { it is EmptyProperties }
             .sortedBy { it::class.qualifiedName }
             .forEach {

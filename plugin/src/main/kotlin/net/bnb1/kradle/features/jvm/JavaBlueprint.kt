@@ -4,7 +4,6 @@ import net.bnb1.kradle.apply
 import net.bnb1.kradle.featureRegistry
 import net.bnb1.kradle.features.Blueprint
 import net.bnb1.kradle.features.general.BootstrapFeature
-import net.bnb1.kradle.propertiesRegistry
 import org.gradle.api.GradleException
 import org.gradle.api.JavaVersion
 import org.gradle.api.Project
@@ -15,15 +14,23 @@ import org.gradle.kotlin.dsl.withType
 
 class JavaBlueprint(project: Project) : Blueprint(project) {
 
+    lateinit var javaProperties: JavaProperties
+    lateinit var jvmProperties: JvmProperties
+    lateinit var applicationProperties: ApplicationProperties
+    lateinit var lintProperties: LintProperties
+    lateinit var codeAnalysisProperties: CodeAnalysisProperties
+    lateinit var checkstyleProperties: CheckstyleProperties
+    lateinit var pmdProperties: PmdProperties
+    lateinit var spotBugsProperties: SpotBugsProperties
+
     override fun checkPreconditions() {
-        val properties = project.propertiesRegistry.get<JvmProperties>()
         val javaExtension = project.extensions.getByType(JavaPluginExtension::class.java)
         if (getJavaRelease() < 8) {
             throw GradleException("Minimum supported JVM version is 8")
         }
 
         if (javaExtension.toolchain.languageVersion.isPresent) {
-            val target = Integer.parseInt(properties.targetJvm.get())
+            val target = Integer.parseInt(jvmProperties.targetJvm.get())
             val toolchain = javaExtension.toolchain.languageVersion.get().asInt()
             if (target > toolchain) {
                 throw GradleException("'targetJvm' must be ≤ toolchain language version ($toolchain)")
@@ -38,10 +45,29 @@ class JavaBlueprint(project: Project) : Blueprint(project) {
     override fun registerBlueprints() {
         with(project.featureRegistry) {
             if (get<JavaFeature>().isEnabled) {
-                get<BootstrapFeature>().addBlueprint(JavaBootstrapBlueprint(project))
-                get<CodeAnalysisFeature>().addBlueprint(PmdBlueprint(project))
-                get<CodeAnalysisFeature>().addBlueprint(SpotBugsBlueprint(project))
-                get<LintFeature>().addBlueprint(CheckstyleBlueprint(project))
+                get<BootstrapFeature>().addBlueprint(
+                    JavaBootstrapBlueprint(project).also {
+                        it.applicationProperties = applicationProperties
+                    }
+                )
+                get<CodeAnalysisFeature>().addBlueprint(
+                    PmdBlueprint(project).also {
+                        it.pmdProperties = pmdProperties
+                        it.codeAnalysisProperties = codeAnalysisProperties
+                    }
+                )
+                get<CodeAnalysisFeature>().addBlueprint(
+                    SpotBugsBlueprint(project).also {
+                        it.spotBugsProperties = spotBugsProperties
+                        it.codeAnalysisProperties = codeAnalysisProperties
+                    }
+                )
+                get<LintFeature>().addBlueprint(
+                    CheckstyleBlueprint(project).also {
+                        it.checkstyleProperties = checkstyleProperties
+                        it.lintProperties = lintProperties
+                    }
+                )
             }
         }
     }
@@ -52,7 +78,6 @@ class JavaBlueprint(project: Project) : Blueprint(project) {
             options.release.set(release)
         }
 
-        val javaProperties = project.propertiesRegistry.get<JavaProperties>()
         if (javaProperties.previewFeatures.get()) {
             project.tasks.withType<JavaCompile> {
                 options.compilerArgs.add("--enable-preview")
@@ -61,7 +86,6 @@ class JavaBlueprint(project: Project) : Blueprint(project) {
     }
 
     private fun getJavaRelease(): Int {
-        val jvmProperties = project.propertiesRegistry.get<JvmProperties>()
         val major = JavaVersion.toVersion(jvmProperties.targetJvm.get()).majorVersion
         return Integer.parseInt(major)
     }

@@ -6,7 +6,6 @@ import net.bnb1.kradle.featureRegistry
 import net.bnb1.kradle.features.Blueprint
 import net.bnb1.kradle.features.general.BootstrapFeature
 import net.bnb1.kradle.implementation
-import net.bnb1.kradle.propertiesRegistry
 import net.bnb1.kradle.testImplementation
 import org.gradle.api.GradleException
 import org.gradle.api.Project
@@ -20,6 +19,16 @@ import org.jetbrains.kotlinx.serialization.gradle.SerializationGradleSubplugin
 
 class KotlinBlueprint(project: Project) : Blueprint(project) {
 
+    lateinit var kotlinProperties: KotlinProperties
+    lateinit var jvmProperties: JvmProperties
+    lateinit var applicationProperties: ApplicationProperties
+    lateinit var lintProperties: LintProperties
+    lateinit var codeAnalysisProperties: CodeAnalysisProperties
+    lateinit var testProperties: TestProperties
+    lateinit var detektProperties: DetektProperties
+    lateinit var ktlintProperties: KtlintProperties
+    lateinit var kotlinTestProperties: KotlinTestProperties
+
     override fun checkPreconditions() {
         if (project.extensions.findByType(KotlinJvmProjectExtension::class.java) == null) {
             throw GradleException("Kotlin JVM plugin has to be applied")
@@ -28,10 +37,29 @@ class KotlinBlueprint(project: Project) : Blueprint(project) {
 
     override fun registerBlueprints() {
         with(project.featureRegistry) {
-            get<BootstrapFeature>().addBlueprint(KotlinBootstrapBlueprint(project))
-            get<CodeAnalysisFeature>().addBlueprint(DetektBlueprint(project))
-            get<LintFeature>().addBlueprint(KtlintBlueprint(project))
-            get<TestFeature>().addBlueprint(KotlinTestBlueprint(project))
+            get<BootstrapFeature>().addBlueprint(
+                KotlinBootstrapBlueprint(project).also {
+                    it.applicationProperties = applicationProperties
+                }
+            )
+            get<CodeAnalysisFeature>().addBlueprint(
+                DetektBlueprint(project).also {
+                    it.detektProperties = detektProperties
+                    it.codeAnalysisProperties = codeAnalysisProperties
+                }
+            )
+            get<LintFeature>().addBlueprint(
+                KtlintBlueprint(project).also {
+                    it.ktlintProperties = ktlintProperties
+                    it.lintProperties = lintProperties
+                }
+            )
+            get<TestFeature>().addBlueprint(
+                KotlinTestBlueprint(project).also {
+                    it.kotlinTestProperties = kotlinTestProperties
+                    it.testProperties = testProperties
+                }
+            )
         }
     }
 
@@ -44,14 +72,13 @@ class KotlinBlueprint(project: Project) : Blueprint(project) {
     }
 
     override fun addDependencies() {
-        val properties = project.propertiesRegistry.get<KotlinProperties>()
         project.dependencies {
             implementation(platform(Catalog.Dependencies.Platform.kotlin))
             implementation(Catalog.Dependencies.kotlinStdlib)
             implementation(Catalog.Dependencies.kotlinReflect)
-            if (properties.kotlinxCoroutinesVersion.hasValue) {
+            if (kotlinProperties.kotlinxCoroutinesVersion.hasValue) {
                 implementation(
-                    "${Catalog.Dependencies.kotlinCoroutines}:${properties.kotlinxCoroutinesVersion.get()}"
+                    "${Catalog.Dependencies.kotlinCoroutines}:${kotlinProperties.kotlinxCoroutinesVersion.get()}"
                 )
             }
             testImplementation(Catalog.Dependencies.Test.kotlinTest)
@@ -59,13 +86,12 @@ class KotlinBlueprint(project: Project) : Blueprint(project) {
     }
 
     override fun configure() {
-        val properties = project.propertiesRegistry.get<JvmProperties>()
         project.tasks.withType<KotlinCompile> {
             kotlinOptions {
-                jvmTarget = if (properties.targetJvm.get() == "8") {
+                jvmTarget = if (jvmProperties.targetJvm.get() == "8") {
                     "1.8"
                 } else {
-                    properties.targetJvm.get()
+                    jvmProperties.targetJvm.get()
                 }
                 freeCompilerArgs = listOf("-Xopt-in=kotlin.RequiresOptIn", "-Xjsr305=strict")
             }

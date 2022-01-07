@@ -16,7 +16,11 @@ class KradlePlugin : Plugin<Project> {
         val context = KradleContext()
         project.extensions.create<KradleExtension>("kradle", context, project)
 
-        project.createHelperTask<KradleDumpTask>("kradleDump", "Dumps kradle diagnostic information")
+        val task = project.createHelperTask<KradleDumpTask>(
+            "kradleDump",
+            "Dumps kradle diagnostic information"
+        )
+        task.also { it.context = context }
         project.afterEvaluate { project.tracer.deactivate() }
 
         project.repositories {

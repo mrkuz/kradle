@@ -50,8 +50,8 @@ class KradleCompat(private val context: KradleContext, private val project: Proj
             annotation("org.openjdk.jmh.annotations.State")
         }
 
-        BenchmarksBlueprint(project).createSourceSets()
-        TestBlueprint(project).createTasks()
+        context.get<BenchmarksBlueprint>().createSourceSets()
+        context.get<TestBlueprint>().createTasks()
     }
 
     @SuppressWarnings("LongMethod")

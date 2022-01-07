@@ -7,7 +7,6 @@ import net.bnb1.kradle.Catalog
 import net.bnb1.kradle.apply
 import net.bnb1.kradle.createHelperTask
 import net.bnb1.kradle.features.Blueprint
-import net.bnb1.kradle.propertiesRegistry
 import org.gradle.api.Project
 import org.gradle.api.Task
 import org.gradle.api.plugins.JavaPluginExtension
@@ -16,12 +15,14 @@ import org.gradle.kotlin.dsl.dependencies
 
 class SpotBugsBlueprint(project: Project) : Blueprint(project) {
 
+    lateinit var spotBugsProperties: SpotBugsProperties
+    lateinit var codeAnalysisProperties: CodeAnalysisProperties
+
     override fun applyPlugins() {
         project.apply(SpotBugsBasePlugin::class.java)
     }
 
     override fun createTasks() {
-        val codeAnalysisProperties = project.propertiesRegistry.get<CodeAnalysisProperties>()
         val spotbugsTask = project.createHelperTask<Task>("spotbugs", "Runs SpotBugs")
         project.tasks.getByName(CodeAnalysisFeature.MAIN_TASK).dependsOn(spotbugsTask)
 
@@ -46,23 +47,27 @@ class SpotBugsBlueprint(project: Project) : Blueprint(project) {
     }
 
     override fun addDependencies() {
-        val properties = project.propertiesRegistry.get<SpotBugsProperties>()
         project.dependencies {
             add("compileOnly", "${Catalog.Dependencies.Tools.findBugsAnnotations}:${Catalog.Versions.findBugs}")
             add("spotbugsSlf4j", "${Catalog.Dependencies.Tools.slf4jSimple}:${Catalog.Versions.slf4j}")
-            if (properties.useFindSecBugs.hasValue) {
-                add("spotbugsPlugins", "${Catalog.Dependencies.Tools.findSecBugs}:${properties.useFindSecBugs.get()}")
+            if (spotBugsProperties.useFindSecBugs.hasValue) {
+                add(
+                    "spotbugsPlugins",
+                    "${Catalog.Dependencies.Tools.findSecBugs}:${spotBugsProperties.useFindSecBugs.get()}"
+                )
             }
-            if (properties.useFbContrib.hasValue) {
-                add("spotbugsPlugins", "${Catalog.Dependencies.Tools.fbContrib}:${properties.useFbContrib.get()}")
+            if (spotBugsProperties.useFbContrib.hasValue) {
+                add(
+                    "spotbugsPlugins",
+                    "${Catalog.Dependencies.Tools.fbContrib}:${spotBugsProperties.useFbContrib.get()}"
+                )
             }
         }
     }
 
     override fun configure() {
-        val properties = project.propertiesRegistry.get<SpotBugsProperties>()
         project.configure<SpotBugsExtension> {
-            toolVersion.set(properties.version.get())
+            toolVersion.set(spotBugsProperties.version.get())
         }
     }
 }

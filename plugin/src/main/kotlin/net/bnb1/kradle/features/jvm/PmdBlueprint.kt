@@ -3,7 +3,6 @@ package net.bnb1.kradle.features.jvm
 import net.bnb1.kradle.Catalog
 import net.bnb1.kradle.createHelperTask
 import net.bnb1.kradle.features.Blueprint
-import net.bnb1.kradle.propertiesRegistry
 import org.gradle.api.Project
 import org.gradle.api.Task
 import org.gradle.api.plugins.JavaPluginExtension
@@ -15,13 +14,13 @@ private const val DEFAULT_MINIMUM_PRIORITY = 5
 
 class PmdBlueprint(project: Project) : Blueprint(project) {
 
-    override fun createTasks() {
-        val codeAnalysisProperties = project.propertiesRegistry.get<CodeAnalysisProperties>()
-        val properties = project.propertiesRegistry.get<PmdProperties>()
+    lateinit var pmdProperties: PmdProperties
+    lateinit var codeAnalysisProperties: CodeAnalysisProperties
 
+    override fun createTasks() {
         project.configurations.create(CONFIGURATION_NAME) {
             val dependencyProvider = project.provider {
-                project.dependencies.create("${Catalog.Dependencies.Tools.pmd}:${properties.version.get()}")
+                project.dependencies.create("${Catalog.Dependencies.Tools.pmd}:${pmdProperties.version.get()}")
             }
             dependencies.addLater(dependencyProvider)
         }
@@ -34,7 +33,7 @@ class PmdBlueprint(project: Project) : Blueprint(project) {
             val taskName = "pmd" + sourceSet.name[0].toUpperCase() + sourceSet.name.substring(1)
 
             val enabledRuleSets = mutableListOf<String>()
-            with(properties.ruleSets) {
+            with(pmdProperties.ruleSets) {
                 if (bestPractices.get()) enabledRuleSets.add("category/java/bestpractices.xml")
                 if (codeStyle.get()) enabledRuleSets.add("category/java/codestyle.xml")
                 if (design.get()) enabledRuleSets.add("category/java/design.xml")
