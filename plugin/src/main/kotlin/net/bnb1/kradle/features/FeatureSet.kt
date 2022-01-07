@@ -1,6 +1,6 @@
 package net.bnb1.kradle.features
 
-import net.bnb1.kradle.tracer
+import net.bnb1.kradle.support.Tracer
 import org.gradle.api.GradleException
 import org.gradle.api.Project
 import java.util.concurrent.atomic.AtomicBoolean
@@ -25,36 +25,36 @@ open class FeatureSet(private val project: Project) {
         this.features += features
     }
 
-    fun activate() {
-        if (!tryActivate()) {
+    fun activate(tracer: Tracer) {
+        if (!tryActivate(tracer)) {
             throw GradleException("'${this::class.simpleName}' was already activated")
         }
     }
 
-    fun tryActivate(): Boolean {
+    fun tryActivate(tracer: Tracer): Boolean {
         if (!activated.compareAndSet(false, true)) {
             return false
         }
         val visited = mutableSetOf<Feature>()
-        project.tracer.trace("${this::class.simpleName} (FS)")
+        tracer.trace("${this::class.simpleName} (FS)")
         features.asSequence()
             .filter { it.isEnabled }
             .filter { it.isInactive }
-            .forEach { activateOrdered(visited, it) }
+            .forEach { activateOrdered(tracer, visited, it) }
         return true
     }
 
-    private fun activateOrdered(visited: MutableSet<Feature>, feature: Feature) {
+    private fun activateOrdered(tracer: Tracer, visited: MutableSet<Feature>, feature: Feature) {
         if (!visited.add(feature)) {
             throw IllegalStateException("Dependency loop detected")
         }
-        project.tracer.branch {
+        tracer.branch {
             feature.shouldActivateAfter().asSequence()
                 .filter { it.isEnabled }
                 .filter { it.isInactive }
-                .forEach { activateOrdered(visited, it) }
-            project.tracer.trace("${feature::class.simpleName} (F)")
-            feature.activate()
+                .forEach { activateOrdered(tracer, visited, it) }
+            tracer.trace("${feature::class.simpleName} (F)")
+            feature.activate(tracer)
         }
     }
 }

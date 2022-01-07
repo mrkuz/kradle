@@ -7,6 +7,7 @@ import io.mockk.verify
 import net.bnb1.kradle.Mocks
 import net.bnb1.kradle.features.jvm.AllOpenBlueprint
 import net.bnb1.kradle.features.jvm.KotlinFeature
+import net.bnb1.kradle.support.Tracer
 import org.jetbrains.kotlin.allopen.gradle.AllOpenGradleSubplugin
 
 class AllOpenBlueprintTests : BehaviorSpec({
@@ -14,6 +15,7 @@ class AllOpenBlueprintTests : BehaviorSpec({
     isolationMode = IsolationMode.InstancePerLeaf
 
     Given("AllOpenBlueprint") {
+        val tracer = Tracer()
         val project = Mocks.project()
         val feature = KotlinFeature()
         val blueprint = AllOpenBlueprint(project).apply {
@@ -21,7 +23,7 @@ class AllOpenBlueprintTests : BehaviorSpec({
         }
 
         When("Kotlin feature is disabled") {
-            blueprint.activate()
+            blueprint.activate(tracer)
 
             Then("All-open plugin is not applied") {
                 verify {
@@ -32,7 +34,7 @@ class AllOpenBlueprintTests : BehaviorSpec({
 
         When("Kotlin feature is enabled") {
             feature.enable()
-            blueprint.activate()
+            blueprint.activate(tracer)
 
             Then("All-open plugin is applied") {
                 verify {

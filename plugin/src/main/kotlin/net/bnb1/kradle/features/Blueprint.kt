@@ -1,6 +1,6 @@
 package net.bnb1.kradle.features
 
-import net.bnb1.kradle.tracer
+import net.bnb1.kradle.support.Tracer
 import org.gradle.api.Project
 import java.util.concurrent.atomic.AtomicBoolean
 
@@ -16,7 +16,7 @@ open class Blueprint(protected val project: Project) {
     // Configuration
     val dependsOn = mutableSetOf<Feature>()
 
-    fun activate() {
+    fun activate(tracer: Tracer) {
         if (dependsOn.any { !it.isEnabled }) {
             return
         }
@@ -26,13 +26,13 @@ open class Blueprint(protected val project: Project) {
         }
 
         if (!shouldActivate()) {
-            project.tracer.branch {
+            tracer.branch {
                 trace("${this@Blueprint::class.simpleName} (B, skipped)")
             }
             return
         }
 
-        project.tracer.branch {
+        tracer.branch {
             trace("${this@Blueprint::class.simpleName} (B)")
 
             checkPreconditions()

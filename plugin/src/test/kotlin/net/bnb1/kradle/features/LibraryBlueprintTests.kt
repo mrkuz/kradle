@@ -8,6 +8,7 @@ import net.bnb1.kradle.Mocks
 import net.bnb1.kradle.features.jvm.ApplicationFeature
 import net.bnb1.kradle.features.jvm.LibraryBlueprint
 import net.bnb1.kradle.features.jvm.LibraryFeature
+import net.bnb1.kradle.support.Tracer
 import org.gradle.api.GradleException
 import org.gradle.api.plugins.JavaLibraryPlugin
 
@@ -16,6 +17,7 @@ class LibraryBlueprintTests : BehaviorSpec({
     isolationMode = IsolationMode.InstancePerLeaf
 
     Given("LibraryBlueprint") {
+        val tracer = Tracer()
         val project = Mocks.project()
         val applicationFeature = ApplicationFeature()
         val libraryFeature = LibraryFeature()
@@ -27,7 +29,7 @@ class LibraryBlueprintTests : BehaviorSpec({
 
         When("Library feature is enabled") {
             libraryFeature.enable()
-            blueprint.activate()
+            blueprint.activate(tracer)
 
             Then("Java library plugin is applied") {
                 verify {

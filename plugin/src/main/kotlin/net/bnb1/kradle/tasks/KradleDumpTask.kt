@@ -8,7 +8,7 @@ import net.bnb1.kradle.dsl.SimpleProvider
 import net.bnb1.kradle.features.EmptyProperties
 import net.bnb1.kradle.features.Feature
 import net.bnb1.kradle.features.Properties
-import net.bnb1.kradle.tracer
+import net.bnb1.kradle.support.Tracer
 import org.gradle.api.DefaultTask
 import org.gradle.api.model.ObjectFactory
 import org.gradle.api.provider.Provider
@@ -79,7 +79,7 @@ open class KradleDumpTask : DefaultTask() {
             ------
             """.trimIndent()
         )
-        val entries = project.tracer.entries
+        val entries = context.get<Tracer>().entries
         entries.forEachIndexed { index, entry ->
             if (entry.level == 0) {
                 if (index > 0) {

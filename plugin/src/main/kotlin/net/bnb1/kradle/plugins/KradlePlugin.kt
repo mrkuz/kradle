@@ -3,8 +3,8 @@ package net.bnb1.kradle.plugins
 import net.bnb1.kradle.KradleContext
 import net.bnb1.kradle.KradleExtension
 import net.bnb1.kradle.createHelperTask
+import net.bnb1.kradle.support.Tracer
 import net.bnb1.kradle.tasks.KradleDumpTask
-import net.bnb1.kradle.tracer
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.kotlin.dsl.create
@@ -21,7 +21,7 @@ class KradlePlugin : Plugin<Project> {
             "Dumps kradle diagnostic information"
         )
         task.also { it.context = context }
-        project.afterEvaluate { project.tracer.deactivate() }
+        project.afterEvaluate { context.get<Tracer>().deactivate() }
 
         project.repositories {
             mavenCentral()

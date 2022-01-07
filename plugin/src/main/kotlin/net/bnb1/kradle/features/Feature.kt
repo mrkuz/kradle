@@ -1,5 +1,6 @@
 package net.bnb1.kradle.features
 
+import net.bnb1.kradle.support.Tracer
 import org.gradle.api.GradleException
 import java.util.concurrent.atomic.AtomicBoolean
 import java.util.concurrent.atomic.AtomicReference
@@ -13,11 +14,13 @@ import java.util.concurrent.atomic.AtomicReference
  * Every feature has a parent [feature set][FeatureSet]. If the set is activated, the feature is also activated (unless
  * disabled). This in turn activates assigned [blueprints][Blueprint].
  */
-open class Feature {
+open class Feature() {
 
     enum class State {
         INACTIVE, ACTIVATING, ACTIVATED
     }
+
+    lateinit var tracer: Tracer
 
     private var enabled = AtomicBoolean(false)
     private var disabled = AtomicBoolean(false)
@@ -40,12 +43,12 @@ open class Feature {
     fun addBlueprint(blueprint: Blueprint) {
         if (blueprints.add(blueprint)) {
             if (state.get() == State.ACTIVATED) {
-                blueprint.activate()
+                blueprint.activate(tracer)
             }
         }
     }
 
-    fun activate() {
+    fun activate(tracer: Tracer) {
         if (!isEnabled) {
             return
         }
@@ -53,7 +56,8 @@ open class Feature {
             return
         }
 
-        blueprints.forEach { it.activate() }
+        this.tracer = tracer
+        blueprints.forEach { it.activate(tracer) }
         state.set(State.ACTIVATED)
     }
 

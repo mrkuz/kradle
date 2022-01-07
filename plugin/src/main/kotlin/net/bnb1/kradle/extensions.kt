@@ -1,6 +1,5 @@
 package net.bnb1.kradle
 
-import net.bnb1.kradle.support.Tracer
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.api.Task
@@ -8,7 +7,6 @@ import org.gradle.api.model.ObjectFactory
 import org.gradle.api.provider.Property
 import org.gradle.api.tasks.SourceSetContainer
 import org.gradle.kotlin.dsl.DependencyHandlerScope
-import org.gradle.kotlin.dsl.extra
 
 const val KRADLE_TASK_GROUP = "Kradle"
 const val HELPER_TASK_GROUP = "Kradle helper"
@@ -57,9 +55,6 @@ val Project.extraDir
 
 val Project.sourceSets
     get() = this.extensions.getByType(SourceSetContainer::class.java)
-
-val Project.tracer
-    get() = this.extra.get("tracer") as Tracer
 
 // DependencyHandlerScope
 

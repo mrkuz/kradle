@@ -6,7 +6,7 @@ import net.bnb1.kradle.apply
 import net.bnb1.kradle.features.jvm.BenchmarksBlueprint
 import net.bnb1.kradle.features.jvm.TestBlueprint
 import net.bnb1.kradle.features.jvm.TestProperties
-import net.bnb1.kradle.tracer
+import net.bnb1.kradle.support.Tracer
 import org.gradle.api.Project
 import org.gradle.kotlin.dsl.configure
 import org.jetbrains.kotlin.allopen.gradle.AllOpenExtension
@@ -32,7 +32,7 @@ class KradleCompat(private val context: KradleContext, private val project: Proj
                 jvm.activate()
             }
 
-            project.tracer.deactivate()
+            context.get<Tracer>().deactivate()
         }
     }
 

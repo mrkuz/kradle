@@ -7,12 +7,14 @@ import io.mockk.spyk
 import io.mockk.verify
 import io.mockk.verifyOrder
 import net.bnb1.kradle.Mocks
+import net.bnb1.kradle.support.Tracer
 import org.gradle.api.GradleException
 
 class FeatureSetTests : BehaviorSpec({
 
     isolationMode = IsolationMode.InstancePerLeaf
 
+    val tracer = Tracer()
     val project = Mocks.project()
 
     given("FeatureSet") {
@@ -27,20 +29,20 @@ class FeatureSetTests : BehaviorSpec({
         }
 
         When("Activate twice") {
-            set.activate()
+            set.activate(tracer)
 
             Then("The second attempt fails") {
-                shouldThrow<GradleException> { set.activate() }
+                shouldThrow<GradleException> { set.activate(tracer) }
             }
         }
 
         When("Activate") {
-            set.activate()
+            set.activate(tracer)
 
             Then("The assigned features are also activated") {
                 verify {
-                    feature1.activate()
-                    feature2.activate()
+                    feature1.activate(tracer)
+                    feature2.activate(tracer)
                 }
             }
         }
@@ -68,13 +70,13 @@ class FeatureSetTests : BehaviorSpec({
         }
 
         When("Activate") {
-            set.activate()
+            set.activate(tracer)
 
             Then("Features are activated in the defined order") {
                 verifyOrder {
-                    feature2.activate()
-                    feature3.activate()
-                    feature1.activate()
+                    feature2.activate(tracer)
+                    feature3.activate(tracer)
+                    feature1.activate(tracer)
                 }
             }
         }
@@ -104,7 +106,7 @@ class FeatureSetTests : BehaviorSpec({
 
         When("Activate") {
             Then("Dependency loop is detected") {
-                shouldThrow<IllegalStateException> { set.activate() }
+                shouldThrow<IllegalStateException> { set.activate(tracer) }
             }
         }
     }

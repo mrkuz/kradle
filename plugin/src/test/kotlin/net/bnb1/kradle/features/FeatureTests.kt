@@ -6,12 +6,14 @@ import io.kotest.matchers.shouldBe
 import io.mockk.spyk
 import io.mockk.verify
 import net.bnb1.kradle.Mocks
+import net.bnb1.kradle.support.Tracer
 import org.gradle.api.Project
 
 class FeatureTests : BehaviorSpec({
 
     isolationMode = IsolationMode.InstancePerLeaf
 
+    val tracer = Tracer()
     val project = Mocks.project()
 
     given("Feature with blueprints and listeners") {
@@ -20,12 +22,12 @@ class FeatureTests : BehaviorSpec({
         val blueprint2 = spyk(Blueprint2(project)).also { feature += it }
 
         When("Activate") {
-            feature.activate()
+            feature.activate(tracer)
 
             Then("The assigned blueprints are also activated") {
                 verify {
-                    blueprint1.activate()
-                    blueprint2.activate()
+                    blueprint1.activate(tracer)
+                    blueprint2.activate(tracer)
                 }
             }
         }
@@ -39,11 +41,11 @@ class FeatureTests : BehaviorSpec({
                 feature += it
                 feature += it
             }
-            feature.activate()
+            feature.activate(tracer)
 
             Then("The second attempt is ignored") {
                 verify(exactly = 1) {
-                    blueprint.activate()
+                    blueprint.activate(tracer)
                 }
             }
         }
