@@ -19,12 +19,12 @@ open class KradleExtensionBase(context: KradleContext, project: Project) {
     private val _general by context { GeneralFeatureSet(project) }
     val general = FeatureSetDsl.Builder<GeneralProperties>(project)
         .featureSet { _general }
-        .properties { GeneralProperties(it) }
+        .properties { GeneralProperties(context, it) }
         .build()
 
     private val _jvm by context { JvmFeatureSet(project) }
     val jvm = FeatureSetDsl.Builder<JvmProperties>(project)
         .featureSet { _jvm }
-        .properties { JvmProperties(it) }
+        .properties { JvmProperties(context, it) }
         .build()
 }

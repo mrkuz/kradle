@@ -1,15 +1,32 @@
 package net.bnb1.kradle.features.jvm
 
 import net.bnb1.kradle.Catalog
+import net.bnb1.kradle.KradleContext
 import net.bnb1.kradle.dsl.FeatureDsl
 import net.bnb1.kradle.features.EmptyProperties
 import net.bnb1.kradle.features.Properties
 import org.gradle.api.Project
 
-class JvmProperties(project: Project) : Properties() {
+class JvmProperties(context: KradleContext, project: Project) : Properties() {
 
-    private val javaBlueprint = JavaBlueprint(project)
-    private val allOpenBlueprint = AllOpenBlueprint(project)
+    private val _javaBlueprint by context { JavaBlueprint(project) }
+    private val _kotlinBlueprint by context { KotlinBlueprint(project) }
+    private val _allOpenBlueprint by context { AllOpenBlueprint(project) }
+    private val _applicationBlueprint by context { ApplicationBlueprint(project) }
+    private val _libraryBlueprint by context { LibraryBlueprint(project) }
+    private val _mavenPublishBlueprint by context { MavenPublishBlueprint(project) }
+    private val _dependencyUpdatesBlueprint by context { DependencyUpdatesBlueprint(project) }
+    private val _owaspDependencyCheckBlueprint by context { OwaspDependencyCheckBlueprint(project) }
+    private val _lintBlueprint by context { LintBlueprint(project) }
+    private val _codeAnalysisBlueprint by context { CodeAnalysisBlueprint(project) }
+    private val _developmentModeBlueprint by context { DevelopmentModeBlueprint(project) }
+    private val _testBlueprint by context { TestBlueprint(project) }
+    private val _jacocoBlueprint by context { JacocoBlueprint(project) }
+    private val _benchmarksBlueprint by context { BenchmarksBlueprint(project) }
+    private val _packageBlueprint by context { PackageBlueprint(project) }
+    private val _shadowBlueprint by context { ShadowBlueprint(project) }
+    private val _dokkaBlueprint by context { DokkaBlueprint(project) }
+    private val _jibBlueprint by context { JibBlueprint(project) }
 
     val targetJvm = value(Catalog.Versions.jvm)
 
@@ -17,40 +34,40 @@ class JvmProperties(project: Project) : Properties() {
         .feature { KotlinFeature() }
         .properties { KotlinProperties(it) }
         .parent(JvmFeatureSet::class)
-        .addBlueprint(javaBlueprint)
-        .addBlueprint(KotlinBlueprint(project))
-        .addBlueprint(allOpenBlueprint)
+        .addBlueprint(_javaBlueprint)
+        .addBlueprint(_kotlinBlueprint)
+        .addBlueprint(_allOpenBlueprint)
         .build()
     val java = FeatureDsl.Builder<JavaProperties>(project)
         .feature { JavaFeature() }
         .properties { JavaProperties(it) }
         .parent(JvmFeatureSet::class)
-        .addBlueprint(javaBlueprint)
+        .addBlueprint(_javaBlueprint)
         .build()
     val application = FeatureDsl.Builder<ApplicationProperties>(project)
         .feature { ApplicationFeature() }
         .properties { ApplicationProperties() }
         .parent(JvmFeatureSet::class)
-        .addBlueprint(ApplicationBlueprint(project))
+        .addBlueprint(_applicationBlueprint)
         .build()
     val library = FeatureDsl.Builder<EmptyProperties>(project)
         .feature { LibraryFeature() }
         .properties { EmptyProperties() }
         .parent(JvmFeatureSet::class)
-        .addBlueprint(LibraryBlueprint(project))
-        .addBlueprint(MavenPublishBlueprint(project))
+        .addBlueprint(_libraryBlueprint)
+        .addBlueprint(_mavenPublishBlueprint)
         .build()
     val dependencyUpdates = FeatureDsl.Builder<EmptyProperties>(project)
         .feature { DependencyUpdatesFeature() }
         .properties { EmptyProperties() }
         .parent(JvmFeatureSet::class)
-        .addBlueprint(DependencyUpdatesBlueprint(project))
+        .addBlueprint(_dependencyUpdatesBlueprint)
         .build()
     val vulnerabilityScan = FeatureDsl.Builder<EmptyProperties>(project)
         .feature { VulnerabilityScanFeature() }
         .properties { EmptyProperties() }
         .parent(JvmFeatureSet::class)
-        .addBlueprint(OwaspDependencyCheckBlueprint(project))
+        .addBlueprint(_owaspDependencyCheckBlueprint)
         .build()
     val lint = FeatureDsl.Builder<LintProperties>(project)
         .feature { LintFeature() }
@@ -58,36 +75,36 @@ class JvmProperties(project: Project) : Properties() {
         .parent(JvmFeatureSet::class)
         // Make sure test an benchmark source sets are available
         .after(TestFeature::class, BenchmarkFeature::class)
-        .addBlueprint(LintBlueprint(project))
+        .addBlueprint(_lintBlueprint)
         .build()
     val codeAnalysis = FeatureDsl.Builder<CodeAnalysisProperties>(project)
         .feature { CodeAnalysisFeature() }
         .properties { CodeAnalysisProperties() }
         .parent(JvmFeatureSet::class)
         .after(TestFeature::class, BenchmarkFeature::class)
-        .addBlueprint(CodeAnalysisBlueprint(project))
+        .addBlueprint(_codeAnalysisBlueprint)
         .build()
     val developmentMode = FeatureDsl.Builder<EmptyProperties>(project)
         .feature { DevelopmentModeFeature() }
         .properties { EmptyProperties() }
         .parent(JvmFeatureSet::class)
         .after(ApplicationFeature::class)
-        .addBlueprint(DevelopmentModeBlueprint(project))
+        .addBlueprint(_developmentModeBlueprint)
         .build()
     val devMode = developmentMode
     val test = FeatureDsl.Builder<TestProperties>(project)
         .feature { TestFeature() }
         .properties { TestProperties() }
         .parent(JvmFeatureSet::class)
-        .addBlueprint(TestBlueprint(project))
-        .addBlueprint(JacocoBlueprint(project))
+        .addBlueprint(_testBlueprint)
+        .addBlueprint(_jacocoBlueprint)
         .build()
     val benchmark = FeatureDsl.Builder<BenchmarkProperties>(project)
         .feature { BenchmarkFeature() }
         .properties { BenchmarkProperties() }
         .parent(JvmFeatureSet::class)
-        .addBlueprint(allOpenBlueprint)
-        .addBlueprint(BenchmarksBlueprint(project))
+        .addBlueprint(_allOpenBlueprint)
+        .addBlueprint(_benchmarksBlueprint)
         .build()
 
     @SuppressWarnings("VariableNaming")
@@ -96,21 +113,21 @@ class JvmProperties(project: Project) : Properties() {
         .properties { PackageProperties(it) }
         .parent(JvmFeatureSet::class)
         .after(ApplicationFeature::class)
-        .addBlueprint(PackageBlueprint(project))
-        .addBlueprint(ShadowBlueprint(project))
+        .addBlueprint(_packageBlueprint)
+        .addBlueprint(_shadowBlueprint)
         .build()
     val packaging = `package`
     val documentation = FeatureDsl.Builder<EmptyProperties>(project)
         .feature { DocumentationFeature() }
         .properties { EmptyProperties() }
         .parent(JvmFeatureSet::class)
-        .addBlueprint(DokkaBlueprint(project))
+        .addBlueprint(_dokkaBlueprint)
         .build()
     val docker = FeatureDsl.Builder<DockerProperties>(project)
         .feature { DockerFeature() }
         .properties { DockerProperties() }
         .parent(JvmFeatureSet::class)
         .after(ApplicationFeature::class)
-        .addBlueprint(JibBlueprint(project))
+        .addBlueprint(_jibBlueprint)
         .build()
 }
