@@ -1,9 +1,9 @@
 package net.bnb1.kradle.presets
 
 import net.bnb1.kradle.KradleExtensionBase
-import org.gradle.api.Project
+import java.util.concurrent.atomic.AtomicBoolean
 
-class JavaApplicationPreset(project: Project) : Preset(project) {
+class JavaApplicationPreset(lock: AtomicBoolean) : Preset(lock) {
 
     override fun onConfigure(extension: KradleExtensionBase) {
         extension.apply {

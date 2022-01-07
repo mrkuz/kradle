@@ -1,11 +1,11 @@
 package net.bnb1.kradle.v1
 
+import net.bnb1.kradle.KradleContext
 import net.bnb1.kradle.KradleExtensionBase
 import net.bnb1.kradle.apply
 import net.bnb1.kradle.features.jvm.BenchmarksBlueprint
 import net.bnb1.kradle.features.jvm.TestBlueprint
 import net.bnb1.kradle.features.jvm.TestProperties
-import net.bnb1.kradle.propertiesRegistry
 import net.bnb1.kradle.tracer
 import org.gradle.api.Project
 import org.gradle.kotlin.dsl.configure
@@ -15,13 +15,13 @@ import org.jetbrains.kotlin.allopen.gradle.AllOpenGradleSubplugin
 /**
  * Provides backwards-compatibility for Kradle v1.
  */
-class KradleCompat(private val project: Project, private val type: ProjectType) {
+class KradleCompat(private val context: KradleContext, private val project: Project, private val type: ProjectType) {
 
     enum class ProjectType {
         APPLICATION, LIBRARY
     }
 
-    private val extension = KradleExtensionBase(project)
+    private val extension = KradleExtensionBase(context, project)
 
     fun activate() {
         configureEager()
@@ -40,7 +40,7 @@ class KradleCompat(private val project: Project, private val type: ProjectType) 
         project.apply(AllOpenGradleSubplugin::class.java)
 
         // Source sets need to be created early
-        project.propertiesRegistry.get(TestProperties::class).apply {
+        context[TestProperties::class].apply {
             withIntegrationTests(true)
             withFunctionalTests(true)
         }

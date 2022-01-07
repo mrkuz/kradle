@@ -1,9 +1,9 @@
 package net.bnb1.kradle.presets
 
 import net.bnb1.kradle.KradleExtensionBase
-import org.gradle.api.Project
+import java.util.concurrent.atomic.AtomicBoolean
 
-class KotlinJvmLibraryPreset(project: Project) : Preset(project) {
+class KotlinJvmLibraryPreset(lock: AtomicBoolean) : Preset(lock) {
 
     override fun onConfigure(extension: KradleExtensionBase) {
         extension.apply {

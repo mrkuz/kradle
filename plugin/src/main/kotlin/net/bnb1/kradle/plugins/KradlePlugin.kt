@@ -1,5 +1,6 @@
 package net.bnb1.kradle.plugins
 
+import net.bnb1.kradle.KradleContext
 import net.bnb1.kradle.KradleExtension
 import net.bnb1.kradle.createHelperTask
 import net.bnb1.kradle.tasks.KradleDumpTask
@@ -12,7 +13,8 @@ import org.gradle.kotlin.dsl.repositories
 class KradlePlugin : Plugin<Project> {
 
     override fun apply(project: Project) {
-        project.extensions.create<KradleExtension>("kradle")
+        val context = KradleContext()
+        project.extensions.create<KradleExtension>("kradle", context, project)
 
         project.createHelperTask<KradleDumpTask>("kradleDump", "Dumps kradle diagnostic information")
         project.afterEvaluate { project.tracer.deactivate() }

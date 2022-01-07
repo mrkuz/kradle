@@ -5,6 +5,7 @@ import kotlin.reflect.KProperty
 import kotlin.reflect.full.isSubclassOf
 import kotlin.reflect.jvm.jvmErasure
 
+@Suppress("UNCHECKED_CAST")
 open class KradleContext {
 
     private val _map = mutableMapOf<KClass<*>, Any>()
@@ -13,10 +14,8 @@ open class KradleContext {
 
     fun register(instance: Any): Boolean = _map.putIfAbsent(instance::class, instance) == null
 
-    @Suppress("UNCHECKED_CAST")
     inline fun <reified T : Any> get() = map[T::class] as T
 
-    @Suppress("UNCHECKED_CAST")
     operator fun <T : Any> get(key: KClass<T>) = _map[key] as T
 
     fun <T : Any> getSubclassOf(key: KClass<T>) =

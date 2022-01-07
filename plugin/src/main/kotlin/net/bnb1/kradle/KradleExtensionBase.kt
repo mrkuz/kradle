@@ -9,9 +9,7 @@ import net.bnb1.kradle.support.Tracer
 import org.gradle.api.Project
 import org.gradle.kotlin.dsl.extra
 
-open class KradleExtensionBase(project: Project) {
-
-    private val context = KradleContext()
+open class KradleExtensionBase(context: KradleContext, project: Project) {
 
     init {
         project.extra["tracer"] = Tracer()

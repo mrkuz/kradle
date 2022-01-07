@@ -67,9 +67,6 @@ val Project.featureRegistry
 val Project.propertiesRegistry
     get() = this.extra.get("context") as KradleContext
 
-val Project.presetRegistry
-    get() = this.extra.get("context") as KradleContext
-
 // DependencyHandlerScope
 
 fun DependencyHandlerScope.implementation(notation: Any) = add("implementation", notation)
