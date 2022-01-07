@@ -66,24 +66,24 @@ class KradleCompat(private val project: Project, private val type: ProjectType) 
             }
 
             jvm.configureOnly {
-                targetJvm.bind(compatExtension.targetJvm)
+                targetJvm.set(compatExtension.targetJvm.orNull)
                 kotlin {
-                    kotlinxCoroutinesVersion.bind(compatExtension.kotlinxCoroutinesVersion)
+                    kotlinxCoroutinesVersion.set(compatExtension.kotlinxCoroutinesVersion.orNull)
                     lint {
                         ktlint {
-                            version.bind(compatExtension.ktlintVersion)
+                            version.set(compatExtension.ktlintVersion.orNull)
                             rules {
                                 disable("no-wildcard-imports")
                             }
                         }
                     }
                     codeAnalysis {
-                        detektConfigFile.bind(compatExtension.detektConfigFile)
-                        detektVersion.bind(compatExtension.detektVersion)
+                        detektConfigFile.set(compatExtension.detektConfigFile.orNull)
+                        detektVersion.set(compatExtension.detektVersion.orNull)
                     }
                     test {
-                        useMockk.bind(compatExtension.tests.mockkVersion)
-                        useKotest.bind(compatExtension.tests.kotestVersion)
+                        useMockk.set(compatExtension.tests.mockkVersion.orNull)
+                        useKotest.set(compatExtension.tests.kotestVersion.orNull)
                     }
                 }
 
@@ -104,25 +104,25 @@ class KradleCompat(private val project: Project, private val type: ProjectType) 
 
                 test {
                     prettyPrint(true)
-                    withJunitJupiter.bind(compatExtension.tests.junitJupiterVersion)
-                    withJacoco.bind(compatExtension.tests.jacocoVersion)
+                    withJunitJupiter.set(compatExtension.tests.junitJupiterVersion.orNull)
+                    withJacoco.set(compatExtension.tests.jacocoVersion.orNull)
                 }
                 benchmark {
-                    jmhVersion.bind(compatExtension.jmhVersion)
+                    jmhVersion.set(compatExtension.jmhVersion.orNull)
                 }
                 `package` {
                     uberJar {
-                        minimize.bind(compatExtension.uberJar.minimize)
+                        minimize.set(compatExtension.uberJar.minimize.get())
                     }
                 }
 
                 if (type == ProjectType.APPLICATION) {
                     docker.enable {
-                        baseImage.bind(compatExtension.image.baseImage)
-                        ports.bind(compatExtension.image.ports)
-                        withJvmKill.bind(compatExtension.image.jvmKillVersion)
-                        withAppSh.bind(compatExtension.image.withAppSh)
-                        javaOpts.bind(compatExtension.image.javaOpts)
+                        baseImage.set(compatExtension.image.baseImage.orNull)
+                        compatExtension.image.ports.get().forEach { ports.add(it) }
+                        withJvmKill.set(compatExtension.image.jvmKillVersion.orNull)
+                        withAppSh.set(compatExtension.image.withAppSh.get())
+                        javaOpts.set(compatExtension.image.javaOpts.orNull)
                     }
                 }
                 documentation.enable()

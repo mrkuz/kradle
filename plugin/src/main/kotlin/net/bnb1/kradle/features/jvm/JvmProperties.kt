@@ -6,7 +6,7 @@ import net.bnb1.kradle.features.EmptyProperties
 import net.bnb1.kradle.features.Properties
 import org.gradle.api.Project
 
-class JvmProperties(project: Project) : Properties(project) {
+class JvmProperties(project: Project) : Properties() {
 
     private val javaBlueprint = JavaBlueprint(project)
     private val allOpenBlueprint = AllOpenBlueprint(project)
@@ -29,32 +29,32 @@ class JvmProperties(project: Project) : Properties(project) {
         .build()
     val application = FeatureDsl.Builder<ApplicationProperties>(project)
         .feature { ApplicationFeature() }
-        .properties { ApplicationProperties(it) }
+        .properties { ApplicationProperties() }
         .parent(JvmFeatureSet::class)
         .addBlueprint(ApplicationBlueprint(project))
         .build()
     val library = FeatureDsl.Builder<EmptyProperties>(project)
         .feature { LibraryFeature() }
-        .properties { EmptyProperties(it) }
+        .properties { EmptyProperties() }
         .parent(JvmFeatureSet::class)
         .addBlueprint(LibraryBlueprint(project))
         .addBlueprint(MavenPublishBlueprint(project))
         .build()
     val dependencyUpdates = FeatureDsl.Builder<EmptyProperties>(project)
         .feature { DependencyUpdatesFeature() }
-        .properties { EmptyProperties(it) }
+        .properties { EmptyProperties() }
         .parent(JvmFeatureSet::class)
         .addBlueprint(DependencyUpdatesBlueprint(project))
         .build()
     val vulnerabilityScan = FeatureDsl.Builder<EmptyProperties>(project)
         .feature { VulnerabilityScanFeature() }
-        .properties { EmptyProperties(it) }
+        .properties { EmptyProperties() }
         .parent(JvmFeatureSet::class)
         .addBlueprint(OwaspDependencyCheckBlueprint(project))
         .build()
     val lint = FeatureDsl.Builder<LintProperties>(project)
         .feature { LintFeature() }
-        .properties { LintProperties(it) }
+        .properties { LintProperties() }
         .parent(JvmFeatureSet::class)
         // Make sure test an benchmark source sets are available
         .after(TestFeature::class, BenchmarkFeature::class)
@@ -62,14 +62,14 @@ class JvmProperties(project: Project) : Properties(project) {
         .build()
     val codeAnalysis = FeatureDsl.Builder<CodeAnalysisProperties>(project)
         .feature { CodeAnalysisFeature() }
-        .properties { CodeAnalysisProperties(it) }
+        .properties { CodeAnalysisProperties() }
         .parent(JvmFeatureSet::class)
         .after(TestFeature::class, BenchmarkFeature::class)
         .addBlueprint(CodeAnalysisBlueprint(project))
         .build()
     val developmentMode = FeatureDsl.Builder<EmptyProperties>(project)
         .feature { DevelopmentModeFeature() }
-        .properties { EmptyProperties(it) }
+        .properties { EmptyProperties() }
         .parent(JvmFeatureSet::class)
         .after(ApplicationFeature::class)
         .addBlueprint(DevelopmentModeBlueprint(project))
@@ -77,14 +77,14 @@ class JvmProperties(project: Project) : Properties(project) {
     val devMode = developmentMode
     val test = FeatureDsl.Builder<TestProperties>(project)
         .feature { TestFeature() }
-        .properties { TestProperties(it) }
+        .properties { TestProperties() }
         .parent(JvmFeatureSet::class)
         .addBlueprint(TestBlueprint(project))
         .addBlueprint(JacocoBlueprint(project))
         .build()
     val benchmark = FeatureDsl.Builder<BenchmarkProperties>(project)
         .feature { BenchmarkFeature() }
-        .properties { BenchmarkProperties(it) }
+        .properties { BenchmarkProperties() }
         .parent(JvmFeatureSet::class)
         .addBlueprint(allOpenBlueprint)
         .addBlueprint(BenchmarksBlueprint(project))
@@ -102,13 +102,13 @@ class JvmProperties(project: Project) : Properties(project) {
     val packaging = `package`
     val documentation = FeatureDsl.Builder<EmptyProperties>(project)
         .feature { DocumentationFeature() }
-        .properties { EmptyProperties(it) }
+        .properties { EmptyProperties() }
         .parent(JvmFeatureSet::class)
         .addBlueprint(DokkaBlueprint(project))
         .build()
     val docker = FeatureDsl.Builder<DockerProperties>(project)
         .feature { DockerFeature() }
-        .properties { DockerProperties(it) }
+        .properties { DockerProperties() }
         .parent(JvmFeatureSet::class)
         .after(ApplicationFeature::class)
         .addBlueprint(JibBlueprint(project))

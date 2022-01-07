@@ -15,10 +15,10 @@ class RegistryTests : BehaviorSpec({
         val registry = Registry<Properties>()
 
         When("Registering two instances for one class") {
-            val properties1 = Properties(project)
+            val properties1 = Properties()
             registry.register(properties1)
 
-            val properties2 = Properties(project)
+            val properties2 = Properties()
             registry.register(properties2)
 
             Then("The second instance is ignored") {

@@ -1,28 +1,31 @@
 package net.bnb1.kradle.dsl
 
-import org.gradle.api.provider.Property
+open class OptionalValue<T : Any>(
+    private val suggestion: T
+) : SimpleProvider<T> {
 
-open class OptionalValue(
-    private val property: Property<String>,
-    private val suggestion: String
-) : SimpleProvider<String> {
+    private var value: T? = null
 
     override val notNull: Boolean
-        get() = property.isPresent
+        get() = value != null
 
-    override fun get() = property.get()
+    override fun get() = value!!
 
-    operator fun invoke(version: String = suggestion) = set(version)
+    operator fun invoke(value: T? = suggestion) = set(value)
 
-    fun set(version: String = suggestion) = property.set(version)
+    fun set(value: T? = suggestion) {
+        this.value = value
+    }
 
-    fun bind(property: Property<String>) = this.property.set(property)
+    fun get(default: T) = value ?: default
 
-    fun get(default: String) = property.getOrElse(default)
+    fun reset() {
+        value = null
+    }
 
-    fun reset() = property.set(null)
-
-    fun unset() = property.set(null)
+    fun unset() {
+        value = null
+    }
 
     val hasValue by ::notNull
 }

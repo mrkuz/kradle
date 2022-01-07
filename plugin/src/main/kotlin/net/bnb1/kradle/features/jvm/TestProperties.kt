@@ -2,9 +2,8 @@ package net.bnb1.kradle.features.jvm
 
 import net.bnb1.kradle.Catalog
 import net.bnb1.kradle.features.Properties
-import org.gradle.api.Project
 
-class TestProperties(project: Project) : Properties(project) {
+class TestProperties : Properties() {
 
     val withJunitJupiter = optional(Catalog.Versions.junit)
     val withJacoco = optional(Catalog.Versions.jacoco)

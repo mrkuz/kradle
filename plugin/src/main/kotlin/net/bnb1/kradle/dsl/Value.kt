@@ -1,31 +1,29 @@
 package net.bnb1.kradle.dsl
 
-import org.gradle.api.provider.Property
+open class Value<T : Any>(private val defaultValue: T?) : SimpleProvider<T> {
 
-open class Value<T : Any>(val property: Property<T>, private val defaultValue: T?) : SimpleProvider<T> {
-
-    init {
-        if (defaultValue != null) {
-            property.convention(defaultValue)
-        }
-    }
+    private var value: T? = defaultValue
 
     override val notNull: Boolean
-        get() = property.isPresent
+        get() = value != null
 
-    override fun get() = property.get()
+    override fun get() = value!!
 
-    operator fun invoke(value: T) = set(value)
+    operator fun invoke(value: T?) = set(value)
 
-    fun set(value: T) = property.set(value)
+    fun set(value: T?) {
+        this.value = value
+    }
 
-    fun bind(property: Property<T>) = this.property.set(property)
+    fun get(default: T) = value ?: default
 
-    fun get(default: T) = property.getOrElse(default)
+    fun reset() {
+        value = defaultValue
+    }
 
-    fun reset() = property.set(defaultValue)
-
-    fun unset() = property.set(null)
+    fun unset() {
+        value = null
+    }
 
     val hasValue by ::notNull
 }

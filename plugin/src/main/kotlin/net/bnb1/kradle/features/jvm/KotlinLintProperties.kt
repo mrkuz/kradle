@@ -4,9 +4,9 @@ import net.bnb1.kradle.dsl.PropertiesDsl
 import net.bnb1.kradle.features.Properties
 import org.gradle.api.Project
 
-class KotlinLintProperties(project: Project) : Properties(project) {
+class KotlinLintProperties(project: Project) : Properties() {
 
-    private val ktlintProperties = KtlintProperties(project)
+    private val ktlintProperties = KtlintProperties()
     val ktlint = PropertiesDsl.Builder<KtlintProperties>(project)
         .properties(ktlintProperties)
         .build()

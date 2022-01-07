@@ -4,7 +4,7 @@ import net.bnb1.kradle.dsl.PropertiesDsl
 import net.bnb1.kradle.features.Properties
 import org.gradle.api.Project
 
-class JavaProperties(project: Project) : Properties(project) {
+class JavaProperties(project: Project) : Properties() {
 
     val previewFeatures = flag()
 
