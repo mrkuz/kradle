@@ -26,25 +26,12 @@ class JvmProperties(context: KradleContext, project: Project) : Properties() {
         JavaBlueprint(project).inject {
             javaProperties = _javaProperties
             jvmProperties = this@JvmProperties
-            applicationProperties = _applicationProperties
-            lintProperties = _lintProperties
-            codeAnalysisProperties = _codeAnalysisProperties
-            checkstyleProperties = context.get()
-            pmdProperties = context.get()
-            spotBugsProperties = context.get()
         }
     }
     private val _kotlinBlueprint by context {
         KotlinBlueprint(project).inject {
             kotlinProperties = _kotlinProperties
             jvmProperties = this@JvmProperties
-            applicationProperties = _applicationProperties
-            lintProperties = _lintProperties
-            codeAnalysisProperties = _codeAnalysisProperties
-            testProperties = _testProperties
-            detektProperties = context.get()
-            ktlintProperties = context.get()
-            kotlinTestProperties = context.get()
         }
     }
     private val _allOpenBlueprint by context { AllOpenBlueprint(project) }

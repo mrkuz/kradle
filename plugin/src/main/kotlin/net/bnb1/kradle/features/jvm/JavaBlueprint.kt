@@ -14,12 +14,6 @@ class JavaBlueprint(project: Project) : Blueprint(project) {
 
     lateinit var javaProperties: JavaProperties
     lateinit var jvmProperties: JvmProperties
-    lateinit var applicationProperties: ApplicationProperties
-    lateinit var lintProperties: LintProperties
-    lateinit var codeAnalysisProperties: CodeAnalysisProperties
-    lateinit var checkstyleProperties: CheckstyleProperties
-    lateinit var pmdProperties: PmdProperties
-    lateinit var spotBugsProperties: SpotBugsProperties
 
     override fun checkPreconditions() {
         val javaExtension = project.extensions.getByType(JavaPluginExtension::class.java)
@@ -39,7 +33,7 @@ class JavaBlueprint(project: Project) : Blueprint(project) {
     override fun applyPlugins() {
         project.apply(JavaPlugin::class.java)
     }
-    
+
     override fun configure() {
         val release = getJavaRelease()
         project.tasks.withType<JavaCompile> {

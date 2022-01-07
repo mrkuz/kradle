@@ -19,13 +19,6 @@ class KotlinBlueprint(project: Project) : Blueprint(project) {
 
     lateinit var kotlinProperties: KotlinProperties
     lateinit var jvmProperties: JvmProperties
-    lateinit var applicationProperties: ApplicationProperties
-    lateinit var lintProperties: LintProperties
-    lateinit var codeAnalysisProperties: CodeAnalysisProperties
-    lateinit var testProperties: TestProperties
-    lateinit var detektProperties: DetektProperties
-    lateinit var ktlintProperties: KtlintProperties
-    lateinit var kotlinTestProperties: KotlinTestProperties
 
     override fun checkPreconditions() {
         if (project.extensions.findByType(KotlinJvmProjectExtension::class.java) == null) {
