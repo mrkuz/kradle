@@ -11,19 +11,22 @@ import org.gradle.kotlin.dsl.extra
 
 open class KradleExtensionBase(project: Project) {
 
+    private val context = KradleContext()
+
     init {
         project.extra["tracer"] = Tracer()
-
-        val context = KradleContext()
         project.extra["context"] = context
     }
 
+    private val _general by context { GeneralFeatureSet(project) }
     val general = FeatureSetDsl.Builder<GeneralProperties>(project)
-        .featureSet { GeneralFeatureSet(it) }
+        .featureSet { _general }
         .properties { GeneralProperties(it) }
         .build()
+
+    private val _jvm by context { JvmFeatureSet(project) }
     val jvm = FeatureSetDsl.Builder<JvmProperties>(project)
-        .featureSet { JvmFeatureSet(it) }
+        .featureSet { _jvm }
         .properties { JvmProperties(it) }
         .build()
 }

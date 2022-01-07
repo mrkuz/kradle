@@ -1,6 +1,5 @@
 package net.bnb1.kradle.dsl
 
-import net.bnb1.kradle.featureSetRegistry
 import net.bnb1.kradle.features.FeatureSet
 import net.bnb1.kradle.features.Properties
 import net.bnb1.kradle.propertiesRegistry
@@ -43,7 +42,7 @@ class FeatureSetDsl<P : Properties> private constructor(
         }
 
         fun build(): FeatureSetDsl<P> {
-            val featureSet = featureSetSupplier!!(project).also { project.featureSetRegistry.register(it) }
+            val featureSet = featureSetSupplier!!(project)
             val properties = propertiesSupplier!!(project).also { project.propertiesRegistry.register(it) }
             return FeatureSetDsl(featureSet, properties)
         }

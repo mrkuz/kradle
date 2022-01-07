@@ -1,7 +1,9 @@
 package net.bnb1.kradle
 
 import kotlin.reflect.KClass
+import kotlin.reflect.KProperty
 import kotlin.reflect.full.isSubclassOf
+import kotlin.reflect.jvm.jvmErasure
 
 open class KradleContext {
 
@@ -22,4 +24,18 @@ open class KradleContext {
             .filter { it.key.isSubclassOf(key) }
             .map { it.value as T }
             .toList()
+
+    operator fun <T : Any> invoke(initialize: () -> T) = Delegate(this, initialize)
+
+    class Delegate<T : Any>(private val context: KradleContext, initialize: () -> T) {
+
+        init {
+            val value = initialize()
+            context.register(value)
+        }
+
+        operator fun getValue(thisRef: Any?, property: KProperty<*>): T {
+            return context[property.returnType.jvmErasure as KClass<T>]
+        }
+    }
 }
