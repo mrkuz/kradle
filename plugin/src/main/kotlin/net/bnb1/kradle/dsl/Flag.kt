@@ -11,7 +11,7 @@ open class Flag : SimpleProvider<Boolean> {
 
     operator fun invoke(enabled: Boolean = true) = set(enabled)
 
-    fun set(value: Boolean) = {
+    fun set(value: Boolean) {
         this.value = value
     }
 
