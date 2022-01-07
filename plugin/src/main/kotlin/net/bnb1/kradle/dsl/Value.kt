@@ -1,6 +1,9 @@
 package net.bnb1.kradle.dsl
 
-open class Value<T : Any>(private val defaultValue: T?) : SimpleProvider<T> {
+open class Value<T : Any>(
+    private val defaultValue: T?,
+    private val suggestion: T?
+) : SimpleProvider<T> {
 
     private var value: T? = defaultValue
 
@@ -9,9 +12,9 @@ open class Value<T : Any>(private val defaultValue: T?) : SimpleProvider<T> {
 
     override fun get() = value!!
 
-    operator fun invoke(value: T?) = set(value)
+    operator fun invoke(value: T? = suggestion) = set(value)
 
-    fun set(value: T?) {
+    fun set(value: T? = suggestion) {
         this.value = value
     }
 

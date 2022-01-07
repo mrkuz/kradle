@@ -2,7 +2,6 @@ package net.bnb1.kradle.features
 
 import net.bnb1.kradle.dsl.Flag
 import net.bnb1.kradle.dsl.Flags
-import net.bnb1.kradle.dsl.OptionalValue
 import net.bnb1.kradle.dsl.Value
 import net.bnb1.kradle.dsl.ValueSet
 
@@ -15,11 +14,11 @@ open class Properties {
 
     fun flags(invert: Boolean = false) = Flags(invert)
 
-    inline fun <reified T : Any> value(defaultValue: T?) = Value(defaultValue)
+    fun <T : Any> value(defaultValue: T?) = Value(defaultValue, null)
 
-    inline fun <reified T : Any> value() = Value<T>(null)
+    inline fun <reified T : Any> optional() = Value<T>(null, null)
 
-    fun optional(suggestion: String) = OptionalValue(suggestion)
+    fun <T : Any> optional(suggestion: T) = Value(null, suggestion)
 
     inline fun <reified T : Any> valueSet() = ValueSet<T>()
 }

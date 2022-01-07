@@ -7,7 +7,7 @@ import org.gradle.api.Project
 
 class KotlinProperties(project: Project) : Properties() {
 
-    val kotlinxCoroutinesVersion = value<String>()
+    val kotlinxCoroutinesVersion = optional<String>()
     fun useCoroutines(version: String = Catalog.Versions.kotlinCoroutines) = kotlinxCoroutinesVersion.set(version)
 
     val lint = PropertiesDsl.Builder<KotlinLintProperties>(project)

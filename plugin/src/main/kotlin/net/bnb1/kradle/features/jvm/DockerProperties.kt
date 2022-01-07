@@ -12,6 +12,6 @@ class DockerProperties : Properties() {
     val withAppSh = flag()
     val startupScript = withAppSh
 
-    val javaOpts = value<String>()
+    val javaOpts = optional<String>()
     val jvmOpts = javaOpts
 }
