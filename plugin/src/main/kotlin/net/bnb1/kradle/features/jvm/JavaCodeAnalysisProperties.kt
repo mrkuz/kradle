@@ -1,17 +1,15 @@
 package net.bnb1.kradle.features.jvm
 
+import net.bnb1.kradle.KradleContext
 import net.bnb1.kradle.dsl.PropertiesDsl
 import net.bnb1.kradle.features.Properties
-import org.gradle.api.Project
 
-class JavaCodeAnalysisProperties(project: Project) : Properties() {
+class JavaCodeAnalysisProperties(context: KradleContext) : Properties() {
 
-    val pmd = PropertiesDsl.Builder<PmdProperties>(project)
-        .properties { PmdProperties() }
-        .build()
+    private val _pmdProperties by context { PmdProperties() }
+    val pmd = PropertiesDsl(_pmdProperties)
 
-    val spotbugs = PropertiesDsl.Builder<SpotBugsProperties>(project)
-        .properties { SpotBugsProperties() }
-        .build()
+    private val _spotBugsProperties by context { SpotBugsProperties() }
+    val spotbugs = PropertiesDsl(_spotBugsProperties)
     val spotBugs = spotbugs
 }

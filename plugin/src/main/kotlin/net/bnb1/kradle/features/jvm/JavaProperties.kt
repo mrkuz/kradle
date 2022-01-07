@@ -1,17 +1,16 @@
 package net.bnb1.kradle.features.jvm
 
+import net.bnb1.kradle.KradleContext
 import net.bnb1.kradle.dsl.PropertiesDsl
 import net.bnb1.kradle.features.Properties
-import org.gradle.api.Project
 
-class JavaProperties(project: Project) : Properties() {
+class JavaProperties(context: KradleContext) : Properties() {
 
     val previewFeatures = flag()
 
-    val lint = PropertiesDsl.Builder<JavaLintProperties>(project)
-        .properties { JavaLintProperties(it) }
-        .build()
-    val codeAnalysis = PropertiesDsl.Builder<JavaCodeAnalysisProperties>(project)
-        .properties { JavaCodeAnalysisProperties(it) }
-        .build()
+    private val _lintProperties by context { JavaLintProperties(context) }
+    val lint = PropertiesDsl(_lintProperties)
+
+    private val _codeAnalysisProperties by context { JavaCodeAnalysisProperties(context) }
+    val codeAnalysis = PropertiesDsl(_codeAnalysisProperties)
 }

@@ -9,6 +9,16 @@ import org.gradle.api.Project
 
 class JvmProperties(context: KradleContext, project: Project) : Properties() {
 
+    private val _kotlinProperties by context { KotlinProperties(context) }
+    private val _javaProperties by context { JavaProperties(context) }
+    private val _applicationProperties by context { ApplicationProperties() }
+    private val _lintProperties by context { LintProperties() }
+    private val _codeAnalysisProperties by context { CodeAnalysisProperties() }
+    private val _testProperties by context { TestProperties() }
+    private val _benchmarkProperties by context { BenchmarkProperties() }
+    private val _packageProperties by context { PackageProperties(context) }
+    private val _dockerProperties by context { DockerProperties() }
+
     private val _javaBlueprint by context { JavaBlueprint(project) }
     private val _kotlinBlueprint by context { KotlinBlueprint(project) }
     private val _allOpenBlueprint by context { AllOpenBlueprint(project) }
@@ -32,7 +42,7 @@ class JvmProperties(context: KradleContext, project: Project) : Properties() {
 
     val kotlin = FeatureDsl.Builder<KotlinProperties>(project)
         .feature { KotlinFeature() }
-        .properties { KotlinProperties(it) }
+        .properties { _kotlinProperties }
         .parent(JvmFeatureSet::class)
         .addBlueprint(_javaBlueprint)
         .addBlueprint(_kotlinBlueprint)
@@ -40,13 +50,13 @@ class JvmProperties(context: KradleContext, project: Project) : Properties() {
         .build()
     val java = FeatureDsl.Builder<JavaProperties>(project)
         .feature { JavaFeature() }
-        .properties { JavaProperties(it) }
+        .properties { _javaProperties }
         .parent(JvmFeatureSet::class)
         .addBlueprint(_javaBlueprint)
         .build()
     val application = FeatureDsl.Builder<ApplicationProperties>(project)
         .feature { ApplicationFeature() }
-        .properties { ApplicationProperties() }
+        .properties { _applicationProperties }
         .parent(JvmFeatureSet::class)
         .addBlueprint(_applicationBlueprint)
         .build()
@@ -71,7 +81,7 @@ class JvmProperties(context: KradleContext, project: Project) : Properties() {
         .build()
     val lint = FeatureDsl.Builder<LintProperties>(project)
         .feature { LintFeature() }
-        .properties { LintProperties() }
+        .properties { _lintProperties }
         .parent(JvmFeatureSet::class)
         // Make sure test an benchmark source sets are available
         .after(TestFeature::class, BenchmarkFeature::class)
@@ -79,7 +89,7 @@ class JvmProperties(context: KradleContext, project: Project) : Properties() {
         .build()
     val codeAnalysis = FeatureDsl.Builder<CodeAnalysisProperties>(project)
         .feature { CodeAnalysisFeature() }
-        .properties { CodeAnalysisProperties() }
+        .properties { _codeAnalysisProperties }
         .parent(JvmFeatureSet::class)
         .after(TestFeature::class, BenchmarkFeature::class)
         .addBlueprint(_codeAnalysisBlueprint)
@@ -94,14 +104,14 @@ class JvmProperties(context: KradleContext, project: Project) : Properties() {
     val devMode = developmentMode
     val test = FeatureDsl.Builder<TestProperties>(project)
         .feature { TestFeature() }
-        .properties { TestProperties() }
+        .properties { _testProperties }
         .parent(JvmFeatureSet::class)
         .addBlueprint(_testBlueprint)
         .addBlueprint(_jacocoBlueprint)
         .build()
     val benchmark = FeatureDsl.Builder<BenchmarkProperties>(project)
         .feature { BenchmarkFeature() }
-        .properties { BenchmarkProperties() }
+        .properties { _benchmarkProperties }
         .parent(JvmFeatureSet::class)
         .addBlueprint(_allOpenBlueprint)
         .addBlueprint(_benchmarksBlueprint)
@@ -110,7 +120,7 @@ class JvmProperties(context: KradleContext, project: Project) : Properties() {
     @SuppressWarnings("VariableNaming")
     val `package` = FeatureDsl.Builder<PackageProperties>(project)
         .feature { PackageFeature() }
-        .properties { PackageProperties(it) }
+        .properties { _packageProperties }
         .parent(JvmFeatureSet::class)
         .after(ApplicationFeature::class)
         .addBlueprint(_packageBlueprint)
@@ -125,7 +135,7 @@ class JvmProperties(context: KradleContext, project: Project) : Properties() {
         .build()
     val docker = FeatureDsl.Builder<DockerProperties>(project)
         .feature { DockerFeature() }
-        .properties { DockerProperties() }
+        .properties { _dockerProperties }
         .parent(JvmFeatureSet::class)
         .after(ApplicationFeature::class)
         .addBlueprint(_jibBlueprint)

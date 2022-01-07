@@ -1,12 +1,11 @@
 package net.bnb1.kradle.features.jvm
 
+import net.bnb1.kradle.KradleContext
 import net.bnb1.kradle.dsl.PropertiesDsl
 import net.bnb1.kradle.features.Properties
-import org.gradle.api.Project
 
-class JavaLintProperties(project: Project) : Properties() {
+class JavaLintProperties(context: KradleContext) : Properties() {
 
-    val checkstyle = PropertiesDsl.Builder<CheckstyleProperties>(project)
-        .properties { CheckstyleProperties() }
-        .build()
+    private val _checkstyleProperties by context { CheckstyleProperties() }
+    val checkstyle = PropertiesDsl(_checkstyleProperties)
 }

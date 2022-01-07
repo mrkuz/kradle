@@ -1,12 +1,11 @@
 package net.bnb1.kradle.features.jvm
 
+import net.bnb1.kradle.KradleContext
 import net.bnb1.kradle.dsl.PropertiesDsl
 import net.bnb1.kradle.features.Properties
-import org.gradle.api.Project
 
-class PackageProperties(project: Project) : Properties() {
+class PackageProperties(context: KradleContext) : Properties() {
 
-    val uberJar = PropertiesDsl.Builder<PackageUberJarProperties>(project)
-        .properties { PackageUberJarProperties() }
-        .build()
+    private val _uberJarProperties by context { PackageUberJarProperties() }
+    val uberJar = PropertiesDsl(_uberJarProperties)
 }
