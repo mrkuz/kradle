@@ -13,26 +13,31 @@ class GeneralProperties(context: KradleContext, project: Project) : Properties()
     private val _projectPropertiesBlueprint by context { ProjectPropertiesBlueprint(project) }
     private val _buildPropertiesBlueprint by context { BuildPropertiesBlueprint(project) }
 
+    private val _bootstrap by context { BootstrapFeature() }
+    private val _git by context { GitFeature() }
+    private val _projectProperties by context { ProjectPropertiesFeature() }
+    private val _buildProperties by context { BuildPropertiesFeature() }
+
     val bootstrap = FeatureDsl.Builder<EmptyProperties>(project)
-        .feature { BootstrapFeature() }
+        .feature { _bootstrap }
         .properties { EmptyProperties() }
         .parent(GeneralFeatureSet::class)
         .addBlueprint(_bootstrapBlueprint)
         .build()
     val git = FeatureDsl.Builder<EmptyProperties>(project)
-        .feature { GitFeature() }
+        .feature { _git }
         .properties { EmptyProperties() }
         .parent(GeneralFeatureSet::class)
         .addBlueprint(_gitBlueprint)
         .build()
     val projectProperties = FeatureDsl.Builder<EmptyProperties>(project)
-        .feature { ProjectPropertiesFeature() }
+        .feature { _projectProperties }
         .properties { EmptyProperties() }
         .parent(GeneralFeatureSet::class)
         .addBlueprint(_projectPropertiesBlueprint)
         .build()
     val buildProperties = FeatureDsl.Builder<EmptyProperties>(project)
-        .feature { BuildPropertiesFeature() }
+        .feature { _buildProperties }
         .properties { EmptyProperties() }
         .parent(GeneralFeatureSet::class)
         .addBlueprint(_buildPropertiesBlueprint)

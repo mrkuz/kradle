@@ -41,7 +41,7 @@ open class FeatureSet(private val project: Project) {
         }
         project.tracer.branch {
             feature.shouldActivateAfter().asSequence()
-                .map { project.featureRegistry[it] as Feature }
+                .map { project.featureRegistry[it] }
                 .filter { it.isEnabled }
                 .filter { it.isInactive }
                 .forEach { activateOrdered(visited, it) }
