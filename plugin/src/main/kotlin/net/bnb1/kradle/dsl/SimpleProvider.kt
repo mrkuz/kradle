@@ -1,6 +1,6 @@
 package net.bnb1.kradle.dsl
 
-interface PropertyWrapper<T : Any> {
+interface SimpleProvider<T : Any> {
 
     val notNull: Boolean
 

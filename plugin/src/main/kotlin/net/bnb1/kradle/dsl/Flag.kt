@@ -2,7 +2,7 @@ package net.bnb1.kradle.dsl
 
 import org.gradle.api.provider.Property
 
-open class Flag(private val property: Property<Boolean>) : PropertyWrapper<Boolean> {
+open class Flag(private val property: Property<Boolean>) : SimpleProvider<Boolean> {
 
     init {
         property.convention(false)

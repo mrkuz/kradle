@@ -3,7 +3,7 @@ package net.bnb1.kradle.dsl
 import org.gradle.api.provider.SetProperty
 
 open class Flags(private val property: SetProperty<String>, private val invert: Boolean) :
-    PropertyWrapper<Set<String>> {
+    SimpleProvider<Set<String>> {
 
     override val notNull: Boolean
         get() = true

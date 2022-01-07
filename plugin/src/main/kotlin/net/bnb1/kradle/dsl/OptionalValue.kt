@@ -5,7 +5,7 @@ import org.gradle.api.provider.Property
 open class OptionalValue(
     private val property: Property<String>,
     private val suggestion: String
-) : PropertyWrapper<String> {
+) : SimpleProvider<String> {
 
     override val notNull: Boolean
         get() = property.isPresent

@@ -3,7 +3,7 @@ package net.bnb1.kradle.tasks
 import net.bnb1.kradle.dsl.Configurable
 import net.bnb1.kradle.dsl.FeatureDsl
 import net.bnb1.kradle.dsl.PropertiesDsl
-import net.bnb1.kradle.dsl.PropertyWrapper
+import net.bnb1.kradle.dsl.SimpleProvider
 import net.bnb1.kradle.featureRegistry
 import net.bnb1.kradle.features.EmptyProperties
 import net.bnb1.kradle.propertiesRegistry
@@ -183,8 +183,8 @@ open class KradleDumpTask : DefaultTask() {
             .forEach { member ->
                 val returnType = member.returnType.jvmErasure
                 val key = "${prefix}${member.name}"
-                if (returnType.isSubclassOf(PropertyWrapper::class)) {
-                    val value = member.getter.call(target) as PropertyWrapper<*>
+                if (returnType.isSubclassOf(SimpleProvider::class)) {
+                    val value = member.getter.call(target) as SimpleProvider<*>
                     if (value.notNull) {
                         dump("$key = ${value.get()}")
                     } else {
