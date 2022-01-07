@@ -4,10 +4,8 @@ import com.google.cloud.tools.jib.gradle.BuildDockerTask
 import com.google.cloud.tools.jib.gradle.JibExtension
 import net.bnb1.kradle.createTask
 import net.bnb1.kradle.extraDir
-import net.bnb1.kradle.featureRegistry
 import net.bnb1.kradle.features.Blueprint
 import net.bnb1.kradle.sourceSets
-import org.gradle.api.GradleException
 import org.gradle.api.Project
 import org.gradle.api.tasks.SourceSet
 import org.gradle.kotlin.dsl.named
@@ -20,13 +18,7 @@ class JibBlueprint(project: Project) : Blueprint(project) {
 
     lateinit var dockerProperties: DockerProperties
     lateinit var applicationProperties: ApplicationProperties
-
-    override fun checkPreconditions() {
-        if (!project.featureRegistry.get<ApplicationFeature>().isEnabled) {
-            throw GradleException("'docker' requires 'application' feature")
-        }
-    }
-
+    
     override fun createTasks() {
         project.createTask<BuildDockerTask>(TASK_NAME, "Builds Docker image")
     }

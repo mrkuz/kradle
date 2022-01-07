@@ -5,7 +5,6 @@ import io.kotest.core.spec.IsolationMode
 import io.kotest.core.spec.style.BehaviorSpec
 import io.mockk.verify
 import net.bnb1.kradle.Mocks
-import net.bnb1.kradle.featureRegistry
 import net.bnb1.kradle.features.jvm.ApplicationFeature
 import net.bnb1.kradle.features.jvm.LibraryBlueprint
 import net.bnb1.kradle.features.jvm.LibraryFeature
@@ -18,8 +17,12 @@ class LibraryBlueprintTests : BehaviorSpec({
 
     Given("LibraryBlueprint") {
         val project = Mocks.project()
-        val applicationFeature = ApplicationFeature().also { project.featureRegistry.register(it) }
-        val libraryFeature = LibraryFeature().also { project.featureRegistry.register(it) }
+        val applicationFeature = ApplicationFeature()
+        val libraryFeature = LibraryFeature()
+
+        applicationFeature.conflictsWith = libraryFeature
+        libraryFeature.conflictsWith = applicationFeature
+
         val blueprint = LibraryBlueprint(project)
 
         When("Library feature is enabled") {
@@ -35,10 +38,8 @@ class LibraryBlueprintTests : BehaviorSpec({
 
         When("Library and application features are enabled") {
             applicationFeature.enable()
-            libraryFeature.enable()
-
             Then("Fail") {
-                shouldThrow<GradleException> { blueprint.activate() }
+                shouldThrow<GradleException> { libraryFeature.enable() }
             }
         }
     }

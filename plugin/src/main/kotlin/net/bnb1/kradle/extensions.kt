@@ -61,9 +61,6 @@ val Project.sourceSets
 val Project.tracer
     get() = this.extra.get("tracer") as Tracer
 
-val Project.featureRegistry
-    get() = this.extra.get("context") as KradleContext
-
 // DependencyHandlerScope
 
 fun DependencyHandlerScope.implementation(notation: Any) = add("implementation", notation)

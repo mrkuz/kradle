@@ -18,28 +18,33 @@ class GeneralProperties(context: KradleContext, project: Project) : Properties()
     private val _projectProperties by context { ProjectPropertiesFeature() }
     private val _buildProperties by context { BuildPropertiesFeature() }
 
+    init {
+        context.get<GeneralFeatureSet>().apply {
+            features += _bootstrap
+            features += _git
+            features += _projectProperties
+            features += _buildProperties
+        }
+    }
+
     val bootstrap = FeatureDsl.Builder<EmptyProperties>(project)
         .feature { _bootstrap }
         .properties { EmptyProperties() }
-        .parent(GeneralFeatureSet::class)
         .addBlueprint(_bootstrapBlueprint)
         .build()
     val git = FeatureDsl.Builder<EmptyProperties>(project)
         .feature { _git }
         .properties { EmptyProperties() }
-        .parent(GeneralFeatureSet::class)
         .addBlueprint(_gitBlueprint)
         .build()
     val projectProperties = FeatureDsl.Builder<EmptyProperties>(project)
         .feature { _projectProperties }
         .properties { EmptyProperties() }
-        .parent(GeneralFeatureSet::class)
         .addBlueprint(_projectPropertiesBlueprint)
         .build()
     val buildProperties = FeatureDsl.Builder<EmptyProperties>(project)
         .feature { _buildProperties }
         .properties { EmptyProperties() }
-        .parent(GeneralFeatureSet::class)
         .addBlueprint(_buildPropertiesBlueprint)
         .build()
 }

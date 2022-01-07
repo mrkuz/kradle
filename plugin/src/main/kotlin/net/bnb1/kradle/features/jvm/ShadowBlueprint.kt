@@ -2,7 +2,6 @@ package net.bnb1.kradle.features.jvm
 
 import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
 import net.bnb1.kradle.createTask
-import net.bnb1.kradle.featureRegistry
 import net.bnb1.kradle.features.Blueprint
 import net.bnb1.kradle.sourceSets
 import org.gradle.api.Project
@@ -15,8 +14,6 @@ private const val TASK_NAME = "uberJar"
 class ShadowBlueprint(project: Project) : Blueprint(project) {
 
     lateinit var uberJarProperties: PackageUberJarProperties
-
-    override fun shouldActivate() = project.featureRegistry.get<ApplicationFeature>().isEnabled
 
     override fun createTasks() {
         val jar = project.tasks.named<Jar>("jar").get()

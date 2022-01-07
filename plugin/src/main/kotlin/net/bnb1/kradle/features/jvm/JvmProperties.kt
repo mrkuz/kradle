@@ -5,6 +5,8 @@ import net.bnb1.kradle.KradleContext
 import net.bnb1.kradle.dsl.FeatureDsl
 import net.bnb1.kradle.features.EmptyProperties
 import net.bnb1.kradle.features.Properties
+import net.bnb1.kradle.features.general.BootstrapFeature
+import net.bnb1.kradle.features.general.BuildPropertiesBlueprint
 import net.bnb1.kradle.inject
 import org.gradle.api.Project
 
@@ -81,8 +83,9 @@ class JvmProperties(context: KradleContext, project: Project) : Properties() {
             javaProperties = _javaProperties
         }
     }
-    private val _packageBlueprint by context {
-        PackageBlueprint(project).inject {
+    private val _packageBlueprint by context { PackageBlueprint(project) }
+    private val _packageApplicationBlueprint by context {
+        PackageApplicationBlueprint(project).inject {
             applicationProperties = _applicationProperties
         }
     }
@@ -96,6 +99,54 @@ class JvmProperties(context: KradleContext, project: Project) : Properties() {
         JibBlueprint(project).inject {
             dockerProperties = _dockerProperties
             applicationProperties = _applicationProperties
+        }
+    }
+    private val _javaAppBoostrapBlueprint by context {
+        JavaAppBootstrapBlueprint(project).inject {
+            applicationProperties = _applicationProperties
+        }
+    }
+    private val _javaLibBootstrapBlueprint by context { JavaLibBootstrapBlueprint(project) }
+    private val _pmdBlueprint by context {
+        PmdBlueprint(project).inject {
+            pmdProperties = context.get()
+            codeAnalysisProperties = _codeAnalysisProperties
+        }
+    }
+    private val _spotBugsBlueprint by context {
+        SpotBugsBlueprint(project).inject {
+            spotBugsProperties = context.get()
+            codeAnalysisProperties = _codeAnalysisProperties
+        }
+    }
+    private val _checkstyleBlueprint by context {
+        CheckstyleBlueprint(project).inject {
+            checkstyleProperties = context.get()
+            lintProperties = _lintProperties
+        }
+    }
+    private val _kotlinAppBootstrapBlueprint by context {
+        KotlinAppBootstrapBlueprint(project).inject {
+            applicationProperties = _applicationProperties
+        }
+    }
+    private val _kotlinLibBootstrapBlueprint by context { KotlinLibBootstrapBlueprint(project) }
+    private val _detektBlueprint by context {
+        DetektBlueprint(project).inject {
+            detektProperties = context.get()
+            codeAnalysisProperties = _codeAnalysisProperties
+        }
+    }
+    private val _ktlintBlueprint by context {
+        KtlintBlueprint(project).inject {
+            ktlintProperties = context.get()
+            lintProperties = _lintProperties
+        }
+    }
+    private val _kotlinTestBlueprint by context {
+        KotlinTestBlueprint(project).inject {
+            kotlinTestProperties = context.get()
+            testProperties = _testProperties
         }
     }
 
@@ -114,12 +165,71 @@ class JvmProperties(context: KradleContext, project: Project) : Properties() {
     private val _docker by context { DockerFeature() }
     private val _documentation by context { DocumentationFeature() }
 
+    init {
+        _allOpenBlueprint.dependsOn += _kotlin
+        _packageApplicationBlueprint.dependsOn += _application
+        _shadowBlueprint.dependsOn += _application
+        _javaAppBoostrapBlueprint.dependsOn += _java
+        _javaAppBoostrapBlueprint.dependsOn += _application
+        _javaLibBootstrapBlueprint.dependsOn += _java
+        _javaLibBootstrapBlueprint.dependsOn += _library
+        _checkstyleBlueprint.dependsOn += _java
+        _pmdBlueprint.dependsOn += _java
+        _spotBugsBlueprint.dependsOn += _java
+        _kotlinAppBootstrapBlueprint.dependsOn += _kotlin
+        _kotlinAppBootstrapBlueprint.dependsOn += _application
+        _kotlinLibBootstrapBlueprint.dependsOn += _kotlin
+        _kotlinLibBootstrapBlueprint.dependsOn += _library
+        _ktlintBlueprint.dependsOn += _kotlin
+        _detektBlueprint.dependsOn += _kotlin
+        _spotBugsBlueprint.dependsOn += _java
+
+        _application.conflictsWith = _library
+        _library.conflictsWith = _application
+        _developmentMode.requires = _application
+        _docker.requires = _application
+
+        // Make sure test and benchmark source sets are available
+        _lint.after += _test
+        _lint.after += _benchmark
+        _codeAnalysis.after += _test
+        _codeAnalysis.after += _benchmark
+
+        _package.after += _application
+
+        context.get<BootstrapFeature>().apply {
+            addBlueprint(_kotlinAppBootstrapBlueprint)
+            addBlueprint(_kotlinLibBootstrapBlueprint)
+            addBlueprint(_javaAppBoostrapBlueprint)
+            addBlueprint(_javaLibBootstrapBlueprint)
+        }
+
+        _kotlin.addListener(context.get<BuildPropertiesBlueprint>())
+        _java.addListener(context.get<BuildPropertiesBlueprint>())
+
+        context.get<JvmFeatureSet>().apply {
+            features += _kotlin
+            features += _java
+            features += _application
+            features += _library
+            features += _dependencyUpdates
+            features += _vulnerabilityScan
+            features += _lint
+            features += _codeAnalysis
+            features += _developmentMode
+            features += _test
+            features += _benchmark
+            features += _package
+            features += _docker
+            features += _documentation
+        }
+    }
+
     val targetJvm = value(Catalog.Versions.jvm)
 
     val kotlin = FeatureDsl.Builder<KotlinProperties>(project)
         .feature { _kotlin }
         .properties { _kotlinProperties }
-        .parent(JvmFeatureSet::class)
         .addBlueprint(_javaBlueprint)
         .addBlueprint(_kotlinBlueprint)
         .addBlueprint(_allOpenBlueprint)
@@ -127,68 +237,60 @@ class JvmProperties(context: KradleContext, project: Project) : Properties() {
     val java = FeatureDsl.Builder<JavaProperties>(project)
         .feature { _java }
         .properties { _javaProperties }
-        .parent(JvmFeatureSet::class)
         .addBlueprint(_javaBlueprint)
         .build()
     val application = FeatureDsl.Builder<ApplicationProperties>(project)
         .feature { _application }
         .properties { _applicationProperties }
-        .parent(JvmFeatureSet::class)
         .addBlueprint(_applicationBlueprint)
         .build()
     val library = FeatureDsl.Builder<EmptyProperties>(project)
         .feature { _library }
         .properties { EmptyProperties() }
-        .parent(JvmFeatureSet::class)
         .addBlueprint(_libraryBlueprint)
         .addBlueprint(_mavenPublishBlueprint)
         .build()
     val dependencyUpdates = FeatureDsl.Builder<EmptyProperties>(project)
         .feature { _dependencyUpdates }
         .properties { EmptyProperties() }
-        .parent(JvmFeatureSet::class)
         .addBlueprint(_dependencyUpdatesBlueprint)
         .build()
     val vulnerabilityScan = FeatureDsl.Builder<EmptyProperties>(project)
         .feature { _vulnerabilityScan }
         .properties { EmptyProperties() }
-        .parent(JvmFeatureSet::class)
         .addBlueprint(_owaspDependencyCheckBlueprint)
         .build()
     val lint = FeatureDsl.Builder<LintProperties>(project)
         .feature { _lint }
         .properties { _lintProperties }
-        .parent(JvmFeatureSet::class)
-        // Make sure test an benchmark source sets are available
-        .after(TestFeature::class, BenchmarkFeature::class)
         .addBlueprint(_lintBlueprint)
+        .addBlueprint(_ktlintBlueprint)
+        .addBlueprint(_checkstyleBlueprint)
         .build()
     val codeAnalysis = FeatureDsl.Builder<CodeAnalysisProperties>(project)
         .feature { _codeAnalysis }
         .properties { _codeAnalysisProperties }
-        .parent(JvmFeatureSet::class)
-        .after(TestFeature::class, BenchmarkFeature::class)
         .addBlueprint(_codeAnalysisBlueprint)
+        .addBlueprint(_detektBlueprint)
+        .addBlueprint(_pmdBlueprint)
+        .addBlueprint(_spotBugsBlueprint)
         .build()
     val developmentMode = FeatureDsl.Builder<EmptyProperties>(project)
         .feature { _developmentMode }
         .properties { EmptyProperties() }
-        .parent(JvmFeatureSet::class)
-        .after(ApplicationFeature::class)
         .addBlueprint(_developmentModeBlueprint)
         .build()
     val devMode = developmentMode
     val test = FeatureDsl.Builder<TestProperties>(project)
         .feature { _test }
         .properties { _testProperties }
-        .parent(JvmFeatureSet::class)
         .addBlueprint(_testBlueprint)
         .addBlueprint(_jacocoBlueprint)
+        .addBlueprint(_kotlinTestBlueprint)
         .build()
     val benchmark = FeatureDsl.Builder<BenchmarkProperties>(project)
         .feature { _benchmark }
         .properties { _benchmarkProperties }
-        .parent(JvmFeatureSet::class)
         .addBlueprint(_allOpenBlueprint)
         .addBlueprint(_benchmarksBlueprint)
         .build()
@@ -197,23 +299,19 @@ class JvmProperties(context: KradleContext, project: Project) : Properties() {
     val `package` = FeatureDsl.Builder<PackageProperties>(project)
         .feature { _package }
         .properties { _packageProperties }
-        .parent(JvmFeatureSet::class)
-        .after(ApplicationFeature::class)
         .addBlueprint(_packageBlueprint)
+        .addBlueprint(_packageApplicationBlueprint)
         .addBlueprint(_shadowBlueprint)
         .build()
     val packaging = `package`
     val docker = FeatureDsl.Builder<DockerProperties>(project)
         .feature { _docker }
         .properties { _dockerProperties }
-        .parent(JvmFeatureSet::class)
-        .after(ApplicationFeature::class)
         .addBlueprint(_jibBlueprint)
         .build()
     val documentation = FeatureDsl.Builder<EmptyProperties>(project)
         .feature { _documentation }
         .properties { EmptyProperties() }
-        .parent(JvmFeatureSet::class)
         .addBlueprint(_dokkaBlueprint)
         .build()
 }

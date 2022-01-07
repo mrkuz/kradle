@@ -2,9 +2,7 @@ package net.bnb1.kradle.features.jvm
 
 import net.bnb1.kradle.Catalog
 import net.bnb1.kradle.apply
-import net.bnb1.kradle.featureRegistry
 import net.bnb1.kradle.features.Blueprint
-import net.bnb1.kradle.features.general.BootstrapFeature
 import net.bnb1.kradle.implementation
 import net.bnb1.kradle.testImplementation
 import org.gradle.api.GradleException
@@ -32,34 +30,6 @@ class KotlinBlueprint(project: Project) : Blueprint(project) {
     override fun checkPreconditions() {
         if (project.extensions.findByType(KotlinJvmProjectExtension::class.java) == null) {
             throw GradleException("Kotlin JVM plugin has to be applied")
-        }
-    }
-
-    override fun registerBlueprints() {
-        with(project.featureRegistry) {
-            get<BootstrapFeature>().addBlueprint(
-                KotlinBootstrapBlueprint(project).also {
-                    it.applicationProperties = applicationProperties
-                }
-            )
-            get<CodeAnalysisFeature>().addBlueprint(
-                DetektBlueprint(project).also {
-                    it.detektProperties = detektProperties
-                    it.codeAnalysisProperties = codeAnalysisProperties
-                }
-            )
-            get<LintFeature>().addBlueprint(
-                KtlintBlueprint(project).also {
-                    it.ktlintProperties = ktlintProperties
-                    it.lintProperties = lintProperties
-                }
-            )
-            get<TestFeature>().addBlueprint(
-                KotlinTestBlueprint(project).also {
-                    it.kotlinTestProperties = kotlinTestProperties
-                    it.testProperties = testProperties
-                }
-            )
         }
     }
 

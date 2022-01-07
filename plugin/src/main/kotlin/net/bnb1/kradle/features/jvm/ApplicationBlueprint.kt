@@ -1,7 +1,6 @@
 package net.bnb1.kradle.features.jvm
 
 import net.bnb1.kradle.apply
-import net.bnb1.kradle.featureRegistry
 import net.bnb1.kradle.features.Blueprint
 import org.gradle.api.GradleException
 import org.gradle.api.Project
@@ -18,10 +17,6 @@ class ApplicationBlueprint(project: Project) : Blueprint(project) {
     lateinit var javaProperties: JavaProperties
 
     override fun checkPreconditions() {
-        if (project.featureRegistry.get<LibraryFeature>().isEnabled) {
-            throw GradleException("You can only enable 'application' or 'library' feature")
-        }
-
         if (project.group.toString().isEmpty()) {
             project.logger.warn("WARNING: Group is not specified")
         }

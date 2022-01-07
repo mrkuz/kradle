@@ -5,7 +5,6 @@ import io.kotest.core.spec.style.BehaviorSpec
 import io.mockk.Called
 import io.mockk.verify
 import net.bnb1.kradle.Mocks
-import net.bnb1.kradle.featureRegistry
 import net.bnb1.kradle.features.jvm.AllOpenBlueprint
 import net.bnb1.kradle.features.jvm.KotlinFeature
 import org.jetbrains.kotlin.allopen.gradle.AllOpenGradleSubplugin
@@ -16,8 +15,10 @@ class AllOpenBlueprintTests : BehaviorSpec({
 
     Given("AllOpenBlueprint") {
         val project = Mocks.project()
-        val feature = KotlinFeature().also { project.featureRegistry.register(it) }
-        val blueprint = AllOpenBlueprint(project)
+        val feature = KotlinFeature()
+        val blueprint = AllOpenBlueprint(project).apply {
+            dependsOn += feature
+        }
 
         When("Kotlin feature is disabled") {
             blueprint.activate()

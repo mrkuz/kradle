@@ -12,9 +12,15 @@ import kotlin.reflect.KClass
  */
 open class Blueprint(protected val project: Project) : FeatureListener {
 
+    var dependsOn = mutableSetOf<Feature>()
+
     private val activated = AtomicBoolean(false)
 
     fun activate() {
+        if (dependsOn.any { !it.isEnabled }) {
+            return
+        }
+
         if (!activated.compareAndSet(false, true)) {
             return
         }
@@ -31,7 +37,6 @@ open class Blueprint(protected val project: Project) : FeatureListener {
 
             checkPreconditions()
             applyPlugins()
-            registerBlueprints()
             createSourceSets()
             createTasks()
             addAliases()
@@ -47,7 +52,6 @@ open class Blueprint(protected val project: Project) : FeatureListener {
     protected open fun shouldActivate() = true
     protected open fun checkPreconditions() = Unit
     protected open fun applyPlugins() = Unit
-    protected open fun registerBlueprints() = Unit
     protected open fun createSourceSets() = Unit
     protected open fun createTasks() = Unit
     protected open fun addAliases() = Unit

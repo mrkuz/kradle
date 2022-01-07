@@ -1,9 +1,9 @@
 package net.bnb1.kradle.features
 
+import org.gradle.api.GradleException
 import java.util.concurrent.CopyOnWriteArrayList
 import java.util.concurrent.atomic.AtomicBoolean
 import java.util.concurrent.atomic.AtomicReference
-import kotlin.reflect.KClass
 
 /**
  * A Kradle feature.
@@ -21,23 +21,23 @@ open class Feature {
         INACTIVE, ACTIVATING, ACTIVATED
     }
 
-    private var parent: KClass<out FeatureSet>? = null
+    var conflictsWith: Feature? = null
+    var requires: Feature? = null
+    var after = mutableSetOf<Feature>()
+
     private var enabled = AtomicBoolean(false)
     private var disabled = AtomicBoolean(false)
     private val state = AtomicReference(State.INACTIVE)
-    private val after = CopyOnWriteArrayList<KClass<out Feature>>()
+
     private val blueprints = CopyOnWriteArrayList<Blueprint>()
     private val listeners = CopyOnWriteArrayList<FeatureListener>()
 
-    fun after(vararg features: KClass<out Feature>) {
-        for (feature in features) {
-            if (this::class != feature) {
-                after.addIfAbsent(feature)
-            }
+    fun shouldActivateAfter(): Set<Feature> {
+        if (requires != null) {
+            return setOf(requires!!) + after
         }
+        return after
     }
-
-    fun shouldActivateAfter() = after.toList()
 
     fun addBlueprint(blueprint: Blueprint) {
         if (blueprints.addIfAbsent(blueprint)) {
@@ -54,12 +54,6 @@ open class Feature {
             }
         }
     }
-
-    fun setParent(parent: KClass<out FeatureSet>) {
-        this.parent = parent
-    }
-
-    fun isParent(parent: KClass<out FeatureSet>) = this.parent == parent
 
     fun activate() {
         if (!isEnabled) {
@@ -79,6 +73,17 @@ open class Feature {
     }
 
     fun enable() {
+        if (conflictsWith != null) {
+            if (conflictsWith!!.isEnabled) {
+                throw GradleException("You can only enable '${this::class.simpleName}' or '${conflictsWith!!::class.simpleName}' feature")
+            }
+        }
+        if (requires != null) {
+            if (!requires!!.isEnabled) {
+                throw GradleException("'${this::class.simpleName}' requires '${requires!!::class.simpleName}' feature")
+            }
+        }
+
         if (!enabled.compareAndSet(false, true)) {
             return
         }

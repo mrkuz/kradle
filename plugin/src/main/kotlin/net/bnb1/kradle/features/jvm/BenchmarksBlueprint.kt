@@ -7,14 +7,13 @@ import kotlinx.benchmark.gradle.processJavaSourceSet
 import net.bnb1.kradle.Catalog
 import net.bnb1.kradle.alias
 import net.bnb1.kradle.apply
-import net.bnb1.kradle.featureRegistry
 import net.bnb1.kradle.features.Blueprint
 import net.bnb1.kradle.sourceSets
 import org.gradle.api.Project
 import org.gradle.api.file.DuplicatesStrategy
 import org.gradle.api.tasks.SourceSet
 import org.gradle.jvm.tasks.Jar
-import org.gradle.kotlin.dsl.configure
+import org.gradle.kotlin.dsl.findByType
 import org.gradle.kotlin.dsl.named
 import org.gradle.kotlin.dsl.withConvention
 import org.jetbrains.kotlin.allopen.gradle.AllOpenExtension
@@ -46,11 +45,9 @@ class BenchmarksBlueprint(project: Project) : Blueprint(project) {
             return
         }
 
-        if (project.featureRegistry.get<KotlinFeature>().isEnabled) {
+        project.extensions.findByType<AllOpenExtension>()?.apply {
             // JMH requires benchmark classes to be open
-            project.configure<AllOpenExtension> {
-                annotation("org.openjdk.jmh.annotations.State")
-            }
+            annotation("org.openjdk.jmh.annotations.State")
         }
 
         val mainSourceSet = project.sourceSets.getByName(SourceSet.MAIN_SOURCE_SET_NAME)

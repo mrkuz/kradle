@@ -1,6 +1,5 @@
 package net.bnb1.kradle.features
 
-import net.bnb1.kradle.featureRegistry
 import net.bnb1.kradle.tracer
 import org.gradle.api.GradleException
 import org.gradle.api.Project
@@ -12,6 +11,8 @@ import java.util.concurrent.atomic.AtomicBoolean
  * If the set is activated, the assigned and enabled features are also activated.
  */
 open class FeatureSet(private val project: Project) {
+
+    val features = mutableSetOf<Feature>()
 
     private val activated = AtomicBoolean(false)
 
@@ -27,10 +28,9 @@ open class FeatureSet(private val project: Project) {
         }
         val visited = mutableSetOf<Feature>()
         project.tracer.trace("${this::class.simpleName} (FS)")
-        project.featureRegistry.getSubclassOf(Feature::class).asSequence()
+        features.asSequence()
             .filter { it.isEnabled }
             .filter { it.isInactive }
-            .filter { it.isParent(this::class) }
             .forEach { activateOrdered(visited, it) }
         return true
     }
@@ -41,7 +41,6 @@ open class FeatureSet(private val project: Project) {
         }
         project.tracer.branch {
             feature.shouldActivateAfter().asSequence()
-                .map { project.featureRegistry[it] }
                 .filter { it.isEnabled }
                 .filter { it.isInactive }
                 .forEach { activateOrdered(visited, it) }
