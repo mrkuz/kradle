@@ -169,9 +169,15 @@ class JvmProperties(context: KradleContext, project: Project) : Properties() {
         _kotlin += setOf(
             _javaBlueprint,
             _kotlinBlueprint,
-            _allOpenBlueprint
+            _allOpenBlueprint,
+            _kotlinAppBootstrapBlueprint,
+            _kotlinLibBootstrapBlueprint,
         )
-        _java += _javaBlueprint
+        _java += setOf(
+            _javaBlueprint,
+            _javaAppBoostrapBlueprint,
+            _javaLibBootstrapBlueprint
+        )
         _application += _applicationBlueprint
         _library += setOf(
             _libraryBlueprint,
@@ -211,16 +217,16 @@ class JvmProperties(context: KradleContext, project: Project) : Properties() {
         _allOpenBlueprint.dependsOn += _kotlin
         _packageApplicationBlueprint.dependsOn += _application
         _shadowBlueprint.dependsOn += _application
-        _javaAppBoostrapBlueprint.dependsOn += _java
+        _javaAppBoostrapBlueprint.dependsOn += context.get<BootstrapFeature>()
         _javaAppBoostrapBlueprint.dependsOn += _application
-        _javaLibBootstrapBlueprint.dependsOn += _java
+        _javaLibBootstrapBlueprint.dependsOn += context.get<BootstrapFeature>()
         _javaLibBootstrapBlueprint.dependsOn += _library
         _checkstyleBlueprint.dependsOn += _java
         _pmdBlueprint.dependsOn += _java
         _spotBugsBlueprint.dependsOn += _java
-        _kotlinAppBootstrapBlueprint.dependsOn += _kotlin
+        _kotlinAppBootstrapBlueprint.dependsOn += context.get<BootstrapFeature>()
         _kotlinAppBootstrapBlueprint.dependsOn += _application
-        _kotlinLibBootstrapBlueprint.dependsOn += _kotlin
+        _kotlinLibBootstrapBlueprint.dependsOn += context.get<BootstrapFeature>()
         _kotlinLibBootstrapBlueprint.dependsOn += _library
         _ktlintBlueprint.dependsOn += _kotlin
         _detektBlueprint.dependsOn += _kotlin
@@ -238,13 +244,6 @@ class JvmProperties(context: KradleContext, project: Project) : Properties() {
         _codeAnalysis.after += _benchmark
 
         _package.after += _application
-
-        context.get<BootstrapFeature>() += setOf(
-            _kotlinAppBootstrapBlueprint,
-            _kotlinLibBootstrapBlueprint,
-            _javaAppBoostrapBlueprint,
-            _javaLibBootstrapBlueprint,
-        )
 
         context.get<BuildPropertiesBlueprint>().also {
             _java += it
