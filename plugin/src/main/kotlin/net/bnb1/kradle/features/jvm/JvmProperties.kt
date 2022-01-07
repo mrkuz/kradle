@@ -166,6 +166,48 @@ class JvmProperties(context: KradleContext, project: Project) : Properties() {
     private val _documentation by context { DocumentationFeature() }
 
     init {
+        _kotlin += setOf(
+            _javaBlueprint,
+            _kotlinBlueprint,
+            _allOpenBlueprint
+        )
+        _java += _javaBlueprint
+        _application += _applicationBlueprint
+        _library += setOf(
+            _libraryBlueprint,
+            _mavenPublishBlueprint
+        )
+        _dependencyUpdates += _dependencyUpdatesBlueprint
+        _vulnerabilityScan += _owaspDependencyCheckBlueprint
+        _lint += setOf(
+            _lintBlueprint,
+            _ktlintBlueprint,
+            _checkstyleBlueprint
+        )
+        _codeAnalysis += setOf(
+            _codeAnalysisBlueprint,
+            _detektBlueprint,
+            _pmdBlueprint,
+            _spotBugsBlueprint
+        )
+        _developmentMode += _developmentModeBlueprint
+        _test += setOf(
+            _testBlueprint,
+            _jacocoBlueprint,
+            _kotlinTestBlueprint
+        )
+        _benchmark += setOf(
+            _allOpenBlueprint,
+            _benchmarksBlueprint
+        )
+        _package += setOf(
+            _packageBlueprint,
+            _packageApplicationBlueprint,
+            _shadowBlueprint
+        )
+        _docker += _jibBlueprint
+        _documentation += _dokkaBlueprint
+
         _allOpenBlueprint.dependsOn += _kotlin
         _packageApplicationBlueprint.dependsOn += _application
         _shadowBlueprint.dependsOn += _application
@@ -197,123 +239,54 @@ class JvmProperties(context: KradleContext, project: Project) : Properties() {
 
         _package.after += _application
 
-        context.get<BootstrapFeature>().apply {
-            addBlueprint(_kotlinAppBootstrapBlueprint)
-            addBlueprint(_kotlinLibBootstrapBlueprint)
-            addBlueprint(_javaAppBoostrapBlueprint)
-            addBlueprint(_javaLibBootstrapBlueprint)
-        }
+        context.get<BootstrapFeature>() += setOf(
+            _kotlinAppBootstrapBlueprint,
+            _kotlinLibBootstrapBlueprint,
+            _javaAppBoostrapBlueprint,
+            _javaLibBootstrapBlueprint,
+        )
 
         context.get<BuildPropertiesBlueprint>().also {
-            _java.addBlueprint(it)
-            _kotlin.addBlueprint(it)
+            _java += it
+            _kotlin += it
         }
 
-        context.get<JvmFeatureSet>().apply {
-            features += _kotlin
-            features += _java
-            features += _application
-            features += _library
-            features += _dependencyUpdates
-            features += _vulnerabilityScan
-            features += _lint
-            features += _codeAnalysis
-            features += _developmentMode
-            features += _test
-            features += _benchmark
-            features += _package
-            features += _docker
-            features += _documentation
-        }
+        context.get<JvmFeatureSet>() += setOf(
+            _kotlin,
+            _java,
+            _application,
+            _library,
+            _dependencyUpdates,
+            _vulnerabilityScan,
+            _lint,
+            _codeAnalysis,
+            _developmentMode,
+            _test,
+            _benchmark,
+            _package,
+            _docker,
+            _documentation
+        )
     }
 
     val targetJvm = value(Catalog.Versions.jvm)
 
-    val kotlin = FeatureDsl.Builder<KotlinProperties>(project)
-        .feature { _kotlin }
-        .properties { _kotlinProperties }
-        .addBlueprint(_javaBlueprint)
-        .addBlueprint(_kotlinBlueprint)
-        .addBlueprint(_allOpenBlueprint)
-        .build()
-    val java = FeatureDsl.Builder<JavaProperties>(project)
-        .feature { _java }
-        .properties { _javaProperties }
-        .addBlueprint(_javaBlueprint)
-        .build()
-    val application = FeatureDsl.Builder<ApplicationProperties>(project)
-        .feature { _application }
-        .properties { _applicationProperties }
-        .addBlueprint(_applicationBlueprint)
-        .build()
-    val library = FeatureDsl.Builder<EmptyProperties>(project)
-        .feature { _library }
-        .properties { EmptyProperties() }
-        .addBlueprint(_libraryBlueprint)
-        .addBlueprint(_mavenPublishBlueprint)
-        .build()
-    val dependencyUpdates = FeatureDsl.Builder<EmptyProperties>(project)
-        .feature { _dependencyUpdates }
-        .properties { EmptyProperties() }
-        .addBlueprint(_dependencyUpdatesBlueprint)
-        .build()
-    val vulnerabilityScan = FeatureDsl.Builder<EmptyProperties>(project)
-        .feature { _vulnerabilityScan }
-        .properties { EmptyProperties() }
-        .addBlueprint(_owaspDependencyCheckBlueprint)
-        .build()
-    val lint = FeatureDsl.Builder<LintProperties>(project)
-        .feature { _lint }
-        .properties { _lintProperties }
-        .addBlueprint(_lintBlueprint)
-        .addBlueprint(_ktlintBlueprint)
-        .addBlueprint(_checkstyleBlueprint)
-        .build()
-    val codeAnalysis = FeatureDsl.Builder<CodeAnalysisProperties>(project)
-        .feature { _codeAnalysis }
-        .properties { _codeAnalysisProperties }
-        .addBlueprint(_codeAnalysisBlueprint)
-        .addBlueprint(_detektBlueprint)
-        .addBlueprint(_pmdBlueprint)
-        .addBlueprint(_spotBugsBlueprint)
-        .build()
-    val developmentMode = FeatureDsl.Builder<EmptyProperties>(project)
-        .feature { _developmentMode }
-        .properties { EmptyProperties() }
-        .addBlueprint(_developmentModeBlueprint)
-        .build()
+    val kotlin = FeatureDsl(_kotlin, _kotlinProperties)
+    val java = FeatureDsl(_java, _javaProperties)
+    val application = FeatureDsl(_application, _applicationProperties)
+    val library = FeatureDsl(_library, EmptyProperties())
+    val dependencyUpdates = FeatureDsl(_dependencyUpdates, EmptyProperties())
+    val vulnerabilityScan = FeatureDsl(_vulnerabilityScan, EmptyProperties())
+    val lint = FeatureDsl(_lint, _lintProperties)
+    val codeAnalysis = FeatureDsl(_codeAnalysis, _codeAnalysisProperties)
+    val developmentMode = FeatureDsl(_developmentMode, EmptyProperties())
     val devMode = developmentMode
-    val test = FeatureDsl.Builder<TestProperties>(project)
-        .feature { _test }
-        .properties { _testProperties }
-        .addBlueprint(_testBlueprint)
-        .addBlueprint(_jacocoBlueprint)
-        .addBlueprint(_kotlinTestBlueprint)
-        .build()
-    val benchmark = FeatureDsl.Builder<BenchmarkProperties>(project)
-        .feature { _benchmark }
-        .properties { _benchmarkProperties }
-        .addBlueprint(_allOpenBlueprint)
-        .addBlueprint(_benchmarksBlueprint)
-        .build()
+    val test = FeatureDsl(_test, _testProperties)
+    val benchmark = FeatureDsl(_benchmark, _benchmarkProperties)
 
     @SuppressWarnings("VariableNaming")
-    val `package` = FeatureDsl.Builder<PackageProperties>(project)
-        .feature { _package }
-        .properties { _packageProperties }
-        .addBlueprint(_packageBlueprint)
-        .addBlueprint(_packageApplicationBlueprint)
-        .addBlueprint(_shadowBlueprint)
-        .build()
+    val `package` = FeatureDsl(_package, _packageProperties)
     val packaging = `package`
-    val docker = FeatureDsl.Builder<DockerProperties>(project)
-        .feature { _docker }
-        .properties { _dockerProperties }
-        .addBlueprint(_jibBlueprint)
-        .build()
-    val documentation = FeatureDsl.Builder<EmptyProperties>(project)
-        .feature { _documentation }
-        .properties { EmptyProperties() }
-        .addBlueprint(_dokkaBlueprint)
-        .build()
+    val docker = FeatureDsl(_docker, _dockerProperties)
+    val documentation = FeatureDsl(_documentation, EmptyProperties())
 }

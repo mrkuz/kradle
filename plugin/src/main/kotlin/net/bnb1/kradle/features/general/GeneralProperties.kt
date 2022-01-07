@@ -21,32 +21,20 @@ class GeneralProperties(context: KradleContext, project: Project) : Properties()
     init {
         _buildPropertiesBlueprint.dependsOn += _buildProperties
 
-        context.get<GeneralFeatureSet>().apply {
-            features += _bootstrap
-            features += _git
-            features += _projectProperties
-            features += _buildProperties
-        }
+        _bootstrap += _bootstrapBlueprint
+        _git += _gitBlueprint
+        _projectProperties += _projectPropertiesBlueprint
+
+        context.get<GeneralFeatureSet>() += setOf(
+            _bootstrap,
+            _git,
+            _projectProperties,
+            _buildProperties
+        )
     }
 
-    val bootstrap = FeatureDsl.Builder<EmptyProperties>(project)
-        .feature { _bootstrap }
-        .properties { EmptyProperties() }
-        .addBlueprint(_bootstrapBlueprint)
-        .build()
-    val git = FeatureDsl.Builder<EmptyProperties>(project)
-        .feature { _git }
-        .properties { EmptyProperties() }
-        .addBlueprint(_gitBlueprint)
-        .build()
-    val projectProperties = FeatureDsl.Builder<EmptyProperties>(project)
-        .feature { _projectProperties }
-        .properties { EmptyProperties() }
-        .addBlueprint(_projectPropertiesBlueprint)
-        .build()
-    val buildProperties = FeatureDsl.Builder<EmptyProperties>(project)
-        .feature { _buildProperties }
-        .properties { EmptyProperties() }
-        // .addBlueprint(_buildPropertiesBlueprint)
-        .build()
+    val bootstrap = FeatureDsl(_bootstrap, EmptyProperties())
+    val git = FeatureDsl(_git, EmptyProperties())
+    val projectProperties = FeatureDsl(_projectProperties, EmptyProperties())
+    val buildProperties = FeatureDsl(_buildProperties, EmptyProperties())
 }

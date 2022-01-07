@@ -12,9 +12,18 @@ import java.util.concurrent.atomic.AtomicBoolean
  */
 open class FeatureSet(private val project: Project) {
 
+    private val activated = AtomicBoolean(false)
+
+    // Configuration
     val features = mutableSetOf<Feature>()
 
-    private val activated = AtomicBoolean(false)
+    operator fun plusAssign(feature: Feature) {
+        features += feature
+    }
+
+    operator fun plusAssign(features: Collection<Feature>) {
+        this.features += features
+    }
 
     fun activate() {
         if (!tryActivate()) {

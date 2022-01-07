@@ -16,15 +16,15 @@ open class ValueSet<T : Any> : SimpleProvider<Set<T>> {
         this.values.addAll(values)
     }
 
-    fun reset() {
-        values.clear()
-    }
-
     fun add(value: T) {
         values.add(value)
     }
 
     fun remove(value: T) {
         values.remove(value)
+    }
+
+    fun reset() {
+        values.clear()
     }
 }

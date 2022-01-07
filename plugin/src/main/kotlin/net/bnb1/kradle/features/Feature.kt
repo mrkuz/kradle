@@ -1,7 +1,6 @@
 package net.bnb1.kradle.features
 
 import org.gradle.api.GradleException
-import java.util.concurrent.CopyOnWriteArrayList
 import java.util.concurrent.atomic.AtomicBoolean
 import java.util.concurrent.atomic.AtomicReference
 
@@ -12,8 +11,7 @@ import java.util.concurrent.atomic.AtomicReference
  * [blueprints][Blueprint].
  *
  * Every feature has a parent [feature set][FeatureSet]. If the set is activated, the feature is also activated (unless
- * disabled). This in turn activates assigned [blueprints][Blueprint] and notifies attached
- * [listeners][FeatureListener].
+ * disabled). This in turn activates assigned [blueprints][Blueprint].
  */
 open class Feature {
 
@@ -21,25 +19,26 @@ open class Feature {
         INACTIVE, ACTIVATING, ACTIVATED
     }
 
-    var conflictsWith: Feature? = null
-    var requires: Feature? = null
-    var after = mutableSetOf<Feature>()
-
     private var enabled = AtomicBoolean(false)
     private var disabled = AtomicBoolean(false)
     private val state = AtomicReference(State.INACTIVE)
 
-    private val blueprints = CopyOnWriteArrayList<Blueprint>()
+    // Configuration
+    var conflictsWith: Feature? = null
+    var requires: Feature? = null
+    val after = mutableSetOf<Feature>()
+    private val blueprints = mutableSetOf<Blueprint>()
 
-    fun shouldActivateAfter(): Set<Feature> {
-        if (requires != null) {
-            return setOf(requires!!) + after
-        }
-        return after
+    operator fun plusAssign(blueprint: Blueprint) {
+        addBlueprint(blueprint)
+    }
+
+    operator fun plusAssign(blueprints: Collection<Blueprint>) {
+        blueprints.forEach { addBlueprint(it) }
     }
 
     fun addBlueprint(blueprint: Blueprint) {
-        if (blueprints.addIfAbsent(blueprint)) {
+        if (blueprints.add(blueprint)) {
             if (state.get() == State.ACTIVATED) {
                 blueprint.activate()
             }
@@ -61,7 +60,10 @@ open class Feature {
     fun enable() {
         if (conflictsWith != null) {
             if (conflictsWith!!.isEnabled) {
-                throw GradleException("You can only enable '${this::class.simpleName}' or '${conflictsWith!!::class.simpleName}' feature")
+                throw GradleException(
+                    "You can only enable '${this::class.simpleName}'" +
+                        " or '${conflictsWith!!::class.simpleName}' feature"
+                )
             }
         }
         if (requires != null) {
@@ -77,6 +79,13 @@ open class Feature {
 
     fun disable() {
         disabled.set(true)
+    }
+
+    fun shouldActivateAfter(): Set<Feature> {
+        if (requires != null) {
+            return setOf(requires!!) + after
+        }
+        return after
     }
 
     val isEnabled

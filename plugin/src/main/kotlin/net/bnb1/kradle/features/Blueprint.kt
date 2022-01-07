@@ -11,9 +11,10 @@ import java.util.concurrent.atomic.AtomicBoolean
  */
 open class Blueprint(protected val project: Project) {
 
-    var dependsOn = mutableSetOf<Feature>()
-
     private val activated = AtomicBoolean(false)
+
+    // Configuration
+    val dependsOn = mutableSetOf<Feature>()
 
     fun activate() {
         if (dependsOn.any { !it.isEnabled }) {

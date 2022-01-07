@@ -12,8 +12,6 @@ open class Flags(private val invert: Boolean) :
 
     operator fun invoke(action: Flags.() -> Unit = {}) = action(this)
 
-    fun reset() = values.clear()
-
     fun enable(value: String) {
         if (!invert) {
             values.add(value)
@@ -29,4 +27,6 @@ open class Flags(private val invert: Boolean) :
             values.add(value)
         }
     }
+
+    fun reset() = values.clear()
 }

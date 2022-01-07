@@ -7,6 +7,11 @@ class FeatureSetDsl<P : Properties>(private val featureSet: FeatureSet, private 
 
     operator fun invoke(action: P.() -> Unit = {}) = activate(action)
 
+    fun activate(action: P.() -> Unit = {}) {
+        action(properties)
+        featureSet.activate()
+    }
+
     fun configureOnly(action: P.() -> Unit = {}) {
         action(properties)
     }
@@ -14,10 +19,5 @@ class FeatureSetDsl<P : Properties>(private val featureSet: FeatureSet, private 
     fun tryActivate(action: P.() -> Unit = {}): Boolean {
         action(properties)
         return featureSet.tryActivate()
-    }
-
-    fun activate(action: P.() -> Unit = {}) {
-        action(properties)
-        featureSet.activate()
     }
 }
