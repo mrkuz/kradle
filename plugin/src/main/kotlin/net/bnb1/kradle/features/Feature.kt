@@ -30,7 +30,6 @@ open class Feature {
     private val state = AtomicReference(State.INACTIVE)
 
     private val blueprints = CopyOnWriteArrayList<Blueprint>()
-    private val listeners = CopyOnWriteArrayList<FeatureListener>()
 
     fun shouldActivateAfter(): Set<Feature> {
         if (requires != null) {
@@ -47,14 +46,6 @@ open class Feature {
         }
     }
 
-    fun addListener(listener: FeatureListener) {
-        if (listeners.addIfAbsent(listener)) {
-            if (state.get() == State.ACTIVATED || state.get() == State.ACTIVATING) {
-                listener.onFeatureActivate(this::class)
-            }
-        }
-    }
-
     fun activate() {
         if (!isEnabled) {
             return
@@ -64,11 +55,6 @@ open class Feature {
         }
 
         blueprints.forEach { it.activate() }
-        // Run again to activate blueprints that were added in the first run
-        blueprints
-            .filter { !it.isActivated }
-            .forEach { it.activate() }
-        listeners.forEach { it.onFeatureActivate(this::class) }
         state.set(State.ACTIVATED)
     }
 

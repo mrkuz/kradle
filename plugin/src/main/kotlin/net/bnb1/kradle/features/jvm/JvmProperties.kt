@@ -204,8 +204,10 @@ class JvmProperties(context: KradleContext, project: Project) : Properties() {
             addBlueprint(_javaLibBootstrapBlueprint)
         }
 
-        _kotlin.addListener(context.get<BuildPropertiesBlueprint>())
-        _java.addListener(context.get<BuildPropertiesBlueprint>())
+        context.get<BuildPropertiesBlueprint>().also {
+            _java.addBlueprint(it)
+            _kotlin.addBlueprint(it)
+        }
 
         context.get<JvmFeatureSet>().apply {
             features += _kotlin
