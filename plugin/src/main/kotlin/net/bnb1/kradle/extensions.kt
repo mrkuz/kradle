@@ -1,9 +1,5 @@
 package net.bnb1.kradle
 
-import net.bnb1.kradle.features.FeatureRegistry
-import net.bnb1.kradle.features.FeatureSetRegistry
-import net.bnb1.kradle.features.PropertiesRegistry
-import net.bnb1.kradle.presets.PresetRegistry
 import net.bnb1.kradle.support.Tracer
 import org.gradle.api.Plugin
 import org.gradle.api.Project
@@ -66,16 +62,16 @@ val Project.tracer
     get() = this.extra.get("tracer") as Tracer
 
 val Project.featureRegistry
-    get() = this.extra.get("featureRegistry") as FeatureRegistry
+    get() = this.extra.get("context") as KradleContext
 
 val Project.propertiesRegistry
-    get() = this.extra.get("propertiesRegistry") as PropertiesRegistry
+    get() = this.extra.get("context") as KradleContext
 
 val Project.presetRegistry
-    get() = this.extra.get("presetRegistry") as PresetRegistry
+    get() = this.extra.get("context") as KradleContext
 
 val Project.featureSetRegistry
-    get() = this.extra.get("featureSetRegistry") as FeatureSetRegistry
+    get() = this.extra.get("context") as KradleContext
 
 // DependencyHandlerScope
 

@@ -6,6 +6,8 @@ import net.bnb1.kradle.dsl.PropertiesDsl
 import net.bnb1.kradle.dsl.SimpleProvider
 import net.bnb1.kradle.featureRegistry
 import net.bnb1.kradle.features.EmptyProperties
+import net.bnb1.kradle.features.Feature
+import net.bnb1.kradle.features.Properties
 import net.bnb1.kradle.propertiesRegistry
 import net.bnb1.kradle.tracer
 import org.gradle.api.DefaultTask
@@ -60,7 +62,7 @@ open class KradleDumpTask : DefaultTask() {
             """.trimIndent()
         )
 
-        project.featureRegistry.map.values.asSequence()
+        project.featureRegistry.getSubclassOf(Feature::class).asSequence()
             .filter { it.isEnabled }
             .sortedBy { it::class.qualifiedName }
             .forEach { dump("- ${it::class.qualifiedName}") }
@@ -166,7 +168,7 @@ open class KradleDumpTask : DefaultTask() {
             """.trimIndent()
         )
 
-        project.propertiesRegistry.map.values.asSequence()
+        project.propertiesRegistry.getSubclassOf(Properties::class).asSequence()
             .filterNot { it is EmptyProperties }
             .sortedBy { it::class.qualifiedName }
             .forEach {

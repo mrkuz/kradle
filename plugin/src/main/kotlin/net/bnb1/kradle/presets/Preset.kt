@@ -23,7 +23,7 @@ open class Preset(private val project: Project) {
         if (!activated.compareAndSet(false, true)) {
             return
         }
-        val otherPresetActive = project.presetRegistry.map.values
+        val otherPresetActive = project.presetRegistry.getSubclassOf(Preset::class)
             .filter { p -> p !== this }
             .any { p -> p.isActive }
         if (otherPresetActive) {
