@@ -4,11 +4,11 @@ import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.matchers.file.shouldExist
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.string.shouldContain
-import net.bnb1.kradle.PluginSpec
+import net.bnb1.kradle.IntegrationSpec
 import org.gradle.testkit.runner.TaskOutcome
 import org.gradle.testkit.runner.UnexpectedBuildFailure
 
-class PmdBlueprintTests : PluginSpec({
+class PmdBlueprintTests : IntegrationSpec({
 
     test("Run PMD") {
         bootstrapProject {

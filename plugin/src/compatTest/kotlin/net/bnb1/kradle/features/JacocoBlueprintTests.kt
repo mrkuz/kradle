@@ -1,10 +1,10 @@
 package net.bnb1.kradle.features
 
 import io.kotest.matchers.shouldBe
-import net.bnb1.kradle.PluginSpec
+import net.bnb1.kradle.CompatSpec
 import org.gradle.testkit.runner.TaskOutcome
 
-class JacocoBlueprintTests : PluginSpec({
+class JacocoBlueprintTests : CompatSpec({
 
     fun createAppTest(sourceSet: String) {
         val sourceDir = projectDir.resolve("src/$sourceSet/kotlin/com/example")

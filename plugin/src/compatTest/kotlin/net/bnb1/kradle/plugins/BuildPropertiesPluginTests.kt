@@ -5,10 +5,10 @@ import io.kotest.matchers.collections.shouldHaveSize
 import io.kotest.matchers.file.shouldExist
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.string.shouldMatch
-import net.bnb1.kradle.PluginSpec
+import net.bnb1.kradle.CompatSpec
 import org.gradle.testkit.runner.TaskOutcome
 
-class BuildPropertiesPluginTests : PluginSpec({
+class BuildPropertiesPluginTests : CompatSpec({
 
     test("Generate build.properties") {
         bootstrapCompatAppProject()

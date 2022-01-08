@@ -3,9 +3,9 @@ package net.bnb1.kradle.features
 import io.kotest.inspectors.forOne
 import io.kotest.matchers.file.shouldExist
 import io.kotest.matchers.shouldBe
-import net.bnb1.kradle.PluginSpec
+import net.bnb1.kradle.CompatSpec
 
-class KotlinBootstrapBlueprintTests : PluginSpec({
+class KotlinBootstrapBlueprintTests : CompatSpec({
 
     test("Bootstrap app project") {
         writeSettingsGradle("app")

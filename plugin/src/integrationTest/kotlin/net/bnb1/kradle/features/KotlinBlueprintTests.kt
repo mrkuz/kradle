@@ -1,21 +1,10 @@
 package net.bnb1.kradle.features
 
-import io.kotest.inspectors.forOne
 import io.kotest.matchers.string.shouldContain
-import io.kotest.matchers.string.shouldMatch
 import io.kotest.matchers.string.shouldNotContain
-import net.bnb1.kradle.PluginSpec
+import net.bnb1.kradle.IntegrationSpec
 
-class KotlinBlueprintTests : PluginSpec({
-
-    test("Kotlin version property is set") {
-        bootstrapCompatAppProject()
-        addTask("testTask", "println(\"Result: \${project.properties[\"kotlinVersion\"]}\")")
-
-        val result = runTask("testTask")
-
-        result.output.lines().forOne { it shouldMatch Regex("Result: [0-9]+\\.[0-9]+\\.[0-9]+") }
-    }
+class KotlinBlueprintTests : IntegrationSpec({
 
     test("Check Kotlin dependencies") {
         bootstrapProject {
@@ -48,13 +37,5 @@ class KotlinBlueprintTests : PluginSpec({
         val result = runTask("dependencies", "--configuration", "runtimeClasspath")
 
         result.output shouldContain "org.jetbrains.kotlinx:kotlinx-coroutines-core"
-    }
-
-    test("Check Kotlin test dependencies") {
-        bootstrapCompatAppProject()
-
-        val result = runTask("dependencies", "--configuration", "testRuntimeClasspath")
-
-        result.output shouldContain "org.jetbrains.kotlin:kotlin-test"
     }
 })

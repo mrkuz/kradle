@@ -6,7 +6,6 @@ import io.kotest.core.spec.style.BehaviorSpec
 import io.mockk.spyk
 import io.mockk.verify
 import io.mockk.verifyOrder
-import net.bnb1.kradle.Mocks
 import net.bnb1.kradle.support.Tracer
 import org.gradle.api.GradleException
 
@@ -15,7 +14,6 @@ class FeatureSetTests : BehaviorSpec({
     isolationMode = IsolationMode.InstancePerLeaf
 
     val tracer = Tracer()
-    val project = Mocks.project()
 
     given("FeatureSet") {
         val set = FeatureSet()

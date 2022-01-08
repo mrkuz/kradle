@@ -9,10 +9,10 @@ import io.kotest.inspectors.forOne
 import io.kotest.matchers.collections.shouldContain
 import io.kotest.matchers.file.shouldExist
 import io.kotest.matchers.string.shouldContain
-import net.bnb1.kradle.PluginSpec
+import net.bnb1.kradle.CompatSpec
 import java.util.*
 
-class JibBlueprintTests : PluginSpec({
+class JibBlueprintTests : CompatSpec({
 
     val name = "app-" + UUID.randomUUID()
 

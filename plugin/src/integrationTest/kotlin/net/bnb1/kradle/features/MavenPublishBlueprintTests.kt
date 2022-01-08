@@ -1,10 +1,10 @@
 package net.bnb1.kradle.features
 
 import io.kotest.matchers.string.shouldContain
-import net.bnb1.kradle.PluginSpec
+import net.bnb1.kradle.IntegrationSpec
 import org.gradle.api.publish.maven.plugins.MavenPublishPlugin
 
-class MavenPublishBlueprintTests : PluginSpec({
+class MavenPublishBlueprintTests : IntegrationSpec({
 
     test("Check 'install' alias") {
         bootstrapProject {

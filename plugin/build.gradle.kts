@@ -76,7 +76,7 @@ kradle {
         codeAnalysis.enable()
         test {
             prettyPrint(true)
-            integrationTests(true)
+            customTests("compat", "integration")
             withJunitJupiter()
         }
     }

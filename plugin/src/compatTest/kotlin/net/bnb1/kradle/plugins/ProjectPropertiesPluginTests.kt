@@ -1,9 +1,9 @@
 package net.bnb1.kradle.plugins
 
 import io.kotest.matchers.string.shouldContain
-import net.bnb1.kradle.PluginSpec
+import net.bnb1.kradle.CompatSpec
 
-class ProjectPropertiesPluginTests : PluginSpec({
+class ProjectPropertiesPluginTests : CompatSpec({
 
     test("Load project.properties") {
         bootstrapCompatAppProject()

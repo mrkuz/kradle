@@ -2,10 +2,10 @@ package net.bnb1.kradle.features
 
 import io.kotest.matchers.file.shouldExist
 import io.kotest.matchers.string.shouldContain
-import net.bnb1.kradle.PluginSpec
+import net.bnb1.kradle.CompatSpec
 import net.bnb1.kradle.execute
 
-class ShadowBlueprintTests : PluginSpec({
+class ShadowBlueprintTests : CompatSpec({
 
     test("Create uber JAR") {
         bootstrapCompatAppProject()

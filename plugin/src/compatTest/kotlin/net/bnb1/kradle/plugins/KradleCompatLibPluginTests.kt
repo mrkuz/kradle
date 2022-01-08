@@ -2,9 +2,9 @@ package net.bnb1.kradle.plugins
 
 import io.kotest.matchers.string.shouldContain
 import io.kotest.matchers.string.shouldNotContain
-import net.bnb1.kradle.PluginSpec
+import net.bnb1.kradle.CompatSpec
 
-class KradleCompatLibPluginTests : PluginSpec({
+class KradleCompatLibPluginTests : CompatSpec({
 
     test("Check available tasks") {
         bootstrapCompatLibProject()

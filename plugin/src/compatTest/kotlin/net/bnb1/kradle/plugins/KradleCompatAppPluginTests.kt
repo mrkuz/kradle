@@ -2,10 +2,10 @@ package net.bnb1.kradle.plugins
 
 import io.kotest.matchers.string.shouldContain
 import io.kotest.matchers.string.shouldNotContain
-import net.bnb1.kradle.PluginSpec
+import net.bnb1.kradle.CompatSpec
 import org.gradle.testkit.runner.GradleRunner
 
-class KradleCompatAppPluginTests : PluginSpec({
+class KradleCompatAppPluginTests : CompatSpec({
 
     test("Check available tasks") {
         bootstrapCompatAppProject()

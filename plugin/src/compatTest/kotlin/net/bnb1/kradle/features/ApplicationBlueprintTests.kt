@@ -4,9 +4,9 @@ import io.kotest.inspectors.forOne
 import io.kotest.matchers.file.shouldExist
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.string.shouldContain
-import net.bnb1.kradle.PluginSpec
+import net.bnb1.kradle.CompatSpec
 
-class ApplicationBlueprintTests : PluginSpec({
+class ApplicationBlueprintTests : CompatSpec({
 
     test("Check MANIFEST.MF") {
         bootstrapCompatAppProject()
