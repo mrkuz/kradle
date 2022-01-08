@@ -26,26 +26,38 @@ open class Feature() {
     private var disabled = AtomicBoolean(false)
     private val state = AtomicReference(State.INACTIVE)
 
-    // Configuration
-    var conflictsWith: Feature? = null
-    var requires: Feature? = null
-    val after = mutableSetOf<Feature>()
+    private var conflicts: Feature = NoFeature
+    private var requires: Feature = NoFeature
+    private val after = mutableSetOf<Feature>()
     private val blueprints = mutableSetOf<Blueprint>()
 
+    infix fun conflictsWith(feature: Feature) {
+        failIfNotInactive()
+        conflicts = feature
+    }
+
+    infix fun requires(feature: Feature) {
+        failIfNotInactive()
+        requires = feature
+    }
+
+    infix fun activateAfter(feature: Feature) {
+        failIfNotInactive()
+        after += feature
+    }
+
     operator fun plusAssign(blueprint: Blueprint) {
-        addBlueprint(blueprint)
+        failIfNotInactive()
+        blueprints += blueprint
     }
 
     operator fun plusAssign(blueprints: Collection<Blueprint>) {
-        blueprints.forEach { addBlueprint(it) }
+        failIfNotInactive()
+        this.blueprints += blueprints
     }
 
-    fun addBlueprint(blueprint: Blueprint) {
-        if (blueprints.add(blueprint)) {
-            if (state.get() == State.ACTIVATED) {
-                blueprint.activate(tracer)
-            }
-        }
+    private fun failIfNotInactive() {
+        if (!isInactive) IllegalStateException("Configuration not allowed when activated")
     }
 
     fun activate(tracer: Tracer) {
@@ -62,18 +74,15 @@ open class Feature() {
     }
 
     fun enable() {
-        if (conflictsWith != null) {
-            if (conflictsWith!!.isEnabled) {
-                throw GradleException(
-                    "You can only enable '${this::class.simpleName}'" +
-                        " or '${conflictsWith!!::class.simpleName}' feature"
-                )
-            }
+        if (conflicts != NoFeature && conflicts.isEnabled) {
+            throw GradleException(
+                "You can only enable '${this::class.simpleName}'" +
+                    " or '${conflicts::class.simpleName}' feature"
+            )
         }
-        if (requires != null) {
-            if (!requires!!.isEnabled) {
-                throw GradleException("'${this::class.simpleName}' requires '${requires!!::class.simpleName}' feature")
-            }
+
+        if (requires != NoFeature && !requires.isEnabled) {
+            throw GradleException("'${this::class.simpleName}' requires '${requires::class.simpleName}' feature")
         }
 
         if (!enabled.compareAndSet(false, true)) {
@@ -86,8 +95,8 @@ open class Feature() {
     }
 
     fun shouldActivateAfter(): Set<Feature> {
-        if (requires != null) {
-            return setOf(requires!!) + after
+        if (requires != NoFeature) {
+            return setOf(requires) + after
         }
         return after
     }

@@ -9,24 +9,22 @@ import java.util.concurrent.atomic.AtomicBoolean
  *
  * Only one preset can be active.
  */
-open class Preset(private val lock: AtomicBoolean) {
+open class Preset(private val extension: KradleExtensionBase, private val lock: AtomicBoolean) {
 
     private val activated = AtomicBoolean(false)
 
-    fun configure(extension: KradleExtensionBase) {
-        onConfigure(extension)
-    }
-
-    fun activate(extension: KradleExtensionBase) {
+    fun activate(action: KradleExtensionBase.() -> Unit = {}) {
         if (!activated.compareAndSet(false, true)) {
             return
         }
         if (!lock.compareAndSet(false, true)) {
             throw GradleException("You can only use one preset")
         }
-        onActivate(extension)
+        doConfigure(extension)
+        action(extension)
+        doActivate(extension)
     }
 
-    protected open fun onConfigure(extension: KradleExtensionBase) = Unit
-    protected open fun onActivate(extension: KradleExtensionBase) = Unit
+    protected open fun doConfigure(extension: KradleExtensionBase) = Unit
+    protected open fun doActivate(extension: KradleExtensionBase) = Unit
 }

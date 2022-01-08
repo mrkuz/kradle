@@ -16,7 +16,7 @@ open class KradleContext {
 
     inline fun <reified T : Any> get() = map[T::class] as T
 
-    operator fun <T : Any> get(key: KClass<T>) = _map[key] as T
+    fun <T : Any> get(key: KClass<T>) = _map[key] as T
 
     fun <T : Any> getSubclassOf(key: KClass<T>) =
         _map.entries.asSequence()
@@ -34,7 +34,7 @@ open class KradleContext {
         }
 
         operator fun getValue(thisRef: Any?, property: KProperty<*>): T {
-            return context[property.returnType.jvmErasure as KClass<T>]
+            return context.get(property.returnType.jvmErasure as KClass<T>)
         }
     }
 }

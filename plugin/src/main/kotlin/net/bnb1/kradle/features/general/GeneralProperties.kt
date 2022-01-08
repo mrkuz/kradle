@@ -19,7 +19,7 @@ class GeneralProperties(context: KradleContext, project: Project) : Properties()
     private val _buildProperties by context { BuildPropertiesFeature() }
 
     init {
-        _buildPropertiesBlueprint.dependsOn += _buildProperties
+        _buildPropertiesBlueprint dependsOn _buildProperties
 
         _bootstrap += _bootstrapBlueprint
         _git += _gitBlueprint
@@ -33,8 +33,8 @@ class GeneralProperties(context: KradleContext, project: Project) : Properties()
         )
     }
 
-    val bootstrap = FeatureDsl(_bootstrap, EmptyProperties())
-    val git = FeatureDsl(_git, EmptyProperties())
-    val projectProperties = FeatureDsl(_projectProperties, EmptyProperties())
-    val buildProperties = FeatureDsl(_buildProperties, EmptyProperties())
+    val bootstrap = FeatureDsl(_bootstrap, EmptyProperties)
+    val git = FeatureDsl(_git, EmptyProperties)
+    val projectProperties = FeatureDsl(_projectProperties, EmptyProperties)
+    val buildProperties = FeatureDsl(_buildProperties, EmptyProperties)
 }

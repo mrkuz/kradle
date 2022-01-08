@@ -21,11 +21,11 @@ class FeatureSetTests : BehaviorSpec({
         val set = FeatureSet(project)
         val feature1 = spyk<Feature1>().also {
             it.enable()
-            set.features += it
+            set += it
         }
         val feature2 = spyk<Feature2>().also {
             it.enable()
-            set.features += it
+            set += it
         }
 
         When("Activate twice") {
@@ -56,17 +56,17 @@ class FeatureSetTests : BehaviorSpec({
 
         feature1.also {
             it.enable()
-            set.features += it
-            it.after += feature3
+            set += it
+            it activateAfter feature3
         }
         feature2.also {
             it.enable()
-            set.features += it
+            set += it
         }
         feature3.also {
             it.enable()
-            set.features += it
-            it.after += feature2
+            set += it
+            it activateAfter feature2
         }
 
         When("Activate") {
@@ -90,18 +90,18 @@ class FeatureSetTests : BehaviorSpec({
 
         feature1.also {
             it.enable()
-            set.features += it
-            it.after += feature2
+            set += it
+            it activateAfter feature2
         }
         feature2.also {
             it.enable()
-            set.features += it
-            it.after += feature3
+            set += it
+            it activateAfter feature3
         }
         feature3.also {
             it.enable()
-            set.features += it
-            it.after += feature1
+            set += it
+            it activateAfter feature1
         }
 
         When("Activate") {

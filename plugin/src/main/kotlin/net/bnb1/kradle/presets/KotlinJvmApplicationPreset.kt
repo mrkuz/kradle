@@ -3,9 +3,9 @@ package net.bnb1.kradle.presets
 import net.bnb1.kradle.KradleExtensionBase
 import java.util.concurrent.atomic.AtomicBoolean
 
-class KotlinJvmApplicationPreset(lock: AtomicBoolean) : Preset(lock) {
+class KotlinJvmApplicationPreset(extension: KradleExtensionBase, lock: AtomicBoolean) : Preset(extension, lock) {
 
-    override fun onConfigure(extension: KradleExtensionBase) {
+    override fun doConfigure(extension: KradleExtensionBase) {
         extension.apply {
             general.configureOnly {
                 bootstrap.enable()
@@ -54,7 +54,7 @@ class KotlinJvmApplicationPreset(lock: AtomicBoolean) : Preset(lock) {
         }
     }
 
-    override fun onActivate(extension: KradleExtensionBase) {
+    override fun doActivate(extension: KradleExtensionBase) {
         extension.run {
             general.tryActivate()
             jvm.tryActivate()

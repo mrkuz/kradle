@@ -22,8 +22,8 @@ class LibraryBlueprintTests : BehaviorSpec({
         val applicationFeature = ApplicationFeature()
         val libraryFeature = LibraryFeature()
 
-        applicationFeature.conflictsWith = libraryFeature
-        libraryFeature.conflictsWith = applicationFeature
+        applicationFeature conflictsWith libraryFeature
+        libraryFeature conflictsWith applicationFeature
 
         val blueprint = LibraryBlueprint(project)
 

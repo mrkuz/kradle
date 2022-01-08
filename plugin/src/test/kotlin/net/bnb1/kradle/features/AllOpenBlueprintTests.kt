@@ -18,8 +18,8 @@ class AllOpenBlueprintTests : BehaviorSpec({
         val tracer = Tracer()
         val project = Mocks.project()
         val feature = KotlinFeature()
-        val blueprint = AllOpenBlueprint(project).apply {
-            dependsOn += feature
+        val blueprint = AllOpenBlueprint(project).also {
+            it dependsOn feature
         }
 
         When("Kotlin feature is disabled") {

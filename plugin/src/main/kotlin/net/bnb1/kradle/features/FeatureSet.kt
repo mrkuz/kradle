@@ -14,15 +14,20 @@ open class FeatureSet(private val project: Project) {
 
     private val activated = AtomicBoolean(false)
 
-    // Configuration
-    val features = mutableSetOf<Feature>()
+    private val features = mutableSetOf<Feature>()
 
     operator fun plusAssign(feature: Feature) {
+        failIfActive()
         features += feature
     }
 
     operator fun plusAssign(features: Collection<Feature>) {
+        failIfActive()
         this.features += features
+    }
+
+    private fun failIfActive() {
+        if (activated.get()) throw IllegalStateException("Configuration not allowed when activated")
     }
 
     fun activate(tracer: Tracer) {

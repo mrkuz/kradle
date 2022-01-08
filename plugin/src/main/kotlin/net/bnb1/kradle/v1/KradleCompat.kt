@@ -40,7 +40,7 @@ class KradleCompat(private val context: KradleContext, private val project: Proj
         project.apply(AllOpenGradleSubplugin::class.java)
 
         // Source sets need to be created early
-        context[TestProperties::class].apply {
+        context.get<TestProperties>().apply {
             withIntegrationTests(true)
             withFunctionalTests(true)
         }

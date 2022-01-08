@@ -1,9 +1,8 @@
 package net.bnb1.kradle.dsl
 
 import net.bnb1.kradle.features.Feature
-import net.bnb1.kradle.features.Properties
 
-class FeatureDsl<P : Properties>(private val feature: Feature, private val properties: P) {
+class FeatureDsl<C : Any>(private val feature: Feature, private val configuration: C) {
 
     operator fun invoke(enable: Boolean = true) {
         if (enable) {
@@ -13,10 +12,10 @@ class FeatureDsl<P : Properties>(private val feature: Feature, private val prope
         }
     }
 
-    operator fun invoke(action: P.() -> Unit) = enable(action)
+    operator fun invoke(action: C.() -> Unit) = enable(action)
 
-    fun enable(action: P.() -> Unit = {}) {
-        action(properties)
+    fun enable(action: C.() -> Unit = {}) {
+        action(configuration)
         feature.enable()
     }
 
