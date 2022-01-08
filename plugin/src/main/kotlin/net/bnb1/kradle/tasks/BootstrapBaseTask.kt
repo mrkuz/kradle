@@ -18,7 +18,7 @@ open class BootstrapBaseTask : DefaultTask() {
 
     protected fun copyTextResource(name: String) = copyTextResource(name, name)
 
-    protected fun copyTextResource(resource: String, to: String) {
+    fun copyTextResource(resource: String, to: String) {
         val target = project.rootDir.resolve(to)
         if (!target.exists()) {
             target.writeText(javaClass.getResource("/$resource")!!.readText())

@@ -1,7 +1,6 @@
-package net.bnb1.kradle.dsl
+package net.bnb1.kradle.presets
 
 import net.bnb1.kradle.KradleExtensionBase
-import net.bnb1.kradle.presets.Preset
 
 class PresetDsl(private val preset: Preset) {
 

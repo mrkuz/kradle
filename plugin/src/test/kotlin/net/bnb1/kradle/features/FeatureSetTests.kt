@@ -18,7 +18,7 @@ class FeatureSetTests : BehaviorSpec({
     val project = Mocks.project()
 
     given("FeatureSet") {
-        val set = FeatureSet(project)
+        val set = FeatureSet()
         val feature1 = spyk<Feature1>().also {
             it.enable()
             set += it
@@ -49,7 +49,7 @@ class FeatureSetTests : BehaviorSpec({
     }
 
     given("FeatureSet with ordered features") {
-        val set = FeatureSet(project)
+        val set = FeatureSet()
         val feature1 = spyk<Feature1>()
         val feature2 = spyk<Feature2>()
         val feature3 = spyk<Feature3>()
@@ -83,7 +83,7 @@ class FeatureSetTests : BehaviorSpec({
     }
 
     given("FeatureSet with dependency loop") {
-        val set = FeatureSet(project)
+        val set = FeatureSet()
         val feature1 = spyk<Feature1>()
         val feature2 = spyk<Feature2>()
         val feature3 = spyk<Feature3>()

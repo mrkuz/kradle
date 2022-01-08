@@ -1,8 +1,8 @@
 package net.bnb1.kradle.features.general
 
-import net.bnb1.kradle.dsl.FeatureDsl
 import net.bnb1.kradle.features.AllFeatures
 import net.bnb1.kradle.features.EmptyProperties
+import net.bnb1.kradle.features.FeatureDsl
 
 class GeneralDsl(features: AllFeatures) {
 

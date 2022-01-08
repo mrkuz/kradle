@@ -14,7 +14,7 @@ import java.util.concurrent.atomic.AtomicReference
  * Every feature has a parent [feature set][FeatureSet]. If the set is activated, the feature is also activated (unless
  * disabled). This in turn activates assigned [blueprints][Blueprint].
  */
-open class Feature() {
+open class Feature {
 
     enum class State {
         INACTIVE, ACTIVATING, ACTIVATED

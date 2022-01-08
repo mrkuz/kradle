@@ -1,7 +1,6 @@
 package net.bnb1.kradle.dsl
 
-open class Flags(private val invert: Boolean) :
-    SimpleProvider<Set<String>> {
+open class Flags(private val invert: Boolean) : SimpleProvider<Set<String>> {
 
     private val values = mutableSetOf<String>()
 

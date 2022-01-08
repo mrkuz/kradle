@@ -13,9 +13,9 @@ import net.bnb1.kradle.features.jvm.KotlinProperties
 import net.bnb1.kradle.features.jvm.KotlinTestProperties
 import net.bnb1.kradle.features.jvm.KtlintProperties
 import net.bnb1.kradle.features.jvm.LintProperties
-import net.bnb1.kradle.features.jvm.PackageProperties
-import net.bnb1.kradle.features.jvm.PackageUberJarProperties
+import net.bnb1.kradle.features.jvm.PackagingProperties
 import net.bnb1.kradle.features.jvm.PmdProperties
+import net.bnb1.kradle.features.jvm.ShadowProperties
 import net.bnb1.kradle.features.jvm.SpotBugsProperties
 import net.bnb1.kradle.features.jvm.TestProperties
 
@@ -39,8 +39,8 @@ class AllProperties(context: KradleContext) {
     val test by context { TestProperties() }
     val benchmark by context { BenchmarkProperties() }
 
-    val uberJar by context { PackageUberJarProperties() }
-    val packaging by context { PackageProperties(context) }
+    val uberJar by context { ShadowProperties() }
+    val packaging by context { PackagingProperties(context) }
 
     val docker by context { DockerProperties() }
 }

@@ -4,7 +4,7 @@ import net.bnb1.kradle.KradleContext
 import net.bnb1.kradle.dsl.Configurable
 import net.bnb1.kradle.features.Properties
 
-class PackageProperties(context: KradleContext) : Properties() {
+class PackagingProperties(context: KradleContext) : Properties() {
 
-    val uberJar = Configurable(context.get<PackageUberJarProperties>())
+    val uberJar = Configurable(context.get<ShadowProperties>())
 }

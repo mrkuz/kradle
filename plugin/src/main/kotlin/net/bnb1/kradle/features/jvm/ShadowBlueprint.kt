@@ -13,7 +13,7 @@ private const val TASK_NAME = "uberJar"
 
 class ShadowBlueprint(project: Project) : Blueprint(project) {
 
-    lateinit var uberJarProperties: PackageUberJarProperties
+    lateinit var uberJarProperties: ShadowProperties
 
     override fun createTasks() {
         val jar = project.tasks.named<Jar>("jar").get()

@@ -1,8 +1,8 @@
 package net.bnb1.kradle
 
-import net.bnb1.kradle.dsl.FeatureSetDsl
 import net.bnb1.kradle.features.AllFeatures
 import net.bnb1.kradle.features.AllProperties
+import net.bnb1.kradle.features.FeatureSetDsl
 import net.bnb1.kradle.features.general.GeneralDsl
 import net.bnb1.kradle.features.general.GeneralFeatureSet
 import net.bnb1.kradle.features.jvm.JvmDsl
@@ -19,7 +19,7 @@ open class KradleExtensionBase(
 ) {
 
     private val _general by context {
-        GeneralFeatureSet(project).also {
+        GeneralFeatureSet().also {
             it += setOf(
                 features.bootstrap,
                 features.git,
@@ -31,7 +31,7 @@ open class KradleExtensionBase(
     val general = FeatureSetDsl(tracer, _general, GeneralDsl(features))
 
     private val _jvm by context {
-        JvmFeatureSet(project).also {
+        JvmFeatureSet().also {
             it += setOf(
                 features.kotlin,
                 features.java,

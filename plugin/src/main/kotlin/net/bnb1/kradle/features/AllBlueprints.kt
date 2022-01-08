@@ -29,7 +29,7 @@ import net.bnb1.kradle.features.jvm.LintBlueprint
 import net.bnb1.kradle.features.jvm.MavenPublishBlueprint
 import net.bnb1.kradle.features.jvm.OwaspDependencyCheckBlueprint
 import net.bnb1.kradle.features.jvm.PackageApplicationBlueprint
-import net.bnb1.kradle.features.jvm.PackageBlueprint
+import net.bnb1.kradle.features.jvm.PackagingBlueprint
 import net.bnb1.kradle.features.jvm.PmdBlueprint
 import net.bnb1.kradle.features.jvm.ShadowBlueprint
 import net.bnb1.kradle.features.jvm.SpotBugsBlueprint
@@ -95,7 +95,7 @@ class AllBlueprints(context: KradleContext, properties: AllProperties, project: 
             javaProperties = properties.java
         }
     }
-    val packaging by context { PackageBlueprint(project) }
+    val packaging by context { PackagingBlueprint(project) }
     val packageApplication by context {
         PackageApplicationBlueprint(project).inject {
             applicationProperties = properties.application

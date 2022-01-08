@@ -16,7 +16,7 @@ import net.bnb1.kradle.features.jvm.JavaFeature
 import net.bnb1.kradle.features.jvm.KotlinFeature
 import net.bnb1.kradle.features.jvm.LibraryFeature
 import net.bnb1.kradle.features.jvm.LintFeature
-import net.bnb1.kradle.features.jvm.PackageFeature
+import net.bnb1.kradle.features.jvm.PackagingFeature
 import net.bnb1.kradle.features.jvm.TestFeature
 import net.bnb1.kradle.features.jvm.VulnerabilityScanFeature
 
@@ -40,7 +40,7 @@ class AllFeatures(context: KradleContext) {
     val developmentMode by context { DevelopmentModeFeature() }
     val test by context { TestFeature() }
     val benchmark by context { BenchmarkFeature() }
-    val packaging by context { PackageFeature() }
+    val packaging by context { PackagingFeature() }
     val docker by context { DockerFeature() }
     val documentation by context { DocumentationFeature() }
 }
