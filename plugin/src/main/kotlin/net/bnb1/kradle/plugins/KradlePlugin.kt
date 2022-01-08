@@ -3,6 +3,10 @@ package net.bnb1.kradle.plugins
 import net.bnb1.kradle.KradleContext
 import net.bnb1.kradle.KradleExtension
 import net.bnb1.kradle.createHelperTask
+import net.bnb1.kradle.features.AllBlueprints
+import net.bnb1.kradle.features.AllFeatures
+import net.bnb1.kradle.features.AllProperties
+import net.bnb1.kradle.features.FeaturePlan
 import net.bnb1.kradle.inject
 import net.bnb1.kradle.support.Tracer
 import net.bnb1.kradle.tasks.KradleDumpTask
@@ -22,17 +26,23 @@ class KradlePlugin : Plugin<Project> {
         }
 
         val context = KradleContext()
-
         val tracer = Tracer()
-        context.register(tracer)
         project.afterEvaluate { tracer.deactivate() }
+
+        val properties = AllProperties(context)
+        val blueprints = AllBlueprints(context, properties, project)
+        val features = AllFeatures(context)
+        FeaturePlan(features, blueprints).initialize()
 
         val task = project.createHelperTask<KradleDumpTask>(
             "kradleDump",
             "Dumps kradle diagnostic information"
         )
-        task.inject { this.context = context }
+        task.inject {
+            this.context = context
+            this.tracer = tracer
+        }
 
-        project.extensions.create<KradleExtension>("kradle", context, project)
+        project.extensions.create<KradleExtension>("kradle", context, tracer, features, properties, project)
     }
 }

@@ -41,7 +41,7 @@ open class Feature() {
         requires = feature
     }
 
-    infix fun activateAfter(feature: Feature) {
+    infix fun activatesAfter(feature: Feature) {
         failIfNotInactive()
         after += feature
     }

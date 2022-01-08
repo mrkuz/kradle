@@ -3,25 +3,25 @@ package net.bnb1.kradle.dsl
 import net.bnb1.kradle.features.FeatureSet
 import net.bnb1.kradle.support.Tracer
 
-class FeatureSetDsl<C : Any>(
+class FeatureSetDsl<T : Any>(
     private val tracer: Tracer,
     private val featureSet: FeatureSet,
-    private val configuration: C
+    private val target: T
 ) {
 
-    operator fun invoke(action: C.() -> Unit = {}) = activate(action)
+    operator fun invoke(action: T.() -> Unit = {}) = activate(action)
 
-    fun activate(action: C.() -> Unit = {}) {
-        action(configuration)
+    fun activate(action: T.() -> Unit = {}) {
+        action(target)
         featureSet.activate(tracer)
     }
 
-    fun configureOnly(action: C.() -> Unit = {}) {
-        action(configuration)
+    fun configureOnly(action: T.() -> Unit = {}) {
+        action(target)
     }
 
-    fun tryActivate(action: C.() -> Unit = {}): Boolean {
-        action(configuration)
+    fun tryActivate(action: T.() -> Unit = {}): Boolean {
+        action(target)
         return featureSet.tryActivate(tracer)
     }
 }

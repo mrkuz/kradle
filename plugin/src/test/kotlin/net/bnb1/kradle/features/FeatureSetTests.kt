@@ -57,7 +57,7 @@ class FeatureSetTests : BehaviorSpec({
         feature1.also {
             it.enable()
             set += it
-            it activateAfter feature3
+            it activatesAfter feature3
         }
         feature2.also {
             it.enable()
@@ -66,7 +66,7 @@ class FeatureSetTests : BehaviorSpec({
         feature3.also {
             it.enable()
             set += it
-            it activateAfter feature2
+            it activatesAfter feature2
         }
 
         When("Activate") {
@@ -91,17 +91,17 @@ class FeatureSetTests : BehaviorSpec({
         feature1.also {
             it.enable()
             set += it
-            it activateAfter feature2
+            it activatesAfter feature2
         }
         feature2.also {
             it.enable()
             set += it
-            it activateAfter feature3
+            it activatesAfter feature3
         }
         feature3.also {
             it.enable()
             set += it
-            it activateAfter feature1
+            it activatesAfter feature1
         }
 
         When("Activate") {

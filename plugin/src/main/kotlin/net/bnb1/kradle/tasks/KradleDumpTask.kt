@@ -2,8 +2,8 @@ package net.bnb1.kradle.tasks
 
 import net.bnb1.kradle.KradleContext
 import net.bnb1.kradle.dsl.Configurable
+import net.bnb1.kradle.dsl.ConfigurableSelf
 import net.bnb1.kradle.dsl.FeatureDsl
-import net.bnb1.kradle.dsl.PropertiesDsl
 import net.bnb1.kradle.dsl.SimpleProvider
 import net.bnb1.kradle.features.EmptyProperties
 import net.bnb1.kradle.features.Feature
@@ -29,6 +29,9 @@ open class KradleDumpTask : DefaultTask() {
 
     @Internal
     lateinit var context: KradleContext
+
+    @Internal
+    lateinit var tracer: Tracer
 
     init {
         // Ensure that this task is always executed
@@ -79,7 +82,7 @@ open class KradleDumpTask : DefaultTask() {
             ------
             """.trimIndent()
         )
-        val entries = context.get<Tracer>().entries
+        val entries = tracer.entries
         entries.forEachIndexed { index, entry ->
             if (entry.level == 0) {
                 if (index > 0) {
@@ -207,7 +210,7 @@ open class KradleDumpTask : DefaultTask() {
                 ) {
                     val value = member.getter.call(target) as Collection<*>
                     dump("$key = $value")
-                } else if (returnType.isSubclassOf(Configurable::class)) {
+                } else if (returnType.isSubclassOf(ConfigurableSelf::class)) {
                     member.getter.call(target)?.let {
                         dump("$key = {")
                         printProperties(it, level + 1)
@@ -216,7 +219,7 @@ open class KradleDumpTask : DefaultTask() {
                 } else if (
                     returnType.isSubclassOf(ObjectFactory::class) ||
                     returnType.isSubclassOf(FeatureDsl::class) ||
-                    returnType.isSubclassOf(PropertiesDsl::class)
+                    returnType.isSubclassOf(Configurable::class)
                 ) {
                     // Ignore
                 } else {

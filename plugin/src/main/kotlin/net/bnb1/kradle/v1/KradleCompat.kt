@@ -15,13 +15,17 @@ import org.jetbrains.kotlin.allopen.gradle.AllOpenGradleSubplugin
 /**
  * Provides backwards-compatibility for Kradle v1.
  */
-class KradleCompat(private val context: KradleContext, private val project: Project, private val type: ProjectType) {
+class KradleCompat(
+    private val context: KradleContext,
+    private val tracer: Tracer,
+    private val extension: KradleExtensionBase,
+    private val project: Project,
+    private val type: ProjectType
+) {
 
     enum class ProjectType {
         APPLICATION, LIBRARY
     }
-
-    private val extension = KradleExtensionBase(context, project)
 
     fun activate() {
         configureEager()
@@ -31,8 +35,7 @@ class KradleCompat(private val context: KradleContext, private val project: Proj
                 general.activate()
                 jvm.activate()
             }
-
-            context.get<Tracer>().deactivate()
+            tracer.deactivate()
         }
     }
 

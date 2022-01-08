@@ -1,7 +1,7 @@
 package net.bnb1.kradle.features.jvm
 
 import net.bnb1.kradle.Catalog
-import net.bnb1.kradle.dsl.Configurable
+import net.bnb1.kradle.dsl.ConfigurableSelf
 import net.bnb1.kradle.dsl.Flag
 import net.bnb1.kradle.features.Properties
 
@@ -10,7 +10,7 @@ class PmdProperties : Properties() {
     val version = value(Catalog.Versions.pmd)
     val ruleSets = RuleSets()
 
-    class RuleSets : Configurable<RuleSets> {
+    class RuleSets : ConfigurableSelf<RuleSets> {
 
         val bestPractices = Flag()
         val codeStyle = Flag()
