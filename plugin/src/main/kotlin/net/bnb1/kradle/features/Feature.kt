@@ -31,6 +31,10 @@ open class Feature {
     private val after = mutableSetOf<Feature>()
     private val blueprints = mutableSetOf<Blueprint>()
 
+    infix fun belongsTo(featureSet: FeatureSet) {
+        featureSet += this
+    }
+
     infix fun conflictsWith(feature: Feature) {
         failIfNotInactive()
         conflicts = feature

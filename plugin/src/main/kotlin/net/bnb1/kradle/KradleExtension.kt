@@ -1,5 +1,6 @@
 package net.bnb1.kradle
 
+import net.bnb1.kradle.features.AllFeatureSets
 import net.bnb1.kradle.features.AllFeatures
 import net.bnb1.kradle.features.AllProperties
 import net.bnb1.kradle.presets.JavaApplicationPreset
@@ -8,16 +9,15 @@ import net.bnb1.kradle.presets.KotlinJvmApplicationPreset
 import net.bnb1.kradle.presets.KotlinJvmLibraryPreset
 import net.bnb1.kradle.presets.PresetDsl
 import net.bnb1.kradle.support.Tracer
-import org.gradle.api.Project
 import java.util.concurrent.atomic.AtomicBoolean
 
 open class KradleExtension(
     context: KradleContext,
     tracer: Tracer,
+    featureSets: AllFeatureSets,
     features: AllFeatures,
     properties: AllProperties,
-    project: Project
-) : KradleExtensionBase(context, tracer, features, properties, project) {
+) : KradleExtensionBase(tracer, featureSets, features, properties) {
 
     private val presetLock = AtomicBoolean()
 

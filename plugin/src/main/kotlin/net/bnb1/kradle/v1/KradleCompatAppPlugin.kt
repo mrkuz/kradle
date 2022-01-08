@@ -4,6 +4,7 @@ import net.bnb1.kradle.KradleContext
 import net.bnb1.kradle.KradleExtensionBase
 import net.bnb1.kradle.apply
 import net.bnb1.kradle.features.AllBlueprints
+import net.bnb1.kradle.features.AllFeatureSets
 import net.bnb1.kradle.features.AllFeatures
 import net.bnb1.kradle.features.AllProperties
 import net.bnb1.kradle.features.FeaturePlan
@@ -29,16 +30,17 @@ class KradleCompatAppPlugin : Plugin<Project> {
         val properties = AllProperties(context)
         val blueprints = AllBlueprints(context, properties, project)
         val features = AllFeatures(context)
-        FeaturePlan(features, blueprints).initialize()
+        val featureSets = AllFeatureSets(context)
+        FeaturePlan(features, blueprints, featureSets).initialize()
 
         project.tasks.withType<KradleDumpTask> {
             inject {
-                this.tracer = tracer
                 this.context = context
+                this.tracer = tracer
             }
         }
 
-        val extension = KradleExtensionBase(context, tracer, features, properties, project)
+        val extension = KradleExtensionBase(tracer, featureSets, features, properties)
         KradleCompat(context, tracer, extension, project, KradleCompat.ProjectType.APPLICATION).activate()
     }
 }
