@@ -1,13 +1,14 @@
 package net.bnb1.kradle
 
-import io.kotest.core.spec.style.FunSpec
+import io.kotest.core.spec.IsolationMode
+import io.kotest.core.spec.style.BehaviorSpec
 import org.gradle.testkit.runner.GradleRunner
 import java.io.File
 import kotlin.io.path.ExperimentalPathApi
 import kotlin.io.path.createTempDirectory
 import kotlin.reflect.KClass
 
-abstract class IntegrationSpec(body: IntegrationSpec.() -> Unit) : FunSpec({}) {
+abstract class IntegrationSpec(body: IntegrationSpec.() -> Unit) : BehaviorSpec({}) {
 
     @OptIn(ExperimentalPathApi::class)
     val projectDir = createTempDirectory("kradle-test-").toFile()
@@ -18,9 +19,12 @@ abstract class IntegrationSpec(body: IntegrationSpec.() -> Unit) : FunSpec({}) {
     val buildDir
         get() = projectDir.resolve("build")
 
+    override fun isolationMode(): IsolationMode? {
+        return IsolationMode.InstancePerLeaf
+    }
+
     init {
-        beforeEach {
-            projectDir.deleteRecursively()
+        beforeSpec {
             projectDir.mkdirs()
             println("Project dir: ${projectDir.absolutePath}")
         }
@@ -34,6 +38,7 @@ abstract class IntegrationSpec(body: IntegrationSpec.() -> Unit) : FunSpec({}) {
         .withProjectDir(projectDir)
         .withPluginClasspath()
         .withArguments(listOf(task) + arguments)
+        .forwardOutput()
         .build()
 
     fun addHasPluginTask(clazz: KClass<*>) {

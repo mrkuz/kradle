@@ -10,54 +10,7 @@ import org.gradle.testkit.runner.UnexpectedBuildFailure
 
 class PmdBlueprintTests : IntegrationSpec({
 
-    test("Run PMD") {
-        bootstrapProject {
-            """
-            jvm {
-                java.enable()
-                codeAnalysis.enable()
-            }
-            """.trimIndent()
-        }
-        writeAppJava("System.out.println(\"Hello World\");")
-
-        runTask("pmdMain")
-
-        buildDir.resolve("reports/pmd/main.html").shouldExist()
-    }
-
-    test("Run PMD with 'check'") {
-        bootstrapProject {
-            """
-            jvm {
-                java.enable()
-                codeAnalysis.enable()
-            }
-            """.trimIndent()
-        }
-        writeAppJava("System.out.println(\"Hello World\");")
-
-        val result = runTask("check")
-
-        result.task(":pmdMain")!!.outcome shouldBe TaskOutcome.SUCCESS
-    }
-
-    test("Check PMD dependencies") {
-        bootstrapProject {
-            """
-            jvm {
-                java.enable()
-                codeAnalysis.enable()
-            }
-            """.trimIndent()
-        }
-
-        val result = runTask("dependencies", "--configuration", "kradlePmd")
-
-        result.output shouldContain "net.sourceforge.pmd:pmd-java"
-    }
-
-    test("Fail with error-prone rule set") {
+    Given("Default configuration") {
         bootstrapProject {
             """
             jvm {
@@ -65,7 +18,7 @@ class PmdBlueprintTests : IntegrationSpec({
                     codeAnalysis {
                         pmd {
                             ruleSets {
-                                errorProne(true)
+                                // errorProne(true)
                             }
                         }
                     }
@@ -74,14 +27,49 @@ class PmdBlueprintTests : IntegrationSpec({
             }
             """.trimIndent()
         }
-        writeAppJava("if (true) return;")
 
-        val ex = shouldThrow<UnexpectedBuildFailure> { runTask("pmdMain") }
+        And("Source file without flaws") {
+            writeAppJava("System.out.println(\"Hello World\");")
 
-        ex.message shouldContain "UnconditionalIfStatement"
+            When("Run pmd") {
+                runTask("pmdMain")
+
+                Then("Report is generated") {
+                    buildDir.resolve("reports/pmd/main.html").shouldExist()
+                }
+            }
+
+            When("Run check") {
+                val result = runTask("check")
+
+                Then("pmd should be executed") {
+                    result.task(":pmdMain")!!.outcome shouldBe TaskOutcome.SUCCESS
+                }
+            }
+
+            When("Check dependencies") {
+                val result = runTask("dependencies", "--configuration", "kradlePmd")
+
+                Then("pmd should be available") {
+                    result.output shouldContain "net.sourceforge.pmd:pmd-java"
+                }
+            }
+        }
+
+        And("Source file with unconditional if-statement") {
+            writeAppJava("if (true) return;")
+
+            When("Run pmd") {
+                val ex = shouldThrow<UnexpectedBuildFailure> { runTask("pmdMain") }
+
+                Then("Fail") {
+                    ex.message shouldContain "UnconditionalIfStatement"
+                }
+            }
+        }
     }
 
-    test("Succeed without error-prone rule set") {
+    Given("ruleSets.errorProne(false)") {
         bootstrapProject {
             """
             jvm {
@@ -98,10 +86,17 @@ class PmdBlueprintTests : IntegrationSpec({
             }
             """.trimIndent()
         }
-        writeAppJava("if (true) return;")
 
-        val result = runTask("pmdMain")
+        And("Source file with unconditional if-statement") {
+            writeAppJava("if (true) return;")
 
-        result.task(":pmdMain")!!.outcome shouldBe TaskOutcome.SUCCESS
+            When("Run pmd") {
+                val result = runTask("pmdMain")
+
+                Then("Succeed") {
+                    result.task(":pmdMain")!!.outcome shouldBe TaskOutcome.SUCCESS
+                }
+            }
+        }
     }
 })

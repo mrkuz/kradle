@@ -29,7 +29,7 @@ class JavaBlueprintTests : IntegrationSpec({
     }
 
     // Requires JVM 15
-    xtest("Fail using preview features without flag") {
+    xGiven("Default configuration") {
         bootstrapProject {
             """
             jvm {
@@ -43,13 +43,17 @@ class JavaBlueprintTests : IntegrationSpec({
         }
         createAppJava()
 
-        val ex = shouldThrow<UnexpectedBuildFailure> { runTask("compileJava") }
+        When("Compile code with preview features") {
+            val ex = shouldThrow<UnexpectedBuildFailure> { runTask("compileJava") }
 
-        ex.message shouldContain "use --enable-preview to enable records"
+            Then("Fail") {
+                ex.message shouldContain "use --enable-preview to enable records"
+            }
+        }
     }
 
     // Requires JVM 15
-    xtest("Use preview features") {
+    xGiven("previewFeatures(true)") {
         bootstrapProject {
             """
             jvm {
@@ -65,8 +69,12 @@ class JavaBlueprintTests : IntegrationSpec({
         }
         createAppJava()
 
-        val result = runTask("compileJava")
+        When("Compile code with preview features") {
+            val result = runTask("compileJava")
 
-        result.task(":compileJava")!!.outcome shouldBe TaskOutcome.SUCCESS
+            Then("Succeed") {
+                result.task(":compileJava")!!.outcome shouldBe TaskOutcome.SUCCESS
+            }
+        }
     }
 })

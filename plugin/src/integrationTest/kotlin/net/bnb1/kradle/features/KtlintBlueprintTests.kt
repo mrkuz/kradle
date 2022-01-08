@@ -9,7 +9,7 @@ import org.gradle.testkit.runner.UnexpectedBuildFailure
 
 class KtlintBlueprintTests : IntegrationSpec({
 
-    test("Fail with no-semi rule") {
+    Given("Default configuration") {
         bootstrapProject {
             """
             jvm {
@@ -17,7 +17,7 @@ class KtlintBlueprintTests : IntegrationSpec({
                     lint {
                         ktlint {
                             rules {
-                                enable("no-semi")
+                                // enable("no-semi")
                             }
                         }
                     }
@@ -26,14 +26,21 @@ class KtlintBlueprintTests : IntegrationSpec({
             }
             """.trimIndent()
         }
-        writeAppKt("println(\"Hello World!\");")
 
-        val ex = shouldThrow<UnexpectedBuildFailure> { runTask("ktlintMainSourceSetCheck") }
+        And("Source file with unnecessary semicolon") {
+            writeAppKt("println(\"Hello World!\");")
 
-        ex.message shouldContain "Unnecessary semicolon"
+            When("Run ktlint") {
+                val ex = shouldThrow<UnexpectedBuildFailure> { runTask("ktlintMainSourceSetCheck") }
+
+                Then("Fail") {
+                    ex.message shouldContain "Unnecessary semicolon"
+                }
+            }
+        }
     }
 
-    test("Succeed without error-prone rule set") {
+    Given("rules.disable(no-semi)") {
         bootstrapProject {
             """
             jvm {
@@ -50,10 +57,17 @@ class KtlintBlueprintTests : IntegrationSpec({
             }
             """.trimIndent()
         }
-        writeAppKt("println(\"Hello World!\");")
 
-        val result = runTask("ktlintMainSourceSetCheck")
+        And("Source file with unnecessary semicolon") {
+            writeAppKt("println(\"Hello World!\");")
 
-        result.task(":ktlintMainSourceSetCheck")!!.outcome shouldBe TaskOutcome.SUCCESS
+            When("Run ktlint") {
+                val result = runTask("ktlintMainSourceSetCheck")
+
+                Then("Succeed") {
+                    result.task(":ktlintMainSourceSetCheck")!!.outcome shouldBe TaskOutcome.SUCCESS
+                }
+            }
+        }
     }
 })

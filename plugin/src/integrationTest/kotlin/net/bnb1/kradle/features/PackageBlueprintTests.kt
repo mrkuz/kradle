@@ -7,21 +7,7 @@ import net.bnb1.kradle.execute
 
 class PackageBlueprintTests : IntegrationSpec({
 
-    test("Check 'package' alias") {
-        bootstrapProject {
-            """
-            jvm {
-                packaging.enable()
-            }
-            """.trimIndent()
-        }
-
-        val result = runTask("tasks")
-
-        result.output shouldContain "package "
-    }
-
-    test("Create and run JAR") {
+    Given("Default configuration") {
         bootstrapProject("app") {
             """
             jvm {
@@ -35,10 +21,25 @@ class PackageBlueprintTests : IntegrationSpec({
         }
         writeAppKt("println(\"Hello World\")")
 
-        runTask("jar")
+        When("List tasks") {
+            val result = runTask("tasks")
 
-        val jarFile = buildDir.resolve("libs/app-1.0.0.jar")
-        jarFile.shouldExist()
-        "java -jar ${jarFile.absolutePath}".execute() shouldContain "Hello World"
+            Then("package is available") {
+                result.output shouldContain "package "
+            }
+        }
+
+        When("Run jar") {
+            runTask("jar")
+
+            Then("Jar file is created") {
+                val jarFile = buildDir.resolve("libs/app-1.0.0.jar")
+                jarFile.shouldExist()
+
+                And("Executable") {
+                    "java -jar ${jarFile.absolutePath}".execute() shouldContain "Hello World"
+                }
+            }
+        }
     }
 })

@@ -6,7 +6,7 @@ import net.bnb1.kradle.IntegrationSpec
 
 class KotlinBlueprintTests : IntegrationSpec({
 
-    test("Check Kotlin dependencies") {
+    Given("Default configuration") {
         bootstrapProject {
             """
             jvm {
@@ -15,15 +15,19 @@ class KotlinBlueprintTests : IntegrationSpec({
             """.trimIndent()
         }
 
-        val result = runTask("dependencies", "--configuration", "runtimeClasspath")
+        When("Check dependencies") {
+            val result = runTask("dependencies", "--configuration", "runtimeClasspath")
 
-        result.output shouldContain "org.jetbrains.kotlin:kotlin-stdlib"
-        result.output shouldContain "org.jetbrains.kotlin:kotlin-stdlib-jdk8"
-        result.output shouldContain "org.jetbrains.kotlin:kotlin-reflect"
-        result.output shouldNotContain "org.jetbrains.kotlinx:kotlinx-coroutines-core"
+            Then("Kotlin dependencies should be present") {
+                result.output shouldContain "org.jetbrains.kotlin:kotlin-stdlib"
+                result.output shouldContain "org.jetbrains.kotlin:kotlin-stdlib-jdk8"
+                result.output shouldContain "org.jetbrains.kotlin:kotlin-reflect"
+                result.output shouldNotContain "org.jetbrains.kotlinx:kotlinx-coroutines-core"
+            }
+        }
     }
 
-    test("Check Kotlin coroutines dependencies") {
+    Given("useCoroutines()") {
         bootstrapProject {
             """
             jvm {
@@ -34,8 +38,12 @@ class KotlinBlueprintTests : IntegrationSpec({
             """.trimIndent()
         }
 
-        val result = runTask("dependencies", "--configuration", "runtimeClasspath")
+        When("Check dependencies") {
+            val result = runTask("dependencies", "--configuration", "runtimeClasspath")
 
-        result.output shouldContain "org.jetbrains.kotlinx:kotlinx-coroutines-core"
+            Then("Kotlin coroutines dependency should be present") {
+                result.output shouldContain "org.jetbrains.kotlinx:kotlinx-coroutines-core"
+            }
+        }
     }
 })

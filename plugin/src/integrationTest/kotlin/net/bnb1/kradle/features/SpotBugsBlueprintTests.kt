@@ -8,7 +8,7 @@ import org.gradle.testkit.runner.TaskOutcome
 
 class SpotBugsBlueprintTests : IntegrationSpec({
 
-    test("Run SpotBugs") {
+    Given("Default configuration") {
         bootstrapProject {
             """
             jvm {
@@ -19,43 +19,32 @@ class SpotBugsBlueprintTests : IntegrationSpec({
         }
         writeAppJava("System.out.println(\"Hello World\");")
 
-        runTask("spotbugsMain")
+        When("Run spotbugs") {
+            runTask("spotbugsMain")
 
-        buildDir.resolve("reports/spotbugs/main.html").shouldExist()
-    }
-
-    test("Run SpotBugs with 'check'") {
-        bootstrapProject {
-            """
-            jvm {
-                java.enable()
-                codeAnalysis.enable()
+            Then("Report is generated") {
+                buildDir.resolve("reports/spotbugs/main.html").shouldExist()
             }
-            """.trimIndent()
-        }
-        writeAppJava("System.out.println(\"Hello World\");")
-
-        val result = runTask("check")
-
-        result.task(":spotbugsMain")!!.outcome shouldBe TaskOutcome.SUCCESS
-    }
-
-    test("Check SpotBugs dependencies") {
-        bootstrapProject {
-            """
-            jvm {
-                java.enable()
-                codeAnalysis.enable()
-            }
-            """.trimIndent()
         }
 
-        val result = runTask("dependencies", "--configuration", "spotbugs")
+        When("Run check") {
+            val result = runTask("check")
 
-        result.output shouldContain "com.github.spotbugs:spotbugs"
+            Then("spotbugs should be executed") {
+                result.task(":spotbugsMain")!!.outcome shouldBe TaskOutcome.SUCCESS
+            }
+        }
+
+        When("Check dependencies") {
+            val result = runTask("dependencies", "--configuration", "spotbugs")
+
+            Then("spotbugs should be available") {
+                result.output shouldContain "com.github.spotbugs:spotbugs"
+            }
+        }
     }
 
-    test("Check SpotBugs plugin dependencies") {
+    Given("useFbContrib() and useFindSecBugs()") {
         bootstrapProject {
             """
             jvm {
@@ -72,9 +61,13 @@ class SpotBugsBlueprintTests : IntegrationSpec({
             """.trimIndent()
         }
 
-        val result = runTask("dependencies", "--configuration", "spotbugsPlugins")
+        When("Check dependencies") {
+            val result = runTask("dependencies", "--configuration", "spotbugsPlugins")
 
-        result.output shouldContain "com.h3xstream.findsecbugs:findsecbugs-plugin"
-        result.output shouldContain "com.mebigfatguy.sb-contrib:sb-contrib"
+            Then("findsecbugs and sb-contrib should be available") {
+                result.output shouldContain "com.h3xstream.findsecbugs:findsecbugs-plugin"
+                result.output shouldContain "com.mebigfatguy.sb-contrib:sb-contrib"
+            }
+        }
     }
 })

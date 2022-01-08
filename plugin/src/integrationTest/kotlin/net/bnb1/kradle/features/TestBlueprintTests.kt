@@ -25,7 +25,7 @@ class TestBlueprintTests : IntegrationSpec({
         )
     }
 
-    test("Run custom test") {
+    Given("customTests(custom)") {
         bootstrapProject {
             """
             jvm {
@@ -39,8 +39,12 @@ class TestBlueprintTests : IntegrationSpec({
         }
         createAppTest("customTest")
 
-        val result = runTask("customTest")
+        When("Run customTest") {
+            val result = runTask("customTest")
 
-        result.task(":customTest")!!.outcome shouldBe TaskOutcome.SUCCESS
+            Then("Succeed") {
+                result.task(":customTest")!!.outcome shouldBe TaskOutcome.SUCCESS
+            }
+        }
     }
 })

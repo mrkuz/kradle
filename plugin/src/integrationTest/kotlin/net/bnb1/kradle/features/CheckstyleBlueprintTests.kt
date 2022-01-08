@@ -8,7 +8,7 @@ import org.gradle.testkit.runner.TaskOutcome
 
 class CheckstyleBlueprintTests : IntegrationSpec({
 
-    test("Run checkstyle") {
+    Given("Default configuration") {
         bootstrapProject {
             """
             jvm {
@@ -19,54 +19,36 @@ class CheckstyleBlueprintTests : IntegrationSpec({
         }
         writeAppJava("System.out.println(\"Hello World\");")
 
-        runTask("checkstyleMain")
+        When("Run checkstyle") {
+            runTask("checkstyleMain")
 
-        buildDir.resolve("reports/checkstyle/main.html").shouldExist()
-    }
-
-    test("Generate checkstyle.xml") {
-        bootstrapProject {
-            """
-            jvm {
-                java.enable()
-                lint.enable()
+            Then("Report is generated") {
+                buildDir.resolve("reports/checkstyle/main.html").shouldExist()
             }
-            """.trimIndent()
         }
 
-        runTask("generateCheckstyleConfig")
+        When("Run generateCheckstyleConfig") {
+            runTask("generateCheckstyleConfig")
 
-        projectDir.resolve("checkstyle.xml").shouldExist()
-    }
-
-    test("Run checkstyle with 'check'") {
-        bootstrapProject {
-            """
-            jvm {
-                java.enable()
-                lint.enable()
+            Then("checkstyle.xml is generated") {
+                projectDir.resolve("checkstyle.xml").shouldExist()
             }
-            """.trimIndent()
-        }
-        writeAppJava("System.out.println(\"Hello World\");")
-
-        val result = runTask("check")
-
-        result.task(":checkstyleMain")!!.outcome shouldBe TaskOutcome.SUCCESS
-    }
-
-    test("Check checkstyle dependencies") {
-        bootstrapProject {
-            """
-            jvm {
-                java.enable()
-                lint.enable()
-            }
-            """.trimIndent()
         }
 
-        val result = runTask("dependencies", "--configuration", "kradleCheckstyle")
+        When("Run check'") {
+            val result = runTask("check")
 
-        result.output shouldContain "om.puppycrawl.tools:checkstyle"
+            Then("'checkstyleMain' should also run") {
+                result.task(":checkstyleMain")!!.outcome shouldBe TaskOutcome.SUCCESS
+            }
+        }
+
+        When("Check dependencies") {
+            val result = runTask("dependencies", "--configuration", "kradleCheckstyle")
+
+            Then("checkstyle should be presetn") {
+                result.output shouldContain "om.puppycrawl.tools:checkstyle"
+            }
+        }
     }
 })
