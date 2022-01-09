@@ -6,6 +6,8 @@ import io.kotest.matchers.shouldBe
 import io.mockk.spyk
 import io.mockk.verify
 import net.bnb1.kradle.Mocks
+import net.bnb1.kradle.core.Blueprint
+import net.bnb1.kradle.core.Feature
 import net.bnb1.kradle.support.Tracer
 import org.gradle.api.Project
 

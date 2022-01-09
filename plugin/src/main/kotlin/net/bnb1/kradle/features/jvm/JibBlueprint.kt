@@ -2,9 +2,9 @@ package net.bnb1.kradle.features.jvm
 
 import com.google.cloud.tools.jib.gradle.BuildDockerTask
 import com.google.cloud.tools.jib.gradle.JibExtension
+import net.bnb1.kradle.core.Blueprint
 import net.bnb1.kradle.createTask
 import net.bnb1.kradle.extraDir
-import net.bnb1.kradle.features.Blueprint
 import net.bnb1.kradle.sourceSets
 import org.gradle.api.Project
 import org.gradle.api.tasks.SourceSet
@@ -18,12 +18,12 @@ class JibBlueprint(project: Project) : Blueprint(project) {
 
     lateinit var dockerProperties: DockerProperties
     lateinit var applicationProperties: ApplicationProperties
-    
-    override fun createTasks() {
+
+    override fun doCreateTasks() {
         project.createTask<BuildDockerTask>(TASK_NAME, "Builds Docker image")
     }
 
-    override fun configure() {
+    override fun doConfigure() {
         project.tasks.named<BuildDockerTask>(TASK_NAME).configure {
             dependsOn(project.sourceSets.getByName(SourceSet.MAIN_SOURCE_SET_NAME).runtimeClasspath)
             dependsOn(project.configurations.getByName("runtimeClasspath"))

@@ -1,5 +1,6 @@
-package net.bnb1.kradle.features
+package net.bnb1.kradle.core.dsl
 
+import net.bnb1.kradle.core.FeatureSet
 import net.bnb1.kradle.support.Tracer
 
 class FeatureSetDsl<T : Any>(

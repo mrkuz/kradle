@@ -1,4 +1,4 @@
-package net.bnb1.kradle.features
+package net.bnb1.kradle.core
 
 import net.bnb1.kradle.support.Tracer
 import org.gradle.api.Project
@@ -38,14 +38,14 @@ open class Blueprint(protected val project: Project) {
         tracer.branch {
             trace("${this@Blueprint::class.simpleName} (B)")
 
-            checkPreconditions()
-            applyPlugins()
-            createSourceSets()
-            createTasks()
-            addAliases()
-            addExtraProperties()
-            addDependencies()
-            configure()
+            doCheckPreconditions()
+            doApplyPlugins()
+            doCreateSourceSets()
+            doCreateTasks()
+            doAddAliases()
+            doAddExtraProperties()
+            doAddDependencies()
+            doConfigure()
         }
     }
 
@@ -53,12 +53,12 @@ open class Blueprint(protected val project: Project) {
         get() = activated.get()
 
     protected open fun shouldActivate() = true
-    protected open fun checkPreconditions() = Unit
-    protected open fun applyPlugins() = Unit
-    protected open fun createSourceSets() = Unit
-    protected open fun createTasks() = Unit
-    protected open fun addAliases() = Unit
-    protected open fun addExtraProperties() = Unit
-    protected open fun addDependencies() = Unit
-    protected open fun configure() = Unit
+    protected open fun doCheckPreconditions() = Unit
+    protected open fun doApplyPlugins() = Unit
+    protected open fun doCreateSourceSets() = Unit
+    protected open fun doCreateTasks() = Unit
+    protected open fun doAddAliases() = Unit
+    protected open fun doAddExtraProperties() = Unit
+    protected open fun doAddDependencies() = Unit
+    protected open fun doConfigure() = Unit
 }

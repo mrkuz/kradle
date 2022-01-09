@@ -6,6 +6,7 @@ import io.kotest.core.spec.style.BehaviorSpec
 import io.kotest.matchers.shouldBe
 import net.bnb1.kradle.KradleContext
 import net.bnb1.kradle.KradleExtensionBase
+import net.bnb1.kradle.core.Preset
 import net.bnb1.kradle.features.AllFeatureSets
 import net.bnb1.kradle.features.AllFeatures
 import net.bnb1.kradle.features.AllProperties
@@ -55,7 +56,7 @@ class PresetTests : BehaviorSpec({
     }
 })
 
-class TestPreset(extension: KradleExtensionBase, lock: AtomicBoolean) : Preset(extension, lock) {
+class TestPreset(extension: KradleExtensionBase, lock: AtomicBoolean) : Preset<KradleExtensionBase>(extension, lock) {
 
     val activated = AtomicInteger(0)
 

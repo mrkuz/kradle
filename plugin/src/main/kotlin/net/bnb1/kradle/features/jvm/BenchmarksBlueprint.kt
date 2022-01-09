@@ -7,7 +7,7 @@ import kotlinx.benchmark.gradle.processJavaSourceSet
 import net.bnb1.kradle.Catalog
 import net.bnb1.kradle.alias
 import net.bnb1.kradle.apply
-import net.bnb1.kradle.features.Blueprint
+import net.bnb1.kradle.core.Blueprint
 import net.bnb1.kradle.sourceSets
 import org.gradle.api.Project
 import org.gradle.api.file.DuplicatesStrategy
@@ -34,12 +34,12 @@ class BenchmarksBlueprint(project: Project) : Blueprint(project) {
         return true
     }
 
-    override fun applyPlugins() {
+    override fun doApplyPlugins() {
         project.apply(BenchmarksPlugin::class.java)
     }
 
     // compat: Must be public we can create the tasks eagerly
-    public override fun createSourceSets() {
+    public override fun doCreateSourceSets() {
         // compat: Avoid duplicate creation on activate
         if (project.sourceSets.findByName(SOURCE_SET_NAME) != null) {
             return
@@ -66,11 +66,11 @@ class BenchmarksBlueprint(project: Project) : Blueprint(project) {
         }
     }
 
-    override fun addAliases() {
+    override fun doAddAliases() {
         project.alias("runBenchmarks", "Runs all JMH benchmarks", "benchmark")
     }
 
-    override fun configure() {
+    override fun doConfigure() {
         val javaBenchmarkTarget = JavaBenchmarkTarget(
             project.extensions.getByType(BenchmarksExtension::class.java),
             SOURCE_SET_NAME,

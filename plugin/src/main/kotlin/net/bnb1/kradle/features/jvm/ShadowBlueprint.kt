@@ -1,8 +1,8 @@
 package net.bnb1.kradle.features.jvm
 
 import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
+import net.bnb1.kradle.core.Blueprint
 import net.bnb1.kradle.createTask
-import net.bnb1.kradle.features.Blueprint
 import net.bnb1.kradle.sourceSets
 import org.gradle.api.Project
 import org.gradle.api.tasks.SourceSet
@@ -15,7 +15,7 @@ class ShadowBlueprint(project: Project) : Blueprint(project) {
 
     lateinit var uberJarProperties: ShadowProperties
 
-    override fun createTasks() {
+    override fun doCreateTasks() {
         val jar = project.tasks.named<Jar>("jar").get()
         val main = project.sourceSets.getByName(SourceSet.MAIN_SOURCE_SET_NAME)
         val classpath = project.configurations.getByName("runtimeClasspath")
@@ -34,7 +34,7 @@ class ShadowBlueprint(project: Project) : Blueprint(project) {
         }
     }
 
-    override fun configure() {
+    override fun doConfigure() {
         project.tasks.named<ShadowJar>(TASK_NAME).configure {
             if (uberJarProperties.minimize.get()) {
                 minimize()

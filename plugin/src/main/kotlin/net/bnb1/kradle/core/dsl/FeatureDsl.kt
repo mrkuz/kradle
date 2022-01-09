@@ -1,4 +1,6 @@
-package net.bnb1.kradle.features
+package net.bnb1.kradle.core.dsl
+
+import net.bnb1.kradle.core.Feature
 
 class FeatureDsl<T : Any>(private val feature: Feature, private val target: T) {
 

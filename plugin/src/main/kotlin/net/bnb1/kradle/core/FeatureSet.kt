@@ -1,4 +1,4 @@
-package net.bnb1.kradle.features
+package net.bnb1.kradle.core
 
 import net.bnb1.kradle.support.Tracer
 import org.gradle.api.GradleException

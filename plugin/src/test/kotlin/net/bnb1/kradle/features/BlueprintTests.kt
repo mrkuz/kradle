@@ -4,6 +4,7 @@ import io.kotest.core.spec.IsolationMode
 import io.kotest.core.spec.style.BehaviorSpec
 import io.kotest.matchers.shouldBe
 import net.bnb1.kradle.Mocks
+import net.bnb1.kradle.core.Blueprint
 import net.bnb1.kradle.support.Tracer
 import org.gradle.api.Project
 import java.util.concurrent.atomic.AtomicBoolean
@@ -44,7 +45,7 @@ class TestBlueprint(project: Project) : Blueprint(project) {
 
     override fun shouldActivate() = shouldActive.get()
 
-    override fun configure() {
+    override fun doConfigure() {
         activated.incrementAndGet()
     }
 }

@@ -5,8 +5,8 @@ import com.github.spotbugs.snom.SpotBugsExtension
 import com.github.spotbugs.snom.SpotBugsTask
 import net.bnb1.kradle.Catalog
 import net.bnb1.kradle.apply
+import net.bnb1.kradle.core.Blueprint
 import net.bnb1.kradle.createHelperTask
-import net.bnb1.kradle.features.Blueprint
 import org.gradle.api.Project
 import org.gradle.api.Task
 import org.gradle.api.plugins.JavaPluginExtension
@@ -18,11 +18,11 @@ class SpotBugsBlueprint(project: Project) : Blueprint(project) {
     lateinit var spotBugsProperties: SpotBugsProperties
     lateinit var codeAnalysisProperties: CodeAnalysisProperties
 
-    override fun applyPlugins() {
+    override fun doApplyPlugins() {
         project.apply(SpotBugsBasePlugin::class.java)
     }
 
-    override fun createTasks() {
+    override fun doCreateTasks() {
         val spotbugsTask = project.createHelperTask<Task>("spotbugs", "Runs SpotBugs")
         project.tasks.getByName(CodeAnalysisFeature.MAIN_TASK).dependsOn(spotbugsTask)
 
@@ -46,7 +46,7 @@ class SpotBugsBlueprint(project: Project) : Blueprint(project) {
             }
     }
 
-    override fun addDependencies() {
+    override fun doAddDependencies() {
         project.dependencies {
             add("compileOnly", "${Catalog.Dependencies.Tools.findBugsAnnotations}:${Catalog.Versions.findBugs}")
             add("spotbugsSlf4j", "${Catalog.Dependencies.Tools.slf4jSimple}:${Catalog.Versions.slf4j}")
@@ -65,7 +65,7 @@ class SpotBugsBlueprint(project: Project) : Blueprint(project) {
         }
     }
 
-    override fun configure() {
+    override fun doConfigure() {
         project.configure<SpotBugsExtension> {
             toolVersion.set(spotBugsProperties.version.get())
         }

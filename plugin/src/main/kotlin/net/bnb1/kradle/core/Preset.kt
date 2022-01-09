@@ -1,6 +1,6 @@
-package net.bnb1.kradle.presets
+package net.bnb1.kradle.core
 
-import net.bnb1.kradle.KradleExtensionBase
+import net.bnb1.kradle.core.dsl.ExtensionDsl
 import org.gradle.api.GradleException
 import java.util.concurrent.atomic.AtomicBoolean
 
@@ -9,11 +9,11 @@ import java.util.concurrent.atomic.AtomicBoolean
  *
  * Only one preset can be active.
  */
-open class Preset(private val extension: KradleExtensionBase, private val lock: AtomicBoolean) {
+open class Preset<T : ExtensionDsl>(private val extension: T, private val lock: AtomicBoolean) {
 
     private val activated = AtomicBoolean(false)
 
-    fun activate(action: KradleExtensionBase.() -> Unit = {}) {
+    fun activate(action: T.() -> Unit = {}) {
         if (!activated.compareAndSet(false, true)) {
             return
         }
@@ -25,6 +25,6 @@ open class Preset(private val extension: KradleExtensionBase, private val lock: 
         doActivate(extension)
     }
 
-    protected open fun doConfigure(extension: KradleExtensionBase) = Unit
-    protected open fun doActivate(extension: KradleExtensionBase) = Unit
+    protected open fun doConfigure(extension: T) = Unit
+    protected open fun doActivate(extension: T) = Unit
 }

@@ -6,6 +6,8 @@ import io.kotest.core.spec.style.BehaviorSpec
 import io.mockk.spyk
 import io.mockk.verify
 import io.mockk.verifyOrder
+import net.bnb1.kradle.core.Feature
+import net.bnb1.kradle.core.FeatureSet
 import net.bnb1.kradle.support.Tracer
 import org.gradle.api.GradleException
 

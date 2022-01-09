@@ -1,7 +1,7 @@
 package net.bnb1.kradle.features.jvm
 
+import net.bnb1.kradle.core.Blueprint
 import net.bnb1.kradle.createHelperTask
-import net.bnb1.kradle.features.Blueprint
 import net.bnb1.kradle.features.general.BootstrapFeature
 import net.bnb1.kradle.support.tasks.BootstrapJavaAppTask
 import org.gradle.api.Project
@@ -11,7 +11,7 @@ class JavaAppBootstrapBlueprint(project: Project) : Blueprint(project) {
 
     lateinit var applicationProperties: ApplicationProperties
 
-    override fun createTasks() {
+    override fun doCreateTasks() {
         project.createHelperTask<BootstrapJavaAppTask>(
             "bootstrapJavaApp",
             "Bootstrap Java application project"
@@ -20,7 +20,7 @@ class JavaAppBootstrapBlueprint(project: Project) : Blueprint(project) {
         }
     }
 
-    override fun configure() {
+    override fun doConfigure() {
         val mainClass = applicationProperties.mainClass.get()
         project.tasks.withType<BootstrapJavaAppTask> {
             this.mainClass.set(mainClass)

@@ -53,8 +53,8 @@ class KradleCompat(
             annotation("org.openjdk.jmh.annotations.State")
         }
 
-        context.get<BenchmarksBlueprint>().createSourceSets()
-        context.get<TestBlueprint>().createTasks()
+        context.get<BenchmarksBlueprint>().doCreateSourceSets()
+        context.get<TestBlueprint>().doCreateTasks()
     }
 
     @SuppressWarnings("LongMethod")

@@ -1,7 +1,7 @@
 package net.bnb1.kradle.features.jvm
 
 import net.bnb1.kradle.Catalog
-import net.bnb1.kradle.features.Blueprint
+import net.bnb1.kradle.core.Blueprint
 import net.bnb1.kradle.testImplementation
 import org.gradle.api.Project
 import org.gradle.kotlin.dsl.dependencies
@@ -11,7 +11,7 @@ class KotlinTestBlueprint(project: Project) : Blueprint(project) {
     lateinit var kotlinTestProperties: KotlinTestProperties
     lateinit var testProperties: TestProperties
 
-    override fun addDependencies() {
+    override fun doAddDependencies() {
         val withJunitJupiter = testProperties.withJunitJupiter.hasValue
         val useKotest = kotlinTestProperties.useKotest
         if (useKotest.hasValue) {

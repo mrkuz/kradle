@@ -1,7 +1,7 @@
 package net.bnb1.kradle.features.jvm
 
+import net.bnb1.kradle.core.Blueprint
 import net.bnb1.kradle.createTask
-import net.bnb1.kradle.features.Blueprint
 import net.bnb1.kradle.sourceSets
 import org.gradle.api.Project
 import org.gradle.api.plugins.JavaPluginExtension
@@ -15,7 +15,7 @@ class DevelopmentModeBlueprint(project: Project) : Blueprint(project) {
     lateinit var applicationProperties: ApplicationProperties
     lateinit var javaProperties: JavaProperties
 
-    override fun createTasks() {
+    override fun doCreateTasks() {
         val mainSourceSet = project.sourceSets.getByName(SourceSet.MAIN_SOURCE_SET_NAME)
         val agentResource = javaClass.getResource("/agent.jar")
 
@@ -48,7 +48,7 @@ class DevelopmentModeBlueprint(project: Project) : Blueprint(project) {
         }
     }
 
-    override fun configure() {
+    override fun doConfigure() {
         val mainClass = applicationProperties.mainClass
         project.tasks.named<JavaExec>("dev").configure { this.mainClass.set(mainClass.get()) }
     }

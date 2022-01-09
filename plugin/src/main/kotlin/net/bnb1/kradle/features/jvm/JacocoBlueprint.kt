@@ -1,8 +1,8 @@
 package net.bnb1.kradle.features.jvm
 
 import net.bnb1.kradle.apply
+import net.bnb1.kradle.core.Blueprint
 import net.bnb1.kradle.createHelperTask
-import net.bnb1.kradle.features.Blueprint
 import org.gradle.api.Project
 import org.gradle.api.tasks.SourceSet
 import org.gradle.api.tasks.SourceSetContainer
@@ -19,11 +19,11 @@ class JacocoBlueprint(project: Project) : Blueprint(project) {
 
     override fun shouldActivate() = testProperties.withJacoco.hasValue
 
-    override fun applyPlugins() {
+    override fun doApplyPlugins() {
         project.apply(JacocoPlugin::class.java)
     }
 
-    override fun createTasks() {
+    override fun doCreateTasks() {
         if (testProperties.withIntegrationTests.get()) {
             createTask("integrationTest", "Generates code coverage report for integration tests")
         }
@@ -47,7 +47,7 @@ class JacocoBlueprint(project: Project) : Blueprint(project) {
         }
     }
 
-    override fun configure() {
+    override fun doConfigure() {
         project.configure<JacocoPluginExtension> {
             toolVersion = testProperties.withJacoco.get()
         }

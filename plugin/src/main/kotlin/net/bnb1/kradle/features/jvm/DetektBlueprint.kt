@@ -2,8 +2,8 @@ package net.bnb1.kradle.features.jvm
 
 import io.gitlab.arturbosch.detekt.Detekt
 import net.bnb1.kradle.Catalog
+import net.bnb1.kradle.core.Blueprint
 import net.bnb1.kradle.createHelperTask
-import net.bnb1.kradle.features.Blueprint
 import net.bnb1.kradle.support.tasks.GenerateDetektConfigTask
 import org.gradle.api.Project
 import org.gradle.api.Task
@@ -16,7 +16,7 @@ class DetektBlueprint(project: Project) : Blueprint(project) {
     lateinit var detektProperties: DetektProperties
     lateinit var codeAnalysisProperties: CodeAnalysisProperties
 
-    override fun createTasks() {
+    override fun doCreateTasks() {
         val configFile = project.rootDir.resolve(detektProperties.configFile.get())
 
         project.createHelperTask<GenerateDetektConfigTask>("generateDetektConfig", "Generates detekt-config.yml") {

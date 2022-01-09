@@ -1,9 +1,11 @@
 package net.bnb1.kradle.presets
 
 import net.bnb1.kradle.KradleExtensionBase
+import net.bnb1.kradle.core.Preset
 import java.util.concurrent.atomic.AtomicBoolean
 
-class JavaLibraryPreset(extension: KradleExtensionBase, lock: AtomicBoolean) : Preset(extension, lock) {
+class JavaLibraryPreset(extension: KradleExtensionBase, lock: AtomicBoolean) :
+    Preset<KradleExtensionBase>(extension, lock) {
 
     override fun doConfigure(extension: KradleExtensionBase) {
         extension.apply {

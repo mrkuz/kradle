@@ -3,8 +3,8 @@ package net.bnb1.kradle.features.jvm
 import com.adarshr.gradle.testlogger.TestLoggerPlugin
 import net.bnb1.kradle.Catalog
 import net.bnb1.kradle.apply
+import net.bnb1.kradle.core.Blueprint
 import net.bnb1.kradle.createTask
-import net.bnb1.kradle.features.Blueprint
 import net.bnb1.kradle.sourceSets
 import net.bnb1.kradle.testImplementation
 import net.bnb1.kradle.testRuntimeOnly
@@ -20,14 +20,14 @@ class TestBlueprint(project: Project) : Blueprint(project) {
     lateinit var testProperties: TestProperties
     lateinit var javaProperties: JavaProperties
 
-    override fun applyPlugins() {
+    override fun doApplyPlugins() {
         if (testProperties.prettyPrint.get()) {
             project.apply(TestLoggerPlugin::class.java)
         }
     }
 
     // compat: Must be public we can create the tasks eagerly
-    public override fun createTasks() {
+    public override fun doCreateTasks() {
         val customTests = mutableListOf<String>()
         testProperties.customTests.get().forEach {
             customTests.remove(it)
@@ -85,7 +85,7 @@ class TestBlueprint(project: Project) : Blueprint(project) {
         project.tasks.getByName("check").dependsOn(name)
     }
 
-    override fun addDependencies() {
+    override fun doAddDependencies() {
         if (testProperties.withJunitJupiter.hasValue) {
             project.dependencies {
                 testImplementation(
@@ -100,7 +100,7 @@ class TestBlueprint(project: Project) : Blueprint(project) {
         }
     }
 
-    override fun configure() {
+    override fun doConfigure() {
         project.tasks.withType<Test> {
             if (testProperties.withJunitJupiter.hasValue) {
                 useJUnitPlatform()

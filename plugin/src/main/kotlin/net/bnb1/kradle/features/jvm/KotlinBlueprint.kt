@@ -2,7 +2,7 @@ package net.bnb1.kradle.features.jvm
 
 import net.bnb1.kradle.Catalog
 import net.bnb1.kradle.apply
-import net.bnb1.kradle.features.Blueprint
+import net.bnb1.kradle.core.Blueprint
 import net.bnb1.kradle.implementation
 import net.bnb1.kradle.testImplementation
 import org.gradle.api.GradleException
@@ -20,21 +20,21 @@ class KotlinBlueprint(project: Project) : Blueprint(project) {
     lateinit var kotlinProperties: KotlinProperties
     lateinit var jvmProperties: JvmProperties
 
-    override fun checkPreconditions() {
+    override fun doCheckPreconditions() {
         if (project.extensions.findByType(KotlinJvmProjectExtension::class.java) == null) {
             throw GradleException("Kotlin JVM plugin has to be applied")
         }
     }
 
-    override fun applyPlugins() {
+    override fun doApplyPlugins() {
         project.apply(SerializationGradleSubplugin::class.java)
     }
 
-    override fun addExtraProperties() {
+    override fun doAddExtraProperties() {
         project.extra["kotlinVersion"] = project.getKotlinPluginVersion()
     }
 
-    override fun addDependencies() {
+    override fun doAddDependencies() {
         project.dependencies {
             implementation(platform(Catalog.Dependencies.Platform.kotlin))
             implementation(Catalog.Dependencies.kotlinStdlib)
@@ -48,7 +48,7 @@ class KotlinBlueprint(project: Project) : Blueprint(project) {
         }
     }
 
-    override fun configure() {
+    override fun doConfigure() {
         project.tasks.withType<KotlinCompile> {
             kotlinOptions {
                 jvmTarget = if (jvmProperties.targetJvm.get() == "8") {

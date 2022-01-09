@@ -1,13 +1,13 @@
 package net.bnb1.kradle.features.jvm
 
+import net.bnb1.kradle.core.Blueprint
 import net.bnb1.kradle.createTask
-import net.bnb1.kradle.features.Blueprint
 import org.gradle.api.Project
 import org.jetbrains.dokka.gradle.DokkaTask
 
 class DokkaBlueprint(project: Project) : Blueprint(project) {
 
-    override fun createTasks() {
+    override fun doCreateTasks() {
         project.createTask<DokkaTask>("generateDocumentation", "Generates Dokka HTML documentation") {
             outputDirectory.set(project.buildDir.resolve("docs"))
             dokkaSourceSets

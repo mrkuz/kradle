@@ -1,8 +1,8 @@
 package net.bnb1.kradle.features.jvm
 
 import net.bnb1.kradle.Catalog
+import net.bnb1.kradle.core.Blueprint
 import net.bnb1.kradle.createHelperTask
-import net.bnb1.kradle.features.Blueprint
 import org.gradle.api.Project
 import org.gradle.api.Task
 import org.gradle.api.plugins.JavaPluginExtension
@@ -17,7 +17,7 @@ class PmdBlueprint(project: Project) : Blueprint(project) {
     lateinit var pmdProperties: PmdProperties
     lateinit var codeAnalysisProperties: CodeAnalysisProperties
 
-    override fun createTasks() {
+    override fun doCreateTasks() {
         project.configurations.create(CONFIGURATION_NAME) {
             val dependencyProvider = project.provider {
                 project.dependencies.create("${Catalog.Dependencies.Tools.pmd}:${pmdProperties.version.get()}")

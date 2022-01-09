@@ -1,7 +1,7 @@
 package net.bnb1.kradle.features.jvm
 
 import net.bnb1.kradle.apply
-import net.bnb1.kradle.features.Blueprint
+import net.bnb1.kradle.core.Blueprint
 import org.gradle.api.GradleException
 import org.gradle.api.Project
 import org.gradle.api.plugins.ApplicationPlugin
@@ -16,7 +16,7 @@ class ApplicationBlueprint(project: Project) : Blueprint(project) {
     lateinit var applicationProperties: ApplicationProperties
     lateinit var javaProperties: JavaProperties
 
-    override fun checkPreconditions() {
+    override fun doCheckPreconditions() {
         if (project.group.toString().isEmpty()) {
             project.logger.warn("WARNING: Group is not specified")
         }
@@ -28,11 +28,11 @@ class ApplicationBlueprint(project: Project) : Blueprint(project) {
         }
     }
 
-    override fun applyPlugins() {
+    override fun doApplyPlugins() {
         project.apply(ApplicationPlugin::class.java)
     }
 
-    override fun configure() {
+    override fun doConfigure() {
         val mainClass = applicationProperties.mainClass
         val javaExtension = project.extensions.getByType(JavaApplication::class.java)
         if (!mainClass.hasValue) {
