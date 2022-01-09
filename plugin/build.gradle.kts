@@ -71,7 +71,15 @@ kradle {
     }
     jvm {
         targetJvm("11")
-        kotlin.enable()
+        kotlin {
+            lint {
+                ktlint {
+                    rules {
+                        disable("no-wildcard-imports")
+                    }
+                }
+            }
+        }
         dependencyUpdates.enable()
         vulnerabilityScan.enable()
         lint.enable()

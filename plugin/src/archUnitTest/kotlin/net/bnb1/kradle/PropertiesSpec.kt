@@ -31,13 +31,8 @@ class PropertiesSpec : FunSpec({
             .should().onlyAccessFieldsThat(object : DescribedPredicate<JavaField>("DSL") {
 
                 override fun apply(input: JavaField?): Boolean {
-                    if (input!!.rawType.packageName.startsWith("net.bnb1.kradle.dsl")) {
-                        return true
-                    }
-                    if (input.rawType.isAssignableTo(ConfigurableSelf::class.java)) {
-                        return true
-                    }
-                    return false
+                    return input!!.rawType.packageName.startsWith("net.bnb1.kradle.dsl") ||
+                        input.rawType.isAssignableTo(ConfigurableSelf::class.java)
                 }
             })
 

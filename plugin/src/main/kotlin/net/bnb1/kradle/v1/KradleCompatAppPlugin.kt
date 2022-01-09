@@ -37,7 +37,7 @@ class KradleCompatAppPlugin : Plugin<Project> {
             context.blueprints,
             extension,
             project,
-            KradleCompat.ProjectType.LIBRARY
+            KradleCompat.ProjectType.APPLICATION
         ).activate()
     }
 }

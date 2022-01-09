@@ -10,6 +10,8 @@ import org.gradle.api.plugins.JavaPluginExtension
 import org.gradle.api.tasks.compile.JavaCompile
 import org.gradle.kotlin.dsl.withType
 
+private const val MIN_JAVA_VERSION = 8
+
 class JavaBlueprint(project: Project) : Blueprint(project) {
 
     lateinit var javaProperties: JavaProperties
@@ -17,7 +19,7 @@ class JavaBlueprint(project: Project) : Blueprint(project) {
 
     override fun doCheckPreconditions() {
         val javaExtension = project.extensions.getByType(JavaPluginExtension::class.java)
-        if (getJavaRelease() < 8) {
+        if (getJavaRelease() < MIN_JAVA_VERSION) {
             throw GradleException("Minimum supported JVM version is 8")
         }
 

@@ -40,7 +40,7 @@ class FeatureSet(val name: String) {
             return false
         }
         val visited = mutableSetOf<Feature>()
-        tracer.trace("${this::class.simpleName} (FS)")
+        tracer.trace("$name (FS)")
         features.asSequence()
             .filter { it.isEnabled }
             .filter { it.isInactive }
@@ -57,7 +57,7 @@ class FeatureSet(val name: String) {
                 .filter { it.isEnabled }
                 .filter { it.isInactive }
                 .forEach { activateOrdered(tracer, visited, it) }
-            tracer.trace("${feature::class.simpleName} (F)")
+            tracer.trace("${feature.name} (F)")
             feature.activate(tracer)
         }
     }

@@ -68,8 +68,8 @@ open class KradleDumpTask : DefaultTask() {
 
         context.featuresAsList().asSequence()
             .filter { it.isEnabled }
-            .sortedBy { it::class.qualifiedName }
-            .forEach { dump("- ${it::class.qualifiedName}") }
+            .sortedBy { it.name }
+            .forEach { dump("- ${it.name}") }
     }
 
     private fun printTrace() {

@@ -35,7 +35,7 @@ abstract class CompatSpec(body: CompatSpec.() -> Unit) : FunSpec({}) {
         .withPluginClasspath()
         .withArguments(listOf(task) + arguments)
         .build()
-    
+
     fun addTask(name: String, doLast: String) {
         buildFile.appendText(
             """

@@ -38,9 +38,9 @@ open class Registry {
 
     fun <T : Any> named(name: String, type: KClass<T>) = map[Pair(type, name)] as T
 
-    fun <T : Any> withType() =
-        _map.entries.asSequence()
-            .filter { it.key.first.isSubclassOf(it.key.first) }
+    inline fun <reified T : Any> withType() =
+        map.entries.asSequence()
+            .filter { it.key.first.isSubclassOf(T::class) }
             .map { it.value as T }
             .toList()
 }

@@ -20,32 +20,28 @@ open class Blueprint(protected val project: Project) {
     }
 
     fun activate(tracer: Tracer) {
-        if (dependsOn.any { !it.isEnabled }) {
-            return
-        }
-
-        if (!activated.compareAndSet(false, true)) {
-            return
-        }
-
-        if (!shouldActivate()) {
-            tracer.branch {
-                trace("${this@Blueprint::class.simpleName} (B, skipped)")
-            }
-            return
-        }
-
         tracer.branch {
-            trace("${this@Blueprint::class.simpleName} (B)")
+            val missing = dependsOn
+                .filter { !it.isEnabled }
+                .map { it.name }
+            if (missing.isNotEmpty()) {
+                trace("! ${this@Blueprint::class.simpleName} (B, missing features: ${missing.joinToString(", ")})")
+            } else if (!activated.compareAndSet(false, true)) {
+                trace("! ${this@Blueprint::class.simpleName} (B, already activated)")
+            } else if (!shouldActivate()) {
+                trace("! ${this@Blueprint::class.simpleName} (B, skipped)")
+            } else {
+                trace("${this@Blueprint::class.simpleName} (B)")
 
-            doCheckPreconditions()
-            doApplyPlugins()
-            doCreateSourceSets()
-            doCreateTasks()
-            doAddAliases()
-            doAddExtraProperties()
-            doAddDependencies()
-            doConfigure()
+                doCheckPreconditions()
+                doApplyPlugins()
+                doCreateSourceSets()
+                doCreateTasks()
+                doAddAliases()
+                doAddExtraProperties()
+                doAddDependencies()
+                doConfigure()
+            }
         }
     }
 

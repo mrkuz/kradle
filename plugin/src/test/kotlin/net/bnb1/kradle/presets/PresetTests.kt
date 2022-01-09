@@ -60,7 +60,7 @@ class TestPreset(lock: AtomicBoolean) : Preset<KradleExtensionDsl>(lock) {
 
     val activated = AtomicInteger(0)
 
-    override fun doActivate(extension: KradleExtensionDsl) {
+    override fun doActivate(target: KradleExtensionDsl) {
         activated.incrementAndGet()
     }
 }

@@ -40,7 +40,8 @@ class KradlePlugin : Plugin<Project> {
             tracer,
             context.featureSets,
             context.features,
-            context.properties
+            context.properties,
+            context.presets
         )
     }
 }

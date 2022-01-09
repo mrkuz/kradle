@@ -18,6 +18,7 @@ class KradleContext(project: Project) {
     fun featuresAsList() = registry.withType<Feature>()
     fun propertiesAsList() = registry.withType<Properties>()
 
+    @Suppress("LongMethod", "ComplexMethod")
     fun initialize() {
         features.bootstrap.also { me ->
             me belongsTo featureSets.general
@@ -144,7 +145,7 @@ class KradleContext(project: Project) {
             me += setOf(
                 blueprints.test,
                 blueprints.jacoco,
-                blueprints.kotlinTest.also { it dependsOn features.kotlin },
+                blueprints.kotlinTest.also { it dependsOn features.kotlin }
             )
         }
         features.benchmark.also { me ->

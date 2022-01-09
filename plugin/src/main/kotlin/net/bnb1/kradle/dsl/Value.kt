@@ -1,5 +1,6 @@
 package net.bnb1.kradle.dsl
 
+@Suppress("MemberNameEqualsClassName")
 open class Value<T : Any>(
     private val defaultValue: T?,
     private val suggestion: T?

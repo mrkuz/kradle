@@ -8,6 +8,9 @@ import io.kotest.matchers.string.shouldMatch
 import net.bnb1.kradle.CompatSpec
 import org.gradle.testkit.runner.TaskOutcome
 
+private const val LINES_WITHOUT_GIT = 4
+private const val LINES_WITH_GIT = 5
+
 class BuildPropertiesPluginTests : CompatSpec({
 
     test("Generate build.properties") {
@@ -21,7 +24,7 @@ class BuildPropertiesPluginTests : CompatSpec({
         output.shouldExist()
 
         val lines = output.readLines()
-        lines.shouldHaveSize(4)
+        lines.shouldHaveSize(LINES_WITHOUT_GIT)
         lines.forOne { it shouldBe "project.name=app" }
         lines.forOne { it shouldBe "project.group=com.example" }
         lines.forOne { it shouldBe "project.version=1.0.0" }
@@ -40,7 +43,7 @@ class BuildPropertiesPluginTests : CompatSpec({
         output.shouldExist()
 
         val lines = output.readLines()
-        lines.shouldHaveSize(5)
+        lines.shouldHaveSize(LINES_WITH_GIT)
         lines.forOne { it shouldBe "project.name=app" }
         lines.forOne { it shouldBe "project.group=com.example" }
         lines.forOne { it shouldBe "project.version=1.0.0" }
