@@ -4,8 +4,7 @@ import net.bnb1.kradle.config.dsl.KradleExtensionDsl
 import net.bnb1.kradle.core.Preset
 import java.util.concurrent.atomic.AtomicBoolean
 
-class JavaApplicationPreset(extension: KradleExtensionDsl, lock: AtomicBoolean) :
-    Preset<KradleExtensionDsl>(extension, lock) {
+class JavaApplicationPreset(lock: AtomicBoolean) : Preset<KradleExtensionDsl>(lock) {
 
     override fun doConfigure(extension: KradleExtensionDsl) {
         extension.apply {

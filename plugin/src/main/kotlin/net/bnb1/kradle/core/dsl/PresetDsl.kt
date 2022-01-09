@@ -2,7 +2,11 @@ package net.bnb1.kradle.core.dsl
 
 import net.bnb1.kradle.core.Preset
 
-class PresetDsl<T : ExtensionDsl>(private val preset: Preset<T>) {
+class PresetDsl<T : Any>(private val target: T, private val preset: Preset<T>) {
 
-    operator fun invoke(action: T.() -> Unit = {}) = preset.activate(action)
+    operator fun invoke(action: T.() -> Unit = {}) {
+        preset.configure(target)
+        action(target)
+        preset.activate(target)
+    }
 }

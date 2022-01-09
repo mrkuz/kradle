@@ -13,6 +13,7 @@ class KradleContext(project: Project) {
     val features = AllFeatures(registry)
     val blueprints = AllBlueprints(registry, properties, project)
     val featureSets = AllFeatureSets(registry)
+    val presets = AllPresets(registry)
 
     fun featuresAsList() = registry.withType<Feature>()
     fun propertiesAsList() = registry.withType<Properties>()
