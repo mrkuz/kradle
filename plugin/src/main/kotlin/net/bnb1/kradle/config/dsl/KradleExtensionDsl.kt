@@ -1,15 +1,13 @@
-package net.bnb1.kradle
+package net.bnb1.kradle.config.dsl
 
+import net.bnb1.kradle.config.AllFeatureSets
+import net.bnb1.kradle.config.AllFeatures
+import net.bnb1.kradle.config.AllProperties
 import net.bnb1.kradle.core.dsl.ExtensionDsl
 import net.bnb1.kradle.core.dsl.FeatureSetDsl
-import net.bnb1.kradle.features.AllFeatureSets
-import net.bnb1.kradle.features.AllFeatures
-import net.bnb1.kradle.features.AllProperties
-import net.bnb1.kradle.features.general.GeneralDsl
-import net.bnb1.kradle.features.jvm.JvmDsl
 import net.bnb1.kradle.support.Tracer
 
-open class KradleExtensionBase(
+open class KradleExtensionDsl(
     tracer: Tracer,
     featureSets: AllFeatureSets,
     features: AllFeatures,

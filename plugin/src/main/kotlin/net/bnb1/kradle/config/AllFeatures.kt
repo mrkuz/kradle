@@ -1,4 +1,4 @@
-package net.bnb1.kradle.features
+package net.bnb1.kradle.config
 
 import net.bnb1.kradle.KradleContext
 import net.bnb1.kradle.core.Feature

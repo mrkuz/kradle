@@ -5,11 +5,11 @@ import io.kotest.core.spec.IsolationMode
 import io.kotest.core.spec.style.BehaviorSpec
 import io.kotest.matchers.shouldBe
 import net.bnb1.kradle.KradleContext
-import net.bnb1.kradle.KradleExtensionBase
+import net.bnb1.kradle.config.AllFeatureSets
+import net.bnb1.kradle.config.AllFeatures
+import net.bnb1.kradle.config.AllProperties
+import net.bnb1.kradle.config.dsl.KradleExtensionDsl
 import net.bnb1.kradle.core.Preset
-import net.bnb1.kradle.features.AllFeatureSets
-import net.bnb1.kradle.features.AllFeatures
-import net.bnb1.kradle.features.AllProperties
 import net.bnb1.kradle.support.Tracer
 import org.gradle.api.GradleException
 import java.util.concurrent.atomic.AtomicBoolean
@@ -26,7 +26,7 @@ class PresetTests : BehaviorSpec({
     val featureSets = AllFeatureSets(context)
 
     Given("Preset") {
-        val extension = KradleExtensionBase(tracer, featureSets, features, properties)
+        val extension = KradleExtensionDsl(tracer, featureSets, features, properties)
         val lock = AtomicBoolean()
         val preset = TestPreset(extension, lock)
 
@@ -41,7 +41,7 @@ class PresetTests : BehaviorSpec({
     }
 
     Given("Two presets") {
-        val extension = KradleExtensionBase(tracer, featureSets, features, properties)
+        val extension = KradleExtensionDsl(tracer, featureSets, features, properties)
         val lock = AtomicBoolean()
         val preset1 = TestPreset(extension, lock)
         val preset2 = TestPreset(extension, lock)
@@ -56,11 +56,11 @@ class PresetTests : BehaviorSpec({
     }
 })
 
-class TestPreset(extension: KradleExtensionBase, lock: AtomicBoolean) : Preset<KradleExtensionBase>(extension, lock) {
+class TestPreset(extension: KradleExtensionDsl, lock: AtomicBoolean) : Preset<KradleExtensionDsl>(extension, lock) {
 
     val activated = AtomicInteger(0)
 
-    override fun doActivate(extension: KradleExtensionBase) {
+    override fun doActivate(extension: KradleExtensionDsl) {
         activated.incrementAndGet()
     }
 }

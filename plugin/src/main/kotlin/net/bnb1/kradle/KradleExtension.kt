@@ -1,9 +1,10 @@
 package net.bnb1.kradle
 
+import net.bnb1.kradle.config.AllFeatureSets
+import net.bnb1.kradle.config.AllFeatures
+import net.bnb1.kradle.config.AllProperties
+import net.bnb1.kradle.config.dsl.KradleExtensionDsl
 import net.bnb1.kradle.core.dsl.PresetDsl
-import net.bnb1.kradle.features.AllFeatureSets
-import net.bnb1.kradle.features.AllFeatures
-import net.bnb1.kradle.features.AllProperties
 import net.bnb1.kradle.presets.JavaApplicationPreset
 import net.bnb1.kradle.presets.JavaLibraryPreset
 import net.bnb1.kradle.presets.KotlinJvmApplicationPreset
@@ -17,7 +18,7 @@ open class KradleExtension(
     featureSets: AllFeatureSets,
     features: AllFeatures,
     properties: AllProperties,
-) : KradleExtensionBase(tracer, featureSets, features, properties) {
+) : KradleExtensionDsl(tracer, featureSets, features, properties) {
 
     private val presetLock = AtomicBoolean()
 

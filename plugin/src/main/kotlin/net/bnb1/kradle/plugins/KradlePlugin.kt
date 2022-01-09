@@ -2,12 +2,12 @@ package net.bnb1.kradle.plugins
 
 import net.bnb1.kradle.KradleContext
 import net.bnb1.kradle.KradleExtension
+import net.bnb1.kradle.config.AllBlueprints
+import net.bnb1.kradle.config.AllFeatureSets
+import net.bnb1.kradle.config.AllFeatures
+import net.bnb1.kradle.config.AllProperties
+import net.bnb1.kradle.config.FeaturePlan
 import net.bnb1.kradle.createHelperTask
-import net.bnb1.kradle.features.AllBlueprints
-import net.bnb1.kradle.features.AllFeatureSets
-import net.bnb1.kradle.features.AllFeatures
-import net.bnb1.kradle.features.AllProperties
-import net.bnb1.kradle.features.FeaturePlan
 import net.bnb1.kradle.inject
 import net.bnb1.kradle.support.Tracer
 import net.bnb1.kradle.tasks.KradleDumpTask

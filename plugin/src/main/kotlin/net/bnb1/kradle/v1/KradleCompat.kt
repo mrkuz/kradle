@@ -1,8 +1,8 @@
 package net.bnb1.kradle.v1
 
 import net.bnb1.kradle.KradleContext
-import net.bnb1.kradle.KradleExtensionBase
 import net.bnb1.kradle.apply
+import net.bnb1.kradle.config.dsl.KradleExtensionDsl
 import net.bnb1.kradle.features.jvm.BenchmarksBlueprint
 import net.bnb1.kradle.features.jvm.TestBlueprint
 import net.bnb1.kradle.features.jvm.TestProperties
@@ -18,7 +18,7 @@ import org.jetbrains.kotlin.allopen.gradle.AllOpenGradleSubplugin
 class KradleCompat(
     private val context: KradleContext,
     private val tracer: Tracer,
-    private val extension: KradleExtensionBase,
+    private val extension: KradleExtensionDsl,
     private val project: Project,
     private val type: ProjectType
 ) {

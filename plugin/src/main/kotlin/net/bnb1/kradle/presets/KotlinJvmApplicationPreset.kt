@@ -1,13 +1,13 @@
 package net.bnb1.kradle.presets
 
-import net.bnb1.kradle.KradleExtensionBase
+import net.bnb1.kradle.config.dsl.KradleExtensionDsl
 import net.bnb1.kradle.core.Preset
 import java.util.concurrent.atomic.AtomicBoolean
 
-class KotlinJvmApplicationPreset(extension: KradleExtensionBase, lock: AtomicBoolean) :
-    Preset<KradleExtensionBase>(extension, lock) {
+class KotlinJvmApplicationPreset(extension: KradleExtensionDsl, lock: AtomicBoolean) :
+    Preset<KradleExtensionDsl>(extension, lock) {
 
-    override fun doConfigure(extension: KradleExtensionBase) {
+    override fun doConfigure(extension: KradleExtensionDsl) {
         extension.apply {
             general.configureOnly {
                 bootstrap.enable()
@@ -56,7 +56,7 @@ class KotlinJvmApplicationPreset(extension: KradleExtensionBase, lock: AtomicBoo
         }
     }
 
-    override fun doActivate(extension: KradleExtensionBase) {
+    override fun doActivate(extension: KradleExtensionDsl) {
         extension.run {
             general.tryActivate()
             jvm.tryActivate()

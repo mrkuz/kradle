@@ -1,13 +1,13 @@
 package net.bnb1.kradle.v1
 
 import net.bnb1.kradle.KradleContext
-import net.bnb1.kradle.KradleExtensionBase
 import net.bnb1.kradle.apply
-import net.bnb1.kradle.features.AllBlueprints
-import net.bnb1.kradle.features.AllFeatureSets
-import net.bnb1.kradle.features.AllFeatures
-import net.bnb1.kradle.features.AllProperties
-import net.bnb1.kradle.features.FeaturePlan
+import net.bnb1.kradle.config.AllBlueprints
+import net.bnb1.kradle.config.AllFeatureSets
+import net.bnb1.kradle.config.AllFeatures
+import net.bnb1.kradle.config.AllProperties
+import net.bnb1.kradle.config.FeaturePlan
+import net.bnb1.kradle.config.dsl.KradleExtensionDsl
 import net.bnb1.kradle.inject
 import net.bnb1.kradle.support.Tracer
 import net.bnb1.kradle.tasks.KradleDumpTask
@@ -40,7 +40,7 @@ class KradleCompatLibPlugin : Plugin<Project> {
             }
         }
 
-        val extension = KradleExtensionBase(tracer, featureSets, features, properties)
+        val extension = KradleExtensionDsl(tracer, featureSets, features, properties)
         KradleCompat(context, tracer, extension, project, KradleCompat.ProjectType.LIBRARY).activate()
     }
 }
