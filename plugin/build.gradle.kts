@@ -55,6 +55,8 @@ dependencies {
     testImplementation(Catalog.Build.Dependencies.Test.dockerJava)
     Catalog.Build.Dependencies.Test.kotestBundle.forEach { testImplementation(it) }
 
+    testImplementation("com.tngtech.archunit:archunit-junit5:0.22.0")
+
     constraints {
         Catalog.Build.Constraints.ids.forEach {
             api(it)
@@ -76,7 +78,7 @@ kradle {
         codeAnalysis.enable()
         test {
             prettyPrint(true)
-            customTests("compat", "integration")
+            customTests("archUnit", "compat", "integration")
             withJunitJupiter()
         }
     }
