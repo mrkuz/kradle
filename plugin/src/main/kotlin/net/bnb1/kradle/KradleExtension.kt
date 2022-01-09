@@ -21,15 +21,15 @@ open class KradleExtension(
 
     private val presetLock = AtomicBoolean()
 
-    private val _kotlinJvmApplication by context { KotlinJvmApplicationPreset(this, presetLock) }
+    private val _kotlinJvmApplication = context { KotlinJvmApplicationPreset(this, presetLock) }
     val kotlinJvmApplication = PresetDsl(_kotlinJvmApplication)
 
-    private val _kotlinJvmLibrary by context { KotlinJvmLibraryPreset(this, presetLock) }
+    private val _kotlinJvmLibrary = context { KotlinJvmLibraryPreset(this, presetLock) }
     val kotlinJvmLibrary = PresetDsl(_kotlinJvmLibrary)
 
-    private val _javaApplication by context { JavaApplicationPreset(this, presetLock) }
+    private val _javaApplication = context { JavaApplicationPreset(this, presetLock) }
     val javaApplication = PresetDsl(_javaApplication)
 
-    private val _javaLibrary by context { JavaLibraryPreset(this, presetLock) }
+    private val _javaLibrary = context { JavaLibraryPreset(this, presetLock) }
     val javaLibrary = PresetDsl(_javaLibrary)
 }

@@ -1,40 +1,46 @@
 package net.bnb1.kradle
 
 import kotlin.reflect.KClass
-import kotlin.reflect.KProperty
 import kotlin.reflect.full.isSubclassOf
-import kotlin.reflect.jvm.jvmErasure
 
 @Suppress("UNCHECKED_CAST")
 open class KradleContext {
 
-    private val _map = mutableMapOf<KClass<*>, Any>()
-    val map: Map<KClass<*>, Any>
-        get() = _map
+    private val _map = mutableMapOf<Pair<KClass<*>, String>, Any>()
+    val map: Map<Pair<KClass<*>, String>, Any>
+        get() = _map.toMap()
 
-    fun register(instance: Any): Boolean = _map.putIfAbsent(instance::class, instance) == null
+    fun add(instance: Any) = add(instance::class.qualifiedName!!, instance)
 
-    inline fun <reified T : Any> get() = map[T::class] as T
-
-    fun <T : Any> get(key: KClass<T>) = _map[key] as T
-
-    fun <T : Any> getSubclassOf(key: KClass<T>) =
-        _map.entries.asSequence()
-            .filter { it.key.isSubclassOf(key) }
-            .map { it.value as T }
-            .toList()
-
-    operator fun <T : Any> invoke(initialize: () -> T) = Delegate(this, initialize)
-
-    class Delegate<T : Any>(private val context: KradleContext, initialize: () -> T) {
-
-        init {
-            val value = initialize()
-            context.register(value)
-        }
-
-        operator fun getValue(thisRef: Any?, property: KProperty<*>): T {
-            return context.get(property.returnType.jvmErasure as KClass<T>)
+    fun add(name: String, instance: Any) {
+        if (_map.putIfAbsent(Pair(instance::class, name), instance) != null) {
+            throw IllegalArgumentException("Duplicate key: $name, ${instance::class.qualifiedName}")
         }
     }
+    
+    operator fun <T : Any> invoke(provider: () -> T) = create(provider)
+
+    fun <T : Any> create(provider: () -> T): T {
+        val instance = provider.invoke()
+        add(instance)
+        return instance
+    }
+
+    operator fun <T : Any> invoke(name: String, provider: (String) -> T) = create(name, provider)
+
+    fun <T : Any> create(name: String, provider: (String) -> T): T {
+        val instance = provider.invoke(name)
+        add(name, instance)
+        return instance
+    }
+
+    inline fun <reified T : Any> named(name: String) = map[Pair(T::class, name)] as T
+
+    fun <T : Any> named(name: String, type: KClass<T>) = map[Pair(type, name)] as T
+
+    fun <T : Any> withType() =
+        _map.entries.asSequence()
+            .filter { it.key.first.isSubclassOf(it.key.first) }
+            .map { it.value as T }
+            .toList()
 }

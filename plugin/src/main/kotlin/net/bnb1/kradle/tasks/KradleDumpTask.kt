@@ -68,7 +68,7 @@ open class KradleDumpTask : DefaultTask() {
             """.trimIndent()
         )
 
-        context.getSubclassOf(Feature::class).asSequence()
+        context.withType<Feature>().asSequence()
             .filter { it.isEnabled }
             .sortedBy { it::class.qualifiedName }
             .forEach { dump("- ${it::class.qualifiedName}") }
@@ -174,7 +174,7 @@ open class KradleDumpTask : DefaultTask() {
             """.trimIndent()
         )
 
-        context.getSubclassOf(Properties::class).asSequence()
+        context.withType<Properties>().asSequence()
             .filterNot { it is EmptyProperties }
             .sortedBy { it::class.qualifiedName }
             .forEach {

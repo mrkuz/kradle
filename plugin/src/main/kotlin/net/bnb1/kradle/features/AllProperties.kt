@@ -20,25 +20,25 @@ import net.bnb1.kradle.features.jvm.TestProperties
 
 class AllProperties(context: KradleContext) {
 
-    val jvm by context { JvmProperties() }
+    val jvm = context { JvmProperties() }
 
-    val ktlint by context { KtlintProperties() }
-    val detekt by context { DetektProperties() }
-    val kotlinTest by context { KotlinTestProperties() }
-    val kotlin by context { KotlinProperties() }
+    val ktlint = context { KtlintProperties() }
+    val detekt = context { DetektProperties() }
+    val kotlinTest = context { KotlinTestProperties() }
+    val kotlin = context { KotlinProperties() }
 
-    val checkstyle by context { CheckstyleProperties() }
-    val pmd by context { PmdProperties() }
-    val spotBugs by context { SpotBugsProperties() }
-    val java by context { JavaProperties() }
+    val checkstyle = context { CheckstyleProperties() }
+    val pmd = context { PmdProperties() }
+    val spotBugs = context { SpotBugsProperties() }
+    val java = context { JavaProperties() }
 
-    val application by context { ApplicationProperties() }
-    val lint by context { LintProperties() }
-    val codeAnalysis by context { CodeAnalysisProperties() }
-    val test by context { TestProperties() }
-    val benchmark by context { BenchmarkProperties() }
+    val application = context { ApplicationProperties() }
+    val lint = context { LintProperties() }
+    val codeAnalysis = context { CodeAnalysisProperties() }
+    val test = context { TestProperties() }
+    val benchmark = context { BenchmarkProperties() }
 
-    val uberJar by context { ShadowProperties() }
+    val uberJar = context { ShadowProperties() }
 
-    val docker by context { DockerProperties() }
+    val docker = context { DockerProperties() }
 }

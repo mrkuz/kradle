@@ -14,7 +14,7 @@ import java.util.concurrent.atomic.AtomicReference
  * Every feature has a parent [feature set][FeatureSet]. If the set is activated, the feature is also activated (unless
  * disabled). This in turn activates assigned [blueprints][Blueprint].
  */
-open class Feature {
+open class Feature(val name: String, private val _defaultTaskName: String? = null) {
 
     enum class State {
         INACTIVE, ACTIVATING, ACTIVATED
@@ -30,6 +30,9 @@ open class Feature {
     private var requires: Feature = NoFeature
     private val after = mutableSetOf<Feature>()
     private val blueprints = mutableSetOf<Blueprint>()
+
+    val defaultTaskName
+        get() = _defaultTaskName ?: name
 
     infix fun belongsTo(featureSet: FeatureSet) {
         featureSet += this

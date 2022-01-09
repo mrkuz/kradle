@@ -9,7 +9,9 @@ class FeaturePlan(
     fun initialize() {
         features.bootstrap.also { me ->
             me belongsTo featureSets.general
-            me += blueprints.bootstrap
+            me += blueprints.bootstrap.also {
+                it.taskName = features.bootstrap.defaultTaskName
+            }
         }
         features.git.also { me ->
             me belongsTo featureSets.general
@@ -32,10 +34,12 @@ class FeaturePlan(
                 blueprints.kotlinAppBootstrap.also {
                     it dependsOn features.bootstrap
                     it dependsOn features.application
+                    it.extendsTask = features.bootstrap.defaultTaskName
                 },
                 blueprints.kotlinLibBootstrap.also {
                     it dependsOn features.bootstrap
                     it dependsOn features.library
+                    it.extendsTask = features.bootstrap.defaultTaskName
                 },
                 blueprints.buildProperties.also { it dependsOn features.buildProperties }
             )
@@ -47,10 +51,12 @@ class FeaturePlan(
                 blueprints.javaAppBootstrap.also {
                     it dependsOn features.bootstrap
                     it dependsOn features.application
+                    it.extendsTask = features.bootstrap.defaultTaskName
                 },
                 blueprints.javaLibBootstrap.also {
                     it dependsOn features.bootstrap
                     it dependsOn features.library
+                    it.extendsTask = features.bootstrap.defaultTaskName
                 },
                 blueprints.buildProperties
             )
@@ -81,9 +87,17 @@ class FeaturePlan(
             me activatesAfter features.test
             me activatesAfter features.benchmark
             me += setOf(
-                blueprints.lint,
-                blueprints.ktlint.also { it dependsOn features.kotlin },
-                blueprints.checkstyle.also { it dependsOn features.java }
+                blueprints.lint.also {
+                    it.taskName = features.lint.defaultTaskName
+                },
+                blueprints.ktlint.also {
+                    it dependsOn features.kotlin
+                    it.extendsTask = features.lint.defaultTaskName
+                },
+                blueprints.checkstyle.also {
+                    it dependsOn features.java
+                    it.extendsTask = features.lint.defaultTaskName
+                }
             )
         }
         features.codeAnalysis.also { me ->
@@ -91,10 +105,21 @@ class FeaturePlan(
             me activatesAfter features.test
             me activatesAfter features.benchmark
             me += setOf(
-                blueprints.codeAnalysis,
-                blueprints.detekt.also { it dependsOn features.kotlin },
-                blueprints.pmd.also { it dependsOn features.java },
-                blueprints.spotBugs.also { it dependsOn features.java }
+                blueprints.codeAnalysis.also {
+                    it.taskName = features.codeAnalysis.defaultTaskName
+                },
+                blueprints.detekt.also {
+                    it dependsOn features.kotlin
+                    it.extendsTask = features.codeAnalysis.defaultTaskName
+                },
+                blueprints.pmd.also {
+                    it dependsOn features.java
+                    it.extendsTask = features.codeAnalysis.defaultTaskName
+                },
+                blueprints.spotBugs.also {
+                    it dependsOn features.java
+                    it.extendsTask = features.codeAnalysis.defaultTaskName
+                }
             )
         }
         features.developmentMode.also { me ->

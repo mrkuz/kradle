@@ -19,7 +19,7 @@ class FeatureTests : BehaviorSpec({
     val project = Mocks.project()
 
     given("Feature with blueprints and listeners") {
-        val feature = Feature().also { it.enable() }
+        val feature = Feature("test").also { it.enable() }
         val blueprint1 = spyk(Blueprint1(project)).also { feature += it }
         val blueprint2 = spyk(Blueprint2(project)).also { feature += it }
 
@@ -36,7 +36,7 @@ class FeatureTests : BehaviorSpec({
     }
 
     given("Feature") {
-        val feature = Feature().also { it.enable() }
+        val feature = Feature("test").also { it.enable() }
 
         When("Add blueprint twice") {
             val blueprint = spyk(Blueprint1(project)).also {

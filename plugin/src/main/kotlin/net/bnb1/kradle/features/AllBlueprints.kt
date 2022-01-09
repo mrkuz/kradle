@@ -40,122 +40,122 @@ import org.gradle.api.Project
 class AllBlueprints(context: KradleContext, properties: AllProperties, project: Project) {
 
     // General
-    val bootstrap by context { BootstrapBlueprint(project) }
-    val git by context { GitBlueprint(project) }
-    val projectProperties by context { ProjectPropertiesBlueprint(project) }
-    val buildProperties by context { BuildPropertiesBlueprint(project) }
+    val bootstrap = context { BootstrapBlueprint(project) }
+    val git = context { GitBlueprint(project) }
+    val projectProperties = context { ProjectPropertiesBlueprint(project) }
+    val buildProperties = context { BuildPropertiesBlueprint(project) }
 
     // JVM
-    val java by context {
+    val java = context {
         JavaBlueprint(project).inject {
             javaProperties = properties.java
             jvmProperties = properties.jvm
         }
     }
-    val kotlin by context {
+    val kotlin = context {
         KotlinBlueprint(project).inject {
             kotlinProperties = properties.kotlin
             jvmProperties = properties.jvm
         }
     }
-    val allOpen by context { AllOpenBlueprint(project) }
-    val application by context {
+    val allOpen = context { AllOpenBlueprint(project) }
+    val application = context {
         ApplicationBlueprint(project).inject {
             applicationProperties = properties.application
             javaProperties = properties.java
         }
     }
-    val library by context { LibraryBlueprint(project) }
-    val mavenPublish by context { MavenPublishBlueprint(project) }
-    val dependencyUpdates by context { DependencyUpdatesBlueprint(project) }
-    val owaspDependencyCheck by context { OwaspDependencyCheckBlueprint(project) }
-    val lint by context { LintBlueprint(project) }
-    val codeAnalysis by context { CodeAnalysisBlueprint(project) }
-    val developmentMode by context {
+    val library = context { LibraryBlueprint(project) }
+    val mavenPublish = context { MavenPublishBlueprint(project) }
+    val dependencyUpdates = context { DependencyUpdatesBlueprint(project) }
+    val owaspDependencyCheck = context { OwaspDependencyCheckBlueprint(project) }
+    val lint = context { LintBlueprint(project) }
+    val codeAnalysis = context { CodeAnalysisBlueprint(project) }
+    val developmentMode = context {
         DevelopmentModeBlueprint(project).inject {
             applicationProperties = properties.application
             javaProperties = properties.java
         }
     }
 
-    val test by context {
+    val test = context {
         TestBlueprint(project).inject {
             testProperties = properties.test
             javaProperties = properties.java
         }
     }
-    val jacoco by context {
+    val jacoco = context {
         JacocoBlueprint(project).inject {
             testProperties = properties.test
         }
     }
-    val benchmarks by context {
+    val benchmarks = context {
         BenchmarksBlueprint(project).inject {
             benchmarkProperties = properties.benchmark
             javaProperties = properties.java
         }
     }
-    val packaging by context { PackagingBlueprint(project) }
-    val packageApplication by context {
+    val packaging = context { PackagingBlueprint(project) }
+    val packageApplication = context {
         PackageApplicationBlueprint(project).inject {
             applicationProperties = properties.application
         }
     }
-    val shadow by context {
+    val shadow = context {
         ShadowBlueprint(project).inject {
             uberJarProperties = properties.uberJar
         }
     }
-    val dokka by context { DokkaBlueprint(project) }
-    val jib by context {
+    val dokka = context { DokkaBlueprint(project) }
+    val jib = context {
         JibBlueprint(project).inject {
             dockerProperties = properties.docker
             applicationProperties = properties.application
         }
     }
-    val javaAppBootstrap by context {
+    val javaAppBootstrap = context {
         JavaAppBootstrapBlueprint(project).inject {
             applicationProperties = properties.application
         }
     }
-    val javaLibBootstrap by context { JavaLibBootstrapBlueprint(project) }
-    val pmd by context {
+    val javaLibBootstrap = context { JavaLibBootstrapBlueprint(project) }
+    val pmd = context {
         PmdBlueprint(project).inject {
             pmdProperties = properties.pmd
             codeAnalysisProperties = properties.codeAnalysis
         }
     }
-    val spotBugs by context {
+    val spotBugs = context {
         SpotBugsBlueprint(project).inject {
             spotBugsProperties = properties.spotBugs
             codeAnalysisProperties = properties.codeAnalysis
         }
     }
-    val checkstyle by context {
+    val checkstyle = context {
         CheckstyleBlueprint(project).inject {
             checkstyleProperties = properties.checkstyle
             lintProperties = properties.lint
         }
     }
-    val kotlinAppBootstrap by context {
+    val kotlinAppBootstrap = context {
         KotlinAppBootstrapBlueprint(project).inject {
             applicationProperties = properties.application
         }
     }
-    val kotlinLibBootstrap by context { KotlinLibBootstrapBlueprint(project) }
-    val detekt by context {
+    val kotlinLibBootstrap = context { KotlinLibBootstrapBlueprint(project) }
+    val detekt = context {
         DetektBlueprint(project).inject {
             detektProperties = properties.detekt
             codeAnalysisProperties = properties.codeAnalysis
         }
     }
-    val ktlint by context {
+    val ktlint = context {
         KtlintBlueprint(project).inject {
             ktlintProperties = properties.ktlint
             lintProperties = properties.lint
         }
     }
-    val kotlinTest by context {
+    val kotlinTest = context {
         KotlinTestBlueprint(project).inject {
             kotlinTestProperties = properties.kotlinTest
             testProperties = properties.test

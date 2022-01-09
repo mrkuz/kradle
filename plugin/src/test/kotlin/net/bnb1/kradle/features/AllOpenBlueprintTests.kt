@@ -5,8 +5,8 @@ import io.kotest.core.spec.style.BehaviorSpec
 import io.mockk.Called
 import io.mockk.verify
 import net.bnb1.kradle.Mocks
+import net.bnb1.kradle.core.Feature
 import net.bnb1.kradle.features.jvm.AllOpenBlueprint
-import net.bnb1.kradle.features.jvm.KotlinFeature
 import net.bnb1.kradle.support.Tracer
 import org.jetbrains.kotlin.allopen.gradle.AllOpenGradleSubplugin
 
@@ -17,7 +17,7 @@ class AllOpenBlueprintTests : BehaviorSpec({
     Given("AllOpenBlueprint") {
         val tracer = Tracer()
         val project = Mocks.project()
-        val feature = KotlinFeature()
+        val feature = Feature("kotlin")
         val blueprint = AllOpenBlueprint(project).also {
             it dependsOn feature
         }

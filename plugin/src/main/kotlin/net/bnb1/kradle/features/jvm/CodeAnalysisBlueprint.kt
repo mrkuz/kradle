@@ -7,8 +7,10 @@ import org.gradle.api.Task
 
 class CodeAnalysisBlueprint(project: Project) : Blueprint(project) {
 
+    lateinit var taskName: String
+
     override fun doCreateTasks() {
-        project.createTask<Task>(CodeAnalysisFeature.MAIN_TASK, "Runs code analysis")
-        project.tasks.getByName("check").dependsOn(CodeAnalysisFeature.MAIN_TASK)
+        project.createTask<Task>(taskName, "Runs code analysis")
+        project.tasks.getByName("check").dependsOn(taskName)
     }
 }

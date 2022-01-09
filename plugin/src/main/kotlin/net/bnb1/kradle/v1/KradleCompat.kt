@@ -43,9 +43,9 @@ class KradleCompat(
         project.apply(AllOpenGradleSubplugin::class.java)
 
         // Source sets need to be created early
-        context.get<TestProperties>().apply {
-            withIntegrationTests(true)
-            withFunctionalTests(true)
+        context.withType<TestProperties>().forEach {
+            it.withIntegrationTests(true)
+            it.withFunctionalTests(true)
         }
 
         project.apply(AllOpenGradleSubplugin::class.java)
@@ -53,8 +53,8 @@ class KradleCompat(
             annotation("org.openjdk.jmh.annotations.State")
         }
 
-        context.get<BenchmarksBlueprint>().doCreateSourceSets()
-        context.get<TestBlueprint>().doCreateTasks()
+        context.withType<BenchmarksBlueprint>().forEach { it.doCreateSourceSets() }
+        context.withType<TestBlueprint>().forEach { it.doCreateTasks() }
     }
 
     @SuppressWarnings("LongMethod")

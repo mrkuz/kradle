@@ -16,6 +16,7 @@ class PmdBlueprint(project: Project) : Blueprint(project) {
 
     lateinit var pmdProperties: PmdProperties
     lateinit var codeAnalysisProperties: CodeAnalysisProperties
+    lateinit var extendsTask: String
 
     override fun doCreateTasks() {
         project.configurations.create(CONFIGURATION_NAME) {
@@ -26,7 +27,7 @@ class PmdBlueprint(project: Project) : Blueprint(project) {
         }
 
         val pmdTask = project.createHelperTask<Task>("pmd", "Runs PMD")
-        project.tasks.getByName(CodeAnalysisFeature.MAIN_TASK).dependsOn(pmdTask)
+        project.tasks.getByName(extendsTask).dependsOn(pmdTask)
 
         val javaExtension = project.extensions.getByType(JavaPluginExtension::class.java)
         javaExtension.sourceSets.forEach { sourceSet ->

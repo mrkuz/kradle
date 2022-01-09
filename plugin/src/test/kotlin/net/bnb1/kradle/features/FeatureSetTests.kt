@@ -18,7 +18,7 @@ class FeatureSetTests : BehaviorSpec({
     val tracer = Tracer()
 
     given("FeatureSet") {
-        val set = FeatureSet()
+        val set = FeatureSet("test")
         val feature1 = spyk<Feature1>().also {
             it.enable()
             set += it
@@ -49,7 +49,7 @@ class FeatureSetTests : BehaviorSpec({
     }
 
     given("FeatureSet with ordered features") {
-        val set = FeatureSet()
+        val set = FeatureSet("test")
         val feature1 = spyk<Feature1>()
         val feature2 = spyk<Feature2>()
         val feature3 = spyk<Feature3>()
@@ -83,7 +83,7 @@ class FeatureSetTests : BehaviorSpec({
     }
 
     given("FeatureSet with dependency loop") {
-        val set = FeatureSet()
+        val set = FeatureSet("test")
         val feature1 = spyk<Feature1>()
         val feature2 = spyk<Feature2>()
         val feature3 = spyk<Feature3>()
@@ -112,6 +112,6 @@ class FeatureSetTests : BehaviorSpec({
     }
 })
 
-class Feature1 : Feature()
-class Feature2 : Feature()
-class Feature3 : Feature()
+class Feature1 : Feature("1")
+class Feature2 : Feature("2")
+class Feature3 : Feature("3")

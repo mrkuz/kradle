@@ -17,6 +17,7 @@ class SpotBugsBlueprint(project: Project) : Blueprint(project) {
 
     lateinit var spotBugsProperties: SpotBugsProperties
     lateinit var codeAnalysisProperties: CodeAnalysisProperties
+    lateinit var extendsTask: String
 
     override fun doApplyPlugins() {
         project.apply(SpotBugsBasePlugin::class.java)
@@ -24,7 +25,7 @@ class SpotBugsBlueprint(project: Project) : Blueprint(project) {
 
     override fun doCreateTasks() {
         val spotbugsTask = project.createHelperTask<Task>("spotbugs", "Runs SpotBugs")
-        project.tasks.getByName(CodeAnalysisFeature.MAIN_TASK).dependsOn(spotbugsTask)
+        project.tasks.getByName(extendsTask).dependsOn(spotbugsTask)
 
         val javaExtension = project.extensions.getByType(JavaPluginExtension::class.java)
         javaExtension.sourceSets

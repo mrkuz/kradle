@@ -9,7 +9,7 @@ import java.util.concurrent.atomic.AtomicBoolean
  *
  * If the set is activated, the assigned and enabled features are also activated.
  */
-open class FeatureSet {
+class FeatureSet(val name: String) {
 
     private val activated = AtomicBoolean(false)
 

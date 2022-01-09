@@ -5,9 +5,8 @@ import io.kotest.core.spec.IsolationMode
 import io.kotest.core.spec.style.BehaviorSpec
 import io.mockk.verify
 import net.bnb1.kradle.Mocks
-import net.bnb1.kradle.features.jvm.ApplicationFeature
+import net.bnb1.kradle.core.Feature
 import net.bnb1.kradle.features.jvm.LibraryBlueprint
-import net.bnb1.kradle.features.jvm.LibraryFeature
 import net.bnb1.kradle.support.Tracer
 import org.gradle.api.GradleException
 import org.gradle.api.plugins.JavaLibraryPlugin
@@ -19,8 +18,8 @@ class LibraryBlueprintTests : BehaviorSpec({
     Given("LibraryBlueprint") {
         val tracer = Tracer()
         val project = Mocks.project()
-        val applicationFeature = ApplicationFeature()
-        val libraryFeature = LibraryFeature()
+        val applicationFeature = Feature("application")
+        val libraryFeature = Feature("library")
 
         applicationFeature conflictsWith libraryFeature
         libraryFeature conflictsWith applicationFeature

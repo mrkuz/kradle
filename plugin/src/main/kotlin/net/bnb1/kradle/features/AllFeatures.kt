@@ -1,46 +1,29 @@
 package net.bnb1.kradle.features
 
 import net.bnb1.kradle.KradleContext
-import net.bnb1.kradle.features.general.BootstrapFeature
-import net.bnb1.kradle.features.general.BuildPropertiesFeature
-import net.bnb1.kradle.features.general.GitFeature
-import net.bnb1.kradle.features.general.ProjectPropertiesFeature
-import net.bnb1.kradle.features.jvm.ApplicationFeature
-import net.bnb1.kradle.features.jvm.BenchmarkFeature
-import net.bnb1.kradle.features.jvm.CodeAnalysisFeature
-import net.bnb1.kradle.features.jvm.DependencyUpdatesFeature
-import net.bnb1.kradle.features.jvm.DevelopmentModeFeature
-import net.bnb1.kradle.features.jvm.DockerFeature
-import net.bnb1.kradle.features.jvm.DocumentationFeature
-import net.bnb1.kradle.features.jvm.JavaFeature
-import net.bnb1.kradle.features.jvm.KotlinFeature
-import net.bnb1.kradle.features.jvm.LibraryFeature
-import net.bnb1.kradle.features.jvm.LintFeature
-import net.bnb1.kradle.features.jvm.PackagingFeature
-import net.bnb1.kradle.features.jvm.TestFeature
-import net.bnb1.kradle.features.jvm.VulnerabilityScanFeature
+import net.bnb1.kradle.core.Feature
 
 class AllFeatures(context: KradleContext) {
 
     // General
-    val bootstrap by context { BootstrapFeature() }
-    val git by context { GitFeature() }
-    val projectProperties by context { ProjectPropertiesFeature() }
-    val buildProperties by context { BuildPropertiesFeature() }
+    var bootstrap = context.create("bootstrap") { Feature(it) }
+    val git = context("git") { Feature(it) }
+    val projectProperties = context("projectProperties") { Feature(it) }
+    val buildProperties = context("buildProperties") { Feature(it) }
 
     // JVM
-    val kotlin by context { KotlinFeature() }
-    val java by context { JavaFeature() }
-    val application by context { ApplicationFeature() }
-    val library by context { LibraryFeature() }
-    val dependencyUpdates by context { DependencyUpdatesFeature() }
-    val vulnerabilityScan by context { VulnerabilityScanFeature() }
-    val lint by context { LintFeature() }
-    val codeAnalysis by context { CodeAnalysisFeature() }
-    val developmentMode by context { DevelopmentModeFeature() }
-    val test by context { TestFeature() }
-    val benchmark by context { BenchmarkFeature() }
-    val packaging by context { PackagingFeature() }
-    val docker by context { DockerFeature() }
-    val documentation by context { DocumentationFeature() }
+    val kotlin = context("kotlin") { Feature(it) }
+    val java = context("java") { Feature(it) }
+    val application = context("application") { Feature(it) }
+    val library = context("library") { Feature(it) }
+    val dependencyUpdates = context("dependencyUpdates") { Feature(it) }
+    val vulnerabilityScan = context("vulnerabilityScan") { Feature(it) }
+    val lint = context("lint") { Feature(it) }
+    val codeAnalysis = context("codeAnalysis") { Feature(it, "analyzeCode") }
+    val developmentMode = context("developmentMode") { Feature(it) }
+    val test = context("test") { Feature(it) }
+    val benchmark = context("benchmark") { Feature(it) }
+    val packaging = context("packaging") { Feature(it) }
+    val docker = context("docker") { Feature(it) }
+    val documentation = context("documentation") { Feature(it) }
 }

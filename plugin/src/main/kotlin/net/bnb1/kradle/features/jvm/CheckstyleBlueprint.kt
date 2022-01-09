@@ -15,6 +15,7 @@ class CheckstyleBlueprint(project: Project) : Blueprint(project) {
 
     lateinit var checkstyleProperties: CheckstyleProperties
     lateinit var lintProperties: LintProperties
+    lateinit var extendsTask: String
 
     override fun doCreateTasks() {
         val configFile = project.rootDir.resolve(checkstyleProperties.configFile.get())
@@ -34,7 +35,7 @@ class CheckstyleBlueprint(project: Project) : Blueprint(project) {
         }
 
         val checkstyleTask = project.createHelperTask<Task>("checkstyle", "Runs checkstyle")
-        project.tasks.getByName(LintFeature.MAIN_TASK).dependsOn(checkstyleTask)
+        project.tasks.getByName(extendsTask).dependsOn(checkstyleTask)
 
         val javaExtension = project.extensions.getByType(JavaPluginExtension::class.java)
         javaExtension.sourceSets.forEach { sourceSet ->

@@ -7,7 +7,9 @@ import org.gradle.api.Task
 
 class BootstrapBlueprint(project: Project) : Blueprint(project) {
 
+    lateinit var taskName: String
+
     override fun doCreateTasks() {
-        project.createTask<Task>(BootstrapFeature.MAIN_TASK, "Bootstraps project")
+        project.createTask<Task>(taskName, "Bootstraps project")
     }
 }

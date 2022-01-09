@@ -11,6 +11,7 @@ class KtlintBlueprint(project: Project) : Blueprint(project) {
 
     lateinit var ktlintProperties: KtlintProperties
     lateinit var lintProperties: LintProperties
+    lateinit var extendsTask: String
 
     override fun doApplyPlugins() {
         project.apply(KtlintPlugin::class.java)
@@ -24,6 +25,6 @@ class KtlintBlueprint(project: Project) : Blueprint(project) {
             ignoreFailures.set(lintProperties.ignoreFailures.get())
         }
 
-        project.tasks.getByName(LintFeature.MAIN_TASK).dependsOn("ktlintCheck")
+        project.tasks.getByName(extendsTask).dependsOn("ktlintCheck")
     }
 }

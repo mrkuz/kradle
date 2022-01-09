@@ -15,6 +15,7 @@ class DetektBlueprint(project: Project) : Blueprint(project) {
 
     lateinit var detektProperties: DetektProperties
     lateinit var codeAnalysisProperties: CodeAnalysisProperties
+    lateinit var extendsTask: String
 
     override fun doCreateTasks() {
         val configFile = project.rootDir.resolve(detektProperties.configFile.get())
@@ -31,7 +32,7 @@ class DetektBlueprint(project: Project) : Blueprint(project) {
         }
 
         val detektTask = project.createHelperTask<Task>("detekt", "Runs detekt")
-        project.tasks.getByName(CodeAnalysisFeature.MAIN_TASK).dependsOn(detektTask)
+        project.tasks.getByName(extendsTask).dependsOn(detektTask)
 
         val kotlinExtension = project.extensions.getByType(KotlinProjectExtension::class.java)
         kotlinExtension.sourceSets.forEach { sourceSet ->
