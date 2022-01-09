@@ -28,11 +28,11 @@ class PresetTests : BehaviorSpec({
     Given("Preset") {
         val extension = KradleExtensionDsl(tracer, featureSets, features, properties)
         val lock = AtomicBoolean()
-        val preset = TestPreset(extension, lock)
+        val preset = TestPreset(lock)
 
         When("Activate twice") {
-            preset.activate()
-            preset.activate()
+            preset.activate(extension)
+            preset.activate(extension)
 
             Then("The second attempt is ignored") {
                 preset.activated.get() shouldBe 1
@@ -43,20 +43,20 @@ class PresetTests : BehaviorSpec({
     Given("Two presets") {
         val extension = KradleExtensionDsl(tracer, featureSets, features, properties)
         val lock = AtomicBoolean()
-        val preset1 = TestPreset(extension, lock)
-        val preset2 = TestPreset(extension, lock)
+        val preset1 = TestPreset(lock)
+        val preset2 = TestPreset(lock)
 
         When("Activate both") {
-            preset1.activate()
+            preset1.activate(extension)
 
             Then("The second attempt fails") {
-                shouldThrow<GradleException> { preset2.activate() }
+                shouldThrow<GradleException> { preset2.activate(extension) }
             }
         }
     }
 })
 
-class TestPreset(extension: KradleExtensionDsl, lock: AtomicBoolean) : Preset<KradleExtensionDsl>(extension, lock) {
+class TestPreset(lock: AtomicBoolean) : Preset<KradleExtensionDsl>(lock) {
 
     val activated = AtomicInteger(0)
 

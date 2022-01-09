@@ -1,21 +1,21 @@
 package net.bnb1.kradle.config
 
-import net.bnb1.kradle.features.jvm.ApplicationProperties
-import net.bnb1.kradle.features.jvm.BenchmarkProperties
-import net.bnb1.kradle.features.jvm.CheckstyleProperties
-import net.bnb1.kradle.features.jvm.CodeAnalysisProperties
-import net.bnb1.kradle.features.jvm.DetektProperties
-import net.bnb1.kradle.features.jvm.DockerProperties
-import net.bnb1.kradle.features.jvm.JavaProperties
-import net.bnb1.kradle.features.jvm.JvmProperties
-import net.bnb1.kradle.features.jvm.KotlinProperties
-import net.bnb1.kradle.features.jvm.KotlinTestProperties
-import net.bnb1.kradle.features.jvm.KtlintProperties
-import net.bnb1.kradle.features.jvm.LintProperties
-import net.bnb1.kradle.features.jvm.PmdProperties
-import net.bnb1.kradle.features.jvm.ShadowProperties
-import net.bnb1.kradle.features.jvm.SpotBugsProperties
-import net.bnb1.kradle.features.jvm.TestProperties
+import net.bnb1.kradle.blueprints.jvm.ApplicationProperties
+import net.bnb1.kradle.blueprints.jvm.BenchmarkProperties
+import net.bnb1.kradle.blueprints.jvm.CheckstyleProperties
+import net.bnb1.kradle.blueprints.jvm.CodeAnalysisProperties
+import net.bnb1.kradle.blueprints.jvm.DetektProperties
+import net.bnb1.kradle.blueprints.jvm.DockerProperties
+import net.bnb1.kradle.blueprints.jvm.JavaProperties
+import net.bnb1.kradle.blueprints.jvm.JvmProperties
+import net.bnb1.kradle.blueprints.jvm.KotlinProperties
+import net.bnb1.kradle.blueprints.jvm.KotlinTestProperties
+import net.bnb1.kradle.blueprints.jvm.KtlintProperties
+import net.bnb1.kradle.blueprints.jvm.LintProperties
+import net.bnb1.kradle.blueprints.jvm.PmdProperties
+import net.bnb1.kradle.blueprints.jvm.ShadowProperties
+import net.bnb1.kradle.blueprints.jvm.SpotBugsProperties
+import net.bnb1.kradle.blueprints.jvm.TestProperties
 import net.bnb1.kradle.support.Registry
 
 class AllProperties(registry: Registry) {
