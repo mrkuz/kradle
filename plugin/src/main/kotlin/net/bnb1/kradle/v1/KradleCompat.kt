@@ -1,11 +1,9 @@
 package net.bnb1.kradle.v1
 
-import net.bnb1.kradle.KradleContext
 import net.bnb1.kradle.apply
+import net.bnb1.kradle.config.AllBlueprints
+import net.bnb1.kradle.config.AllProperties
 import net.bnb1.kradle.config.dsl.KradleExtensionDsl
-import net.bnb1.kradle.features.jvm.BenchmarksBlueprint
-import net.bnb1.kradle.features.jvm.TestBlueprint
-import net.bnb1.kradle.features.jvm.TestProperties
 import net.bnb1.kradle.support.Tracer
 import org.gradle.api.Project
 import org.gradle.kotlin.dsl.configure
@@ -16,8 +14,9 @@ import org.jetbrains.kotlin.allopen.gradle.AllOpenGradleSubplugin
  * Provides backwards-compatibility for Kradle v1.
  */
 class KradleCompat(
-    private val context: KradleContext,
     private val tracer: Tracer,
+    private val properties: AllProperties,
+    private val blueprints: AllBlueprints,
     private val extension: KradleExtensionDsl,
     private val project: Project,
     private val type: ProjectType
@@ -43,9 +42,9 @@ class KradleCompat(
         project.apply(AllOpenGradleSubplugin::class.java)
 
         // Source sets need to be created early
-        context.withType<TestProperties>().forEach {
-            it.withIntegrationTests(true)
-            it.withFunctionalTests(true)
+        properties.test.apply {
+            withIntegrationTests(true)
+            withFunctionalTests(true)
         }
 
         project.apply(AllOpenGradleSubplugin::class.java)
@@ -53,8 +52,8 @@ class KradleCompat(
             annotation("org.openjdk.jmh.annotations.State")
         }
 
-        context.withType<BenchmarksBlueprint>().forEach { it.doCreateSourceSets() }
-        context.withType<TestBlueprint>().forEach { it.doCreateTasks() }
+        blueprints.benchmarks.doCreateSourceSets()
+        blueprints.test.doCreateTasks()
     }
 
     @SuppressWarnings("LongMethod")

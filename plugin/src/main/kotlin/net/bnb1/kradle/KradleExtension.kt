@@ -9,11 +9,12 @@ import net.bnb1.kradle.presets.JavaApplicationPreset
 import net.bnb1.kradle.presets.JavaLibraryPreset
 import net.bnb1.kradle.presets.KotlinJvmApplicationPreset
 import net.bnb1.kradle.presets.KotlinJvmLibraryPreset
+import net.bnb1.kradle.support.Registry
 import net.bnb1.kradle.support.Tracer
 import java.util.concurrent.atomic.AtomicBoolean
 
 open class KradleExtension(
-    context: KradleContext,
+    context: Registry,
     tracer: Tracer,
     featureSets: AllFeatureSets,
     features: AllFeatures,

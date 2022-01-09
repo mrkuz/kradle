@@ -1,12 +1,10 @@
 package net.bnb1.kradle.tasks
 
-import net.bnb1.kradle.KradleContext
-import net.bnb1.kradle.core.Feature
+import net.bnb1.kradle.config.KradleContext
 import net.bnb1.kradle.core.dsl.FeatureDsl
 import net.bnb1.kradle.dsl.Configurable
 import net.bnb1.kradle.dsl.ConfigurableSelf
 import net.bnb1.kradle.dsl.EmptyProperties
-import net.bnb1.kradle.dsl.Properties
 import net.bnb1.kradle.dsl.SimpleProvider
 import net.bnb1.kradle.support.Tracer
 import org.gradle.api.DefaultTask
@@ -68,7 +66,7 @@ open class KradleDumpTask : DefaultTask() {
             """.trimIndent()
         )
 
-        context.withType<Feature>().asSequence()
+        context.featuresAsList().asSequence()
             .filter { it.isEnabled }
             .sortedBy { it::class.qualifiedName }
             .forEach { dump("- ${it::class.qualifiedName}") }
@@ -174,7 +172,7 @@ open class KradleDumpTask : DefaultTask() {
             """.trimIndent()
         )
 
-        context.withType<Properties>().asSequence()
+        context.propertiesAsList().asSequence()
             .filterNot { it is EmptyProperties }
             .sortedBy { it::class.qualifiedName }
             .forEach {

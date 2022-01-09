@@ -1,12 +1,7 @@
 package net.bnb1.kradle.v1
 
-import net.bnb1.kradle.KradleContext
 import net.bnb1.kradle.apply
-import net.bnb1.kradle.config.AllBlueprints
-import net.bnb1.kradle.config.AllFeatureSets
-import net.bnb1.kradle.config.AllFeatures
-import net.bnb1.kradle.config.AllProperties
-import net.bnb1.kradle.config.FeaturePlan
+import net.bnb1.kradle.config.KradleContext
 import net.bnb1.kradle.config.dsl.KradleExtensionDsl
 import net.bnb1.kradle.inject
 import net.bnb1.kradle.support.Tracer
@@ -25,13 +20,8 @@ class KradleCompatAppPlugin : Plugin<Project> {
 
         project.apply(KradleCompatBasePlugin::class.java)
 
-        val context = KradleContext()
         val tracer = Tracer()
-        val properties = AllProperties(context)
-        val blueprints = AllBlueprints(context, properties, project)
-        val features = AllFeatures(context)
-        val featureSets = AllFeatureSets(context)
-        FeaturePlan(features, blueprints, featureSets).initialize()
+        val context = KradleContext(project).also { it.initialize() }
 
         project.tasks.withType<KradleDumpTask> {
             inject {
@@ -40,7 +30,14 @@ class KradleCompatAppPlugin : Plugin<Project> {
             }
         }
 
-        val extension = KradleExtensionDsl(tracer, featureSets, features, properties)
-        KradleCompat(context, tracer, extension, project, KradleCompat.ProjectType.APPLICATION).activate()
+        val extension = KradleExtensionDsl(tracer, context.featureSets, context.features, context.properties)
+        KradleCompat(
+            tracer,
+            context.properties,
+            context.blueprints,
+            extension,
+            project,
+            KradleCompat.ProjectType.LIBRARY
+        ).activate()
     }
 }

@@ -1,10 +1,21 @@
 package net.bnb1.kradle.config
 
-class FeaturePlan(
-    private val features: AllFeatures,
-    private val blueprints: AllBlueprints,
-    private val featureSets: AllFeatureSets
-) {
+import net.bnb1.kradle.core.Feature
+import net.bnb1.kradle.dsl.Properties
+import net.bnb1.kradle.support.Registry
+import org.gradle.api.Project
+
+class KradleContext(project: Project) {
+
+    private val registry = Registry()
+
+    val properties = AllProperties(registry)
+    val features = AllFeatures(registry)
+    val blueprints = AllBlueprints(registry, properties, project)
+    val featureSets = AllFeatureSets(registry)
+
+    fun featuresAsList() = registry.withType<Feature>()
+    fun propertiesAsList() = registry.withType<Properties>()
 
     fun initialize() {
         features.bootstrap.also { me ->

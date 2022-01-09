@@ -1,6 +1,5 @@
 package net.bnb1.kradle.config
 
-import net.bnb1.kradle.KradleContext
 import net.bnb1.kradle.features.general.BootstrapBlueprint
 import net.bnb1.kradle.features.general.BuildPropertiesBlueprint
 import net.bnb1.kradle.features.general.GitBlueprint
@@ -35,127 +34,128 @@ import net.bnb1.kradle.features.jvm.ShadowBlueprint
 import net.bnb1.kradle.features.jvm.SpotBugsBlueprint
 import net.bnb1.kradle.features.jvm.TestBlueprint
 import net.bnb1.kradle.inject
+import net.bnb1.kradle.support.Registry
 import org.gradle.api.Project
 
-class AllBlueprints(context: KradleContext, properties: AllProperties, project: Project) {
+class AllBlueprints(registry: Registry, properties: AllProperties, project: Project) {
 
     // General
-    val bootstrap = context { BootstrapBlueprint(project) }
-    val git = context { GitBlueprint(project) }
-    val projectProperties = context { ProjectPropertiesBlueprint(project) }
-    val buildProperties = context { BuildPropertiesBlueprint(project) }
+    val bootstrap = registry { BootstrapBlueprint(project) }
+    val git = registry { GitBlueprint(project) }
+    val projectProperties = registry { ProjectPropertiesBlueprint(project) }
+    val buildProperties = registry { BuildPropertiesBlueprint(project) }
 
     // JVM
-    val java = context {
+    val java = registry {
         JavaBlueprint(project).inject {
             javaProperties = properties.java
             jvmProperties = properties.jvm
         }
     }
-    val kotlin = context {
+    val kotlin = registry {
         KotlinBlueprint(project).inject {
             kotlinProperties = properties.kotlin
             jvmProperties = properties.jvm
         }
     }
-    val allOpen = context { AllOpenBlueprint(project) }
-    val application = context {
+    val allOpen = registry { AllOpenBlueprint(project) }
+    val application = registry {
         ApplicationBlueprint(project).inject {
             applicationProperties = properties.application
             javaProperties = properties.java
         }
     }
-    val library = context { LibraryBlueprint(project) }
-    val mavenPublish = context { MavenPublishBlueprint(project) }
-    val dependencyUpdates = context { DependencyUpdatesBlueprint(project) }
-    val owaspDependencyCheck = context { OwaspDependencyCheckBlueprint(project) }
-    val lint = context { LintBlueprint(project) }
-    val codeAnalysis = context { CodeAnalysisBlueprint(project) }
-    val developmentMode = context {
+    val library = registry { LibraryBlueprint(project) }
+    val mavenPublish = registry { MavenPublishBlueprint(project) }
+    val dependencyUpdates = registry { DependencyUpdatesBlueprint(project) }
+    val owaspDependencyCheck = registry { OwaspDependencyCheckBlueprint(project) }
+    val lint = registry { LintBlueprint(project) }
+    val codeAnalysis = registry { CodeAnalysisBlueprint(project) }
+    val developmentMode = registry {
         DevelopmentModeBlueprint(project).inject {
             applicationProperties = properties.application
             javaProperties = properties.java
         }
     }
 
-    val test = context {
+    val test = registry {
         TestBlueprint(project).inject {
             testProperties = properties.test
             javaProperties = properties.java
         }
     }
-    val jacoco = context {
+    val jacoco = registry {
         JacocoBlueprint(project).inject {
             testProperties = properties.test
         }
     }
-    val benchmarks = context {
+    val benchmarks = registry {
         BenchmarksBlueprint(project).inject {
             benchmarkProperties = properties.benchmark
             javaProperties = properties.java
         }
     }
-    val packaging = context { PackagingBlueprint(project) }
-    val packageApplication = context {
+    val packaging = registry { PackagingBlueprint(project) }
+    val packageApplication = registry {
         PackageApplicationBlueprint(project).inject {
             applicationProperties = properties.application
         }
     }
-    val shadow = context {
+    val shadow = registry {
         ShadowBlueprint(project).inject {
             uberJarProperties = properties.uberJar
         }
     }
-    val dokka = context { DokkaBlueprint(project) }
-    val jib = context {
+    val dokka = registry { DokkaBlueprint(project) }
+    val jib = registry {
         JibBlueprint(project).inject {
             dockerProperties = properties.docker
             applicationProperties = properties.application
         }
     }
-    val javaAppBootstrap = context {
+    val javaAppBootstrap = registry {
         JavaAppBootstrapBlueprint(project).inject {
             applicationProperties = properties.application
         }
     }
-    val javaLibBootstrap = context { JavaLibBootstrapBlueprint(project) }
-    val pmd = context {
+    val javaLibBootstrap = registry { JavaLibBootstrapBlueprint(project) }
+    val pmd = registry {
         PmdBlueprint(project).inject {
             pmdProperties = properties.pmd
             codeAnalysisProperties = properties.codeAnalysis
         }
     }
-    val spotBugs = context {
+    val spotBugs = registry {
         SpotBugsBlueprint(project).inject {
             spotBugsProperties = properties.spotBugs
             codeAnalysisProperties = properties.codeAnalysis
         }
     }
-    val checkstyle = context {
+    val checkstyle = registry {
         CheckstyleBlueprint(project).inject {
             checkstyleProperties = properties.checkstyle
             lintProperties = properties.lint
         }
     }
-    val kotlinAppBootstrap = context {
+    val kotlinAppBootstrap = registry {
         KotlinAppBootstrapBlueprint(project).inject {
             applicationProperties = properties.application
         }
     }
-    val kotlinLibBootstrap = context { KotlinLibBootstrapBlueprint(project) }
-    val detekt = context {
+    val kotlinLibBootstrap = registry { KotlinLibBootstrapBlueprint(project) }
+    val detekt = registry {
         DetektBlueprint(project).inject {
             detektProperties = properties.detekt
             codeAnalysisProperties = properties.codeAnalysis
         }
     }
-    val ktlint = context {
+    val ktlint = registry {
         KtlintBlueprint(project).inject {
             ktlintProperties = properties.ktlint
             lintProperties = properties.lint
         }
     }
-    val kotlinTest = context {
+    val kotlinTest = registry {
         KotlinTestBlueprint(project).inject {
             kotlinTestProperties = properties.kotlinTest
             testProperties = properties.test

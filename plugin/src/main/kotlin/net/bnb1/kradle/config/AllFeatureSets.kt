@@ -1,10 +1,10 @@
 package net.bnb1.kradle.config
 
-import net.bnb1.kradle.KradleContext
 import net.bnb1.kradle.core.FeatureSet
+import net.bnb1.kradle.support.Registry
 
-class AllFeatureSets(context: KradleContext) {
+class AllFeatureSets(registry: Registry) {
 
-    val general = context("general") { FeatureSet(it) }
-    val jvm = context("jvm") { FeatureSet(it) }
+    val general = registry("general") { FeatureSet(it) }
+    val jvm = registry("jvm") { FeatureSet(it) }
 }

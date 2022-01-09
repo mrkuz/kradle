@@ -1,29 +1,29 @@
 package net.bnb1.kradle.config
 
-import net.bnb1.kradle.KradleContext
 import net.bnb1.kradle.core.Feature
+import net.bnb1.kradle.support.Registry
 
-class AllFeatures(context: KradleContext) {
+class AllFeatures(registry: Registry) {
 
     // General
-    var bootstrap = context.create("bootstrap") { Feature(it) }
-    val git = context("git") { Feature(it) }
-    val projectProperties = context("projectProperties") { Feature(it) }
-    val buildProperties = context("buildProperties") { Feature(it) }
+    var bootstrap = registry.create("bootstrap") { Feature(it) }
+    val git = registry("git") { Feature(it) }
+    val projectProperties = registry("projectProperties") { Feature(it) }
+    val buildProperties = registry("buildProperties") { Feature(it) }
 
     // JVM
-    val kotlin = context("kotlin") { Feature(it) }
-    val java = context("java") { Feature(it) }
-    val application = context("application") { Feature(it) }
-    val library = context("library") { Feature(it) }
-    val dependencyUpdates = context("dependencyUpdates") { Feature(it) }
-    val vulnerabilityScan = context("vulnerabilityScan") { Feature(it) }
-    val lint = context("lint") { Feature(it) }
-    val codeAnalysis = context("codeAnalysis") { Feature(it, "analyzeCode") }
-    val developmentMode = context("developmentMode") { Feature(it) }
-    val test = context("test") { Feature(it) }
-    val benchmark = context("benchmark") { Feature(it) }
-    val packaging = context("packaging") { Feature(it) }
-    val docker = context("docker") { Feature(it) }
-    val documentation = context("documentation") { Feature(it) }
+    val kotlin = registry("kotlin") { Feature(it) }
+    val java = registry("java") { Feature(it) }
+    val application = registry("application") { Feature(it) }
+    val library = registry("library") { Feature(it) }
+    val dependencyUpdates = registry("dependencyUpdates") { Feature(it) }
+    val vulnerabilityScan = registry("vulnerabilityScan") { Feature(it) }
+    val lint = registry("lint") { Feature(it) }
+    val codeAnalysis = registry("codeAnalysis") { Feature(it, "analyzeCode") }
+    val developmentMode = registry("developmentMode") { Feature(it) }
+    val test = registry("test") { Feature(it) }
+    val benchmark = registry("benchmark") { Feature(it) }
+    val packaging = registry("packaging") { Feature(it) }
+    val docker = registry("docker") { Feature(it) }
+    val documentation = registry("documentation") { Feature(it) }
 }

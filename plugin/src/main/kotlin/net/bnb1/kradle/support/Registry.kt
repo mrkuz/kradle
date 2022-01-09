@@ -1,10 +1,10 @@
-package net.bnb1.kradle
+package net.bnb1.kradle.support
 
 import kotlin.reflect.KClass
 import kotlin.reflect.full.isSubclassOf
 
 @Suppress("UNCHECKED_CAST")
-open class KradleContext {
+open class Registry {
 
     private val _map = mutableMapOf<Pair<KClass<*>, String>, Any>()
     val map: Map<Pair<KClass<*>, String>, Any>
@@ -17,7 +17,7 @@ open class KradleContext {
             throw IllegalArgumentException("Duplicate key: $name, ${instance::class.qualifiedName}")
         }
     }
-    
+
     operator fun <T : Any> invoke(provider: () -> T) = create(provider)
 
     fun <T : Any> create(provider: () -> T): T {
