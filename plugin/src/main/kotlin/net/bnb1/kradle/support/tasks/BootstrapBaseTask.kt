@@ -1,4 +1,4 @@
-package net.bnb1.kradle.tasks
+package net.bnb1.kradle.support.tasks
 
 import org.eclipse.jgit.api.Git
 import org.gradle.api.DefaultTask

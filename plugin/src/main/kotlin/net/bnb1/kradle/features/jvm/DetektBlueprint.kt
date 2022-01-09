@@ -4,7 +4,7 @@ import io.gitlab.arturbosch.detekt.Detekt
 import net.bnb1.kradle.Catalog
 import net.bnb1.kradle.createHelperTask
 import net.bnb1.kradle.features.Blueprint
-import net.bnb1.kradle.tasks.GenerateDetektConfigTask
+import net.bnb1.kradle.support.tasks.GenerateDetektConfigTask
 import org.gradle.api.Project
 import org.gradle.api.Task
 import org.jetbrains.kotlin.gradle.dsl.KotlinProjectExtension

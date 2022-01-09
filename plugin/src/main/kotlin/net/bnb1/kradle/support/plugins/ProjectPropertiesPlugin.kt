@@ -1,4 +1,4 @@
-package net.bnb1.kradle.plugins
+package net.bnb1.kradle.support.plugins
 
 import org.gradle.api.Plugin
 import org.gradle.api.Project

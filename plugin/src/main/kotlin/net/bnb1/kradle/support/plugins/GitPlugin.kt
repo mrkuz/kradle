@@ -1,7 +1,7 @@
-package net.bnb1.kradle.plugins
+package net.bnb1.kradle.support.plugins
 
 import net.bnb1.kradle.createTask
-import net.bnb1.kradle.tasks.GenerateGitignoreTask
+import net.bnb1.kradle.support.tasks.GenerateGitignoreTask
 import org.eclipse.jgit.api.Git
 import org.eclipse.jgit.lib.Constants
 import org.gradle.api.Plugin

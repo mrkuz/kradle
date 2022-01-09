@@ -1,4 +1,4 @@
-package net.bnb1.kradle.tasks
+package net.bnb1.kradle.support.tasks
 
 import net.bnb1.kradle.empty
 import org.gradle.api.tasks.Input

@@ -3,7 +3,7 @@ package net.bnb1.kradle.features.jvm
 import net.bnb1.kradle.createHelperTask
 import net.bnb1.kradle.features.Blueprint
 import net.bnb1.kradle.features.general.BootstrapFeature
-import net.bnb1.kradle.tasks.BootstrapKotlinAppTask
+import net.bnb1.kradle.support.tasks.BootstrapKotlinAppTask
 import org.gradle.api.Project
 import org.gradle.kotlin.dsl.withType
 

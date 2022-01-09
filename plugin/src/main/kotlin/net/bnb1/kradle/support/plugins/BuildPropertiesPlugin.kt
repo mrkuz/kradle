@@ -1,7 +1,7 @@
-package net.bnb1.kradle.plugins
+package net.bnb1.kradle.support.plugins
 
 import net.bnb1.kradle.createTask
-import net.bnb1.kradle.tasks.GenerateBuildPropertiesTask
+import net.bnb1.kradle.support.tasks.GenerateBuildPropertiesTask
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 

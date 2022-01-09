@@ -4,8 +4,8 @@ import io.kotest.core.spec.style.FunSpec
 import io.mockk.verify
 import net.bnb1.kradle.Mocks
 import net.bnb1.kradle.features.general.ProjectPropertiesBlueprint
-import net.bnb1.kradle.plugins.ProjectPropertiesPlugin
 import net.bnb1.kradle.support.Tracer
+import net.bnb1.kradle.support.plugins.ProjectPropertiesPlugin
 
 class ProjectPropertiesBlueprintTests : FunSpec({
 

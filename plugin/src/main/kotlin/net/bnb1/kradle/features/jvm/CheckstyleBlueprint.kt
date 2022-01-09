@@ -3,7 +3,7 @@ package net.bnb1.kradle.features.jvm
 import net.bnb1.kradle.Catalog
 import net.bnb1.kradle.createHelperTask
 import net.bnb1.kradle.features.Blueprint
-import net.bnb1.kradle.tasks.GenerateCheckstyleConfigTask
+import net.bnb1.kradle.support.tasks.GenerateCheckstyleConfigTask
 import org.gradle.api.Project
 import org.gradle.api.Task
 import org.gradle.api.plugins.JavaPluginExtension
