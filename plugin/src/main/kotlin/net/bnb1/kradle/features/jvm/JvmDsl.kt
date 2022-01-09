@@ -23,7 +23,7 @@ class JvmDsl(features: AllFeatures, properties: AllProperties) {
     val benchmark = FeatureDsl(features.benchmark, properties.benchmark)
 
     @SuppressWarnings("VariableNaming")
-    val `package` = FeatureDsl(features.packaging, properties.packaging)
+    val `package` = FeatureDsl(features.packaging, PackagingDsl(properties))
     val packaging = `package`
     val docker = FeatureDsl(features.docker, properties.docker)
     val documentation = FeatureDsl(features.documentation, EmptyProperties)
