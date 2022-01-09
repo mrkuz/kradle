@@ -1,8 +1,8 @@
 package net.bnb1.kradle.features.jvm
 
+import net.bnb1.kradle.dsl.EmptyProperties
 import net.bnb1.kradle.features.AllFeatures
 import net.bnb1.kradle.features.AllProperties
-import net.bnb1.kradle.features.EmptyProperties
 import net.bnb1.kradle.features.FeatureDsl
 
 class JvmDsl(features: AllFeatures, properties: AllProperties) {

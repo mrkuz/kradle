@@ -3,11 +3,11 @@ package net.bnb1.kradle.tasks
 import net.bnb1.kradle.KradleContext
 import net.bnb1.kradle.dsl.Configurable
 import net.bnb1.kradle.dsl.ConfigurableSelf
+import net.bnb1.kradle.dsl.EmptyProperties
+import net.bnb1.kradle.dsl.Properties
 import net.bnb1.kradle.dsl.SimpleProvider
-import net.bnb1.kradle.features.EmptyProperties
 import net.bnb1.kradle.features.Feature
 import net.bnb1.kradle.features.FeatureDsl
-import net.bnb1.kradle.features.Properties
 import net.bnb1.kradle.support.Tracer
 import org.gradle.api.DefaultTask
 import org.gradle.api.model.ObjectFactory

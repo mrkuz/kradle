@@ -1,3 +1,3 @@
-package net.bnb1.kradle.features
+package net.bnb1.kradle.dsl
 
 object EmptyProperties : Properties()

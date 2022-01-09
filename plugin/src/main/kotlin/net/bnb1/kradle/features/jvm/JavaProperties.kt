@@ -1,6 +1,6 @@
 package net.bnb1.kradle.features.jvm
 
-import net.bnb1.kradle.features.Properties
+import net.bnb1.kradle.dsl.Properties
 
 class JavaProperties : Properties() {
 

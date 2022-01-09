@@ -1,9 +1,4 @@
-package net.bnb1.kradle.features
-
-import net.bnb1.kradle.dsl.Flag
-import net.bnb1.kradle.dsl.Flags
-import net.bnb1.kradle.dsl.Value
-import net.bnb1.kradle.dsl.ValueSet
+package net.bnb1.kradle.dsl
 
 /**
  * Properties are used to configure [feature sets][FeatureSet] and [features][Feature].
