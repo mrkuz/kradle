@@ -6,8 +6,8 @@ import java.util.concurrent.atomic.AtomicBoolean
 
 class KotlinJvmApplicationPreset(lock: AtomicBoolean) : Preset<KradleExtensionDsl>(lock) {
 
-    override fun doConfigure(extension: KradleExtensionDsl) {
-        extension.apply {
+    override fun doConfigure(target: KradleExtensionDsl) {
+        target.apply {
             general.configureOnly {
                 bootstrap.enable()
                 git.enable()
@@ -55,8 +55,8 @@ class KotlinJvmApplicationPreset(lock: AtomicBoolean) : Preset<KradleExtensionDs
         }
     }
 
-    override fun doActivate(extension: KradleExtensionDsl) {
-        extension.run {
+    override fun doActivate(target: KradleExtensionDsl) {
+        target.run {
             general.tryActivate()
             jvm.tryActivate()
         }
