@@ -92,6 +92,13 @@ kradle {
     }
 }
 
+tasks.withType<Test> {
+    environment("PROJECT_DIR", project.projectDir)
+    testLogging {
+        showStandardStreams = true
+    }
+}
+
 // Not sure why this hack is needed
 afterEvaluate {
 

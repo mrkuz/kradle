@@ -30,4 +30,5 @@ open class Value<T : Any>(
     }
 
     val hasValue by ::notNull
+    val hasSuggestion = suggestion != null
 }

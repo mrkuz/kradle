@@ -18,4 +18,6 @@ open class Flag : SimpleProvider<Boolean> {
     fun enable() = set(true)
 
     fun disable() = set(false)
+
+    fun toggle() = set(!value)
 }
