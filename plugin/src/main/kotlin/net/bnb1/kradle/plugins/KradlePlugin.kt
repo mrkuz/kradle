@@ -31,7 +31,8 @@ class KradlePlugin : Plugin<Project> {
             "Dumps kradle diagnostic information"
         )
         task.inject {
-            this.context = context
+            this.properties = context.propertiesAsList()
+            this.features = context.featuresAsList()
             this.tracer = tracer
         }
 

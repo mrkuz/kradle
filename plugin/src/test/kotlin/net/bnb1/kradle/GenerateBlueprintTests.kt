@@ -1,3 +1,5 @@
+@file:Suppress("UNCHECKED_CAST")
+
 package net.bnb1.kradle
 
 import io.mockk.MockK
@@ -33,7 +35,6 @@ import kotlin.reflect.jvm.jvmErasure
 
 private const val SOURCE_SET = "generatedTest"
 
-@Suppress("UNCHECKED_CAST")
 class GenerateBlueprintTests {
 
     @Test

@@ -25,7 +25,8 @@ class KradleCompatLibPlugin : Plugin<Project> {
 
         project.tasks.withType<KradleDumpTask> {
             inject {
-                this.context = context
+                this.properties = context.propertiesAsList()
+                this.features = context.featuresAsList()
                 this.tracer = tracer
             }
         }

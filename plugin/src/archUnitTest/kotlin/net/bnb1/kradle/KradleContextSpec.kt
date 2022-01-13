@@ -4,8 +4,9 @@ import com.tngtech.archunit.core.importer.ClassFileImporter
 import com.tngtech.archunit.core.importer.ImportOption
 import com.tngtech.archunit.lang.syntax.ArchRuleDefinition
 import io.kotest.core.spec.style.FunSpec
+import net.bnb1.kradle.config.KradleContext
 
-class DslPackageSpec : FunSpec({
+class KradleContextSpec : FunSpec({
 
     val classes = ClassFileImporter()
         .withImportOption(ImportOption.Predefined.DO_NOT_INCLUDE_TESTS)
@@ -13,10 +14,13 @@ class DslPackageSpec : FunSpec({
         .withImportOption(ImportOption.Predefined.DO_NOT_INCLUDE_JARS)
         .importPackages("net.bnb1.kradle")
 
-    test("No global access from dsl") {
+    test("Limit access to Kradle context") {
         var rule = ArchRuleDefinition
-            .classes().that().resideOutsideOfPackage("net.bnb1.kradle.dsl")
-            .should().onlyHaveDependentClassesThat().resideOutsideOfPackage("net.bnb1.kradle.dsl")
+            .classes().that().areAssignableTo(KradleContext::class.java)
+            .should().onlyHaveDependentClassesThat().resideInAnyPackage(
+                "net.bnb1.kradle.plugins",
+                "net.bnb1.kradle.v1"
+            )
 
         rule.check(classes)
     }
