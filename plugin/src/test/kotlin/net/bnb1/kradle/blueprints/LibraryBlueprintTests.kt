@@ -3,12 +3,13 @@ package net.bnb1.kradle.blueprints
 import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.spec.IsolationMode
 import io.kotest.core.spec.style.BehaviorSpec
+import io.mockk.mockk
 import io.mockk.verify
-import net.bnb1.kradle.Mocks
 import net.bnb1.kradle.blueprints.jvm.LibraryBlueprint
 import net.bnb1.kradle.core.Feature
 import net.bnb1.kradle.support.Tracer
 import org.gradle.api.GradleException
+import org.gradle.api.Project
 import org.gradle.api.plugins.JavaLibraryPlugin
 
 class LibraryBlueprintTests : BehaviorSpec({
@@ -17,7 +18,7 @@ class LibraryBlueprintTests : BehaviorSpec({
 
     Given("LibraryBlueprint") {
         val tracer = Tracer()
-        val project = Mocks.project()
+        val project = mockk<Project>(relaxed = true)
         val applicationFeature = Feature("application")
         val libraryFeature = Feature("library")
 

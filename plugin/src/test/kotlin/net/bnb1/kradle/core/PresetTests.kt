@@ -1,4 +1,4 @@
-package net.bnb1.kradle.presets
+package net.bnb1.kradle.core
 
 import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.spec.IsolationMode
@@ -8,7 +8,6 @@ import net.bnb1.kradle.config.AllFeatureSets
 import net.bnb1.kradle.config.AllFeatures
 import net.bnb1.kradle.config.AllProperties
 import net.bnb1.kradle.config.dsl.KradleExtensionDsl
-import net.bnb1.kradle.core.Preset
 import net.bnb1.kradle.support.Registry
 import net.bnb1.kradle.support.Tracer
 import org.gradle.api.GradleException
@@ -24,10 +23,10 @@ class PresetTests : BehaviorSpec({
     val properties = AllProperties(context)
     val features = AllFeatures(context)
     val featureSets = AllFeatureSets(context)
+    val extension = KradleExtensionDsl(tracer, featureSets, features, properties)
+    val lock = AtomicBoolean()
 
     Given("Preset") {
-        val extension = KradleExtensionDsl(tracer, featureSets, features, properties)
-        val lock = AtomicBoolean()
         val preset = TestPreset(lock)
 
         When("Activate twice") {
@@ -35,14 +34,12 @@ class PresetTests : BehaviorSpec({
             preset.activate(extension)
 
             Then("The second attempt is ignored") {
-                preset.activated.get() shouldBe 1
+                preset.activations.get() shouldBe 1
             }
         }
     }
 
     Given("Two presets") {
-        val extension = KradleExtensionDsl(tracer, featureSets, features, properties)
-        val lock = AtomicBoolean()
         val preset1 = TestPreset(lock)
         val preset2 = TestPreset(lock)
 
@@ -58,9 +55,9 @@ class PresetTests : BehaviorSpec({
 
 class TestPreset(lock: AtomicBoolean) : Preset<KradleExtensionDsl>(lock) {
 
-    val activated = AtomicInteger(0)
+    val activations = AtomicInteger(0)
 
     override fun doActivate(target: KradleExtensionDsl) {
-        activated.incrementAndGet()
+        activations.incrementAndGet()
     }
 }

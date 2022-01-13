@@ -4,9 +4,9 @@ import io.kotest.core.spec.style.FunSpec
 import io.kotest.matchers.booleans.shouldBeTrue
 import net.bnb1.kradle.blueprints.jvm.DependencyUpdatesBlueprint
 
-class DependencyUpdatesBlueprintTests : FunSpec({
+class DependencyUpdatesVersionFilterTests : FunSpec({
 
-    test("Exclude alphas, RCs and milestones") {
+    test("Exclude alphas, betas, RCs and milestones") {
 
         val filter = DependencyUpdatesBlueprint.VersionFilter
 

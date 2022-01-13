@@ -14,7 +14,7 @@ import java.util.concurrent.atomic.AtomicReference
  * Every feature has a parent [feature set][FeatureSet]. If the set is activated, the feature is also activated (unless
  * disabled). This in turn activates assigned [blueprints][Blueprint].
  */
-open class Feature(val name: String, private val taskName: String? = null) {
+class Feature(val name: String, private val taskName: String? = null) {
 
     enum class State {
         INACTIVE, ACTIVATING, ACTIVATED
@@ -26,8 +26,8 @@ open class Feature(val name: String, private val taskName: String? = null) {
     private var disabled = AtomicBoolean(false)
     private val state = AtomicReference(State.INACTIVE)
 
-    private var conflicts: Feature = NoFeature
-    private var requires: Feature = NoFeature
+    private var conflicts = mutableSetOf<Feature>()
+    private var requires = mutableSetOf<Feature>()
     private val after = mutableSetOf<Feature>()
     private val blueprints = mutableSetOf<Blueprint>()
 
@@ -40,12 +40,13 @@ open class Feature(val name: String, private val taskName: String? = null) {
 
     infix fun conflictsWith(feature: Feature) {
         failIfNotInactive()
-        conflicts = feature
+        feature.conflicts += this
+        conflicts += feature
     }
 
     infix fun requires(feature: Feature) {
         failIfNotInactive()
-        requires = feature
+        requires += feature
     }
 
     infix fun activatesAfter(feature: Feature) {
@@ -64,7 +65,7 @@ open class Feature(val name: String, private val taskName: String? = null) {
     }
 
     private fun failIfNotInactive() {
-        if (!isInactive) IllegalStateException("Configuration not allowed when activated")
+        if (!isInactive) throw IllegalStateException("Configuration not allowed when activated")
     }
 
     fun activate(tracer: Tracer) {
@@ -81,15 +82,15 @@ open class Feature(val name: String, private val taskName: String? = null) {
     }
 
     fun enable() {
-        if (conflicts != NoFeature && conflicts.isEnabled) {
+        conflicts.find { it.isEnabled }?.let {
             throw GradleException(
                 "You can only enable '${this::class.simpleName}'" +
-                    " or '${conflicts::class.simpleName}' feature"
+                    " or '${it::class.simpleName}' feature"
             )
         }
 
-        if (requires != NoFeature && !requires.isEnabled) {
-            throw GradleException("'${this::class.simpleName}' requires '${requires::class.simpleName}' feature")
+        requires.find { !it.isEnabled }?.let {
+            throw GradleException("'${this::class.simpleName}' requires '${it::class.simpleName}' feature")
         }
 
         if (!enabled.compareAndSet(false, true)) {
@@ -102,10 +103,7 @@ open class Feature(val name: String, private val taskName: String? = null) {
     }
 
     fun shouldActivateAfter(): Set<Feature> {
-        if (requires != NoFeature) {
-            return setOf(requires) + after
-        }
-        return after
+        return requires + after
     }
 
     val isEnabled

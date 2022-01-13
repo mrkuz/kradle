@@ -1,4 +1,4 @@
-package net.bnb1.kradle.blueprints
+package net.bnb1.kradle.core
 
 import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.spec.IsolationMode
@@ -6,8 +6,6 @@ import io.kotest.core.spec.style.BehaviorSpec
 import io.mockk.spyk
 import io.mockk.verify
 import io.mockk.verifyOrder
-import net.bnb1.kradle.core.Feature
-import net.bnb1.kradle.core.FeatureSet
 import net.bnb1.kradle.support.Tracer
 import org.gradle.api.GradleException
 
@@ -17,23 +15,15 @@ class FeatureSetTests : BehaviorSpec({
 
     val tracer = Tracer()
 
-    given("FeatureSet") {
+    Given("FeatureSet with two features") {
         val set = FeatureSet("test")
-        val feature1 = spyk<Feature1>().also {
+        val feature1 = spyk(Feature("1")).also {
             it.enable()
             set += it
         }
-        val feature2 = spyk<Feature2>().also {
+        val feature2 = spyk(Feature("2")).also {
             it.enable()
             set += it
-        }
-
-        When("Activate twice") {
-            set.activate(tracer)
-
-            Then("The second attempt fails") {
-                shouldThrow<GradleException> { set.activate(tracer) }
-            }
         }
 
         When("Activate") {
@@ -46,13 +36,21 @@ class FeatureSetTests : BehaviorSpec({
                 }
             }
         }
+
+        When("Activate twice") {
+            set.activate(tracer)
+
+            Then("The second attempt fails") {
+                shouldThrow<GradleException> { set.activate(tracer) }
+            }
+        }
     }
 
-    given("FeatureSet with ordered features") {
+    Given("FeatureSet with ordered features") {
         val set = FeatureSet("test")
-        val feature1 = spyk<Feature1>()
-        val feature2 = spyk<Feature2>()
-        val feature3 = spyk<Feature3>()
+        val feature1 = spyk(Feature("1"))
+        val feature2 = spyk(Feature("2"))
+        val feature3 = spyk(Feature("3"))
 
         feature1.also {
             it.enable()
@@ -82,11 +80,11 @@ class FeatureSetTests : BehaviorSpec({
         }
     }
 
-    given("FeatureSet with dependency loop") {
+    Given("FeatureSet with dependency loop") {
         val set = FeatureSet("test")
-        val feature1 = spyk<Feature1>()
-        val feature2 = spyk<Feature2>()
-        val feature3 = spyk<Feature3>()
+        val feature1 = spyk(Feature("1"))
+        val feature2 = spyk(Feature("2"))
+        val feature3 = spyk(Feature("3"))
 
         feature1.also {
             it.enable()
@@ -111,7 +109,3 @@ class FeatureSetTests : BehaviorSpec({
         }
     }
 })
-
-class Feature1 : Feature("1")
-class Feature2 : Feature("2")
-class Feature3 : Feature("3")

@@ -33,10 +33,11 @@ import kotlin.reflect.jvm.jvmErasure
 
 private const val SOURCE_SET = "generatedTest"
 
-class GenerateTests {
+@Suppress("UNCHECKED_CAST")
+class GenerateBlueprintTests {
 
     @Test
-    @Disabled("This is not a test. It's a utility to create test boilerplate")
+    @Disabled("Utility to create blueprint test boilerplate")
     fun run() {
         var project = mockk<Project>(relaxed = true)
         val context = spyk(KradleContext(project))
@@ -99,7 +100,6 @@ class GenerateTests {
             }
     }
 
-    @Suppress("UncheckedCast")
     private fun getAccessedProperties(): List<PropertyAccess> {
         val properties = mutableListOf<PropertyAccess>()
         MockK.useImpl {
@@ -277,7 +277,6 @@ class AllPropertiesWrapper(private val allProperties: AllProperties) {
     }
 }
 
-@Suppress("UncheckedCast")
 fun <T : Any, U : Any> KClass<T>.getMemberProperties(subclassOf: KClass<U>): List<KProperty1<T, U>> {
     return memberProperties
         .filter { it.visibility == KVisibility.PUBLIC }
