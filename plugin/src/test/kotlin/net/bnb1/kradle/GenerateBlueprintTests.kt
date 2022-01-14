@@ -18,10 +18,11 @@ import net.bnb1.kradle.dsl.Flag
 import net.bnb1.kradle.dsl.Properties
 import net.bnb1.kradle.dsl.Value
 import net.bnb1.kradle.support.Registry
-import org.apache.tools.ant.TaskContainer
 import org.gradle.api.Project
 import org.gradle.api.artifacts.dsl.DependencyHandler
 import org.gradle.api.plugins.PluginManager
+import org.gradle.api.tasks.TaskContainer
+import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.Test
 import java.nio.file.Path
 import kotlin.reflect.KClass
@@ -34,17 +35,19 @@ import kotlin.reflect.jvm.isAccessible
 import kotlin.reflect.jvm.jvmErasure
 
 private const val SOURCE_SET = "generatedTest"
-private const val TRIPLE = "\"\"\""
+private const val TRIPLE_QUOTES = "\"\"\""
 
 class GenerateBlueprintTests {
 
     @Test
-    // @Disabled("Utility to create blueprint test boilerplate")
+    @Disabled("Utility to create blueprint test boilerplate")
     fun run() {
         val project = mockk<Project>(relaxed = true)
+        every { project.tasks } returns mockk()
         val context = spyk(KradleContext(project))
         val registry = Registry()
         val properties = spyAllProperties(registry)
+        every { context.properties } returns properties
         every { context.blueprints } returns AllBlueprints(registry, properties, project)
         context.initialize()
 
@@ -61,20 +64,20 @@ class GenerateBlueprintTests {
     }
 
     private fun collectBlueprintsMetadata(context: KradleContext): List<BlueprintMetadata> {
-        val blueprints = mutableListOf<BlueprintMetadata>()
+        val metadata = mutableListOf<BlueprintMetadata>()
         AllBlueprints::class.getMemberProperties(Blueprint::class).forEach {
             val blueprint = it.get(context.blueprints)
             MockkUtils.clearRecordings()
             runBlueprintMethods(blueprint)
-            val properties = getAccessedProperties()
-            blueprints.add(BlueprintMetadata(blueprint, properties))
+            val accessedProperties = getAccessedProperties()
+            metadata.add(BlueprintMetadata(blueprint, accessedProperties))
             MockkUtils.clearRecordings()
         }
-        return blueprints
+        return metadata
     }
 
     private fun getAccessedProperties(): List<PropertyAccess> {
-        val properties = mutableListOf<PropertyAccess>()
+        val accessedProperties = mutableListOf<PropertyAccess>()
         MockK.useImpl {
             val gateway = MockKGateway.implementation() as JvmMockKGateway
             gateway.stubRepo.allStubs
@@ -82,11 +85,11 @@ class GenerateBlueprintTests {
                 .forEach { stub ->
                     stub.allRecordedCalls().forEach { invocation ->
                         val fieldName = invocation.fieldValueProvider.invoke()!!.name
-                        properties.add(PropertyAccess(stub.type as KClass<Properties>, fieldName))
+                        accessedProperties.add(PropertyAccess(stub.type as KClass<Properties>, fieldName))
                     }
                 }
         }
-        return properties
+        return accessedProperties
     }
 }
 
@@ -114,6 +117,7 @@ class TestGenerator(context: KradleContext, private val metadata: BlueprintMetad
             package net.bnb1.kradle.blueprints
 
             import io.kotest.core.spec.style.BehaviorSpec
+            import io.kotest.matchers.shouldBe
             import net.bnb1.kradle.TestProject
             import org.gradle.testkit.runner.TaskOutcome
 
@@ -128,11 +132,11 @@ class TestGenerator(context: KradleContext, private val metadata: BlueprintMetad
         generateGiven("Default configuration", 4) {
             """
             project.setUp {
-               $TRIPLE
+               $TRIPLE_QUOTES
                ${featureSet.name} {
                    ${feature.name}.enable()
                }
-               $TRIPLE.trimIndent()
+               $TRIPLE_QUOTES.trimIndent()
             }
             
             When("Run ${feature.defaultTaskName}") {
@@ -175,19 +179,19 @@ class TestGenerator(context: KradleContext, private val metadata: BlueprintMetad
         return if (featureExists) {
             """
             project.setUp {
-               $TRIPLE
+               $TRIPLE_QUOTES
                ${featureSet.name} {
                    $propertiesName {
                        ${access.name}($value)
                    }
                }
-               $TRIPLE.trimIndent()
+               $TRIPLE_QUOTES.trimIndent()
             }
             """
         } else {
             """
             project.setUp {
-               $TRIPLE
+               $TRIPLE_QUOTES
                ${featureSet.name} {
                    ${feature.name} {
                        $propertiesName {
@@ -195,7 +199,7 @@ class TestGenerator(context: KradleContext, private val metadata: BlueprintMetad
                        }
                    }
                }
-               $TRIPLE.trimIndent()
+               $TRIPLE_QUOTES.trimIndent()
             }  
             """
         }
@@ -220,15 +224,15 @@ class TestGenerator(context: KradleContext, private val metadata: BlueprintMetad
         MockkUtils.clearRecordings()
         runBlueprintMethods(metadata.blueprint)
 
-        var invocations = findInvocations(PluginManager::class, "apply")
+        var invocations = findInvocations(PluginManager::class, "apply", 1)
         handlePlugins(invocations, indent)
 
-        invocations = findInvocations(TaskContainer::class, "create")
+        invocations = findInvocations(TaskContainer::class, "create", 1)
         handleTasks(invocations, indent)
 
         invocations = mutableListOf()
-        invocations = invocations + findInvocations(DependencyHandler::class, "create")
-        invocations = invocations + findInvocations(DependencyHandler::class, "add")
+        invocations = invocations + findInvocations(DependencyHandler::class, "create", 2)
+        invocations = invocations + findInvocations(DependencyHandler::class, "add", 2)
         handleDependencies(invocations, indent)
 
         MockkUtils.clearRecordings()
@@ -271,19 +275,35 @@ class TestGenerator(context: KradleContext, private val metadata: BlueprintMetad
             """.block(indent)
         )
 
-        invocations
+        val tasks = invocations
             .map { it.args[0] }
             .filterIsInstance<String>()
-            .forEach {
-                output.appendText(
-                    """
+
+        tasks.forEach {
+            output.appendText(
+                """
                         
-                    Then("Task $it is available") {
-                        project.shouldHaveTask("$it")
+                Then("Task $it is available") {
+                    project.shouldHaveTask("$it")
+                }
+                """.block(indent + 4)
+            )
+        }
+
+        tasks.forEach {
+            output.appendText(
+                """       
+                
+                When("Run $it") {
+                    val result = project.runTask("$it")
+
+                    Then("Succeed") {
+                        result.task(":$it")!!.outcome shouldBe TaskOutcome.SUCCESS
                     }
-                    """.block(indent + 4)
-                )
-            }
+                }
+                """.block(indent + 4)
+            )
+        }
 
         output.appendText("}".block(indent))
     }
@@ -306,7 +326,7 @@ class TestGenerator(context: KradleContext, private val metadata: BlueprintMetad
                 output.appendText(
                     """
                         
-                    Then("${it[1]} is available") {
+                    Then("${it[1].toString().split(":")[1]} is available") {
                         project.shouldHaveDependency("${it[0]}", "${it[1]}")
                     }
                     """.block(indent + 4)
@@ -316,9 +336,9 @@ class TestGenerator(context: KradleContext, private val metadata: BlueprintMetad
         output.appendText("}".block(indent))
     }
 
-    private fun findInvocations(klass: KClass<*>, methodName: String): List<MockkUtils.Invocation> {
+    private fun findInvocations(klass: KClass<*>, methodName: String, argsLimit: Int): List<MockkUtils.Invocation> {
         return MockkUtils.findInvocations(klass, methodName)
-            .filter { processed.add(it) }
+            .filter { processed.add(MockkUtils.Invocation(it.klass, it.methodName, it.args.slice(0 until argsLimit))) }
             .toList()
     }
 }
