@@ -1,35 +1,28 @@
 package net.bnb1.kradle.blueprints
 
-import io.kotest.matchers.string.shouldContain
-import net.bnb1.kradle.IntegrationSpec
+import io.kotest.core.spec.style.BehaviorSpec
+import net.bnb1.kradle.TestProject
 import org.gradle.api.publish.maven.plugins.MavenPublishPlugin
 
-class MavenPublishBlueprintTests : IntegrationSpec({
+class MavenPublishBlueprintTests : BehaviorSpec({
+
+    val project = TestProject(this)
 
     Given("Default configuration") {
-        bootstrapProject {
+        project.setUp {
             """
             jvm {
                 library.enable()
             }
             """.trimIndent()
         }
-        addHasPluginTask(MavenPublishPlugin::class)
 
-        When("List tasks") {
-            val result = runTask("tasks")
-
-            Then("install should be available") {
-                result.output shouldContain "install "
-            }
+        Then("Task install is available") {
+            project.shouldHaveTask("install")
         }
 
-        When("Check for plugin") {
-            val result = runTask("hasPlugin")
-
-            Then("MavenPublishPlugin is applied") {
-                result.output shouldContain "hasPlugin: true"
-            }
+        Then("Maven plugin is applied") {
+            project.shouldHavePlugin(MavenPublishPlugin::class)
         }
     }
 })

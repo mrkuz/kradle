@@ -25,6 +25,8 @@ class FeatureSet(val name: String) {
         this.features += features
     }
 
+    fun hasFeature(feature: Feature) = features.contains(feature)
+
     private fun failIfActive() {
         if (activated.get()) throw IllegalStateException("Configuration not allowed when activated")
     }

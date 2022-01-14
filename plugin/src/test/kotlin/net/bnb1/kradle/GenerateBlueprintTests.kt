@@ -12,6 +12,8 @@ import net.bnb1.kradle.config.AllBlueprints
 import net.bnb1.kradle.config.AllProperties
 import net.bnb1.kradle.config.KradleContext
 import net.bnb1.kradle.core.Blueprint
+import net.bnb1.kradle.core.Feature
+import net.bnb1.kradle.core.FeatureSet
 import net.bnb1.kradle.dsl.Flag
 import net.bnb1.kradle.dsl.Properties
 import net.bnb1.kradle.dsl.Value
@@ -20,7 +22,6 @@ import org.apache.tools.ant.TaskContainer
 import org.gradle.api.Project
 import org.gradle.api.artifacts.dsl.DependencyHandler
 import org.gradle.api.plugins.PluginManager
-import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.Test
 import java.io.File
 import java.nio.file.Path
@@ -34,11 +35,12 @@ import kotlin.reflect.jvm.isAccessible
 import kotlin.reflect.jvm.jvmErasure
 
 private const val SOURCE_SET = "generatedTest"
+private const val TRIPLE = "\"\"\""
 
 class GenerateBlueprintTests {
 
     @Test
-    @Disabled("Utility to create blueprint test boilerplate")
+    // @Disabled("Utility to create blueprint test boilerplate")
     fun run() {
         var project = mockk<Project>(relaxed = true)
         val context = spyk(KradleContext(project))
@@ -48,7 +50,7 @@ class GenerateBlueprintTests {
         context.initialize()
 
         val blueprints = collectBlueprintsMetadata(context)
-        blueprints.forEach { generateTest(it, properties) }
+        blueprints.forEach { generateTest(it, context) }
     }
 
     private fun spyAllProperties(registry: Registry): AllProperties {
@@ -134,7 +136,7 @@ class GenerateBlueprintTests {
         return invocations
     }
 
-    private fun generateTest(metadata: BlueprintMetadata, allProperties: AllProperties) {
+    private fun generateTest(metadata: BlueprintMetadata, context: KradleContext) {
         val dir = Path.of(
             System.getenv("PROJECT_DIR"), "src", SOURCE_SET, "kotlin", "net", "bnb1", "kradle", "blueprints"
         ).toFile()
@@ -143,65 +145,86 @@ class GenerateBlueprintTests {
 
         val className = metadata.blueprint::class.simpleName + "Tests"
         val file = dir.resolve("$className.kt")
-        if (file.exists()) {
-            return
-        }
 
         file.writeText(
             """
             package net.bnb1.kradle.blueprints
 
             import io.kotest.core.spec.style.BehaviorSpec
+            import net.bnb1.kradle.TestProject
 
             class $className : BehaviorSpec({
             
+                val project = TestProject(this)
             """.trimIndent()
         )
 
-        generateGiven(file, metadata, "Default configuration")
+        val wrapper = KradleContextWrapper(context)
+        val featureSet = wrapper.getFeatureSet(metadata)
+        val feature = wrapper.getFeature(metadata)
 
-        val wrapper = AllPropertiesWrapper(allProperties)
+        generateGiven(file, metadata, "Default configuration", 4) {
+            """
+            project.setUp {
+               $TRIPLE
+               ${featureSet.name} {
+                   ${feature.name}.enable()
+               }
+               $TRIPLE.trimIndent()
+            }
+            
+            When("Run ${feature.defaultTaskName}") {
+                            
+                Then("TODO") {
+                    // TODO
+                }
+            }
+            
+            """
+        }
+
         metadata.properties.forEach {
             val value = wrapper.getValue(it)
             val propertyName = wrapper.getPropertiesName(it) + "." + it.name
             if (value is Flag) {
                 value.toggle()
-                generateGiven(file, metadata, "$propertyName = ${value.get()}")
+                generateGiven(file, metadata, "$propertyName = ${value.get()}", 4) { "" }
                 value.toggle()
             }
             if (value is Value<*> && !value.hasValue && value.hasSuggestion) {
                 value.set()
-                generateGiven(file, metadata, "$propertyName = ${value.get()}")
+                generateGiven(file, metadata, "$propertyName = ${value.get()}", 4) { "" }
                 value.reset()
             }
         }
 
-        file.appendText(
-            """
-            })
-            """.trimIndent()
-        )
+        file.appendText("})")
     }
 
-    private fun generateGiven(file: File, metadata: BlueprintMetadata, givenText: String) {
+    private fun generateGiven(
+        file: File,
+        metadata: BlueprintMetadata,
+        givenText: String,
+        indent: Int,
+        body: () -> String
+    ) {
         file.appendText(
             """
-            |    
-            |    Given("$givenText") {
-        """.trimMargin("|")
+
+
+            Given("$givenText") {
+            
+            """.block(indent)
         )
 
-        generateWhens(file, metadata)
+        file.appendText(body().block(indent + 4))
 
-        file.appendText(
-            """
-            |    }
-            |
-        """.trimMargin("|")
-        )
+        generateWhens(file, metadata, indent + 4)
+
+        file.appendText("}".block(indent))
     }
 
-    private fun generateWhens(file: File, metadata: BlueprintMetadata) {
+    private fun generateWhens(file: File, metadata: BlueprintMetadata, indent: Int) {
         clearRecordings()
         runBlueprintMethods(metadata.blueprint)
 
@@ -209,18 +232,20 @@ class GenerateBlueprintTests {
         if (invocations.isNotEmpty()) {
             generateWhenThen(
                 file,
-                "Check for plugin", "Plugin is applied",
-                invocations.flatMap { it.args }.joinToString(", ")
-            )
+                "Check for plugin", "Plugin is applied", indent
+            ) {
+                "// " + invocations.flatMap { it.args }.joinToString(", ")
+            }
         }
 
         invocations = getInvocations(TaskContainer::class, "create")
         if (invocations.isNotEmpty()) {
             generateWhenThen(
                 file,
-                "List tasks", "Task is available",
-                invocations.flatMap { it.args }.joinToString(", ")
-            )
+                "List tasks", "Task is available", indent
+            ) {
+                "// " + invocations.flatMap { it.args }.joinToString(", ")
+            }
         }
 
         invocations = (
@@ -230,26 +255,25 @@ class GenerateBlueprintTests {
         if (invocations.isNotEmpty()) {
             generateWhenThen(
                 file,
-                "List dependencies", "Dependencies are available",
-                invocations.flatMap { it.args }.joinToString(", ")
-            )
+                "List dependencies", "Dependencies are available", indent
+            ) {
+                "// " + invocations.flatMap { it.args }.joinToString(", ")
+            }
         }
 
         clearRecordings()
     }
 
-    private fun generateWhenThen(file: File, whenText: String, thenText: String, comment: String) {
+    private fun generateWhenThen(file: File, whenText: String, thenText: String, indent: Int, body: () -> String) {
         file.appendText(
             """
-            |        
-            |        When("$whenText") {
-            |            
-            |            Then("$thenText") {
-            |                // $comment
-            |            }
-            |        }
-            |
-        """.trimMargin("|")
+            When("$whenText") {
+                            
+                Then("$thenText") {
+                    ${body()}
+                }
+            }
+        """.block(indent)
         )
     }
 }
@@ -265,7 +289,7 @@ data class PropertyAccess(val propertiesClass: KClass<Properties>, val name: Str
 
 data class Invocation(val args: List<Any?>)
 
-class AllPropertiesWrapper(private val allProperties: AllProperties) {
+class KradleContextWrapper(private val context: KradleContext) {
 
     fun getPropertiesName(access: PropertyAccess) = AllProperties::class.memberProperties
         .find { it.returnType.jvmErasure == access.propertiesClass }!!.name
@@ -273,8 +297,18 @@ class AllPropertiesWrapper(private val allProperties: AllProperties) {
     fun getValue(access: PropertyAccess): Any {
         val properties = AllProperties::class.memberProperties
             .find { it.returnType.jvmErasure == access.propertiesClass }!!
-            .get(allProperties) as Properties
+            .get(context.properties) as Properties
         return access.getValue(properties)
+    }
+
+    fun getFeature(metadata: BlueprintMetadata): Feature {
+        return context.featuresAsList().find { it.hasBlueprint(metadata.blueprint::class) }!!
+    }
+
+    fun getFeatureSet(metadata: BlueprintMetadata): FeatureSet {
+        val feature = context.featuresAsList().find { it.hasBlueprint(metadata.blueprint::class) }!!
+        val featureSet = context.featuresSetsAsList().find { it.hasFeature(feature!!) }!!
+        return featureSet
     }
 }
 
@@ -283,4 +317,15 @@ fun <T : Any, U : Any> KClass<T>.getMemberProperties(subclassOf: KClass<U>): Lis
         .filter { it.visibility == KVisibility.PUBLIC }
         .filter { it.returnType.jvmErasure.isSubclassOf(subclassOf) }
         .toList() as List<KProperty1<T, U>>
+}
+
+fun String.block(indent: Int): String {
+    val lines = this.trimIndent().lines()
+    return lines.joinToString("\n") {
+        if (it.isBlank()) {
+            ""
+        } else {
+            " ".repeat(indent) + it
+        }
+    } + "\n"
 }

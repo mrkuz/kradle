@@ -4,6 +4,7 @@ import net.bnb1.kradle.support.Tracer
 import org.gradle.api.GradleException
 import java.util.concurrent.atomic.AtomicBoolean
 import java.util.concurrent.atomic.AtomicReference
+import kotlin.reflect.KClass
 
 /**
  * A Kradle feature.
@@ -63,6 +64,8 @@ class Feature(val name: String, private val taskName: String? = null) {
         failIfNotInactive()
         this.blueprints += blueprints
     }
+
+    fun hasBlueprint(blueprint: KClass<out Blueprint>) = blueprints.any { it::class == blueprint }
 
     private fun failIfNotInactive() {
         if (!isInactive) throw IllegalStateException("Configuration not allowed when activated")
