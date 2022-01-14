@@ -23,7 +23,6 @@ import org.gradle.api.Project
 import org.gradle.api.artifacts.dsl.DependencyHandler
 import org.gradle.api.plugins.PluginManager
 import org.junit.jupiter.api.Test
-import java.io.File
 import java.nio.file.Path
 import kotlin.reflect.KClass
 import kotlin.reflect.KProperty1
@@ -42,7 +41,7 @@ class GenerateBlueprintTests {
     @Test
     // @Disabled("Utility to create blueprint test boilerplate")
     fun run() {
-        var project = mockk<Project>(relaxed = true)
+        val project = mockk<Project>(relaxed = true)
         val context = spyk(KradleContext(project))
         val registry = Registry()
         val properties = spyAllProperties(registry)
@@ -50,7 +49,7 @@ class GenerateBlueprintTests {
         context.initialize()
 
         val blueprints = collectBlueprintsMetadata(context)
-        blueprints.forEach { generateTest(it, context) }
+        blueprints.forEach { TestGenerator(context, it).generate() }
     }
 
     private fun spyAllProperties(registry: Registry): AllProperties {
@@ -65,105 +64,68 @@ class GenerateBlueprintTests {
         val blueprints = mutableListOf<BlueprintMetadata>()
         AllBlueprints::class.getMemberProperties(Blueprint::class).forEach {
             val blueprint = it.get(context.blueprints)
-            clearRecordings()
+            MockkUtils.clearRecordings()
             runBlueprintMethods(blueprint)
             val properties = getAccessedProperties()
             blueprints.add(BlueprintMetadata(blueprint, properties))
-            clearRecordings()
+            MockkUtils.clearRecordings()
         }
         return blueprints
-    }
-
-    private fun clearRecordings() {
-        MockK.useImpl {
-            val clearOptions = MockKGateway.ClearOptions(
-                answers = false,
-                recordedCalls = true,
-                childMocks = false,
-                verificationMarks = false,
-                exclusionRules = false
-            )
-            val gateway = MockKGateway.implementation() as JvmMockKGateway
-            gateway.stubRepo.allStubs.forEach {
-                it.clear(clearOptions)
-            }
-        }
-    }
-
-    private fun runBlueprintMethods(blueprint: Blueprint) {
-        blueprint::class.memberFunctions
-            .filter { it.isOpen }
-            .forEach {
-                try {
-                    it.isAccessible = true
-                    it.call(blueprint)
-                } catch (e: Exception) {
-                    // Ignore
-                }
-            }
     }
 
     private fun getAccessedProperties(): List<PropertyAccess> {
         val properties = mutableListOf<PropertyAccess>()
         MockK.useImpl {
             val gateway = MockKGateway.implementation() as JvmMockKGateway
-            gateway.stubRepo.allStubs.forEach { stub ->
-                if (stub.type.isSubclassOf(Properties::class)) {
+            gateway.stubRepo.allStubs
+                .filter { stub -> stub.type.isSubclassOf(Properties::class) }
+                .forEach { stub ->
                     stub.allRecordedCalls().forEach { invocation ->
                         val fieldName = invocation.fieldValueProvider.invoke()!!.name
                         properties.add(PropertyAccess(stub.type as KClass<Properties>, fieldName))
                     }
                 }
-            }
         }
         return properties
     }
+}
 
-    private fun getInvocations(klass: KClass<*>, methodName: String): List<Invocation> {
-        val invocations = mutableListOf<Invocation>()
-        MockK.useImpl {
-            val gateway = MockKGateway.implementation() as JvmMockKGateway
-            gateway.stubRepo.allStubs.forEach { stub ->
-                if (stub.type == klass) {
-                    stub.allRecordedCalls().forEach { invocation ->
-                        if (invocation.method.name == methodName) {
-                            invocations.add(Invocation((invocation.args)))
-                        }
-                    }
-                }
-            }
-        }
-        return invocations
-    }
+class TestGenerator(context: KradleContext, private val metadata: BlueprintMetadata) {
 
-    private fun generateTest(metadata: BlueprintMetadata, context: KradleContext) {
-        val dir = Path.of(
-            System.getenv("PROJECT_DIR"), "src", SOURCE_SET, "kotlin", "net", "bnb1", "kradle", "blueprints"
-        ).toFile()
+    private val wrapper = KradleContextWrapper(context)
+    private val featureSet = wrapper.getFeatureSet(metadata)
+    private val feature = wrapper.getFeature(metadata)
 
-        dir.mkdirs()
+    private val className = metadata.blueprint::class.simpleName + "Tests"
+    private val dir = Path.of(
+        System.getenv("PROJECT_DIR"),
+        "src", SOURCE_SET, "kotlin",
+        "net", "bnb1", "kradle", "blueprints"
+    )
+    private val output = dir.toFile().resolve("$className.kt")
 
-        val className = metadata.blueprint::class.simpleName + "Tests"
-        val file = dir.resolve("$className.kt")
+    private val processed = mutableSetOf<MockkUtils.Invocation>()
 
-        file.writeText(
+    fun generate() {
+        dir.toFile().mkdirs()
+
+        output.writeText(
             """
             package net.bnb1.kradle.blueprints
 
             import io.kotest.core.spec.style.BehaviorSpec
             import net.bnb1.kradle.TestProject
+            import org.gradle.testkit.runner.TaskOutcome
 
             class $className : BehaviorSpec({
             
                 val project = TestProject(this)
+                
             """.trimIndent()
         )
 
-        val wrapper = KradleContextWrapper(context)
-        val featureSet = wrapper.getFeatureSet(metadata)
-        val feature = wrapper.getFeature(metadata)
-
-        generateGiven(file, metadata, "Default configuration", 4) {
+        // TODO: Handle depends on
+        generateGiven("Default configuration", 4) {
             """
             project.setUp {
                $TRIPLE
@@ -174,107 +136,190 @@ class GenerateBlueprintTests {
             }
             
             When("Run ${feature.defaultTaskName}") {
-                            
-                Then("TODO") {
-                    // TODO
+                val result = project.runTask("${feature.defaultTaskName}")
+                
+                Then("Succeed") {
+                    result.task(":${feature.defaultTaskName}")!!.outcome shouldBe TaskOutcome.SUCCESS
                 }
             }
-            
             """
         }
 
         metadata.properties.forEach {
             val value = wrapper.getValue(it)
-            val propertyName = wrapper.getPropertiesName(it) + "." + it.name
+            val propertiesName = wrapper.getPropertiesName(it)
+            val propertyName = propertiesName + "." + it.name
             if (value is Flag) {
                 value.toggle()
-                generateGiven(file, metadata, "$propertyName = ${value.get()}", 4) { "" }
+                generateGiven("$propertyName = ${value.get()}", 4) {
+                    guessProjectSetup(it, value.get())
+                }
                 value.toggle()
             }
             if (value is Value<*> && !value.hasValue && value.hasSuggestion) {
                 value.set()
-                generateGiven(file, metadata, "$propertyName = ${value.get()}", 4) { "" }
+                generateGiven("$propertyName = ${value.get()}", 4) {
+                    guessProjectSetup(it, value.get())
+                }
                 value.reset()
             }
         }
 
-        file.appendText("})")
+        output.appendText("})")
     }
 
-    private fun generateGiven(
-        file: File,
-        metadata: BlueprintMetadata,
-        givenText: String,
-        indent: Int,
-        body: () -> String
-    ) {
-        file.appendText(
+    private fun guessProjectSetup(access: PropertyAccess, value: Any): String {
+        // TODO: Use KradleExtension instead of guessing
+        val propertiesName = wrapper.getPropertiesName(access)
+        val featureExists = wrapper.context.featuresAsList().any { it.name == propertiesName }
+        return if (featureExists) {
+            """
+            project.setUp {
+               $TRIPLE
+               ${featureSet.name} {
+                   $propertiesName {
+                       ${access.name}($value)
+                   }
+               }
+               $TRIPLE.trimIndent()
+            }
+            """
+        } else {
+            """
+            project.setUp {
+               $TRIPLE
+               ${featureSet.name} {
+                   ${feature.name} {
+                       $propertiesName {
+                           ${access.name}($value)
+                       }
+                   }
+               }
+               $TRIPLE.trimIndent()
+            }  
+            """
+        }
+    }
+
+    private fun generateGiven(givenText: String, indent: Int, body: () -> String) {
+        output.appendText(
             """
 
-
             Given("$givenText") {
-            
             """.block(indent)
         )
 
-        file.appendText(body().block(indent + 4))
+        output.appendText(body().block(indent + 4))
 
-        generateWhens(file, metadata, indent + 4)
+        generateWhens(indent + 4)
 
-        file.appendText("}".block(indent))
+        output.appendText("}".block(indent))
     }
 
-    private fun generateWhens(file: File, metadata: BlueprintMetadata, indent: Int) {
-        clearRecordings()
+    private fun generateWhens(indent: Int) {
+        MockkUtils.clearRecordings()
         runBlueprintMethods(metadata.blueprint)
 
-        var invocations = getInvocations(PluginManager::class, "apply")
-        if (invocations.isNotEmpty()) {
-            generateWhenThen(
-                file,
-                "Check for plugin", "Plugin is applied", indent
-            ) {
-                "// " + invocations.flatMap { it.args }.joinToString(", ")
-            }
-        }
+        var invocations = findInvocations(PluginManager::class, "apply")
+        handlePlugins(invocations, indent)
 
-        invocations = getInvocations(TaskContainer::class, "create")
-        if (invocations.isNotEmpty()) {
-            generateWhenThen(
-                file,
-                "List tasks", "Task is available", indent
-            ) {
-                "// " + invocations.flatMap { it.args }.joinToString(", ")
-            }
-        }
+        invocations = findInvocations(TaskContainer::class, "create")
+        handleTasks(invocations, indent)
 
-        invocations = (
-            getInvocations(DependencyHandler::class, "create") +
-                getInvocations(DependencyHandler::class, "add")
-            )
-        if (invocations.isNotEmpty()) {
-            generateWhenThen(
-                file,
-                "List dependencies", "Dependencies are available", indent
-            ) {
-                "// " + invocations.flatMap { it.args }.joinToString(", ")
-            }
-        }
+        invocations = mutableListOf()
+        invocations = invocations + findInvocations(DependencyHandler::class, "create")
+        invocations = invocations + findInvocations(DependencyHandler::class, "add")
+        handleDependencies(invocations, indent)
 
-        clearRecordings()
+        MockkUtils.clearRecordings()
     }
 
-    private fun generateWhenThen(file: File, whenText: String, thenText: String, indent: Int, body: () -> String) {
-        file.appendText(
+    private fun handlePlugins(invocations: List<MockkUtils.Invocation>, indent: Int) {
+        if (invocations.isEmpty()) return
+
+        output.appendText(
             """
-            When("$whenText") {
-                            
-                Then("$thenText") {
-                    ${body()}
-                }
-            }
-        """.block(indent)
+                
+            When("Check for plugins") {
+            """.block(indent)
         )
+
+        invocations
+            .map { it.args[0] }
+            .filterIsInstance<Class<*>>()
+            .forEach {
+                output.appendText(
+                    """
+                        
+                    Then("${it.simpleName} is applied") {
+                        project.shouldHavePlugin(${it.simpleName}::class)
+                    }
+                    """.block(indent + 4)
+                )
+            }
+
+        output.appendText("}".block(indent))
+    }
+
+    private fun handleTasks(invocations: List<MockkUtils.Invocation>, indent: Int) {
+        if (invocations.isEmpty()) return
+
+        output.appendText(
+            """
+                
+            When("Check for tasks") {
+            """.block(indent)
+        )
+
+        invocations
+            .map { it.args[0] }
+            .filterIsInstance<String>()
+            .forEach {
+                output.appendText(
+                    """
+                        
+                    Then("Task $it is available") {
+                        project.shouldHaveTask("$it")
+                    }
+                    """.block(indent + 4)
+                )
+            }
+
+        output.appendText("}".block(indent))
+    }
+
+    private fun handleDependencies(invocations: List<MockkUtils.Invocation>, indent: Int) {
+        if (invocations.isEmpty()) return
+
+        output.appendText(
+            """
+            
+            When("Check for dependencies") {
+            """.block(indent)
+        )
+
+        invocations
+            .map { it.args }
+            .filter { it.size == 2 }
+            .filter { it[0] is String && it[1] is String }
+            .forEach {
+                output.appendText(
+                    """
+                        
+                    Then("${it[1]} is available") {
+                        project.shouldHaveDependency("${it[0]}", "${it[1]}")
+                    }
+                    """.block(indent + 4)
+                )
+            }
+
+        output.appendText("}".block(indent))
+    }
+
+    private fun findInvocations(klass: KClass<*>, methodName: String): List<MockkUtils.Invocation> {
+        return MockkUtils.findInvocations(klass, methodName)
+            .filter { processed.add(it) }
+            .toList()
     }
 }
 
@@ -287,9 +332,7 @@ data class PropertyAccess(val propertiesClass: KClass<Properties>, val name: Str
         .get(properties)!!
 }
 
-data class Invocation(val args: List<Any?>)
-
-class KradleContextWrapper(private val context: KradleContext) {
+class KradleContextWrapper(val context: KradleContext) {
 
     fun getPropertiesName(access: PropertyAccess) = AllProperties::class.memberProperties
         .find { it.returnType.jvmErasure == access.propertiesClass }!!.name
@@ -307,9 +350,21 @@ class KradleContextWrapper(private val context: KradleContext) {
 
     fun getFeatureSet(metadata: BlueprintMetadata): FeatureSet {
         val feature = context.featuresAsList().find { it.hasBlueprint(metadata.blueprint::class) }!!
-        val featureSet = context.featuresSetsAsList().find { it.hasFeature(feature!!) }!!
-        return featureSet
+        return context.featuresSetsAsList().find { it.hasFeature(feature) }!!
     }
+}
+
+private fun runBlueprintMethods(blueprint: Blueprint) {
+    blueprint::class.memberFunctions
+        .filter { it.isOpen }
+        .forEach {
+            try {
+                it.isAccessible = true
+                it.call(blueprint)
+            } catch (e: Exception) {
+                // Ignore
+            }
+        }
 }
 
 fun <T : Any, U : Any> KClass<T>.getMemberProperties(subclassOf: KClass<U>): List<KProperty1<T, U>> {

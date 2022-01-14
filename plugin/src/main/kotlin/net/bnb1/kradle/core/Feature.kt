@@ -33,7 +33,7 @@ class Feature(val name: String, private val taskName: String? = null) {
     private val blueprints = mutableSetOf<Blueprint>()
 
     val defaultTaskName
-        get() = taskName ?: name
+        get() = taskName ?: "NONE"
 
     infix fun belongsTo(featureSet: FeatureSet) {
         featureSet += this

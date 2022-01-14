@@ -6,7 +6,7 @@ import net.bnb1.kradle.support.Registry
 class AllFeatures(registry: Registry) {
 
     // General
-    var bootstrap = registry.create("bootstrap") { Feature(it) }
+    var bootstrap = registry.create("bootstrap") { Feature(it, "bootstrap") }
     val git = registry("git") { Feature(it) }
     val projectProperties = registry("projectProperties") { Feature(it) }
     val buildProperties = registry("buildProperties") { Feature(it) }
@@ -18,7 +18,7 @@ class AllFeatures(registry: Registry) {
     val library = registry("library") { Feature(it) }
     val dependencyUpdates = registry("dependencyUpdates") { Feature(it) }
     val vulnerabilityScan = registry("vulnerabilityScan") { Feature(it) }
-    val lint = registry("lint") { Feature(it) }
+    val lint = registry("lint") { Feature(it, "lint") }
     val codeAnalysis = registry("codeAnalysis") { Feature(it, "analyzeCode") }
     val developmentMode = registry("developmentMode") { Feature(it) }
     val test = registry("test") { Feature(it) }

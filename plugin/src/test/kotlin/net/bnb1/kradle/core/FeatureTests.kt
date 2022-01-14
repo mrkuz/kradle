@@ -60,6 +60,14 @@ class FeatureTests : BehaviorSpec({
                 feature.isEnabled shouldBe false
             }
         }
+
+        When("Get default task name") {
+            val taskName = feature.defaultTaskName
+
+            Then("It should be NONE") {
+                taskName shouldBe "NONE"
+            }
+        }
     }
 
     Given("Feature with blueprints") {
