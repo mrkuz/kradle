@@ -14,6 +14,8 @@ open class GenerateGitignoreTask : DefaultTask() {
 
     @TaskAction
     fun run() {
-        file.writeText(javaClass.getResource("/gitignore")!!.readText())
+        if (!project.rootDir.resolve(".gitignore").exists()) {
+            file.writeText(javaClass.getResource("/gitignore")!!.readText())
+        }
     }
 }

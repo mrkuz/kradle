@@ -125,4 +125,28 @@ class TestProject(spec: Spec) {
         git.add().addFilepattern(".").call()
         git.commit().setMessage("Initial commit").call()
     }
+
+    fun shouldNotHaveProperty(name: String) {
+        val taskName = createHasPropertyTask(name)
+        runTask(taskName).output.shouldContain("$name=null")
+    }
+
+    fun shouldHaveProperty(name: String, value: String) {
+        val taskName = createHasPropertyTask(name)
+        runTask(taskName).output.shouldContain("$name=$value")
+    }
+
+    fun shouldHaveProperty(name: String, pattern: Regex) {
+        val taskName = createHasPropertyTask(name)
+        runTask(taskName).output.lines().find { it.contains(name) }!!.shouldContain(pattern)
+    }
+
+    private fun createHasPropertyTask(name: String): String {
+        val taskName = "hasProperty${name[0].toUpperCase() + name.substring(1)}"
+        addTask(
+            taskName,
+            "println(\"$name=\${project.properties[\"$name\"]}\")"
+        )
+        return taskName
+    }
 }
