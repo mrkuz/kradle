@@ -3,6 +3,7 @@ package net.bnb1.kradle
 import io.kotest.core.spec.IsolationMode
 import io.kotest.core.spec.Spec
 import io.kotest.matchers.string.shouldContain
+import org.eclipse.jgit.api.Git
 import org.gradle.api.Plugin
 import org.gradle.testkit.runner.GradleRunner
 import java.io.File
@@ -48,12 +49,15 @@ class TestProject(spec: Spec) {
         runTask("hasPlugin$name").output.shouldContain("$name:true")
     }
 
+    fun shouldHaveDependency(configuration: String, id: String) =
+        runTask("dependencies", "--configuration", configuration).output.shouldContain(id)
+
     fun setUp(name: String = "test", kradleConfig: () -> String) {
         writeSettingsFile(name)
         writeBuildFile(buildFile, kradleConfig)
     }
 
-    fun writeSettingsFile(projectName: String) {
+    fun writeSettingsFile(projectName: String = "test") {
         settingsFile.writeText(
             """
             rootProject.name = "$projectName"
@@ -61,6 +65,8 @@ class TestProject(spec: Spec) {
             """.trimIndent()
         )
     }
+
+    fun writeBuildFile(kradleConfig: () -> String) = writeBuildFile(buildFile, kradleConfig)
 
     fun writeBuildFile(output: File, kradleConfig: () -> String) = output.writeText(
         """
@@ -93,5 +99,30 @@ class TestProject(spec: Spec) {
             
             """.trimIndent()
         )
+    }
+
+    fun writeHelloWorldAppKt() = writeAppKt { "println(\"Hello World!\")" }
+
+    fun writeAppKt(main: () -> String) {
+        val sourceDir = projectDir.resolve("src/main/kotlin/com/example/demo")
+        sourceDir.mkdirs()
+        sourceDir.resolve("App.kt").writeText(
+            """
+            package com.example.demo
+            
+            class App
+            
+            fun main() {
+                ${main()}
+            }
+            
+            """.trimIndent()
+        )
+    }
+
+    fun gitInit() {
+        val git = Git.init().setDirectory(projectDir).call()
+        git.add().addFilepattern(".").call()
+        git.commit().setMessage("Initial commit").call()
     }
 }
