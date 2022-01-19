@@ -132,7 +132,7 @@ class TestProject(spec: Spec) {
             public class App {
             
                 public static void main(String[] args) {
-                    $main
+                    ${main()}
                 }
             }
             """.trimIndent()

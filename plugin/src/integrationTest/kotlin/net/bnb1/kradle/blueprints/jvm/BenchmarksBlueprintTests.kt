@@ -88,7 +88,7 @@ class BenchmarksBlueprintTests : BehaviorSpec({
         }
     }
 
-    Given("jmhVersion = 1.20") {
+    Given("benchmark.jmhVersion = 1.20") {
         project.setUp {
             """
             jvm {

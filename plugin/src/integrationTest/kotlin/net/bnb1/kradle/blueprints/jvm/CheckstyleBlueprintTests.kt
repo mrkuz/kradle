@@ -74,7 +74,7 @@ class CheckstyleBlueprintTests : BehaviorSpec({
         }
     }
 
-    Given("version = 9.2.0") {
+    Given("checkstyle.version = 9.2.0") {
         project.setUp {
             """
             jvm {
@@ -99,7 +99,7 @@ class CheckstyleBlueprintTests : BehaviorSpec({
         }
     }
 
-    Given("configFile = checkstyle-config.xml") {
+    Given("checkstyle.configFile = checkstyle-config.xml") {
         project.setUp {
             """
             jvm {
@@ -146,7 +146,7 @@ class CheckstyleBlueprintTests : BehaviorSpec({
             }
         }
 
-        And("ignoreFailures = true") {
+        And("lint.ignoreFailures = true") {
             project.setUp {
                 """
                 jvm {
