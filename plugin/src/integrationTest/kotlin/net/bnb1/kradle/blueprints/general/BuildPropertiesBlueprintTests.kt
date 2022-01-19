@@ -29,6 +29,20 @@ class BuildPropertiesBlueprintTests : BehaviorSpec({
             """.trimIndent()
         }
 
+        When("Check for plugins") {
+
+            Then("Build properties plugin is applied") {
+                project.shouldHavePlugin(BuildPropertiesPlugin::class)
+            }
+        }
+
+        When("Check for tasks") {
+
+            Then("Task generateBuildProperties is available") {
+                project.shouldHaveTask("generateBuildProperties")
+            }
+        }
+
         When("Run generateBuildProperties") {
             val result = project.runTask("generateBuildProperties")
 
@@ -54,20 +68,6 @@ class BuildPropertiesBlueprintTests : BehaviorSpec({
 
             Then("generateBuildProperties is called") {
                 result.task(":generateBuildProperties")!!.outcome shouldBe TaskOutcome.SUCCESS
-            }
-        }
-
-        When("Check for tasks") {
-
-            Then("Task generateBuildProperties is available") {
-                project.shouldHaveTask("generateBuildProperties")
-            }
-        }
-
-        When("Check for plugins") {
-
-            Then("Build properties plugin is applied") {
-                project.shouldHavePlugin(BuildPropertiesPlugin::class)
             }
         }
     }

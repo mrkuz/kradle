@@ -43,25 +43,6 @@ class BenchmarksBlueprintTests : BehaviorSpec({
             """.trimIndent()
         )
 
-        When("Run runBenchmarks") {
-            val result = project.runTask("runBenchmarks")
-
-            Then("Succeed") {
-                result.task(":runBenchmarks")!!.outcome shouldBe TaskOutcome.SUCCESS
-            }
-
-            Then("Benchmarks should be run") {
-                result.output shouldContain "Running 'main' benchmarks for 'benchmark'"
-                result.output shouldContain "com.example.DummyBenchmark.doNothing"
-                result.output shouldContain "Iteration 1:"
-                result.output shouldContain Regex("Success: [0-9]+")
-            }
-
-            Then("Report is available") {
-                project.buildDir.resolve("reports/benchmarks").shouldExist()
-            }
-        }
-
         When("Check for plugins") {
 
             Then("Benchmarks plugin is applied") {
@@ -84,6 +65,25 @@ class BenchmarksBlueprintTests : BehaviorSpec({
 
             Then("JMH is available") {
                 project.shouldHaveDependency("benchmarkImplementation", "org.openjdk.jmh:jmh-core")
+            }
+        }
+
+        When("Run runBenchmarks") {
+            val result = project.runTask("runBenchmarks")
+
+            Then("Succeed") {
+                result.task(":runBenchmarks")!!.outcome shouldBe TaskOutcome.SUCCESS
+            }
+
+            Then("Benchmarks should be run") {
+                result.output shouldContain "Running 'main' benchmarks for 'benchmark'"
+                result.output shouldContain "com.example.DummyBenchmark.doNothing"
+                result.output shouldContain "Iteration 1:"
+                result.output shouldContain Regex("Success: [0-9]+")
+            }
+
+            Then("Report is available") {
+                project.buildDir.resolve("reports/benchmarks").shouldExist()
             }
         }
     }

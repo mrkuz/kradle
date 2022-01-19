@@ -22,17 +22,17 @@ class ProjectPropertiesBlueprintTests : BehaviorSpec({
             """.trimIndent()
         )
 
-        When("Check for project properties") {
-
-            Then("Succeed") {
-                project.shouldHaveProperty("key", "value")
-            }
-        }
-
         When("Check for plugins") {
 
             Then("Project properties plugin is applied") {
                 project.shouldHavePlugin(ProjectPropertiesPlugin::class)
+            }
+        }
+
+        When("Check for project properties") {
+
+            Then("Succeed") {
+                project.shouldHaveProperty("key", "value")
             }
         }
     }

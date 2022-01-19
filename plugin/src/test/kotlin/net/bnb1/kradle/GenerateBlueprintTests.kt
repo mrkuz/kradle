@@ -179,27 +179,27 @@ class TestGenerator(context: KradleContext, private val metadata: BlueprintMetad
         return if (featureExists) {
             """
             project.setUp {
-               $TRIPLE_QUOTES
-               ${featureSet.name} {
-                   $propertiesName {
-                       ${access.name}($value)
-                   }
-               }
-               $TRIPLE_QUOTES.trimIndent()
+                $TRIPLE_QUOTES
+                ${featureSet.name} {
+                    $propertiesName {
+                        ${access.name}($value)
+                    }
+                }
+                $TRIPLE_QUOTES.trimIndent()
             }
             """
         } else {
             """
             project.setUp {
-               $TRIPLE_QUOTES
-               ${featureSet.name} {
-                   ${feature.name} {
-                       $propertiesName {
-                           ${access.name}($value)
-                       }
-                   }
-               }
-               $TRIPLE_QUOTES.trimIndent()
+                $TRIPLE_QUOTES
+                ${featureSet.name} {
+                    ${feature.name} {
+                        $propertiesName {
+                            ${access.name}($value)
+                        }
+                    }
+                }
+                $TRIPLE_QUOTES.trimIndent()
             }  
             """
         }

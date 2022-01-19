@@ -120,6 +120,25 @@ class TestProject(spec: Spec) {
         )
     }
 
+    fun writeHelloWorldAppJava() = writeAppJava { "System.out.println(\"Hello World\");" }
+
+    fun writeAppJava(main: () -> String) {
+        val sourceDir = projectDir.resolve("src/main/java/com/example/demo")
+        sourceDir.mkdirs()
+        sourceDir.resolve("App.java").writeText(
+            """
+            package com.example.demo;
+            
+            public class App {
+            
+                public static void main(String[] args) {
+                    $main
+                }
+            }
+            """.trimIndent()
+        )
+    }
+
     fun gitInit() {
         val git = Git.init().setDirectory(projectDir).call()
         git.add().addFilepattern(".").call()

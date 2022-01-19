@@ -45,18 +45,18 @@ class ApplicationBlueprintTests : BehaviorSpec({
         }
         project.writeHelloWorldAppKt()
 
+        When("Check for plugins") {
+
+            Then("Application plugin is applied") {
+                project.shouldHavePlugin(ApplicationPlugin::class)
+            }
+        }
+
         When("Run 'run'") {
             val result = project.runTask("run")
 
             Then("Succeed") {
                 result.task(":run")!!.outcome shouldBe TaskOutcome.SUCCESS
-            }
-        }
-
-        When("Check for plugins") {
-
-            Then("Application plugin is applied") {
-                project.shouldHavePlugin(ApplicationPlugin::class)
             }
         }
     }

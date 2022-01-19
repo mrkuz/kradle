@@ -22,25 +22,6 @@ class GitBlueprintTests : BehaviorSpec({
             """.trimIndent()
         }
 
-        When("Run generateGitignore") {
-            val result = project.runTask("generateGitignore")
-
-            Then("Succeed") {
-                result.task(":generateGitignore")!!.outcome shouldBe TaskOutcome.SUCCESS
-            }
-
-            Then(".gitignore exists") {
-                project.projectDir.resolve(".gitignore").shouldExist()
-            }
-        }
-
-        When("Check for project properties") {
-
-            Then("gitCommit is not set") {
-                project.shouldNotHaveProperty("gitCommit")
-            }
-        }
-
         When("Check for plugins") {
 
             Then("Git plugin is applied") {
@@ -52,6 +33,25 @@ class GitBlueprintTests : BehaviorSpec({
 
             Then("Task generateGitignore is available") {
                 project.shouldHaveTask("generateGitignore")
+            }
+        }
+
+        When("Check for project properties") {
+
+            Then("gitCommit is not set") {
+                project.shouldNotHaveProperty("gitCommit")
+            }
+        }
+
+        When("Run generateGitignore") {
+            val result = project.runTask("generateGitignore")
+
+            Then("Succeed") {
+                result.task(":generateGitignore")!!.outcome shouldBe TaskOutcome.SUCCESS
+            }
+
+            Then(".gitignore exists") {
+                project.projectDir.resolve(".gitignore").shouldExist()
             }
         }
 
