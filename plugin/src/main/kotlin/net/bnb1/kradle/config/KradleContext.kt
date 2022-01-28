@@ -46,6 +46,9 @@ class KradleContext(project: Project) {
                 blueprints.java,
                 blueprints.kotlin,
                 blueprints.allOpen,
+                blueprints.bootstrap.also {
+                    it dependsOn features.bootstrap
+                },
                 blueprints.kotlinAppBootstrap.also {
                     it dependsOn features.bootstrap
                     it dependsOn features.application
@@ -63,6 +66,9 @@ class KradleContext(project: Project) {
             me belongsTo featureSets.jvm
             me += setOf(
                 blueprints.java,
+                blueprints.bootstrap.also {
+                    it dependsOn features.bootstrap
+                },
                 blueprints.javaAppBootstrap.also {
                     it dependsOn features.bootstrap
                     it dependsOn features.application
