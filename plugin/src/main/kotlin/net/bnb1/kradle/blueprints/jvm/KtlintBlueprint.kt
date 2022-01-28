@@ -6,6 +6,7 @@ import org.gradle.api.Project
 import org.gradle.kotlin.dsl.configure
 import org.jlleitschuh.gradle.ktlint.KtlintExtension
 import org.jlleitschuh.gradle.ktlint.KtlintPlugin
+import org.jlleitschuh.gradle.ktlint.reporter.ReporterType
 
 class KtlintBlueprint(project: Project) : Blueprint(project) {
 
@@ -23,6 +24,9 @@ class KtlintBlueprint(project: Project) : Blueprint(project) {
             disabledRules.set(ktlintProperties.rules.get())
             version.set(ktlintProperties.version.get())
             ignoreFailures.set(lintProperties.ignoreFailures.get())
+            reporters {
+                reporter(ReporterType.HTML)
+            }
         }
 
         project.tasks.getByName(extendsTask).dependsOn("ktlintCheck")

@@ -70,21 +70,21 @@ class TestProject(spec: Spec) {
 
     fun writeBuildFile(output: File, kradleConfig: () -> String) = output.writeText(
         """
-            plugins {
-                id("org.jetbrains.kotlin.jvm") version "1.6.0"
-                id("net.bitsandbobs.kradle")
+        plugins {
+            id("org.jetbrains.kotlin.jvm") version "1.6.0"
+            id("net.bitsandbobs.kradle")
+        }
+        
+        group = "com.example"
+        version = "1.0.0"
+        
+        kradle {
+            jvm.configureOnly {
+                targetJvm("11")
             }
-            
-            group = "com.example"
-            version = "1.0.0"
-            
-            kradle {
-                jvm.configureOnly {
-                    targetJvm("11")
-                }
-                ${kradleConfig()}
-            }
-            
+            ${kradleConfig()}
+        }
+
         """.trimIndent()
     )
 
