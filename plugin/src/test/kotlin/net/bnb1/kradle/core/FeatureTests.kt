@@ -135,29 +135,32 @@ class FeatureTests : BehaviorSpec({
         And("Feature 1 requires feature 2") {
             feature1 requires feature2
 
-            When("Feature 2 is enabled") {
+            When("Both are enabled") {
+                feature1.enable()
                 feature2.enable()
 
-                Then("Enable feature 1 succeeds") {
-                    feature1.enable()
-                    feature1.isEnabled shouldBe true
+                Then("Activate feature 1 succeeds") {
+                    feature1.activate(tracer)
+                    feature1.isActive shouldBe true
                 }
             }
 
             When("Feature 2 is disabled") {
+                feature1.enable()
                 feature2.disable()
 
-                Then("Enable feature 1 fails") {
-                    shouldThrow<GradleException> { feature1.enable() }
+                Then("Activate feature 1 fails") {
+                    shouldThrow<GradleException> { feature1.activate(tracer) }
                 }
             }
 
             When("Feature 1 is disabled") {
                 feature1.disable()
+                feature2.enable()
 
-                Then("Enable feature 2 succeeds") {
-                    feature2.enable()
-                    feature2.isEnabled shouldBe true
+                Then("Activate feature 2 succeeds") {
+                    feature2.activate(tracer)
+                    feature2.isActive shouldBe true
                 }
             }
         }
@@ -165,37 +168,36 @@ class FeatureTests : BehaviorSpec({
         And("Feature 1 conflicts with feature 2") {
             feature1 conflictsWith feature2
 
-            When("Feature 2 is enabled") {
+            When("Both are enabled") {
+                feature1.enable()
                 feature2.enable()
 
-                Then("Enable feature 1 fails") {
-                    shouldThrow<GradleException> { feature1.enable() }
+                Then("Activate feature 1 fails") {
+                    shouldThrow<GradleException> { feature1.activate(tracer) }
+                }
+
+                Then("Activate feature 2 fails") {
+                    shouldThrow<GradleException> { feature2.activate(tracer) }
                 }
             }
 
             When("Feature 2 is disabled") {
+                feature1.enable()
                 feature2.disable()
 
-                Then("Enable feature 1 succeeds") {
-                    feature1.enable()
-                    feature1.isEnabled shouldBe true
-                }
-            }
-
-            When("Feature 1 is enabled") {
-                feature1.enable()
-
-                Then("Enable feature 2 fails") {
-                    shouldThrow<GradleException> { feature2.enable() }
+                Then("Activate feature 1 succeeds") {
+                    feature1.activate(tracer)
+                    feature1.isActive shouldBe true
                 }
             }
 
             When("Feature 1 is disabled") {
                 feature1.disable()
+                feature2.enable()
 
-                Then("Enable feature 2 succeeds") {
-                    feature2.enable()
-                    feature2.isEnabled shouldBe true
+                Then("Activate feature 2 succeeds") {
+                    feature2.activate(tracer)
+                    feature2.isActive shouldBe true
                 }
             }
         }

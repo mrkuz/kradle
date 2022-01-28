@@ -79,23 +79,20 @@ class Feature(val name: String, private val taskName: String? = null) {
             return
         }
 
+        conflicts.find { it.isEnabled }?.let {
+            throw GradleException("You can only enable '$name'" + " or '${it.name}' feature")
+        }
+
+        requires.find { !it.isEnabled }?.let {
+            throw GradleException("'$name' requires '${it.name}' feature")
+        }
+
         this.tracer = tracer
         blueprints.forEach { it.activate(tracer) }
         state.set(State.ACTIVATED)
     }
 
     fun enable() {
-        conflicts.find { it.isEnabled }?.let {
-            throw GradleException(
-                "You can only enable '${this::class.simpleName}'" +
-                    " or '${it::class.simpleName}' feature"
-            )
-        }
-
-        requires.find { !it.isEnabled }?.let {
-            throw GradleException("'${this::class.simpleName}' requires '${it::class.simpleName}' feature")
-        }
-
         if (!enabled.compareAndSet(false, true)) {
             return
         }
@@ -111,6 +108,9 @@ class Feature(val name: String, private val taskName: String? = null) {
 
     val isEnabled
         get() = enabled.get() && !disabled.get()
+
+    val isActive
+        get() = state.get() == State.ACTIVATED
 
     val isInactive
         get() = state.get() == State.INACTIVE
