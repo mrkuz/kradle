@@ -18,16 +18,18 @@ class JavaBlueprint(project: Project) : Blueprint(project) {
     lateinit var jvmProperties: JvmProperties
 
     override fun doCheckPreconditions() {
-        val javaExtension = project.extensions.getByType(JavaPluginExtension::class.java)
         if (getJavaRelease() < MIN_JAVA_VERSION) {
             throw GradleException("Minimum supported JVM version is 8")
         }
 
-        if (javaExtension.toolchain.languageVersion.isPresent) {
-            val target = Integer.parseInt(jvmProperties.targetJvm.get())
-            val toolchain = javaExtension.toolchain.languageVersion.get().asInt()
-            if (target > toolchain) {
-                throw GradleException("'targetJvm' must be ≤ toolchain language version ($toolchain)")
+        project.afterEvaluate {
+            val javaExtension = project.extensions.getByType(JavaPluginExtension::class.java)
+            if (javaExtension.toolchain.languageVersion.isPresent) {
+                val target = Integer.parseInt(jvmProperties.targetJvm.get())
+                val toolchain = javaExtension.toolchain.languageVersion.get().asInt()
+                if (target > toolchain) {
+                    throw GradleException("'targetJvm' must be ≤ toolchain language version ($toolchain)")
+                }
             }
         }
     }

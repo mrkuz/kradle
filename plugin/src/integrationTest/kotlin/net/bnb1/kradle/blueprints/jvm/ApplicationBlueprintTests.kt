@@ -35,12 +35,12 @@ class ApplicationBlueprintTests : BehaviorSpec({
     Given("application.mainClass is set") {
         project.setUp {
             """
-                jvm {
-                    kotlin.enable()
-                    application {
-                        mainClass("com.example.demo.AppKt")
-                    }
+            jvm {
+                kotlin.enable()
+                application {
+                    mainClass("com.example.demo.AppKt")
                 }
+            }
             """.trimIndent()
         }
         project.writeHelloWorldAppKt()
@@ -159,9 +159,5 @@ class ApplicationBlueprintTests : BehaviorSpec({
                 result.output shouldContain "WARNING: Version is not specified"
             }
         }
-    }
-
-    Given("java.previewFeatures = true") {
-        // TODO
     }
 })

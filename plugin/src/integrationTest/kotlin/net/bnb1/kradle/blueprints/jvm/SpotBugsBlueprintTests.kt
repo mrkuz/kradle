@@ -83,7 +83,7 @@ class SpotBugsBlueprintTests : BehaviorSpec({
         }
     }
 
-    Given("useFbContrib = true") {
+    Given("useFbContrib()") {
         project.setUp {
             """
             jvm {
@@ -107,7 +107,7 @@ class SpotBugsBlueprintTests : BehaviorSpec({
         }
     }
 
-    Given("useFindSecBugs = true") {
+    Given("useFindSecBugs()") {
         project.setUp {
             """
             jvm {
