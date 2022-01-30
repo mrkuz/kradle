@@ -26,18 +26,21 @@ open class BootstrapJavaAppTask : BootstrapBaseTask() {
             project.projectDir.resolve("src/$it/java/$packagePath").mkdirs()
         }
 
-        project.projectDir.resolve("src/main/java/$packagePath/$mainClassName.java").writeText(
-            """
-            package $packageName;
-            
-            public class $mainClassName {
-            
-                public static void main(String[] args) {
-                    System.out.println("Hello World!");
+        val appSource = project.projectDir.resolve("src/main/java/$packagePath/$mainClassName.java")
+        if (!appSource.exists()) {
+            appSource.writeText(
+                """
+                package $packageName;
+                
+                public class $mainClassName {
+                
+                    public static void main(String[] args) {
+                        System.out.println("Hello World!");
+                    }
                 }
-            }
-            
-            """.trimIndent()
-        )
+                
+                """.trimIndent()
+            )
+        }
     }
 }

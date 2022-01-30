@@ -2,35 +2,14 @@ package net.bnb1.kradle.blueprints.jvm
 
 import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.spec.style.BehaviorSpec
-import io.kotest.matchers.shouldBe
 import io.kotest.matchers.string.shouldContain
 import net.bnb1.kradle.TestProject
 import org.gradle.api.plugins.JavaPlugin
-import org.gradle.testkit.runner.TaskOutcome
 import org.gradle.testkit.runner.UnexpectedBuildFailure
 
 class JavaBlueprintTests : BehaviorSpec({
 
     val project = TestProject(this)
-
-    fun createAppJava() {
-        val sourceDir = project.projectDir.resolve("src/main/java/com/example/demo")
-        sourceDir.mkdirs()
-        sourceDir.resolve("App.java").writeText(
-            """
-            package com.example.demo;
-            
-            record Point (int x, int y) {
-            }
-            
-            public class App {
-            
-                public static void main(String[] args) {
-                }
-            }
-            """.trimIndent()
-        )
-    }
 
     Given("Default configuration") {
         project.setUp {
@@ -58,7 +37,7 @@ class JavaBlueprintTests : BehaviorSpec({
             }
             """.trimIndent()
         }
-        createAppJava()
+        project.writeHelloWorldAppJava()
 
         When("Run any task") {
             val ex = shouldThrow<UnexpectedBuildFailure> { project.runTask("tasks") }
@@ -101,56 +80,6 @@ class JavaBlueprintTests : BehaviorSpec({
 
             Then("Fail") {
                 ex.message shouldContain "'targetJvm' must be ≤ toolchain language version"
-            }
-        }
-    }
-
-    // Requires JVM 15
-    xGiven("jvm.targetJvm = 15 AND java.previewFeatures = false") {
-        project.setUp {
-            """
-            jvm {
-                targetJvm("15")
-                application {
-                    mainClass("com.example.demo.App")
-                }
-                java.enable()
-            }
-            """.trimIndent()
-        }
-        createAppJava()
-
-        When("Run compileJava") {
-            val ex = shouldThrow<UnexpectedBuildFailure> { project.runTask("compileJava") }
-
-            Then("Fail") {
-                ex.message shouldContain "use --enable-preview to enable records"
-            }
-        }
-    }
-
-    // Requires JVM 15
-    xGiven("jvm.targetJvm = 15 AND java.previewFeatures = true") {
-        project.setUp {
-            """
-            jvm {
-                targetJvm("15")
-                application {
-                    mainClass("com.example.demo.App")
-                }
-                java {
-                    previewFeatures(true)
-                }
-            }
-            """.trimIndent()
-        }
-        createAppJava()
-
-        When("Run compileJava") {
-            val result = project.runTask("compileJava")
-
-            Then("Succeed") {
-                result.task(":compileJava")!!.outcome shouldBe TaskOutcome.SUCCESS
             }
         }
     }

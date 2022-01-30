@@ -26,17 +26,20 @@ open class BootstrapKotlinAppTask : BootstrapBaseTask() {
             project.projectDir.resolve("src/$it/kotlin/$packagePath").mkdirs()
         }
 
-        project.projectDir.resolve("src/main/kotlin/$packagePath/$mainClassName.kt").writeText(
-            """
-            package $packageName
-            
-            class $mainClassName
-            
-            fun main() {
-                println("Hello World!")
-            }
-            
-            """.trimIndent()
-        )
+        val appSource = project.projectDir.resolve("src/main/kotlin/$packagePath/$mainClassName.kt")
+        if (!appSource.exists()) {
+            appSource.writeText(
+                """
+                package $packageName
+                
+                class $mainClassName
+                
+                fun main() {
+                    println("Hello World!")
+                }
+                
+                """.trimIndent()
+            )
+        }
     }
 }

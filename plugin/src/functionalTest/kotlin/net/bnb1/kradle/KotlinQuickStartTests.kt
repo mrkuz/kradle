@@ -6,24 +6,24 @@ import io.kotest.matchers.string.shouldContain
 
 class KotlinQuickStartTests : FunSpec({
 
-    val container = TestContainer(this).container
+    val container = TestContainer(this).start()
 
     test("(Very) Quick Start") {
-        container.execInContainer(
+        container.exec(
             "curl",
             "-O",
             "https://raw.githubusercontent.com/mrkuz/kradle/main/examples/app/settings.gradle.kts"
         )
-        container.execInContainer(
+        container.exec(
             "curl",
             "-O",
             "https://raw.githubusercontent.com/mrkuz/kradle/main/examples/app/build.gradle.kts"
         )
 
-        val bootstrapResult = container.execInContainer("gradle", "bootstrap")
+        val bootstrapResult = container.exec("gradle", "bootstrap")
         bootstrapResult.exitCode shouldBe 0
 
-        val runResult = container.execInContainer("./gradlew", "run")
+        val runResult = container.exec("./gradlew", "run")
         runResult.stdout shouldContain "Hello World!"
     }
 })
