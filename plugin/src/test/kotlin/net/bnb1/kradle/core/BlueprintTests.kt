@@ -53,7 +53,7 @@ class BlueprintTests : BehaviorSpec({
         }
 
         When("Feature is not enabled") {
-            
+
             Then("Blueprint is not activated") {
                 blueprint.activate(tracer)
                 blueprint.activated.get() shouldBe 0

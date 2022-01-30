@@ -102,8 +102,13 @@ class TestGenerator(context: KradleContext, private val metadata: BlueprintMetad
     private val className = metadata.blueprint::class.simpleName + "Tests"
     private val dir = Path.of(
         System.getenv("PROJECT_DIR"),
-        "src", SOURCE_SET, "kotlin",
-        "net", "bnb1", "kradle", "blueprints"
+        "src",
+        SOURCE_SET,
+        "kotlin",
+        "net",
+        "bnb1",
+        "kradle",
+        "blueprints"
     )
     private val output = dir.toFile().resolve("$className.kt")
 
@@ -128,7 +133,6 @@ class TestGenerator(context: KradleContext, private val metadata: BlueprintMetad
             """.trimIndent()
         )
 
-        // TODO: Handle depends on
         generateGiven("Default configuration", 4) {
             """
             project.setUp {
@@ -173,7 +177,7 @@ class TestGenerator(context: KradleContext, private val metadata: BlueprintMetad
     }
 
     private fun guessProjectSetup(access: PropertyAccess, value: Any): String {
-        // TODO: Use KradleExtension instead of guessing
+        // It would be better to use KradleExtension instead of guessing, but for now this is fine
         val propertiesName = wrapper.getPropertiesName(access)
         val featureExists = wrapper.context.featuresAsList().any { it.name == propertiesName }
         return if (featureExists) {
@@ -374,6 +378,7 @@ class KradleContextWrapper(val context: KradleContext) {
     }
 }
 
+@SuppressWarnings("SwallowedException")
 private fun runBlueprintMethods(blueprint: Blueprint) {
     blueprint::class.memberFunctions
         .filter { it.isOpen }

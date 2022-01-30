@@ -39,9 +39,10 @@ class LibraryBlueprintTests : BehaviorSpec({
         }
 
         When("Library and application features are enabled") {
+            libraryFeature.enable()
             applicationFeature.enable()
             Then("Fail") {
-                shouldThrow<GradleException> { libraryFeature.enable() }
+                shouldThrow<GradleException> { libraryFeature.activate(tracer) }
             }
         }
     }
