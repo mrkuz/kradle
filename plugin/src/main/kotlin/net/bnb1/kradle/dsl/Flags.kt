@@ -1,34 +1,31 @@
 package net.bnb1.kradle.dsl
 
-import org.gradle.api.provider.SetProperty
+open class Flags(private val invert: Boolean) : SimpleProvider<Set<String>> {
 
-open class Flags(private val property: SetProperty<String>, private val invert: Boolean) :
-    PropertyWrapper<Set<String>> {
+    private val values = mutableSetOf<String>()
 
     override val notNull: Boolean
         get() = true
 
-    override fun get(): Set<String> = property.get()
+    override fun get(): Set<String> = values.toSet()
 
     operator fun invoke(action: Flags.() -> Unit = {}) = action(this)
 
-    fun bind(property: SetProperty<String>) = this.property.set(property)
-
-    fun reset() = property.set(setOf())
-
-    fun enable(value: String) = property.set(
+    fun enable(value: String) {
         if (!invert) {
-            property.get() + value
+            values.add(value)
         } else {
-            property.get() - value
+            values.remove(value)
         }
-    )
+    }
 
-    fun disable(value: String) = property.set(
+    fun disable(value: String) {
         if (!invert) {
-            property.get() - value
+            values.remove(value)
         } else {
-            property.get() + value
+            values.add(value)
         }
-    )
+    }
+
+    fun reset() = values.clear()
 }

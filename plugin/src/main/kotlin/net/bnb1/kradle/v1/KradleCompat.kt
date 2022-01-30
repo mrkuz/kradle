@@ -1,12 +1,10 @@
 package net.bnb1.kradle.v1
 
-import net.bnb1.kradle.KradleExtensionBase
 import net.bnb1.kradle.apply
-import net.bnb1.kradle.features.jvm.BenchmarksBlueprint
-import net.bnb1.kradle.features.jvm.TestBlueprint
-import net.bnb1.kradle.features.jvm.TestProperties
-import net.bnb1.kradle.propertiesRegistry
-import net.bnb1.kradle.tracer
+import net.bnb1.kradle.config.AllBlueprints
+import net.bnb1.kradle.config.AllProperties
+import net.bnb1.kradle.config.dsl.KradleExtensionDsl
+import net.bnb1.kradle.support.Tracer
 import org.gradle.api.Project
 import org.gradle.kotlin.dsl.configure
 import org.jetbrains.kotlin.allopen.gradle.AllOpenExtension
@@ -15,13 +13,18 @@ import org.jetbrains.kotlin.allopen.gradle.AllOpenGradleSubplugin
 /**
  * Provides backwards-compatibility for Kradle v1.
  */
-class KradleCompat(private val project: Project, private val type: ProjectType) {
+class KradleCompat(
+    private val tracer: Tracer,
+    private val properties: AllProperties,
+    private val blueprints: AllBlueprints,
+    private val extension: KradleExtensionDsl,
+    private val project: Project,
+    private val type: ProjectType
+) {
 
     enum class ProjectType {
         APPLICATION, LIBRARY
     }
-
-    private val extension = KradleExtensionBase(project)
 
     fun activate() {
         configureEager()
@@ -31,8 +34,7 @@ class KradleCompat(private val project: Project, private val type: ProjectType) 
                 general.activate()
                 jvm.activate()
             }
-
-            project.tracer.deactivate()
+            tracer.deactivate()
         }
     }
 
@@ -40,7 +42,7 @@ class KradleCompat(private val project: Project, private val type: ProjectType) 
         project.apply(AllOpenGradleSubplugin::class.java)
 
         // Source sets need to be created early
-        project.propertiesRegistry.get(TestProperties::class).apply {
+        properties.test.apply {
             withIntegrationTests(true)
             withFunctionalTests(true)
         }
@@ -50,8 +52,8 @@ class KradleCompat(private val project: Project, private val type: ProjectType) 
             annotation("org.openjdk.jmh.annotations.State")
         }
 
-        BenchmarksBlueprint(project).createSourceSets()
-        TestBlueprint(project).createTasks()
+        blueprints.benchmarks.doCreateSourceSets()
+        blueprints.test.doCreateTasks()
     }
 
     @SuppressWarnings("LongMethod")
@@ -66,24 +68,24 @@ class KradleCompat(private val project: Project, private val type: ProjectType) 
             }
 
             jvm.configureOnly {
-                targetJvm.bind(compatExtension.targetJvm)
+                targetJvm.set(compatExtension.targetJvm.orNull)
                 kotlin {
-                    kotlinxCoroutinesVersion.bind(compatExtension.kotlinxCoroutinesVersion)
+                    kotlinxCoroutinesVersion.set(compatExtension.kotlinxCoroutinesVersion.orNull)
                     lint {
                         ktlint {
-                            version.bind(compatExtension.ktlintVersion)
+                            version.set(compatExtension.ktlintVersion.orNull)
                             rules {
                                 disable("no-wildcard-imports")
                             }
                         }
                     }
                     codeAnalysis {
-                        detektConfigFile.bind(compatExtension.detektConfigFile)
-                        detektVersion.bind(compatExtension.detektVersion)
+                        detektConfigFile.set(compatExtension.detektConfigFile.orNull)
+                        detektVersion.set(compatExtension.detektVersion.orNull)
                     }
                     test {
-                        useMockk.bind(compatExtension.tests.mockkVersion)
-                        useKotest.bind(compatExtension.tests.kotestVersion)
+                        useMockk.set(compatExtension.tests.mockkVersion.orNull)
+                        useKotest.set(compatExtension.tests.kotestVersion.orNull)
                     }
                 }
 
@@ -104,25 +106,25 @@ class KradleCompat(private val project: Project, private val type: ProjectType) 
 
                 test {
                     prettyPrint(true)
-                    withJunitJupiter.bind(compatExtension.tests.junitJupiterVersion)
-                    withJacoco.bind(compatExtension.tests.jacocoVersion)
+                    withJunitJupiter.set(compatExtension.tests.junitJupiterVersion.orNull)
+                    withJacoco.set(compatExtension.tests.jacocoVersion.orNull)
                 }
                 benchmark {
-                    jmhVersion.bind(compatExtension.jmhVersion)
+                    jmhVersion.set(compatExtension.jmhVersion.orNull)
                 }
                 `package` {
                     uberJar {
-                        minimize.bind(compatExtension.uberJar.minimize)
+                        minimize.set(compatExtension.uberJar.minimize.get())
                     }
                 }
 
                 if (type == ProjectType.APPLICATION) {
                     docker.enable {
-                        baseImage.bind(compatExtension.image.baseImage)
-                        ports.bind(compatExtension.image.ports)
-                        withJvmKill.bind(compatExtension.image.jvmKillVersion)
-                        withAppSh.bind(compatExtension.image.withAppSh)
-                        javaOpts.bind(compatExtension.image.javaOpts)
+                        baseImage.set(compatExtension.image.baseImage.orNull)
+                        compatExtension.image.ports.get().forEach { ports.add(it) }
+                        withJvmKill.set(compatExtension.image.jvmKillVersion.orNull)
+                        withAppSh.set(compatExtension.image.withAppSh.get())
+                        javaOpts.set(compatExtension.image.javaOpts.orNull)
                     }
                 }
                 documentation.enable()

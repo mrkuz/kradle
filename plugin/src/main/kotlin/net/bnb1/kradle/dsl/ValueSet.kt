@@ -1,23 +1,30 @@
 package net.bnb1.kradle.dsl
 
-import org.gradle.api.provider.SetProperty
+open class ValueSet<T : Any> : SimpleProvider<Set<T>> {
 
-open class ValueSet<T : Any>(private val property: SetProperty<T>) : PropertyWrapper<Set<T>> {
+    private val values = mutableSetOf<T>()
 
     override val notNull: Boolean
         get() = true
 
-    override fun get(): Set<T> = property.get()
+    override fun get(): Set<T> = values.toSet()
 
-    operator fun invoke(vararg values: T) = property.set(values.toSet())
+    operator fun invoke(vararg values: T) = set(*values)
 
-    fun set(vararg values: T) = property.set(values.toSet())
+    fun set(vararg values: T) {
+        this.values.clear()
+        this.values.addAll(values)
+    }
 
-    fun bind(property: SetProperty<T>) = this.property.set(property)
+    fun add(value: T) {
+        values.add(value)
+    }
 
-    fun reset() = property.set(setOf())
+    fun remove(value: T) {
+        values.remove(value)
+    }
 
-    fun add(value: T) = property.set(property.get() + value)
-
-    fun remove(value: T) = property.set(property.get() - value)
+    fun reset() {
+        values.clear()
+    }
 }

@@ -1,16 +1,17 @@
 package net.bnb1.kradle.tasks
 
+import net.bnb1.kradle.core.Feature
+import net.bnb1.kradle.core.dsl.FeatureDsl
 import net.bnb1.kradle.dsl.Configurable
-import net.bnb1.kradle.dsl.FeatureDsl
-import net.bnb1.kradle.dsl.PropertiesDsl
-import net.bnb1.kradle.dsl.PropertyWrapper
-import net.bnb1.kradle.featureRegistry
-import net.bnb1.kradle.features.EmptyProperties
-import net.bnb1.kradle.propertiesRegistry
-import net.bnb1.kradle.tracer
+import net.bnb1.kradle.dsl.ConfigurableSelf
+import net.bnb1.kradle.dsl.EmptyProperties
+import net.bnb1.kradle.dsl.Properties
+import net.bnb1.kradle.dsl.SimpleProvider
+import net.bnb1.kradle.support.Tracer
 import org.gradle.api.DefaultTask
 import org.gradle.api.model.ObjectFactory
 import org.gradle.api.provider.Provider
+import org.gradle.api.tasks.Internal
 import org.gradle.api.tasks.TaskAction
 import org.gradle.util.GradleVersion
 import java.nio.file.Paths
@@ -24,6 +25,15 @@ import kotlin.streams.asSequence
 import java.util.Properties as JavaProperties
 
 open class KradleDumpTask : DefaultTask() {
+
+    @Internal
+    lateinit var properties: List<Properties>
+
+    @Internal
+    lateinit var features: List<Feature>
+
+    @Internal
+    lateinit var tracer: Tracer
 
     init {
         // Ensure that this task is always executed
@@ -60,10 +70,10 @@ open class KradleDumpTask : DefaultTask() {
             """.trimIndent()
         )
 
-        project.featureRegistry.map.values.asSequence()
+        features.asSequence()
             .filter { it.isEnabled }
-            .sortedBy { it::class.qualifiedName }
-            .forEach { dump("- ${it::class.qualifiedName}") }
+            .sortedBy { it.name }
+            .forEach { dump("- ${it.name}") }
     }
 
     private fun printTrace() {
@@ -74,7 +84,7 @@ open class KradleDumpTask : DefaultTask() {
             ------
             """.trimIndent()
         )
-        val entries = project.tracer.entries
+        val entries = tracer.entries
         entries.forEachIndexed { index, entry ->
             if (entry.level == 0) {
                 if (index > 0) {
@@ -166,7 +176,7 @@ open class KradleDumpTask : DefaultTask() {
             """.trimIndent()
         )
 
-        project.propertiesRegistry.map.values.asSequence()
+        properties.asSequence()
             .filterNot { it is EmptyProperties }
             .sortedBy { it::class.qualifiedName }
             .forEach {
@@ -183,8 +193,8 @@ open class KradleDumpTask : DefaultTask() {
             .forEach { member ->
                 val returnType = member.returnType.jvmErasure
                 val key = "${prefix}${member.name}"
-                if (returnType.isSubclassOf(PropertyWrapper::class)) {
-                    val value = member.getter.call(target) as PropertyWrapper<*>
+                if (returnType.isSubclassOf(SimpleProvider::class)) {
+                    val value = member.getter.call(target) as SimpleProvider<*>
                     if (value.notNull) {
                         dump("$key = ${value.get()}")
                     } else {
@@ -202,7 +212,7 @@ open class KradleDumpTask : DefaultTask() {
                 ) {
                     val value = member.getter.call(target) as Collection<*>
                     dump("$key = $value")
-                } else if (returnType.isSubclassOf(Configurable::class)) {
+                } else if (returnType.isSubclassOf(ConfigurableSelf::class)) {
                     member.getter.call(target)?.let {
                         dump("$key = {")
                         printProperties(it, level + 1)
@@ -211,7 +221,7 @@ open class KradleDumpTask : DefaultTask() {
                 } else if (
                     returnType.isSubclassOf(ObjectFactory::class) ||
                     returnType.isSubclassOf(FeatureDsl::class) ||
-                    returnType.isSubclassOf(PropertiesDsl::class)
+                    returnType.isSubclassOf(Configurable::class)
                 ) {
                     // Ignore
                 } else {

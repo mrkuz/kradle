@@ -1,0 +1,45 @@
+package net.bnb1.kradle.blueprints.jvm
+
+import io.kotest.core.spec.style.BehaviorSpec
+import io.kotest.matchers.string.shouldContain
+import net.bnb1.kradle.TestProject
+
+class DevelopmentModeBlueprintTests : BehaviorSpec({
+
+    val project = TestProject(this)
+
+    Given("Default configuration") {
+        project.setUp {
+            """
+           jvm {
+               kotlin.enable()
+               application {
+                   mainClass("com.example.demo.AppKt")
+               }
+               developmentMode.enable()
+           }
+            """.trimIndent()
+        }
+        project.writeAppKt { "println(\"DEV_MODE=\" + System.getenv()[\"DEV_MODE\"])" }
+
+        When("Check for tasks") {
+
+            Then("Task dev is available") {
+                project.shouldHaveTask("dev")
+            }
+        }
+
+        When("Run dev") {
+            val result = project.runTask("dev")
+
+            Then("DEV_MODE environment variable is set") {
+                result.output shouldContain "DEV_MODE=true"
+            }
+
+            Then("Agent is attached") {
+                // Agent output
+                result.output shouldContain "DEBUG Project root: ${project.projectDir.absolutePath}"
+            }
+        }
+    }
+})

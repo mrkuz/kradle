@@ -1,25 +1,23 @@
 package net.bnb1.kradle.dsl
 
-import org.gradle.api.provider.Property
+open class Flag : SimpleProvider<Boolean> {
 
-open class Flag(private val property: Property<Boolean>) : PropertyWrapper<Boolean> {
-
-    init {
-        property.convention(false)
-    }
+    private var value: Boolean = false
 
     override val notNull: Boolean
         get() = true
 
-    override fun get() = property.get()
+    override fun get() = value
 
     operator fun invoke(enabled: Boolean = true) = set(enabled)
 
-    fun set(value: Boolean) = property.set(value)
-
-    fun bind(property: Property<Boolean>) = this.property.set(property)
+    fun set(value: Boolean) {
+        this.value = value
+    }
 
     fun enable() = set(true)
 
     fun disable() = set(false)
+
+    fun toggle() = set(!value)
 }

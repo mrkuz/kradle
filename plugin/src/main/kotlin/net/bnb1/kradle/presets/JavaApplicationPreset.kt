@@ -1,12 +1,13 @@
 package net.bnb1.kradle.presets
 
-import net.bnb1.kradle.KradleExtensionBase
-import org.gradle.api.Project
+import net.bnb1.kradle.config.dsl.KradleExtensionDsl
+import net.bnb1.kradle.core.Preset
+import java.util.concurrent.atomic.AtomicBoolean
 
-class JavaApplicationPreset(project: Project) : Preset(project) {
+class JavaApplicationPreset(lock: AtomicBoolean) : Preset<KradleExtensionDsl>(lock) {
 
-    override fun onConfigure(extension: KradleExtensionBase) {
-        extension.apply {
+    override fun doConfigure(target: KradleExtensionDsl) {
+        target.apply {
             general.configureOnly {
                 bootstrap.enable()
                 git.enable()
@@ -47,8 +48,8 @@ class JavaApplicationPreset(project: Project) : Preset(project) {
         }
     }
 
-    override fun onActivate(extension: KradleExtensionBase) {
-        extension.run {
+    override fun doActivate(target: KradleExtensionDsl) {
+        target.run {
             general.tryActivate()
             jvm.tryActivate()
         }

@@ -55,6 +55,10 @@ dependencies {
     testImplementation(Catalog.Build.Dependencies.Test.dockerJava)
     Catalog.Build.Dependencies.Test.kotestBundle.forEach { testImplementation(it) }
 
+    testImplementation("com.tngtech.archunit:archunit-junit5:0.22.0")
+    testImplementation("org.testcontainers:testcontainers:1.16.3")
+    testImplementation("org.testcontainers:junit-jupiter:1.16.3")
+
     constraints {
         Catalog.Build.Constraints.ids.forEach {
             api(it)
@@ -69,16 +73,32 @@ kradle {
     }
     jvm {
         targetJvm("11")
-        kotlin.enable()
+        kotlin {
+            lint {
+                ktlint {
+                    rules {
+                        disable("no-wildcard-imports")
+                    }
+                }
+            }
+        }
         dependencyUpdates.enable()
         vulnerabilityScan.enable()
         lint.enable()
         codeAnalysis.enable()
         test {
             prettyPrint(true)
-            integrationTests(true)
+            customTests("archUnit", "compat", "integration", "functional")
             withJunitJupiter()
         }
+    }
+}
+
+tasks.withType<Test> {
+    environment("PROJECT_DIR", project.projectDir)
+    environment("PROJECT_ROOT_DIR", project.rootDir)
+    testLogging {
+        showStandardStreams = true
     }
 }
 

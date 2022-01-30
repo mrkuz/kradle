@@ -1,18 +1,46 @@
 package net.bnb1.kradle.support
 
 import kotlin.reflect.KClass
+import kotlin.reflect.full.isSubclassOf
 
-open class Registry<T : Any> {
+@Suppress("UNCHECKED_CAST")
+open class Registry {
 
-    private val _map = mutableMapOf<KClass<*>, T>()
-    val map: Map<KClass<*>, T>
-        get() = _map
+    private val _map = mutableMapOf<Pair<KClass<*>, String>, Any>()
+    val map: Map<Pair<KClass<*>, String>, Any>
+        get() = _map.toMap()
 
-    fun register(instance: T): Boolean = _map.putIfAbsent(instance::class, instance) == null
+    fun add(instance: Any) = add(instance::class.qualifiedName!!, instance)
 
-    @Suppress("UNCHECKED_CAST")
-    inline fun <reified U : T> get() = map[U::class] as U
+    fun add(name: String, instance: Any) {
+        if (_map.putIfAbsent(Pair(instance::class, name), instance) != null) {
+            throw IllegalArgumentException("Duplicate key: $name, ${instance::class.qualifiedName}")
+        }
+    }
 
-    @Suppress("UNCHECKED_CAST")
-    fun <U : T> get(key: KClass<U>) = map[key] as U
+    operator fun <T : Any> invoke(provider: () -> T) = create(provider)
+
+    fun <T : Any> create(provider: () -> T): T {
+        val instance = provider.invoke()
+        add(instance)
+        return instance
+    }
+
+    operator fun <T : Any> invoke(name: String, provider: (String) -> T) = create(name, provider)
+
+    fun <T : Any> create(name: String, provider: (String) -> T): T {
+        val instance = provider.invoke(name)
+        add(name, instance)
+        return instance
+    }
+
+    inline fun <reified T : Any> named(name: String) = map[Pair(T::class, name)] as T
+
+    fun <T : Any> named(name: String, type: KClass<T>) = map[Pair(type, name)] as T
+
+    inline fun <reified T : Any> withType() =
+        map.entries.asSequence()
+            .filter { it.key.first.isSubclassOf(T::class) }
+            .map { it.value as T }
+            .toList()
 }

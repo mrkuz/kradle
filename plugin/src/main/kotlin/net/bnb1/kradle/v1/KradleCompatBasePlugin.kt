@@ -10,15 +10,18 @@ import org.gradle.kotlin.dsl.repositories
 class KradleCompatBasePlugin : Plugin<Project> {
 
     override fun apply(project: Project) {
-        project.extensions.create<KradleCompatExtension>("kradle")
-
-        project.createHelperTask<KradleDumpTask>("kradleDump", "Dumps kradle diagnostic information")
-
         project.repositories {
             mavenCentral()
             google()
             gradlePluginPortal()
             mavenLocal()
         }
+
+        project.createHelperTask<KradleDumpTask>(
+            "kradleDump",
+            "Dumps kradle diagnostic information"
+        )
+
+        project.extensions.create<KradleCompatExtension>("kradle")
     }
 }

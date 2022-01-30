@@ -1,25 +1,24 @@
 package net.bnb1.kradle
 
-import net.bnb1.kradle.dsl.PresetDsl
-import net.bnb1.kradle.presets.JavaApplicationPreset
-import net.bnb1.kradle.presets.JavaLibraryPreset
-import net.bnb1.kradle.presets.KotlinJvmApplicationPreset
-import net.bnb1.kradle.presets.KotlinJvmLibraryPreset
-import org.gradle.api.Project
-import javax.inject.Inject
+import net.bnb1.kradle.config.AllFeatureSets
+import net.bnb1.kradle.config.AllFeatures
+import net.bnb1.kradle.config.AllPresets
+import net.bnb1.kradle.config.AllProperties
+import net.bnb1.kradle.config.dsl.KradleExtensionDsl
+import net.bnb1.kradle.core.dsl.PresetDsl
+import net.bnb1.kradle.support.Tracer
 
-open class KradleExtension @Inject constructor(project: Project) : KradleExtensionBase(project) {
+@Suppress("LeakingThis")
+open class KradleExtension(
+    tracer: Tracer,
+    featureSets: AllFeatureSets,
+    features: AllFeatures,
+    properties: AllProperties,
+    presets: AllPresets
+) : KradleExtensionDsl(tracer, featureSets, features, properties) {
 
-    val kotlinJvmApplication = PresetDsl.Builder(project)
-        .preset { KotlinJvmApplicationPreset(it) }
-        .build()
-    val kotlinJvmLibrary = PresetDsl.Builder(project)
-        .preset { KotlinJvmLibraryPreset(it) }
-        .build()
-    val javaApplication = PresetDsl.Builder(project)
-        .preset { JavaApplicationPreset(it) }
-        .build()
-    val javaLibrary = PresetDsl.Builder(project)
-        .preset { JavaLibraryPreset(it) }
-        .build()
+    val kotlinJvmApplication = PresetDsl(this, presets.kotlinJvmApplication)
+    val kotlinJvmLibrary = PresetDsl(this, presets.kotlinJvmLibrary)
+    val javaApplication = PresetDsl(this, presets.javaApplication)
+    val javaLibrary = PresetDsl(this, presets.javaLibrary)
 }
