@@ -19,8 +19,6 @@ class KotlinTestBlueprint(project: Project) : Blueprint(project) {
                 testImplementation("${Catalog.Dependencies.Test.kotestAssertions}:${useKotest.get()}")
                 if (withJunitJupiter) {
                     testImplementation("${Catalog.Dependencies.Test.kotestJunit5}:${useKotest.get()}")
-                } else {
-                    testImplementation("${Catalog.Dependencies.Test.kotestJunit4}:${useKotest.get()}")
                 }
             }
         }

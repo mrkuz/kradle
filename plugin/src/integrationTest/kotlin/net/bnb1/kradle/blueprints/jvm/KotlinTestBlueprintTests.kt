@@ -26,10 +26,6 @@ class KotlinTestBlueprintTests : BehaviorSpec({
             Then("kotest-assertions-core is available") {
                 project.shouldHaveDependency("testImplementation", "io.kotest:kotest-assertions-core")
             }
-
-            Then("kotest-runner-junit4 is available") {
-                project.shouldHaveDependency("testImplementation", "io.kotest:kotest-runner-junit4")
-            }
         }
     }
 
@@ -55,7 +51,7 @@ class KotlinTestBlueprintTests : BehaviorSpec({
                 project.shouldHaveDependency("testImplementation", "io.kotest:kotest-assertions-core")
             }
 
-            Then("kotest-runner-junit4 is available") {
+            Then("kotest-runner-junit5 is available") {
                 project.shouldHaveDependency("testImplementation", "io.kotest:kotest-runner-junit5")
             }
         }

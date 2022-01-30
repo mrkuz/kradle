@@ -67,7 +67,6 @@ object Catalog {
             val junitApi = artifact("org.junit.jupiter", "junit-jupiter-api", Versions.junit)
             val junitEngine = artifact("org.junit.jupiter", "junit-jupiter-engine", Versions.junit)
             val kotlinTest = artifact("org.jetbrains.kotlin", "kotlin-test", Versions.kotlin)
-            val kotestJunit4 = artifact("io.kotest", "kotest-runner-junit4", Versions.kotest)
             val kotestJunit5 = artifact("io.kotest", "kotest-runner-junit5", Versions.kotest)
             val kotestAssertions = artifact("io.kotest", "kotest-assertions-core", Versions.kotest)
             val mockk = artifact("io.mockk", "mockk", Versions.mockk)
