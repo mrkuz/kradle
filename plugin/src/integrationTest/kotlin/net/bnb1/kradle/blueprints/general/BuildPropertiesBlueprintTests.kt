@@ -87,7 +87,7 @@ class BuildPropertiesBlueprintTests : BehaviorSpec({
         project.gitInit()
 
         When("Run generateBuildProperties") {
-            val result = project.runTask("generateBuildProperties")
+            project.runTask("generateBuildProperties")
 
             Then("build.properties contains Git commit id") {
                 val output = project.buildDir.resolve("resources/main/build.properties")

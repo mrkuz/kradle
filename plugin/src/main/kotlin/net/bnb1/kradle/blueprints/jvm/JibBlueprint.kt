@@ -78,7 +78,7 @@ class JibBlueprint(project: Project) : Blueprint(project) {
                 }
             }
 
-            if (project.extraDir.exists()) {
+            if (project.extraDir.exists() || dockerProperties.withAppSh.get() || dockerProperties.withJvmKill.hasValue) {
                 extraDirectories {
                     paths {
                         path {
