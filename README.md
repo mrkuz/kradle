@@ -70,8 +70,9 @@ Most of the functionality is provided by other well-known plugins. `kradle` just
     - [Kotlin/JVM library](#preset-kotlin-jvm-library)
     - [Java application](#preset-java-application)
     - [Java library](#preset-java-library)
-- [Configuration reference](#configuration-reference)
+- [Configuration DSL reference](#configuration-reference)
 - [How to report bugs](#bugs)
+- [Versioning](#versioning)
 - [License](#license)
 
 <a id="whats-new"></a>
@@ -374,12 +375,14 @@ kradle {
 ```
 
 - `useCoroutines`: Adds Kotlin coroutines dependency
-- `ktlint.version`: [ktlint](https://ktlint.github.io/) version used (only if [linting](#feature-lint) enabled)
-- `ktlint.rules.disable`: Disable [ktlint](https://ktlint.github.io/) rule. Can be called multiple times
-- `ktlint.disable()`: Disable [ktlint](https://ktlint.github.io/)
-- `detekt.version`: [detekt](https://detekt.github.io/detekt/) version used (only if [static code analysis](#feature-code-analysis) is enabled)
-- `detekt.configFile`: [detekt](https://detekt.github.io/detekt/) configuration file used
-- `detekt.disable()`: Disable [detekt](https://detekt.github.io/detekt/)
+- `ktlint.*`: [ktlint](https://ktlint.github.io/) configuration (only relevant if [linting](#feature-lint) enabled)
+- `ktlint.version`: ktlint version used
+- `ktlint.rules.disable`: Disable ktlint rule. Can be called multiple times
+- `ktlint.disable`: Disable ktlint
+- `detekt.*`: [detekt](https://detekt.github.io/detekt/) configuration (only relevant if [static code analysis](#feature-code-analysis) is enabled)
+- `detekt.version`: detekt version used
+- `detekt.configFile`: detekt configuration file used
+- `detekt.disable`: Disable detekt
 - `useKoTest`: Adds [kotest](https://kotest.io/) test dependencies (only if [test improvements](#feature-test) are enabled)
 - `useMockk`: Adds [mockk](https://mockk.io/) test dependency (only if [test improvements](#feature-test) are enabled)
 
@@ -438,16 +441,19 @@ kradle {
 ```
 
 - `previewFeatures`: Enable preview features
-- `checkstyle.version`: [checkstyle](https://checkstyle.sourceforge.io/) version used (only if [linting](#feature-lint) is enabled)
-- `checkstyle.configFile`: [checkstyle](https://checkstyle.sourceforge.io/) configuration file used
-- `checkstyle.disable()`: Disable [checkstyle](https://checkstyle.sourceforge.io/)
-- `pmd.version`: [PMD](https://pmd.github.io/) version used (only if [code analysis](#feature-code-analysis) is enabled)
-- `pmd.ruleSets.*`: Enable/disable [PMD](https://pmd.github.io/) rule sets
-- `pmd.disable()`: Disable [PMD](https://pmd.github.io/)
-- `spotBugs.version`: [SpotBugs](https://spotbugs.github.io/) version used (only if [code analysis](#code-analysis) is enabled)
+- `checkstyle.*`: [checkstyle](https://checkstyle.sourceforge.io/) configuration (only relevant if [linting](#feature-lint) is enabled)
+- `checkstyle.version`: checkstyle version used
+- `checkstyle.configFile`: checkstyle configuration file used
+- `checkstyle.disable`: Disable checkstyle
+- `pmd.*`: [PMD](https://pmd.github.io/) configuration (only relevant if [code analysis](#feature-code-analysis) is enabled)
+- `pmd.version`: PMD version used
+- `pmd.ruleSets.*`: Enable/disable PMD rule sets
+- `pmd.disable`: Disable PMD
+- `spotBugs.version`: [SpotBugs](https://spotbugs.github.io/) configuration (only relevant if [code analysis](#code-analysis) is enabled)
+- `spotBugs.version`: SpotBugs version used
 - `spotBugs.useFbContrib`: Use [fb-contrib](http://fb-contrib.sourceforge.net/) plugin
 - `spotBugs.useFbContrib`: Use [Find Security Bugs](https://find-sec-bugs.github.io/) plugin
-- `spotBugs.disable()`: Disable [SpotBugs](https://spotbugs.github.io/)
+- `spotBugs.disable`: Disable SpotBugs
 
 <a id="feature-application"></a>
 ### Application development
@@ -544,7 +550,7 @@ Adds the task `lint`, which runs:
 
 `lint` is executed when running `check`.
 
-Plugins used: [ktlint Plugin](https://plugins.gradle.org/plugin/org.jlleitschuh.gradle.ktlint)
+Plugins used: [ktlint Plugin](https://plugins.gradle.org/plugin/org.jlleitschuh.gradle.ktlint), [Checkstyle Plugin](https://docs.gradle.org/current/userguide/checkstyle_plugin.html)
 
 #### Options
 
@@ -732,7 +738,7 @@ kradle {
 ```
 
 - `minimize`: Minimizes Uber-Jar, only required classes are added
-- `disable()`: Disables `uberJar` task
+- `disable`: Disables `uberJar` task
 
 <a id="feature-docker"></a>
 ### Docker
@@ -1060,7 +1066,7 @@ kradle {
 ```
 
 <a id="configuration-reference"></a>
-## Configuration reference
+## Configuration DSL reference
 
 This example configuration shows all available options.
 
@@ -1181,6 +1187,15 @@ kradle {
 ## How to report bugs
 
 Please open a new [issue](https://github.com/mrkuz/kradle/issues) and if possible provide the output of `gradle kradleDump`.
+
+<a id="versioning"></a>
+## Versioning (since 2.0.0)
+
+`kradle` uses a `MAJOR.MINOR.PATCH` pattern.
+
+- `PATCH`: Bug fixes. Configuration DSL will not change.
+- `MINOR`: New features. Configuration DSL changes, but will stay backwards compatible. Default values might change (__Defaults change__ in the [CHANGELOG](CHANGELOG.md)).
+- `MAJOR`: New features, that break the configuration DSL or functional backwards compatibility (__Breaking change__ in the [CHANGELOG](CHANGELOG.md)).
 
 <a id="license"></a>
 ## License
