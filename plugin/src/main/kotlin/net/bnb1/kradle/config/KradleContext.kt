@@ -152,8 +152,12 @@ class KradleContext(project: Project) {
             me belongsTo featureSets.jvm
             me += setOf(
                 blueprints.test,
-                blueprints.jacoco,
-                blueprints.kotlinTest.also { it dependsOn features.kotlin }
+                blueprints.junitJupiter.also { it.disable() },
+                blueprints.jacoco.also { it.disable() },
+                blueprints.kotlinTest.also {
+                    it dependsOn features.kotlin
+                    it.withJunitJupiter = { blueprints.junitJupiter.isEnabled }
+                }
             )
         }
         features.benchmark.also { me ->

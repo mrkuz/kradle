@@ -1,5 +1,6 @@
 package net.bnb1.kradle
 
+import net.bnb1.kradle.config.AllBlueprints
 import net.bnb1.kradle.config.AllFeatureSets
 import net.bnb1.kradle.config.AllFeatures
 import net.bnb1.kradle.config.AllPresets
@@ -13,9 +14,10 @@ open class KradleExtension(
     tracer: Tracer,
     featureSets: AllFeatureSets,
     features: AllFeatures,
+    blueprints: AllBlueprints,
     properties: AllProperties,
     presets: AllPresets
-) : KradleExtensionDsl(tracer, featureSets, features, properties) {
+) : KradleExtensionDsl(tracer, featureSets, features, blueprints, properties) {
 
     val kotlinJvmApplication = PresetDsl(this, presets.kotlinJvmApplication)
     val kotlinJvmLibrary = PresetDsl(this, presets.kotlinJvmLibrary)

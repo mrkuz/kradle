@@ -70,6 +70,17 @@ class Feature(val name: String, private val taskName: String? = null) {
         if (!isInactive) throw IllegalStateException("Configuration not allowed when activated")
     }
 
+    fun enable() {
+        enabled.set(true)
+    }
+
+    fun disable() {
+        enabled.set(false)
+    }
+
+    val isEnabled
+        get() = enabled.get()
+
     fun activate(tracer: Tracer) {
         if (!isEnabled) {
             return
@@ -91,20 +102,9 @@ class Feature(val name: String, private val taskName: String? = null) {
         state.set(State.ACTIVATED)
     }
 
-    fun enable() {
-        enabled.set(true)
-    }
-
-    fun disable() {
-        enabled.set(false)
-    }
-
     fun shouldActivateAfter(): Set<Feature> {
         return requires + after
     }
-
-    val isEnabled
-        get() = enabled.get()
 
     val isActive
         get() = state.get() == State.ACTIVATED

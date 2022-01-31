@@ -9,15 +9,14 @@ import org.gradle.kotlin.dsl.dependencies
 class KotlinTestBlueprint(project: Project) : Blueprint(project) {
 
     lateinit var kotlinTestProperties: KotlinTestProperties
-    lateinit var testProperties: TestProperties
+    lateinit var withJunitJupiter: () -> Boolean
 
     override fun doAddDependencies() {
-        val withJunitJupiter = testProperties.withJunitJupiter.hasValue
         val useKotest = kotlinTestProperties.useKotest
         if (useKotest.hasValue) {
             project.dependencies {
                 testImplementation("${Catalog.Dependencies.Test.kotestAssertions}:${useKotest.get()}")
-                if (withJunitJupiter) {
+                if (withJunitJupiter()) {
                     testImplementation("${Catalog.Dependencies.Test.kotestJunit5}:${useKotest.get()}")
                 }
             }

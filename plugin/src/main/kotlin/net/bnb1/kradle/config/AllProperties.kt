@@ -6,7 +6,9 @@ import net.bnb1.kradle.blueprints.jvm.CheckstyleProperties
 import net.bnb1.kradle.blueprints.jvm.CodeAnalysisProperties
 import net.bnb1.kradle.blueprints.jvm.DetektProperties
 import net.bnb1.kradle.blueprints.jvm.DockerProperties
+import net.bnb1.kradle.blueprints.jvm.JacocoProperties
 import net.bnb1.kradle.blueprints.jvm.JavaProperties
+import net.bnb1.kradle.blueprints.jvm.JunitJupiterProperties
 import net.bnb1.kradle.blueprints.jvm.JvmProperties
 import net.bnb1.kradle.blueprints.jvm.KotlinProperties
 import net.bnb1.kradle.blueprints.jvm.KotlinTestProperties
@@ -36,6 +38,8 @@ class AllProperties(registry: Registry) {
     val lint = registry { LintProperties() }
     val codeAnalysis = registry { CodeAnalysisProperties() }
     val test = registry { TestProperties() }
+    val junitJupiter = registry { JunitJupiterProperties() }
+    val jacoco = registry { JacocoProperties() }
     val benchmark = registry { BenchmarkProperties() }
 
     val uberJar = registry { ShadowProperties() }

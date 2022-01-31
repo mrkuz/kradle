@@ -18,6 +18,7 @@ import net.bnb1.kradle.blueprints.jvm.JavaAppBootstrapBlueprint
 import net.bnb1.kradle.blueprints.jvm.JavaBlueprint
 import net.bnb1.kradle.blueprints.jvm.JavaLibBootstrapBlueprint
 import net.bnb1.kradle.blueprints.jvm.JibBlueprint
+import net.bnb1.kradle.blueprints.jvm.JunitJupiterBlueprint
 import net.bnb1.kradle.blueprints.jvm.KotlinAppBootstrapBlueprint
 import net.bnb1.kradle.blueprints.jvm.KotlinBlueprint
 import net.bnb1.kradle.blueprints.jvm.KotlinLibBootstrapBlueprint
@@ -84,8 +85,14 @@ class AllBlueprints(registry: Registry, properties: AllProperties, project: Proj
             javaProperties = properties.java
         }
     }
+    val junitJupiter = registry {
+        JunitJupiterBlueprint(project).inject {
+            junitJupiterProperties = properties.junitJupiter
+        }
+    }
     val jacoco = registry {
         JacocoBlueprint(project).inject {
+            jacocoProperties = properties.jacoco
             testProperties = properties.test
         }
     }
@@ -158,7 +165,6 @@ class AllBlueprints(registry: Registry, properties: AllProperties, project: Proj
     val kotlinTest = registry {
         KotlinTestBlueprint(project).inject {
             kotlinTestProperties = properties.kotlinTest
-            testProperties = properties.test
         }
     }
 }

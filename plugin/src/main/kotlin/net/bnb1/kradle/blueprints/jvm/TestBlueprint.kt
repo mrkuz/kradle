@@ -1,18 +1,14 @@
 package net.bnb1.kradle.blueprints.jvm
 
 import com.adarshr.gradle.testlogger.TestLoggerPlugin
-import net.bnb1.kradle.Catalog
 import net.bnb1.kradle.apply
 import net.bnb1.kradle.core.Blueprint
 import net.bnb1.kradle.createTask
 import net.bnb1.kradle.sourceSets
-import net.bnb1.kradle.testImplementation
-import net.bnb1.kradle.testRuntimeOnly
 import org.gradle.api.Project
 import org.gradle.api.tasks.SourceSet
 import org.gradle.api.tasks.testing.Test
 import org.gradle.api.tasks.testing.logging.TestLogEvent
-import org.gradle.kotlin.dsl.dependencies
 import org.gradle.kotlin.dsl.withType
 
 class TestBlueprint(project: Project) : Blueprint(project) {
@@ -34,11 +30,11 @@ class TestBlueprint(project: Project) : Blueprint(project) {
             customTests.add(it)
         }
 
-        if (testProperties.withFunctionalTests.get()) {
+        if (testProperties.functionalTests.get()) {
             customTests.remove("functional")
             customTests.add(0, "functional")
         }
-        if (testProperties.withIntegrationTests.get()) {
+        if (testProperties.integrationTests.get()) {
             customTests.remove("integration")
             customTests.add(0, "integration")
         }
@@ -85,26 +81,8 @@ class TestBlueprint(project: Project) : Blueprint(project) {
         project.tasks.getByName("check").dependsOn(name)
     }
 
-    override fun doAddDependencies() {
-        if (testProperties.withJunitJupiter.hasValue) {
-            project.dependencies {
-                testImplementation(
-                    "${Catalog.Dependencies.Test.junitApi}:" +
-                        "${testProperties.withJunitJupiter.get()}"
-                )
-                testRuntimeOnly(
-                    "${Catalog.Dependencies.Test.junitEngine}:" +
-                        "${testProperties.withJunitJupiter.get()}"
-                )
-            }
-        }
-    }
-
     override fun doConfigure() {
         project.tasks.withType<Test> {
-            if (testProperties.withJunitJupiter.hasValue) {
-                useJUnitPlatform()
-            }
             if (javaProperties.previewFeatures.get()) {
                 jvmArgs = jvmArgs + "--enable-preview"
             }

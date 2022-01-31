@@ -37,6 +37,15 @@ class BlueprintTests : BehaviorSpec({
                 blueprint.activated.get() shouldBe 0
             }
         }
+
+        When("Blueprint is disabled") {
+            blueprint.disable()
+
+            blueprint.activate(tracer)
+            Then("Blueprint is not activated") {
+                blueprint.activated.get() shouldBe 0
+            }
+        }
     }
 
     Given("Blueprint with feature dependency") {

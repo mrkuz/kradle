@@ -180,14 +180,16 @@ class JacocoBlueprintTests : BehaviorSpec({
         }
     }
 
-    Given("test.withJacoco = 0.8.6") {
+    Given("jacoco.version = 0.8.6") {
         project.setUp {
             """
             jvm {
                 kotlin.enable()
                 test {
                     withJunitJupiter()
-                    withJacoco("0.8.6")
+                    jacoco {
+                        version("0.8.6")
+                    }
                 }
             }
             """.trimIndent()

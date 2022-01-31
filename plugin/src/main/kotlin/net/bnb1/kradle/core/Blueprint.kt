@@ -11,6 +11,7 @@ import java.util.concurrent.atomic.AtomicBoolean
  */
 open class Blueprint(protected val project: Project) {
 
+    private val enabled = AtomicBoolean(true)
     private val activated = AtomicBoolean(false)
     private val dependsOn = mutableSetOf<Feature>()
 
@@ -19,12 +20,25 @@ open class Blueprint(protected val project: Project) {
         dependsOn += feature
     }
 
+    fun enable() {
+        enabled.set(true)
+    }
+
+    fun disable() {
+        enabled.set(false)
+    }
+
+    val isEnabled
+        get() = enabled.get()
+
     fun activate(tracer: Tracer) {
         tracer.branch {
             val missing = dependsOn
                 .filter { !it.isEnabled }
                 .map { it.name }
-            if (missing.isNotEmpty()) {
+            if (!isEnabled) {
+                trace("! ${this@Blueprint::class.simpleName} (B, disabled)")
+            } else if (missing.isNotEmpty()) {
                 trace("! ${this@Blueprint::class.simpleName} (B, missing features: ${missing.joinToString(", ")})")
             } else if (!activated.compareAndSet(false, true)) {
                 trace("! ${this@Blueprint::class.simpleName} (B, already activated)")
@@ -45,7 +59,7 @@ open class Blueprint(protected val project: Project) {
         }
     }
 
-    val isActivated
+    val isActivate
         get() = activated.get()
 
     protected open fun shouldActivate() = true

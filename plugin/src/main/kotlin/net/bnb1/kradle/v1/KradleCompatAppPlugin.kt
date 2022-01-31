@@ -31,7 +31,13 @@ class KradleCompatAppPlugin : Plugin<Project> {
             }
         }
 
-        val extension = KradleExtensionDsl(tracer, context.featureSets, context.features, context.properties)
+        val extension = KradleExtensionDsl(
+            tracer,
+            context.featureSets,
+            context.features,
+            context.blueprints,
+            context.properties
+        )
         KradleCompat(
             tracer,
             context.properties,

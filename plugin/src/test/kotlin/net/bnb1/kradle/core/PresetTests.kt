@@ -4,6 +4,8 @@ import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.spec.IsolationMode
 import io.kotest.core.spec.style.BehaviorSpec
 import io.kotest.matchers.shouldBe
+import io.mockk.mockk
+import net.bnb1.kradle.config.AllBlueprints
 import net.bnb1.kradle.config.AllFeatureSets
 import net.bnb1.kradle.config.AllFeatures
 import net.bnb1.kradle.config.AllProperties
@@ -11,6 +13,7 @@ import net.bnb1.kradle.config.dsl.KradleExtensionDsl
 import net.bnb1.kradle.support.Registry
 import net.bnb1.kradle.support.Tracer
 import org.gradle.api.GradleException
+import org.gradle.api.Project
 import java.util.concurrent.atomic.AtomicBoolean
 import java.util.concurrent.atomic.AtomicInteger
 
@@ -18,12 +21,14 @@ class PresetTests : BehaviorSpec({
 
     isolationMode = IsolationMode.InstancePerLeaf
 
+    val project = mockk<Project>(relaxed = true)
     val context = Registry()
     val tracer = Tracer()
     val properties = AllProperties(context)
+    var blueprints = AllBlueprints(context, properties, project)
     val features = AllFeatures(context)
     val featureSets = AllFeatureSets(context)
-    val extension = KradleExtensionDsl(tracer, featureSets, features, properties)
+    val extension = KradleExtensionDsl(tracer, featureSets, features, blueprints, properties)
     val lock = AtomicBoolean()
 
     Given("Preset") {

@@ -41,17 +41,6 @@ class TestBlueprintTests : BehaviorSpec({
         }
         createAppTest("test")
 
-        When("Check for dependencies") {
-
-            Then("junit-jupiter-api is available") {
-                project.shouldHaveDependency("testImplementation", "org.junit.jupiter:junit-jupiter-api")
-            }
-
-            Then("junit-jupiter-engine is available") {
-                project.shouldHaveDependency("testRuntimeOnly", "org.junit.jupiter:junit-jupiter-engine")
-            }
-        }
-
         When("Run test") {
             val result = project.runTask("test")
 
