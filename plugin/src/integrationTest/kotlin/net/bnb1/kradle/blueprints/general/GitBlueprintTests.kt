@@ -78,6 +78,10 @@ class GitBlueprintTests : BehaviorSpec({
                 Then("gitCommit is set") {
                     project.shouldHaveProperty("gitCommit", Regex("[a-z0-9]{7}"))
                 }
+
+                Then("gitBranch is set") {
+                    project.shouldHaveProperty("gitBranch", "main")
+                }
             }
         }
     }

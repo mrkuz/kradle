@@ -19,6 +19,9 @@ class GitPlugin : Plugin<Project> {
             if (hash != null) {
                 project.extra["gitCommit"] = hash.substring(0, COMMIT_LENGTH)
             }
+            git.repository.branch?.let {
+                project.extra["gitBranch"] = it
+            }
         }
 
         project.createTask<GenerateGitignoreTask>("generateGitignore", "Generates .gitignore")
