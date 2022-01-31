@@ -2,7 +2,7 @@
 
 ## Changelog
 
-### Version main-SNAPSHOT (2022-01-06)
+### Version main-SNAPSHOT (2022-01-31)
 
 - Fix support for target JVM 8
 

@@ -68,7 +68,7 @@ Most of the functionality is provided by other well-known plugins. `kradle` just
     - [Kotlin/JVM library](#preset-kotlin-jvm-library)
     - [Java application](#preset-java-application)
     - [Java library](#preset-java-library)
-    - [Configuration reference](#configuration-reference)
+- [Configuration reference](#configuration-reference)
 - [How to report bugs](#bugs)
 - [License](#license)
 
@@ -371,7 +371,7 @@ kradle {
 
 - `useCoroutines`: Adds Kotlin coroutines dependency
 - `ktlint.version`: [ktlint](https://ktlint.github.io/) version used (only if [linting](#feature-lint) enabled)
-- `ktlint.disable`: Disable [ktlint](https://ktlint.github.io/) rule. Can be called multiple times
+- `ktlint.rules.disable`: Disable [ktlint](https://ktlint.github.io/) rule. Can be called multiple times
 - `detekt.version`: [detekt](https://detekt.github.io/detekt/) version used (only if [static code analysis](#feature-code-analysis) is enabled)
 - `detekt.configFile`: [detekt](https://detekt.github.io/detekt/) configuration file used
 - `useKoTest`: Adds [kotest](https://kotest.io/) test dependencies (only if [test improvements](#feature-test) are enabled)
