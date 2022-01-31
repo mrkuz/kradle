@@ -52,6 +52,13 @@ class ApplicationBlueprintTests : BehaviorSpec({
             }
         }
 
+        When("Check for properties") {
+
+            Then("mainClass is set") {
+                project.shouldHaveProperty("mainClass", "com.example.demo.AppKt")
+            }
+        }
+
         When("Run 'run'") {
             val result = project.runTask("run")
 

@@ -7,6 +7,7 @@ import org.gradle.api.Project
 import org.gradle.api.plugins.ApplicationPlugin
 import org.gradle.api.plugins.JavaApplication
 import org.gradle.api.tasks.JavaExec
+import org.gradle.kotlin.dsl.extra
 import org.gradle.kotlin.dsl.withType
 
 private val GROUP_PATTERN = Regex("^[a-z]+(\\.[a-z0-9]+)+$")
@@ -30,6 +31,10 @@ class ApplicationBlueprint(project: Project) : Blueprint(project) {
 
     override fun doApplyPlugins() {
         project.apply(ApplicationPlugin::class.java)
+    }
+
+    override fun doAddExtraProperties() {
+        project.extra["mainClass"] = applicationProperties.mainClass.get()
     }
 
     override fun doConfigure() {
