@@ -26,6 +26,8 @@ class TestBlueprintTests : BehaviorSpec({
                 @Test
                 fun doNothing() {
                     println("Hello Test!")
+                    println("PROJECT_DIR = " + System.getenv("PROJECT_DIR"))
+                    println("PROJECT_ROOT_DIR = " + System.getenv("PROJECT_ROOT_DIR"))
                 }
             }
             """.trimIndent()
@@ -176,6 +178,14 @@ class TestBlueprintTests : BehaviorSpec({
 
             Then("Show stdout") {
                 result.output shouldContain "Hello Test!"
+            }
+
+            Then("PROJECT_DIR is set") {
+                result.output shouldContain "PROJECT_DIR = " + project.projectDir.absoluteFile
+            }
+
+            Then("PROJECT_ROOT_DIR is set") {
+                result.output shouldContain "PROJECT_ROOT_DIR = " + project.projectDir.absoluteFile
             }
         }
     }

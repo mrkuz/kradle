@@ -638,6 +638,8 @@ kradle {
 
 Test file names can end with `Test`, `Tests`, `Spec` or `IT`.
 
+When running tests, the environment variables `PROJECT_DIR` and `PROJECT_ROOT_DIR` are set.
+
 Plugins used: [Java Plugin](https://docs.gradle.org/current/userguide/java_plugin.html)
 , [JaCocCo Plugin](https://docs.gradle.org/current/userguide/jacoco_plugin.html),
 [Gradle Test Logger Plugin](https://plugins.gradle.org/plugin/com.adarshr.test-logger)

@@ -89,6 +89,8 @@ class TestBlueprint(project: Project) : Blueprint(project) {
         }
 
         project.tasks.withType<Test> {
+            environment("PROJECT_DIR", project.projectDir.absolutePath)
+            environment("PROJECT_ROOT_DIR", project.rootDir.absolutePath)
             if (javaProperties.previewFeatures.get()) {
                 jvmArgs = jvmArgs + "--enable-preview"
             }
