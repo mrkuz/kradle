@@ -1,5 +1,7 @@
 # Kradle
 
+[![Gradle Plugin Portal](https://img.shields.io/gradle-plugin-portal/v/net.bitsandbobs.kradle)](https://plugins.gradle.org/plugin/net.bitsandbobs.kradle)
+
 Swiss army knife for Kotlin/JVM (and also Java) development.
 
 `kradle` is a Gradle plugin, which sets up your Kotlin/JVM (or Java) project in no time.
@@ -353,12 +355,14 @@ kradle {
                         // disable(...)
                     }
                 }
+                // ktlint.disable()
             }
             codeAnalysis {
                 detekt {
                     version("1.19.0")
                     configFile("detekt-config.yml")
                 }
+                // detekt.disable()
             }
             test {
                 // useKotest("5.0.3")
@@ -372,8 +376,10 @@ kradle {
 - `useCoroutines`: Adds Kotlin coroutines dependency
 - `ktlint.version`: [ktlint](https://ktlint.github.io/) version used (only if [linting](#feature-lint) enabled)
 - `ktlint.rules.disable`: Disable [ktlint](https://ktlint.github.io/) rule. Can be called multiple times
+- `ktlint.disable()`: Disable [ktlint](https://ktlint.github.io/)
 - `detekt.version`: [detekt](https://detekt.github.io/detekt/) version used (only if [static code analysis](#feature-code-analysis) is enabled)
 - `detekt.configFile`: [detekt](https://detekt.github.io/detekt/) configuration file used
+- `detekt.disable()`: Disable [detekt](https://detekt.github.io/detekt/)
 - `useKoTest`: Adds [kotest](https://kotest.io/) test dependencies (only if [test improvements](#feature-test) are enabled)
 - `useMockk`: Adds [mockk](https://mockk.io/) test dependency (only if [test improvements](#feature-test) are enabled)
 
@@ -402,6 +408,7 @@ kradle {
                     version("9.2.1")
                     configFile("checkstyle.xml")
                 }
+                // checkstyle.disable()
             }
             codeAnalysis {
                 pmd {
@@ -417,11 +424,13 @@ kradle {
                         security(true)
                     }
                 }
+                // pmd.disable()
                 spotBugs {
                     version("4.5.3")
                     // useFbContrib(7.4.7)
                     // useFindSecBugs(1.11.0)
                 }
+                // spotBugs.disable()
             }
         }
     }
@@ -431,11 +440,14 @@ kradle {
 - `previewFeatures`: Enable preview features
 - `checkstyle.version`: [checkstyle](https://checkstyle.sourceforge.io/) version used (only if [linting](#feature-lint) is enabled)
 - `checkstyle.configFile`: [checkstyle](https://checkstyle.sourceforge.io/) configuration file used
+- `checkstyle.disable()`: Disable [checkstyle](https://checkstyle.sourceforge.io/)
 - `pmd.version`: [PMD](https://pmd.github.io/) version used (only if [code analysis](#feature-code-analysis) is enabled)
 - `pmd.ruleSets.*`: Enable/disable [PMD](https://pmd.github.io/) rule sets
+- `pmd.disable()`: Disable [PMD](https://pmd.github.io/)
 - `spotBugs.version`: [SpotBugs](https://spotbugs.github.io/) version used (only if [code analysis](#code-analysis) is enabled)
 - `spotBugs.useFbContrib`: Use [fb-contrib](http://fb-contrib.sourceforge.net/) plugin
 - `spotBugs.useFbContrib`: Use [Find Security Bugs](https://find-sec-bugs.github.io/) plugin
+- `spotBugs.disable()`: Disable [SpotBugs](https://spotbugs.github.io/)
 
 <a id="feature-application"></a>
 ### Application development
@@ -633,9 +645,15 @@ kradle {
             prettyPrint(false)
             integrationTests(false)
             functionalTests(false)
-            // customTests("<NAME>")
-            // withJunitJupiter("5.8.2")
-            // withJacoco(0.8.7")
+            /*
+            customTests("<NAME>")
+            junitJupiter.enable {
+                version("5.8.2")
+            }
+            jacoco.enable {
+                version("0.8.7")
+            }
+            */
         }
     }
 }
@@ -645,8 +663,10 @@ kradle {
 - `integrationTests`: Adds task `integrationTest`, which runs tests under _src/integrationTest_. The task is executed when running `check`.
 - `functionalTests`: Adds task `functionalTest`, which runs tests under _src/functionalTest_. The task is executed when running `check`.
 - `customTests`: Adds task `<NAME>Test`, which runs tests under _src/&lt;NAME&gt;_. The task is executed when running `check`. Can be called multiple times.
-- `withJunitJupiter`: Sets up [JUnit Jupiter](https://junit.org/junit5/) for running tests
-- `withJacoco`: Generates [JaCoCo](https://www.jacoco.org/jacoco/) code coverage reports after tests. They can be found under _build/reports/jacoco/_.
+- `junitJupiter.enable`: Sets up [JUnit Jupiter](https://junit.org/junit5/) for running tests.
+- `junitJupiter.version`: [JUnit Jupiter](https://junit.org/junit5/) version used.
+- `jacoco.enable`: Generates [JaCoCo](https://www.jacoco.org/jacoco/) code coverage reports after tests. They can be found under _build/reports/jacoco/_.
+- `jacoco.version`: [JaCoCo](https://www.jacoco.org/jacoco/) version used.
 
 <a id="feature-benchmark"></a>
 ### Benchmarks
@@ -705,12 +725,14 @@ kradle {
             uberJar {
                 minimize(false)
             }
+            // uberJar.disable()
         }
     }
 }
 ```
 
 - `minimize`: Minimizes Uber-Jar, only required classes are added
+- `disable()`: Disables `uberJar` task
 
 <a id="feature-docker"></a>
 ### Docker
@@ -855,8 +877,8 @@ kradle {
             prettyPrint(true)
             integrationTests(true)
             functionalTests(true)
-            withJunitJupiter()
-            withJacoco()
+            junitJupiter(true)
+            jacoco(true)
         }
 
         benchmark.enable()
@@ -914,8 +936,8 @@ kradle {
             prettyPrint(true)
             integrationTests(true)
             functionalTests(true)
-            withJunitJupiter()
-            withJacoco()
+            junitJupiter(true)
+            jacoco(true)
         }
 
         benchmark.enable()
@@ -973,8 +995,8 @@ kradle {
             prettyPrint(true)
             integrationTests(true)
             functionalTests(true)
-            withJunitJupiter()
-            withJacoco()
+            junitJupiter(true)
+            jacoco(true)
         }
 
         benchmark.enable()
@@ -1026,8 +1048,8 @@ kradle {
             prettyPrint(true)
             integrationTests(true)
             functionalTests(true)
-            withJunitJupiter()
-            withJacoco()
+            junitJupiter(true)
+            jacoco(true)
         }
 
         benchmark.enable()
@@ -1124,8 +1146,12 @@ kradle {
             integrationTests(true)
             functionalTests(true)
             customTests(...)
-            withJunitJupiter(/* "5.8.2" */)
-            withJacoco(/* "0.8.7" */)
+            junitJupiter {
+                version("5.8.2")
+            }
+            jacoco {
+                version("0.8.7")
+            }
         }
 
         benchmark {

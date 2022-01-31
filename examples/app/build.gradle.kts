@@ -95,8 +95,12 @@ kradle {
             integrationTests(true)
             functionalTests(true)
             // customTests("...")
-            withJunitJupiter(/* "5.8.2" */)
-            withJacoco(/* "0.8.7" */)
+            junitJupiter {
+                // version("5.8.2")
+            }
+            jacoco {
+                // version("0.8.7")
+            }
         }
 
         benchmark {

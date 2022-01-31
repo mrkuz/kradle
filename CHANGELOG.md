@@ -5,6 +5,42 @@
 ### Version main-SNAPSHOT (2022-01-31)
 
 - Fix support for target JVM 8
+- `uberJar`, linters and code analysis tools can be disabled
+- Alternative syntax for JaCoCo and JUnit Jupiter
+
+  Before
+
+    ```kotlin
+    kradle {
+        jvm {
+            test {
+                withJunitJupiter("5.8.2")
+                withJacoco("0.8.7")
+            }
+        }
+    }
+    ```
+
+  After
+
+    ```kotlin
+    kradle {
+        jvm {
+            test {
+                // junitJupiter()
+                // junitJupiter(true)
+                // junitJupiter.enable()
+                // junitJupiter.enable { ... }
+                junitJupiter {
+                    version("5.8.2")
+                }
+                jacoco {
+                    version("0.8.7")
+                }
+            }
+        }
+    }
+    ```
 
 ### Version 2.1.0 (2022-01-06)
 

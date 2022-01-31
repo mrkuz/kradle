@@ -1,5 +1,7 @@
 # Kradle
 
+[![Gradle Plugin Portal](https://img.shields.io/gradle-plugin-portal/v/net.bitsandbobs.kradle)](https://plugins.gradle.org/plugin/net.bitsandbobs.kradle)
+
 Swiss army knife for Kotlin/JVM (and also Java) development.
 
 `kradle` is a Gradle plugin, which sets up your Kotlin/JVM (or Java) project in no time.
