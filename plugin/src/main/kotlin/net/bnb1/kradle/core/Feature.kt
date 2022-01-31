@@ -23,8 +23,7 @@ class Feature(val name: String, private val taskName: String? = null) {
 
     lateinit var tracer: Tracer
 
-    private var enabled = AtomicBoolean(false)
-    private var disabled = AtomicBoolean(false)
+    private val enabled = AtomicBoolean(false)
     private val state = AtomicReference(State.INACTIVE)
 
     private var conflicts = mutableSetOf<Feature>()
@@ -93,13 +92,11 @@ class Feature(val name: String, private val taskName: String? = null) {
     }
 
     fun enable() {
-        if (!enabled.compareAndSet(false, true)) {
-            return
-        }
+        enabled.set(true)
     }
 
     fun disable() {
-        disabled.set(true)
+        enabled.set(false)
     }
 
     fun shouldActivateAfter(): Set<Feature> {
@@ -107,7 +104,7 @@ class Feature(val name: String, private val taskName: String? = null) {
     }
 
     val isEnabled
-        get() = enabled.get() && !disabled.get()
+        get() = enabled.get()
 
     val isActive
         get() = state.get() == State.ACTIVATED

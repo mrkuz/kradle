@@ -52,15 +52,6 @@ class FeatureTests : BehaviorSpec({
             }
         }
 
-        When("Disable is called") {
-            feature.disable()
-
-            Then("Enable is no longer possible") {
-                feature.enable()
-                feature.isEnabled shouldBe false
-            }
-        }
-
         When("Get default task name") {
             val taskName = feature.defaultTaskName
 
