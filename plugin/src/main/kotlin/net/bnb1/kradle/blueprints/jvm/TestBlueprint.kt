@@ -1,5 +1,6 @@
 package net.bnb1.kradle.blueprints.jvm
 
+import com.adarshr.gradle.testlogger.TestLoggerExtension
 import com.adarshr.gradle.testlogger.TestLoggerPlugin
 import net.bnb1.kradle.apply
 import net.bnb1.kradle.core.Blueprint
@@ -82,18 +83,28 @@ class TestBlueprint(project: Project) : Blueprint(project) {
     }
 
     override fun doConfigure() {
+        var testEvents = setOf(TestLogEvent.SKIPPED, TestLogEvent.PASSED, TestLogEvent.FAILED)
+        if (testProperties.standardStreams.get()) {
+            testEvents += setOf(TestLogEvent.STANDARD_OUT, TestLogEvent.STANDARD_ERROR)
+        }
+
         project.tasks.withType<Test> {
             if (javaProperties.previewFeatures.get()) {
                 jvmArgs = jvmArgs + "--enable-preview"
             }
             testLogging {
-                showStandardStreams = true
-                events = setOf(TestLogEvent.SKIPPED, TestLogEvent.PASSED, TestLogEvent.FAILED)
+                events = testEvents
             }
             include("**/*Test.class")
             include("**/*Tests.class")
             include("**/*IT.class")
             include("**/*Spec.class")
+        }
+
+        if (testProperties.prettyPrint.get()) {
+            project.extensions.getByType(TestLoggerExtension::class.java).apply {
+                showStandardStreams = testProperties.standardStreams.get()
+            }
         }
     }
 }

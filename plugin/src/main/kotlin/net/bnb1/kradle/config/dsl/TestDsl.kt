@@ -18,6 +18,7 @@ class TestDsl(blueprints: AllBlueprints, properties: AllProperties) {
     }
 
     val prettyPrint = properties.test.prettyPrint
+    val standardStreams = properties.test.standardStreams
 
     val integrationTests = properties.test.integrationTests
     val withIntegrationTests = integrationTests

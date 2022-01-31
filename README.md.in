@@ -649,6 +649,7 @@ kradle {
     jvm {
         test {
             prettyPrint(false)
+            standardStreams(false)
             integrationTests(false)
             functionalTests(false)
             /*
@@ -666,6 +667,7 @@ kradle {
 ```
 
 - `prettyPrint`: Prettifies test output with [Gradle Test Logger Plugin](https://plugins.gradle.org/plugin/com.adarshr.test-logger)
+- `standardStreams`: Show stdout and stderr in test output
 - `integrationTests`: Adds task `integrationTest`, which runs tests under _src/integrationTest_. The task is executed when running `check`.
 - `functionalTests`: Adds task `functionalTest`, which runs tests under _src/functionalTest_. The task is executed when running `check`.
 - `customTests`: Adds task `<NAME>Test`, which runs tests under _src/&lt;NAME&gt;_. The task is executed when running `check`. Can be called multiple times.
@@ -1149,6 +1151,7 @@ kradle {
 
         test {
             prettyPrint(true)
+            standardStreams(true)
             integrationTests(true)
             functionalTests(true)
             customTests(...)

@@ -92,6 +92,7 @@ kradle {
 
         test {
             prettyPrint(true)
+            // standardStreams(false)
             integrationTests(true)
             functionalTests(true)
             // customTests("...")

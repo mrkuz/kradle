@@ -3,6 +3,7 @@ package net.bnb1.kradle.blueprints.jvm
 import com.adarshr.gradle.testlogger.TestLoggerPlugin
 import io.kotest.core.spec.style.BehaviorSpec
 import io.kotest.matchers.shouldBe
+import io.kotest.matchers.string.shouldNotContain
 import net.bnb1.kradle.TestProject
 import org.gradle.testkit.runner.TaskOutcome
 
@@ -22,7 +23,9 @@ class TestBlueprintTests : BehaviorSpec({
             class AppTest {
 
                 @Test
-                fun doNothing() {}
+                fun doNothing() {
+                    println("Hello Test!")
+                }
             }
             """.trimIndent()
         )
@@ -46,6 +49,10 @@ class TestBlueprintTests : BehaviorSpec({
 
             Then("Succeed") {
                 result.task(":test")!!.outcome shouldBe TaskOutcome.SUCCESS
+            }
+
+            Then("Hide stdout") {
+                result.output shouldNotContain "Hello Test!"
             }
         }
     }
@@ -135,6 +142,57 @@ class TestBlueprintTests : BehaviorSpec({
 
             Then("Test logger plugin is applied") {
                 project.shouldHavePlugin(TestLoggerPlugin::class)
+            }
+        }
+
+        When("Run test") {
+            val result = project.runTask("test")
+
+            Then("Hide stdout") {
+                result.output shouldNotContain "Hello Test!"
+            }
+        }
+    }
+
+    Given("test.standardStreams = true") {
+        project.setUp {
+            """
+           jvm {
+               kotlin.enable()
+               test {
+                   standardStreams(true)
+               }
+           }
+            """.trimIndent()
+        }
+
+        When("Run test") {
+            val result = project.runTask("test")
+
+            Then("Show stdout") {
+                result.output shouldNotContain "Hello Test!"
+            }
+        }
+    }
+
+    Given("test.standardStreams = true && test.prettyPrint = true") {
+        project.setUp {
+            """
+           jvm {
+               kotlin.enable()
+               test {
+                   prettyPrint(true)
+                   standardStreams(true)
+               }
+           }
+            """.trimIndent()
+        }
+
+        When("Run test") {
+            val result = project.runTask("test")
+
+            Then("Show stdout") {
+                result.output shouldNotContain "Hello Test!"
             }
         }
     }

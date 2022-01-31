@@ -5,6 +5,7 @@
 ### Version ${kradleVersion} (${new Date().format("yyyy-MM-dd")})
 
 - Add `mainClass` and `gitBranch` to project properties
+- Add option `standardStreams` for tests
 - Fix support for target JVM 8
 - `uberJar`, linters and code analysis tools can be disabled
 - Alternative syntax for JaCoCo and JUnit Jupiter
