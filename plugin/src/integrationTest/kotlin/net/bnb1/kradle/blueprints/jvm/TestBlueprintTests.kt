@@ -3,6 +3,7 @@ package net.bnb1.kradle.blueprints.jvm
 import com.adarshr.gradle.testlogger.TestLoggerPlugin
 import io.kotest.core.spec.style.BehaviorSpec
 import io.kotest.matchers.shouldBe
+import io.kotest.matchers.string.shouldContain
 import io.kotest.matchers.string.shouldNotContain
 import net.bnb1.kradle.TestProject
 import org.gradle.testkit.runner.TaskOutcome
@@ -12,7 +13,7 @@ class TestBlueprintTests : BehaviorSpec({
     val project = TestProject(this)
 
     fun createAppTest(sourceSet: String) {
-        val sourceDir = project.projectDir.resolve("src/$sourceSet/kotlin/com/example")
+        val sourceDir = project.projectDir.resolve("src/$sourceSet/kotlin/com/example/demo")
         sourceDir.mkdirs()
         sourceDir.resolve("AppTest.kt").writeText(
             """
@@ -132,11 +133,13 @@ class TestBlueprintTests : BehaviorSpec({
            jvm {
                kotlin.enable()
                test {
+                   withJunitJupiter()
                    prettyPrint(true)
                }
            }
             """.trimIndent()
         }
+        createAppTest("test")
 
         When("Check for plugins") {
 
@@ -160,17 +163,19 @@ class TestBlueprintTests : BehaviorSpec({
            jvm {
                kotlin.enable()
                test {
+                   withJunitJupiter()
                    standardStreams(true)
                }
            }
             """.trimIndent()
         }
+        createAppTest("test")
 
         When("Run test") {
             val result = project.runTask("test")
 
             Then("Show stdout") {
-                result.output shouldNotContain "Hello Test!"
+                result.output shouldContain "Hello Test!"
             }
         }
     }
@@ -181,18 +186,20 @@ class TestBlueprintTests : BehaviorSpec({
            jvm {
                kotlin.enable()
                test {
+                   withJunitJupiter()
                    prettyPrint(true)
                    standardStreams(true)
                }
            }
             """.trimIndent()
         }
+        createAppTest("test")
 
         When("Run test") {
             val result = project.runTask("test")
 
             Then("Show stdout") {
-                result.output shouldNotContain "Hello Test!"
+                result.output shouldContain "Hello Test!"
             }
         }
     }
