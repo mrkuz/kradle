@@ -4,7 +4,7 @@ import io.kotest.core.spec.style.FunSpec
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.string.shouldContain
 
-class KotlinQuickStartTests : FunSpec({
+class JavaQuickStartTests : FunSpec({
 
     val container = TestContainer(this).start()
 

@@ -10,6 +10,7 @@
 - Add `useArchUnit` and `useTestcontainers`
 - Add task `runTests`
 - Fix support for target JVM 8
+- Fix benchmarks for pure Java projects
 - `uberJar`, linters and code analysis tools can be disabled
 - Alternative syntax for JaCoCo and JUnit Jupiter
 

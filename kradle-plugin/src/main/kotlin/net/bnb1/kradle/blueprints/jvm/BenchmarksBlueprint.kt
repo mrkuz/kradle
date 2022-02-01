@@ -15,9 +15,7 @@ import org.gradle.api.tasks.SourceSet
 import org.gradle.jvm.tasks.Jar
 import org.gradle.kotlin.dsl.findByType
 import org.gradle.kotlin.dsl.named
-import org.gradle.kotlin.dsl.withConvention
 import org.jetbrains.kotlin.allopen.gradle.AllOpenExtension
-import org.jetbrains.kotlin.gradle.plugin.KotlinSourceSet
 
 private const val SOURCE_SET_NAME = "benchmark"
 
@@ -55,15 +53,12 @@ class BenchmarksBlueprint(project: Project) : Blueprint(project) {
 
         benchmarkSourceSet.compileClasspath += mainSourceSet.output + mainSourceSet.compileClasspath
         benchmarkSourceSet.runtimeClasspath += mainSourceSet.output + mainSourceSet.runtimeClasspath
-        @Suppress("DEPRECATION")
-        benchmarkSourceSet.withConvention(KotlinSourceSet::class) {
-            dependencies {
-                implementation(
-                    "${Catalog.Dependencies.Tools.kotlinxBenchmarkRuntime}:" +
-                        "${BenchmarksPlugin.PLUGIN_VERSION}"
-                )
-            }
-        }
+
+        val runtime = project.dependencies.create(
+            "${Catalog.Dependencies.Tools.kotlinxBenchmarkRuntime}:${BenchmarksPlugin.PLUGIN_VERSION}"
+        )
+        val configuration = project.configurations.getByName(benchmarkSourceSet.implementationConfigurationName)
+        configuration.dependencies.add(runtime)
     }
 
     override fun doAddAliases() {
