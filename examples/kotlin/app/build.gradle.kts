@@ -46,39 +46,6 @@ kradle {
                 useMockk(/* "1.12.2" */)
             }
         }
-        java {
-            /*
-            previewFeatures(false)
-            lint {
-                checkstyle {
-                    version("9.2.1")
-                    configFile("checkstyle.xml")
-                }
-            }
-            */
-            codeAnalysis {
-                /*
-                pmd {
-                    version("6.41.0")
-                    ruleSets {
-                        bestPractices(false)
-                        codeStyle(false)
-                        design(false)
-                        documentation(false)
-                        errorProne(true)
-                        multithreading(true)
-                        performance(true)
-                        security(true)
-                    }
-                }
-                */
-                spotBugs {
-                    // version("4.5.3")
-                    useFbContrib(/* 7.4.7 */)
-                    useFindSecBugs(/* 1.11.0 */)
-                }
-            }
-        }
 
         dependencyUpdates.enable()
         vulnerabilityScan.enable()
@@ -92,6 +59,7 @@ kradle {
 
         test {
             prettyPrint(true)
+            // standardStreams(false)
             integrationTests(true)
             functionalTests(true)
             // customTests("...")
@@ -101,6 +69,8 @@ kradle {
             jacoco {
                 // version("0.8.7")
             }
+            // useArchUnit("0.22.0")
+            // useTestcontainers("1.16.3")
         }
 
         benchmark {

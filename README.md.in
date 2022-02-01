@@ -84,10 +84,21 @@ See [CHANGELOG](CHANGELOG.md).
 <a id="very-quick-start"></a>
 ## (Very) Quick Start
 
+Kotlin:
+
 ```shell
 mkdir demo && cd demo
-curl -O https://raw.githubusercontent.com/mrkuz/kradle/${gitBranch}/examples/app/settings.gradle.kts
-curl -O https://raw.githubusercontent.com/mrkuz/kradle/${gitBranch}/examples/app/build.gradle.kts
+curl -O https://raw.githubusercontent.com/mrkuz/kradle/${gitBranch}/examples/kotlin/app/settings.gradle.kts
+curl -O https://raw.githubusercontent.com/mrkuz/kradle/${gitBranch}/examples/kotlin/app/build.gradle.kts
+gradle bootstrap
+```
+
+Java:
+
+```shell
+mkdir demo && cd demo
+curl -O https://raw.githubusercontent.com/mrkuz/kradle/${gitBranch}/examples/java/app/settings.gradle.kts
+curl -O https://raw.githubusercontent.com/mrkuz/kradle/${gitBranch}/examples/java/app/build.gradle.kts
 gradle bootstrap
 ```
 

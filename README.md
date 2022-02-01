@@ -34,6 +34,7 @@ Most of the functionality is provided by other well-known plugins. `kradle` just
     - [`analyzeCode`](#task-analyze-code)
     - [`dev`](#task-dev)
     - [`runBenchmarks`](#task-run-benchmarks)
+    - [`runTests`](#task-run-tests)
     - [`integrationTest`](#task-integration-test)
     - [`functionalTest`](#task-functional-test)
     - [`generateDocumentation`](#task-generate-documentation)
@@ -83,10 +84,21 @@ See [CHANGELOG](CHANGELOG.md).
 <a id="very-quick-start"></a>
 ## (Very) Quick Start
 
+Kotlin:
+
 ```shell
 mkdir demo && cd demo
-curl -O https://raw.githubusercontent.com/mrkuz/kradle/main/examples/app/settings.gradle.kts
-curl -O https://raw.githubusercontent.com/mrkuz/kradle/main/examples/app/build.gradle.kts
+curl -O https://raw.githubusercontent.com/mrkuz/kradle/main/examples/kotlin/app/settings.gradle.kts
+curl -O https://raw.githubusercontent.com/mrkuz/kradle/main/examples/kotlin/app/build.gradle.kts
+gradle bootstrap
+```
+
+Java:
+
+```shell
+mkdir demo && cd demo
+curl -O https://raw.githubusercontent.com/mrkuz/kradle/main/examples/java/app/settings.gradle.kts
+curl -O https://raw.githubusercontent.com/mrkuz/kradle/main/examples/java/app/build.gradle.kts
 gradle bootstrap
 ```
 
@@ -154,6 +166,7 @@ Which tasks are available, depends on the [features](#features) enabled.
 | <a id="task-analyze-dependencies"></a>[analyzeDependencies](#feature-vulnerability-scan) | Analyzes dependencies for vulnerabilities | - | [OWASP Dependency Check Plugin](https://plugins.gradle.org/plugin/org.owasp.dependencycheck) |
 | <a id="task-dev"></a>[dev](#feature-development-mode) | Runs the application and stops it when sources change (use with `-t`, applications only) | - | - |
 | <a id="task-run-benchmarks"></a>[runBenchmarks](#feature-benchmark) | Runs [JMH](https://github.com/openjdk/jmh) benchmarks | benchmark | [kotlinx.benchmark Plugin](https://plugins.gradle.org/plugin/org.jetbrains.kotlinx.benchmark) |
+| <a id="task-run-tests"></a>[runTests](#feature-test) | Runs all tests | test | - |
 | <a id="task-integration-test"></a>[integrationTest](#feature-test) | Runs integration tests | - | - |
 | <a id="task-functional-test"></a>[functionalTest](#feature-test) | Runs functional tests | - | - |
 | <a id="task-generate-documentation"></a>[generateDocumentation](#feature-documentation) | Generates [Dokka](https://kotlin.github.io/dokka/) HTML documentation | - | [Dokka Plugin](https://plugins.gradle.org/plugin/org.jetbrains.dokka) |
@@ -353,7 +366,7 @@ kradle {
                 ktlint {
                     version("0.43.2")
                     rules {
-                        // disable(...)
+                        // disable("...")
                     }
                 }
                 // ktlint.disable()
@@ -638,6 +651,10 @@ kradle {
 
 Test file names can end with `Test`, `Tests`, `Spec` or `IT`.
 
+When running tests, the environment variables `PROJECT_DIR` and `PROJECT_ROOT_DIR` are set.
+
+Adds the task `runTests`, which runs all tests (unit, integration, functional, custom).
+
 Plugins used: [Java Plugin](https://docs.gradle.org/current/userguide/java_plugin.html)
 , [JaCocCo Plugin](https://docs.gradle.org/current/userguide/jacoco_plugin.html),
 [Gradle Test Logger Plugin](https://plugins.gradle.org/plugin/com.adarshr.test-logger)
@@ -649,6 +666,7 @@ kradle {
     jvm {
         test {
             prettyPrint(false)
+            standardStreams(false)
             integrationTests(false)
             functionalTests(false)
             /*
@@ -659,6 +677,8 @@ kradle {
             jacoco.enable {
                 version("0.8.7")
             }
+            useArchUnit("0.22.0")
+            useTestcontainers("1.16.3")
             */
         }
     }
@@ -666,6 +686,7 @@ kradle {
 ```
 
 - `prettyPrint`: Prettifies test output with [Gradle Test Logger Plugin](https://plugins.gradle.org/plugin/com.adarshr.test-logger)
+- `standardStreams`: Show stdout and stderr in test output
 - `integrationTests`: Adds task `integrationTest`, which runs tests under _src/integrationTest_. The task is executed when running `check`.
 - `functionalTests`: Adds task `functionalTest`, which runs tests under _src/functionalTest_. The task is executed when running `check`.
 - `customTests`: Adds task `<NAME>Test`, which runs tests under _src/&lt;NAME&gt;_. The task is executed when running `check`. Can be called multiple times.
@@ -673,6 +694,8 @@ kradle {
 - `junitJupiter.version`: [JUnit Jupiter](https://junit.org/junit5/) version used.
 - `jacoco.enable`: Generates [JaCoCo](https://www.jacoco.org/jacoco/) code coverage reports after tests. They can be found under _build/reports/jacoco/_.
 - `jacoco.version`: [JaCoCo](https://www.jacoco.org/jacoco/) version used.
+- `useArchUnit`: Adds [ArchUnit](https://www.archunit.org/) test dependencies.
+- `useTestcontainers`: Adds [Testcontainers](https://www.testcontainers.org/) test dependencies.
 
 <a id="feature-benchmark"></a>
 ### Benchmarks
@@ -769,7 +792,7 @@ kradle {
             startupScript(false)
             // withJvmKill(1.16.0")
             // ports(...)
-            // jvmOpts(...)
+            // jvmOpts("...")
         }
     }
 }
@@ -1083,7 +1106,7 @@ kradle {
     jvm {
         targetJvm("17")
         kotlin {
-            useCoroutines(/* "1.6.0" */)
+            useCoroutines("1.6.0")
             lint {
                 ktlint {
                     version("0.43.2")
@@ -1099,12 +1122,12 @@ kradle {
                 }
             }
             test {
-                useKotest(/* "5.0.3" */)
-                useMockk(/* "1.12.2" */)
+                useKotest("5.0.3")
+                useMockk("1.12.2")
             }
         }
         java {
-            previewFeatures(true)
+            previewFeatures(false)
             lint {
                 checkstyle {
                     version("9.2.1")
@@ -1127,8 +1150,8 @@ kradle {
                 }
                 spotBugs {
                     version("4.5.3")
-                    useFbContrib(/* 7.4.7 */)
-                    useFindSecBugs(/* 1.11.0 */)
+                    useFbContrib("7.4.7")
+                    useFindSecBugs("1.11.0")
                 }
             }
         }
@@ -1148,16 +1171,19 @@ kradle {
         developmentMode.enable()
 
         test {
-            prettyPrint(true)
-            integrationTests(true)
-            functionalTests(true)
-            customTests(...)
+            prettyPrint(false)
+            standardStreams(false)
+            integrationTests(false)
+            functionalTests(false)
+            customTests("...")
             junitJupiter {
                 version("5.8.2")
             }
             jacoco {
                 version("0.8.7")
             }
+            useArchUnit("0.22.0")
+            useTestcontainers("1.16.3")
         }
 
         benchmark {
@@ -1166,16 +1192,16 @@ kradle {
 
         packaging {
             uberJar {
-                minimize(true)
+                minimize(false)
             }
         }
 
         docker {
             baseImage("bellsoft/liberica-openjdk-alpine:17")
-            withJvmKill(/* "1.16.0" */)
-            startupScript(true)
+            withJvmKill("1.16.0")
+            startupScript(false)
             ports(...)
-            jvmOpts(...)
+            jvmOpts("...")
         }
 
         documentation.enable()

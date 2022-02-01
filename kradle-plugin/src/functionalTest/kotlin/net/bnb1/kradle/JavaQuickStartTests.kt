@@ -12,12 +12,12 @@ class KotlinQuickStartTests : FunSpec({
         container.exec(
             "curl",
             "-O",
-            "https://raw.githubusercontent.com/mrkuz/kradle/main/examples/kotlin/app/settings.gradle.kts"
+            "https://raw.githubusercontent.com/mrkuz/kradle/main/examples/java/app/settings.gradle.kts"
         )
         container.exec(
             "curl",
             "-O",
-            "https://raw.githubusercontent.com/mrkuz/kradle/main/examples/kotlin/app/build.gradle.kts"
+            "https://raw.githubusercontent.com/mrkuz/kradle/main/examples/java/app/build.gradle.kts"
         )
 
         val bootstrapResult = container.exec("gradle", "bootstrap")

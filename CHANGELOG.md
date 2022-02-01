@@ -2,8 +2,13 @@
 
 ## Changelog
 
-### Version main-SNAPSHOT (2022-01-31)
+### Version main-SNAPSHOT (2022-02-01)
 
+- Add `mainClass` and `gitBranch` to project properties
+- Add option `standardStreams` for tests
+- Environment variables `PROJECT_DIR` and `PROJECT_ROOT_DIR` are set when running tests
+- Add `useArchUnit` and `useTestcontainers`
+- Add task `runTests`
 - Fix support for target JVM 8
 - `uberJar`, linters and code analysis tools can be disabled
 - Alternative syntax for JaCoCo and JUnit Jupiter

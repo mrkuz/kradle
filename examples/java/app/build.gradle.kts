@@ -1,6 +1,6 @@
 plugins {
-    id("org.jetbrains.kotlin.jvm") version "${versions.kotlin}"
-    id("net.bitsandbobs.kradle") version "${kradleVersion}"
+    `java`
+    id("net.bitsandbobs.kradle") version "main-SNAPSHOT"
 }
 
 group = "com.example"
@@ -19,39 +19,16 @@ kradle {
 
     jvm {
         application {
-            mainClass("com.example.demo.AppKt")
+            mainClass("com.example.demo.App")
         }
 
-        // targetJvm("${versions.jvm}")
-        kotlin {
-            useCoroutines(/* "${versions.kotlinCoroutines}" */)
-            lint {
-                ktlint {
-                    // version("${versions.ktlint}")
-                    rules {
-                        disable("no-wildcard-imports")
-                    }
-                }
-            }
-            /*
-            codeAnalysis {
-                detekt {
-                    version("${versions.detekt}")
-                    configFile("detekt-config.yml")
-                }
-            }
-            */
-            test {
-                useKotest(/* "${versions.kotest}" */)
-                useMockk(/* "${versions.mockk}" */)
-            }
-        }
+        // targetJvm("17")
         java {
             /*
             previewFeatures(false)
             lint {
                 checkstyle {
-                    version("${versions.checkstyle}")
+                    version("9.2.1")
                     configFile("checkstyle.xml")
                 }
             }
@@ -59,7 +36,7 @@ kradle {
             codeAnalysis {
                 /*
                 pmd {
-                    version("${versions.pmd}")
+                    version("6.41.0")
                     ruleSets {
                         bestPractices(false)
                         codeStyle(false)
@@ -73,9 +50,9 @@ kradle {
                 }
                 */
                 spotBugs {
-                    // version("${versions.spotbugs}")
-                    useFbContrib(/* ${versions.fbContrib} */)
-                    useFindSecBugs(/* ${versions.findSecBugs} */)
+                    // version("4.5.3")
+                    useFbContrib(/* 7.4.7 */)
+                    useFindSecBugs(/* 1.11.0 */)
                 }
             }
         }
@@ -97,17 +74,17 @@ kradle {
             functionalTests(true)
             // customTests("...")
             junitJupiter {
-                // version("${versions.junit}")
+                // version("5.8.2")
             }
             jacoco {
-                // version("${versions.jacoco}")
+                // version("0.8.7")
             }
-            // useArchUnit("${versions.archUnit}")
-            // useTestcontainers("${versions.testcontainers}")
+            // useArchUnit("0.22.0")
+            // useTestcontainers("1.16.3")
         }
 
         benchmark {
-            // jmhVersion("${versions.jmh}")
+            // jmhVersion("1.34")
         }
 
         packaging {
@@ -117,8 +94,8 @@ kradle {
         }
 
         docker {
-            // baseImage("bellsoft/liberica-openjdk-alpine:${versions.jvm}")
-            withJvmKill(/* "${versions.jvmKill}" */)
+            // baseImage("bellsoft/liberica-openjdk-alpine:17")
+            withJvmKill(/* "1.16.0" */)
             // startupScript(false)
             // ports(...)
             // javaOpts("")

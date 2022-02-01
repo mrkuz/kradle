@@ -1,0 +1,96 @@
+plugins {
+    id("org.jetbrains.kotlin.jvm") version "${versions.kotlin}"
+    id("net.bitsandbobs.kradle") version "${kradleVersion}"
+}
+
+group = "com.example"
+version = "1.0.0"
+
+kradle {
+
+    // Defaults are commented out, but kept for reference
+
+    general {
+        bootstrap.enable()
+        git.enable()
+        projectProperties.enable()
+        buildProperties.enable()
+    }
+
+    jvm {
+        application {
+            mainClass("com.example.demo.AppKt")
+        }
+
+        // targetJvm("${versions.jvm}")
+        kotlin {
+            useCoroutines(/* "${versions.kotlinCoroutines}" */)
+            lint {
+                ktlint {
+                    // version("${versions.ktlint}")
+                    rules {
+                        disable("no-wildcard-imports")
+                    }
+                }
+            }
+            /*
+            codeAnalysis {
+                detekt {
+                    version("${versions.detekt}")
+                    configFile("detekt-config.yml")
+                }
+            }
+            */
+            test {
+                useKotest(/* "${versions.kotest}" */)
+                useMockk(/* "${versions.mockk}" */)
+            }
+        }
+
+        dependencyUpdates.enable()
+        vulnerabilityScan.enable()
+        lint {
+            // ignoreFailures(false)
+        }
+        codeAnalysis {
+            // ignoreFailures(false)
+        }
+        developmentMode.enable()
+
+        test {
+            prettyPrint(true)
+            // standardStreams(false)
+            integrationTests(true)
+            functionalTests(true)
+            // customTests("...")
+            junitJupiter {
+                // version("${versions.junit}")
+            }
+            jacoco {
+                // version("${versions.jacoco}")
+            }
+            // useArchUnit("${versions.archUnit}")
+            // useTestcontainers("${versions.testcontainers}")
+        }
+
+        benchmark {
+            // jmhVersion("${versions.jmh}")
+        }
+
+        packaging {
+            uberJar {
+                // minimize(false)
+            }
+        }
+
+        docker {
+            // baseImage("bellsoft/liberica-openjdk-alpine:${versions.jvm}")
+            withJvmKill(/* "${versions.jvmKill}" */)
+            // startupScript(false)
+            // ports(...)
+            // javaOpts("")
+        }
+
+        documentation.enable()
+    }
+}
