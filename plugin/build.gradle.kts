@@ -54,10 +54,8 @@ dependencies {
     testImplementation(Catalog.Build.Dependencies.Test.mockk)
     testImplementation(Catalog.Build.Dependencies.Test.dockerJava)
     Catalog.Build.Dependencies.Test.kotestBundle.forEach { testImplementation(it) }
-
-    testImplementation("com.tngtech.archunit:archunit-junit5:0.22.0")
-    testImplementation("org.testcontainers:testcontainers:1.16.3")
-    testImplementation("org.testcontainers:junit-jupiter:1.16.3")
+    testImplementation(Catalog.Build.Dependencies.Test.archUnitJunit5)
+    Catalog.Build.Dependencies.Test.testcontainersBundle.forEach { testImplementation(it) }
 
     constraints {
         Catalog.Build.Constraints.ids.forEach {
@@ -244,12 +242,3 @@ publishing {
         }
     }
 }
-
-/*
-// For testing only
-java {
-    toolchain {
-        languageVersion.set(JavaLanguageVersion.of(15))
-    }
-}
-*/

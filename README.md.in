@@ -662,6 +662,8 @@ kradle {
             jacoco.enable {
                 version("${versions.jacoco}")
             }
+            useArchUnit("${versions.archUnit}")
+            useTestcontainers("${versions.testcontainers}")
             */
         }
     }
@@ -677,6 +679,8 @@ kradle {
 - `junitJupiter.version`: [JUnit Jupiter](https://junit.org/junit5/) version used.
 - `jacoco.enable`: Generates [JaCoCo](https://www.jacoco.org/jacoco/) code coverage reports after tests. They can be found under _build/reports/jacoco/_.
 - `jacoco.version`: [JaCoCo](https://www.jacoco.org/jacoco/) version used.
+- `useArchUnit`: Adds [ArchUnit](https://www.archunit.org/) test dependencies.
+- `useTestcontainers`: Adds [Testcontainers](https://www.testcontainers.org/) test dependencies.
 
 <a id="feature-benchmark"></a>
 ### Benchmarks
@@ -1163,6 +1167,8 @@ kradle {
             jacoco {
                 version("${versions.jacoco}")
             }
+            useArchUnit("${versions.archUnit}")
+            useTestcontainers("${versions.testcontainers}")
         }
 
         benchmark {

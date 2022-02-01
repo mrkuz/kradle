@@ -15,14 +15,8 @@ class JunitJupiterBlueprint(project: Project) : Blueprint(project) {
 
     override fun doAddDependencies() {
         project.dependencies {
-            testImplementation(
-                "${Catalog.Dependencies.Test.junitApi}:" +
-                    "${junitJupiterProperties.version.get()}"
-            )
-            testRuntimeOnly(
-                "${Catalog.Dependencies.Test.junitEngine}:" +
-                    "${junitJupiterProperties.version.get()}"
-            )
+            testImplementation("${Catalog.Dependencies.Test.junitApi}:${junitJupiterProperties.version.get()}")
+            testRuntimeOnly("${Catalog.Dependencies.Test.junitEngine}:${junitJupiterProperties.version.get()}")
         }
     }
 

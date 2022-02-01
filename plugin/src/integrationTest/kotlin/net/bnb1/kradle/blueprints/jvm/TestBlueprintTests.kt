@@ -213,4 +213,96 @@ class TestBlueprintTests : BehaviorSpec({
             }
         }
     }
+
+    Given("test.useArchUnit()") {
+        project.setUp {
+            """
+            jvm {
+                test {
+                    useArchUnit()
+                }
+            }
+            """.trimIndent()
+        }
+
+        When("Check for dependencies") {
+
+            Then("archunit is available") {
+                project.shouldHaveDependency("testImplementation", "com.tngtech.archunit:archunit")
+            }
+        }
+    }
+
+    Given("test.useArchUnit() AND test.junitJupiter()") {
+        project.setUp {
+            """
+            jvm {
+                kotlin {
+                    test {
+                        useKotest()
+                    }
+                }
+                test {
+                    useArchUnit()
+                    junitJupiter()
+                }
+            }
+            """.trimIndent()
+        }
+
+        When("Check for dependencies") {
+
+            Then("archunit-junit5 is available") {
+                project.shouldHaveDependency("testImplementation", "com.tngtech.archunit:archunit-junit5")
+            }
+        }
+    }
+
+    Given("test.useTestcontainers()") {
+        project.setUp {
+            """
+            jvm {
+                test {
+                    useTestcontainers()
+                }
+            }
+            """.trimIndent()
+        }
+
+        When("Check for dependencies") {
+
+            Then("testcontainers is available") {
+                project.shouldHaveDependency("testImplementation", "org.testcontainers:testcontainers")
+            }
+        }
+    }
+
+    Given("test.useTestcontainers() AND test.junitJupiter()") {
+        project.setUp {
+            """
+            jvm {
+                kotlin {
+                    test {
+                        useKotest()
+                    }
+                }
+                test {
+                    useTestcontainers()
+                    junitJupiter()
+                }
+            }
+            """.trimIndent()
+        }
+
+        When("Check for dependencies") {
+
+            Then("testcontainers is available") {
+                project.shouldHaveDependency("testImplementation", "org.testcontainers:testcontainers")
+            }
+
+            Then("testcontainers.junit-jupiter is available") {
+                project.shouldHaveDependency("testImplementation", "org.testcontainers:junit-jupiter")
+            }
+        }
+    }
 })

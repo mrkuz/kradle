@@ -19,6 +19,8 @@ object Catalog {
         const val fbContrib = "7.4.7"
         const val findBugs = "3.0.1"
         const val slf4j = "1.7.32"
+        const val archUnit = "0.22.0"
+        const val testcontainers = "1.16.3"
     }
 
     object Dependencies {
@@ -70,6 +72,10 @@ object Catalog {
             val kotestJunit5 = artifact("io.kotest", "kotest-runner-junit5", Versions.kotest)
             val kotestAssertions = artifact("io.kotest", "kotest-assertions-core", Versions.kotest)
             val mockk = artifact("io.mockk", "mockk", Versions.mockk)
+            val archUnit = artifact("com.tngtech.archunit", "archunit", Versions.archUnit)
+            val archUnitJunit5 = artifact("com.tngtech.archunit", "archunit-junit5", Versions.archUnit)
+            val testcontainers = artifact("org.testcontainers", "testcontainers", Versions.testcontainers)
+            val testcontainersJunit5 = artifact("org.testcontainers", "junit-jupiter", Versions.testcontainers)
         }
 
         fun artifact(group: String, name: String, version: String): String {
@@ -86,6 +92,8 @@ object Catalog {
             const val kotest = "4.6.3"
             const val mockk = "1.12.2"
             const val kotlinxBenchmarkPlugin = "0.4.1"
+            const val archUnit = "0.22.0"
+            const val testcontainers = "1.16.3"
         }
 
         object Plugins {
@@ -128,8 +136,11 @@ object Catalog {
                 const val kotestJunit5 = "io.kotest:kotest-runner-junit5:${Versions.kotest}"
                 const val kotestProperty = "io.kotest:kotest-property:${Versions.kotest}"
                 const val dockerJava = "com.github.docker-java:docker-java:3.2.12"
-
+                const val archUnitJunit5 = "com.tngtech.archunit:archunit-junit5:${Versions.archUnit}"
+                const val testcontainers = "org.testcontainers:testcontainers:${Versions.testcontainers}"
+                const val testcontainersJunit5 = "org.testcontainers:junit-jupiter:${Versions.testcontainers}"
                 val kotestBundle = setOf(kotestJunit5, kotestProperty)
+                val testcontainersBundle = setOf(testcontainers, testcontainersJunit5)
             }
         }
 

@@ -2,20 +2,24 @@ package net.bnb1.kradle.blueprints.jvm
 
 import com.adarshr.gradle.testlogger.TestLoggerExtension
 import com.adarshr.gradle.testlogger.TestLoggerPlugin
+import net.bnb1.kradle.Catalog
 import net.bnb1.kradle.apply
 import net.bnb1.kradle.core.Blueprint
 import net.bnb1.kradle.createTask
 import net.bnb1.kradle.sourceSets
+import net.bnb1.kradle.testImplementation
 import org.gradle.api.Project
 import org.gradle.api.tasks.SourceSet
 import org.gradle.api.tasks.testing.Test
 import org.gradle.api.tasks.testing.logging.TestLogEvent
+import org.gradle.kotlin.dsl.dependencies
 import org.gradle.kotlin.dsl.withType
 
 class TestBlueprint(project: Project) : Blueprint(project) {
 
     lateinit var testProperties: TestProperties
     lateinit var javaProperties: JavaProperties
+    lateinit var withJunitJupiter: () -> Boolean
 
     override fun doApplyPlugins() {
         if (testProperties.prettyPrint.get()) {
@@ -80,6 +84,24 @@ class TestBlueprint(project: Project) : Blueprint(project) {
         }
 
         project.tasks.getByName("check").dependsOn(name)
+    }
+
+    override fun doAddDependencies() {
+        project.dependencies {
+            if (testProperties.useArchUnit.hasValue) {
+                if (withJunitJupiter()) {
+                    testImplementation("${Catalog.Dependencies.Test.archUnitJunit5}:${testProperties.useArchUnit.get()}")
+                } else {
+                    testImplementation("${Catalog.Dependencies.Test.archUnit}:${testProperties.useArchUnit.get()}")
+                }
+            }
+            if (testProperties.useTestcontainers.hasValue) {
+                testImplementation("${Catalog.Dependencies.Test.testcontainers}:${testProperties.useTestcontainers.get()}")
+                if (withJunitJupiter()) {
+                    testImplementation("${Catalog.Dependencies.Test.testcontainersJunit5}:${testProperties.useTestcontainers.get()}")
+                }
+            }
+        }
     }
 
     override fun doConfigure() {

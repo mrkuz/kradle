@@ -27,4 +27,7 @@ class TestDsl(blueprints: AllBlueprints, properties: AllProperties) {
     val withFunctionalTests = functionalTests
 
     val customTests = properties.test.customTests
+
+    val useArchUnit = properties.test.useArchUnit
+    val useTestcontainers = properties.test.useTestcontainers
 }
