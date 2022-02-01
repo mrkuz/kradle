@@ -33,8 +33,11 @@ class TestBlueprint(project: Project) : Blueprint(project) {
 
     // compat: Must be public we can create the tasks eagerly
     public override fun doCreateTasks() {
-        project.createTask<Task>(RUN_TESTS_TASK, "Runs all tests") {
-            dependsOn("test")
+        // compat: Avoid duplicate creation on activate
+        if (project.tasks.findByName(RUN_TESTS_TASK) == null) {
+            project.createTask<Task>(RUN_TESTS_TASK, "Runs all tests") {
+                dependsOn("test")
+            }
         }
 
         val customTests = mutableListOf<String>()
@@ -99,15 +102,23 @@ class TestBlueprint(project: Project) : Blueprint(project) {
         project.dependencies {
             if (testProperties.useArchUnit.hasValue) {
                 if (withJunitJupiter()) {
-                    testImplementation("${Catalog.Dependencies.Test.archUnitJunit5}:${testProperties.useArchUnit.get()}")
+                    testImplementation(
+                        "${Catalog.Dependencies.Test.archUnitJunit5}:${testProperties.useArchUnit.get()}"
+                    )
                 } else {
-                    testImplementation("${Catalog.Dependencies.Test.archUnit}:${testProperties.useArchUnit.get()}")
+                    testImplementation(
+                        "${Catalog.Dependencies.Test.archUnit}:${testProperties.useArchUnit.get()}"
+                    )
                 }
             }
             if (testProperties.useTestcontainers.hasValue) {
-                testImplementation("${Catalog.Dependencies.Test.testcontainers}:${testProperties.useTestcontainers.get()}")
+                testImplementation(
+                    "${Catalog.Dependencies.Test.testcontainers}:${testProperties.useTestcontainers.get()}"
+                )
                 if (withJunitJupiter()) {
-                    testImplementation("${Catalog.Dependencies.Test.testcontainersJunit5}:${testProperties.useTestcontainers.get()}")
+                    testImplementation(
+                        "${Catalog.Dependencies.Test.testcontainersJunit5}:${testProperties.useTestcontainers.get()}"
+                    )
                 }
             }
         }
