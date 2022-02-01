@@ -16,18 +16,16 @@ import org.gradle.testing.jacoco.tasks.JacocoReportsContainer
 class JacocoBlueprint(project: Project) : Blueprint(project) {
 
     lateinit var jacocoProperties: JacocoProperties
-    lateinit var testProperties: TestProperties
 
     override fun doApplyPlugins() {
         project.apply(JacocoPlugin::class.java)
     }
 
     override fun doCreateTasks() {
-        if (testProperties.integrationTests.get()) {
-            createTask("integrationTest", "Generates code coverage report for integration tests")
-        }
-        if (testProperties.functionalTests.get()) {
-            createTask("functionalTest", "Generates code coverage report for functional tests")
+        jacocoProperties.includes.get().forEach {
+            if (it != "test") {
+                createTask(it, "Generates code coverage report for '$it'")
+            }
         }
     }
 

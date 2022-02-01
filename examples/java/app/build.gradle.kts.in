@@ -78,6 +78,7 @@ kradle {
             }
             jacoco {
                 // version("${versions.jacoco}")
+                // includes("...")
             }
             // useArchUnit("${versions.archUnit}")
             // useTestcontainers("${versions.testcontainers}")

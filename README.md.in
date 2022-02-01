@@ -676,6 +676,7 @@ kradle {
             }
             jacoco.enable {
                 version("${versions.jacoco}")
+                includes("...")
             }
             useArchUnit("${versions.archUnit}")
             useTestcontainers("${versions.testcontainers}")
@@ -692,8 +693,9 @@ kradle {
 - `customTests`: Adds task `<NAME>Test`, which runs tests under _src/&lt;NAME&gt;_. The task is executed when running `check`. Can be called multiple times.
 - `junitJupiter.enable`: Sets up [JUnit Jupiter](https://junit.org/junit5/) for running tests.
 - `junitJupiter.version`: [JUnit Jupiter](https://junit.org/junit5/) version used.
-- `jacoco.enable`: Generates [JaCoCo](https://www.jacoco.org/jacoco/) code coverage reports after tests. They can be found under _build/reports/jacoco/_.
+- `jacoco.enable`: Generates [JaCoCo](https://www.jacoco.org/jacoco/) code coverage report after test. Can be found under _build/reports/jacoco/_.
 - `jacoco.version`: [JaCoCo](https://www.jacoco.org/jacoco/) version used.
+- `jacoco.includes`: List of test tasks which should generate reports (in addition to `test`)
 - `useArchUnit`: Adds [ArchUnit](https://www.archunit.org/) test dependencies.
 - `useTestcontainers`: Adds [Testcontainers](https://www.testcontainers.org/) test dependencies.
 
@@ -1181,6 +1183,7 @@ kradle {
             }
             jacoco {
                 version("${versions.jacoco}")
+                includes("...")
             }
             useArchUnit("${versions.archUnit}")
             useTestcontainers("${versions.testcontainers}")

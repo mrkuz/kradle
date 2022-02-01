@@ -86,15 +86,17 @@ class JacocoBlueprintTests : BehaviorSpec({
         }
     }
 
-    Given("test.withIntegrationTests = true") {
+    Given("test.withIntegrationTests = true && jacoco.includes = integrationTest") {
         project.setUp {
             """
             jvm {
                 kotlin.enable()
                 test {
-                    withJunitJupiter()
-                    withJacoco()
-                    withIntegrationTests(true)
+                    junitJupiter()
+                    integrationTests(true)
+                    jacoco {
+                        includes("integrationTest")
+                    }
                 }
             }
             """.trimIndent()
@@ -129,53 +131,6 @@ class JacocoBlueprintTests : BehaviorSpec({
 
             Then("jacocoIntegrationTestReport is called") {
                 result.task(":jacocoIntegrationTestReport")!!.outcome shouldBe TaskOutcome.SUCCESS
-            }
-        }
-    }
-
-    Given("test.withFunctionalTests = true") {
-        project.setUp {
-            """
-            jvm {
-                kotlin.enable()
-                test {
-                    withJunitJupiter()
-                    withJacoco()
-                    withFunctionalTests(true)
-                }
-            }
-            """.trimIndent()
-        }
-        createAppTest("functionalTest")
-
-        When("Check for tasks") {
-
-            Then("Task jacocoFunctionalTestReport is available") {
-                project.shouldHaveTask("jacocoFunctionalTestReport")
-            }
-        }
-
-        When("Run jacocoFunctionalTestReport") {
-            val result = project.runTask("jacocoFunctionalTestReport")
-
-            Then("Succeed") {
-                result.task(":jacocoFunctionalTestReport")!!.outcome shouldBe TaskOutcome.SUCCESS
-            }
-
-            Then("Report is generated") {
-                project.buildDir.resolve("reports/jacoco/functionalTest/index.html").shouldExist()
-            }
-
-            Then("functionalTest is called") {
-                result.task(":functionalTest")!!.outcome shouldBe TaskOutcome.SUCCESS
-            }
-        }
-
-        When("Run functionalTest") {
-            val result = project.runTask("functionalTest")
-
-            Then("jacocoFunctionalTestReport is called") {
-                result.task(":jacocoFunctionalTestReport")!!.outcome shouldBe TaskOutcome.SUCCESS
             }
         }
     }

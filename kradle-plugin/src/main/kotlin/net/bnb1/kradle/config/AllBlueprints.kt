@@ -93,7 +93,6 @@ class AllBlueprints(registry: Registry, properties: AllProperties, project: Proj
     val jacoco = registry {
         JacocoBlueprint(project).inject {
             jacocoProperties = properties.jacoco
-            testProperties = properties.test
         }
     }
     val benchmarks = registry {
