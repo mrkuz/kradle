@@ -47,6 +47,17 @@ class TestBlueprintTests : BehaviorSpec({
         }
         createAppTest("test")
 
+        When("Check for tasks") {
+
+            Then("Task test is available") {
+                project.shouldHaveTask("test")
+            }
+
+            Then("Task runTests is available") {
+                project.shouldHaveTask("runTests")
+            }
+        }
+
         When("Run test") {
             val result = project.runTask("test")
 
@@ -56,6 +67,14 @@ class TestBlueprintTests : BehaviorSpec({
 
             Then("Hide stdout") {
                 result.output shouldNotContain "Hello Test!"
+            }
+        }
+
+        When("Run runTests") {
+            val result = project.runTask("runTests")
+
+            Then("test is called") {
+                result.task(":test")!!.outcome shouldBe TaskOutcome.SUCCESS
             }
         }
     }
@@ -74,10 +93,25 @@ class TestBlueprintTests : BehaviorSpec({
         }
         createAppTest("integrationTest")
 
+        When("Check for tasks") {
+
+            Then("Task integrationTest is available") {
+                project.shouldHaveTask("integrationTest")
+            }
+        }
+
         When("Run integrationTest") {
             val result = project.runTask("integrationTest")
 
             Then("Succeed") {
+                result.task(":integrationTest")!!.outcome shouldBe TaskOutcome.SUCCESS
+            }
+        }
+
+        When("Run runTests") {
+            val result = project.runTask("runTests")
+
+            Then("integrationTest is called") {
                 result.task(":integrationTest")!!.outcome shouldBe TaskOutcome.SUCCESS
             }
         }
@@ -97,10 +131,25 @@ class TestBlueprintTests : BehaviorSpec({
         }
         createAppTest("functionalTest")
 
+        When("Check for tasks") {
+
+            Then("Task functionalTest is available") {
+                project.shouldHaveTask("functionalTest")
+            }
+        }
+
         When("Run functionalTest") {
             val result = project.runTask("functionalTest")
 
             Then("Succeed") {
+                result.task(":functionalTest")!!.outcome shouldBe TaskOutcome.SUCCESS
+            }
+        }
+
+        When("Run runTests") {
+            val result = project.runTask("runTests")
+
+            Then("functionalTest is called") {
                 result.task(":functionalTest")!!.outcome shouldBe TaskOutcome.SUCCESS
             }
         }
@@ -120,10 +169,25 @@ class TestBlueprintTests : BehaviorSpec({
         }
         createAppTest("customTest")
 
+        When("Check for tasks") {
+
+            Then("Task customTest is available") {
+                project.shouldHaveTask("customTest")
+            }
+        }
+
         When("Run customTest") {
             val result = project.runTask("customTest")
 
             Then("Succeed") {
+                result.task(":customTest")!!.outcome shouldBe TaskOutcome.SUCCESS
+            }
+        }
+
+        When("Run runTests") {
+            val result = project.runTask("runTests")
+
+            Then("customTest is called") {
                 result.task(":customTest")!!.outcome shouldBe TaskOutcome.SUCCESS
             }
         }

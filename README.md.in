@@ -34,6 +34,7 @@ Most of the functionality is provided by other well-known plugins. `kradle` just
     - [`analyzeCode`](#task-analyze-code)
     - [`dev`](#task-dev)
     - [`runBenchmarks`](#task-run-benchmarks)
+    - [`runTests`](#task-run-tests)
     - [`integrationTest`](#task-integration-test)
     - [`functionalTest`](#task-functional-test)
     - [`generateDocumentation`](#task-generate-documentation)
@@ -154,6 +155,7 @@ Which tasks are available, depends on the [features](#features) enabled.
 | <a id="task-analyze-dependencies"></a>[analyzeDependencies](#feature-vulnerability-scan) | Analyzes dependencies for vulnerabilities | - | [OWASP Dependency Check Plugin](https://plugins.gradle.org/plugin/org.owasp.dependencycheck) |
 | <a id="task-dev"></a>[dev](#feature-development-mode) | Runs the application and stops it when sources change (use with `-t`, applications only) | - | - |
 | <a id="task-run-benchmarks"></a>[runBenchmarks](#feature-benchmark) | Runs [JMH](https://github.com/openjdk/jmh) benchmarks | benchmark | [kotlinx.benchmark Plugin](https://plugins.gradle.org/plugin/org.jetbrains.kotlinx.benchmark) |
+| <a id="task-run-tests"></a>[runTests](#feature-test) | Runs all tests | test | - |
 | <a id="task-integration-test"></a>[integrationTest](#feature-test) | Runs integration tests | - | - |
 | <a id="task-functional-test"></a>[functionalTest](#feature-test) | Runs functional tests | - | - |
 | <a id="task-generate-documentation"></a>[generateDocumentation](#feature-documentation) | Generates [Dokka](https://kotlin.github.io/dokka/) HTML documentation | - | [Dokka Plugin](https://plugins.gradle.org/plugin/org.jetbrains.dokka) |
@@ -639,6 +641,8 @@ kradle {
 Test file names can end with `Test`, `Tests`, `Spec` or `IT`.
 
 When running tests, the environment variables `PROJECT_DIR` and `PROJECT_ROOT_DIR` are set.
+
+Adds the task `runTests`, which runs all tests (unit, integration, functional, custom).
 
 Plugins used: [Java Plugin](https://docs.gradle.org/current/userguide/java_plugin.html)
 , [JaCocCo Plugin](https://docs.gradle.org/current/userguide/jacoco_plugin.html),

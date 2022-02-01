@@ -5,15 +5,19 @@ import com.adarshr.gradle.testlogger.TestLoggerPlugin
 import net.bnb1.kradle.Catalog
 import net.bnb1.kradle.apply
 import net.bnb1.kradle.core.Blueprint
+import net.bnb1.kradle.createHelperTask
 import net.bnb1.kradle.createTask
 import net.bnb1.kradle.sourceSets
 import net.bnb1.kradle.testImplementation
 import org.gradle.api.Project
+import org.gradle.api.Task
 import org.gradle.api.tasks.SourceSet
 import org.gradle.api.tasks.testing.Test
 import org.gradle.api.tasks.testing.logging.TestLogEvent
 import org.gradle.kotlin.dsl.dependencies
 import org.gradle.kotlin.dsl.withType
+
+private const val RUN_TESTS_TASK = "runTests"
 
 class TestBlueprint(project: Project) : Blueprint(project) {
 
@@ -29,6 +33,10 @@ class TestBlueprint(project: Project) : Blueprint(project) {
 
     // compat: Must be public we can create the tasks eagerly
     public override fun doCreateTasks() {
+        project.createTask<Task>(RUN_TESTS_TASK, "Runs all tests") {
+            dependsOn("test")
+        }
+
         val customTests = mutableListOf<String>()
         testProperties.customTests.get().forEach {
             customTests.remove(it)
@@ -77,13 +85,14 @@ class TestBlueprint(project: Project) : Blueprint(project) {
                 }
             }
 
-        project.createTask<Test>(name, description) {
+        project.createHelperTask<Test>(name, description) {
             testClassesDirs = sourceSet.output.classesDirs
             classpath = sourceSet.runtimeClasspath
             mustRunAfter("test")
         }
 
         project.tasks.getByName("check").dependsOn(name)
+        project.tasks.getByName(RUN_TESTS_TASK).dependsOn(name)
     }
 
     override fun doAddDependencies() {
