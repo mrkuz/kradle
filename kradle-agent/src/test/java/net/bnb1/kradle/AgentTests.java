@@ -1,4 +1,4 @@
-package net.bnb1.stop;
+package net.bnb1.kradle;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

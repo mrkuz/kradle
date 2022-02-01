@@ -23,6 +23,6 @@ tasks.withType<Test> {
 
 tasks.named<Jar>("jar").configure {
     manifest {
-        attributes(Pair("Premain-Class", "net.bnb1.stop.Agent"))
+        attributes(Pair("Premain-Class", "net.bnb1.kradle.Agent"))
     }
 }

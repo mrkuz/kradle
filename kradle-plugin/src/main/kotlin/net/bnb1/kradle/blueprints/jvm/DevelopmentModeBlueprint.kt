@@ -17,7 +17,7 @@ class DevelopmentModeBlueprint(project: Project) : Blueprint(project) {
 
     override fun doCreateTasks() {
         val mainSourceSet = project.sourceSets.getByName(SourceSet.MAIN_SOURCE_SET_NAME)
-        val agentResource = javaClass.getResource("/agent.jar")
+        val agentResource = javaClass.getResource("/kradle-agent.jar")
 
         val javaExtension = project.extensions.getByType(JavaPluginExtension::class.java)
         val toolchainService = project.extensions.getByType(JavaToolchainService::class.java)
@@ -27,7 +27,7 @@ class DevelopmentModeBlueprint(project: Project) : Blueprint(project) {
             "dev",
             "Runs the application and stops it when sources change (use with -t)"
         ) {
-            val agentFile = project.rootDir.resolve(".gradle/kradle/agent.jar")
+            val agentFile = project.rootDir.resolve(".gradle/kradle/kradle-agent.jar")
             doFirst {
                 agentFile.parentFile.mkdirs()
                 agentFile.writeBytes(agentResource.readBytes())

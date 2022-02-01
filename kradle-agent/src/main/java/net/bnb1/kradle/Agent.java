@@ -1,6 +1,6 @@
-package net.bnb1.stop;
+package net.bnb1.kradle;
 
-import net.bnb1.stop.annotations.VisibleForTesting;
+import net.bnb1.kradle.annotations.VisibleForTesting;
 
 import java.io.FileInputStream;
 import java.io.IOException;

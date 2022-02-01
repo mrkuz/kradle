@@ -1,4 +1,4 @@
-package net.bnb1.stop.annotations;
+package net.bnb1.kradle.annotations;
 
 public @interface VisibleForTesting {
 }

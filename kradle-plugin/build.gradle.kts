@@ -160,8 +160,8 @@ tasks.named("runKtlintCheckOverMainSourceSet") {
 }
 
 tasks.register<Copy>("buildAgent") {
-    dependsOn(":agent:jar")
-    from(project(":agent").buildDir.resolve("libs/agent.jar"))
+    dependsOn(":kradle-agent:jar")
+    from(project(":kradle-agent").buildDir.resolve("libs/kradle-agent.jar"))
     into(project.buildDir.resolve("resources/main/"))
 }
 
