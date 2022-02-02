@@ -35,7 +35,7 @@ class JavaLibraryPreset(lock: AtomicBoolean) : Preset<KradleExtensionDsl>(lock) 
                     integrationTests()
                     functionalTests()
                     junitJupiter()
-                    jacoco()
+                    kover()
                 }
 
                 benchmark.enable()

@@ -156,6 +156,7 @@ class KradleContext(project: Project) {
                 },
                 blueprints.junitJupiter.also { it.disable() },
                 blueprints.jacoco.also { it.disable() },
+                blueprints.kover.also { it.disable() },
                 blueprints.kotlinTest.also {
                     it dependsOn features.kotlin
                     it.withJunitJupiter = { blueprints.junitJupiter.isEnabled }

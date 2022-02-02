@@ -23,6 +23,7 @@ import net.bnb1.kradle.blueprints.jvm.KotlinAppBootstrapBlueprint
 import net.bnb1.kradle.blueprints.jvm.KotlinBlueprint
 import net.bnb1.kradle.blueprints.jvm.KotlinLibBootstrapBlueprint
 import net.bnb1.kradle.blueprints.jvm.KotlinTestBlueprint
+import net.bnb1.kradle.blueprints.jvm.KoverBlueprint
 import net.bnb1.kradle.blueprints.jvm.KtlintBlueprint
 import net.bnb1.kradle.blueprints.jvm.LibraryBlueprint
 import net.bnb1.kradle.blueprints.jvm.LintBlueprint
@@ -93,6 +94,11 @@ class AllBlueprints(registry: Registry, properties: AllProperties, project: Proj
     val jacoco = registry {
         JacocoBlueprint(project).inject {
             jacocoProperties = properties.jacoco
+        }
+    }
+    val kover = registry {
+        KoverBlueprint(project).inject {
+            koverProperties = properties.kover
         }
     }
     val benchmarks = registry {

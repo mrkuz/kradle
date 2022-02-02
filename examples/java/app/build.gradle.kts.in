@@ -8,7 +8,7 @@ version = "1.0.0"
 
 kradle {
 
-    // Defaults are commented out, but kept for reference
+    // Default values and unused features are commented out, but kept for reference
 
     general {
         bootstrap.enable()
@@ -51,8 +51,8 @@ kradle {
                 */
                 spotBugs {
                     // version("${versions.spotbugs}")
-                    useFbContrib(/* ${versions.fbContrib} */)
-                    useFindSecBugs(/* ${versions.findSecBugs} */)
+                    useFbContrib(/* "${versions.fbContrib}"* /)
+                    useFindSecBugs(/* "${versions.findSecBugs}" */)
                 }
             }
         }
@@ -76,8 +76,13 @@ kradle {
             junitJupiter {
                 // version("${versions.junit}")
             }
+            /*
             jacoco {
-                // version("${versions.jacoco}")
+                version("${versions.jacoco}")
+                includes("...")
+            }
+            */
+            kover {
                 // includes("...")
             }
             // useArchUnit("${versions.archUnit}")
@@ -99,7 +104,7 @@ kradle {
             withJvmKill(/* "${versions.jvmKill}" */)
             // startupScript(false)
             // ports(...)
-            // javaOpts("")
+            // jvmOpts("...")
         }
 
         documentation.enable()

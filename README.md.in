@@ -656,8 +656,9 @@ When running tests, the environment variables `PROJECT_DIR` and `PROJECT_ROOT_DI
 Adds the task `runTests`, which runs all tests (unit, integration, functional, custom).
 
 Plugins used: [Java Plugin](https://docs.gradle.org/current/userguide/java_plugin.html)
-, [JaCocCo Plugin](https://docs.gradle.org/current/userguide/jacoco_plugin.html),
-[Gradle Test Logger Plugin](https://plugins.gradle.org/plugin/com.adarshr.test-logger)
+, [JaCocCo Plugin](https://docs.gradle.org/current/userguide/jacoco_plugin.html)
+, [Kover](https://github.com/Kotlin/kotlinx-kover)
+, [Gradle Test Logger Plugin](https://plugins.gradle.org/plugin/com.adarshr.test-logger)
 
 #### Options
 
@@ -678,6 +679,9 @@ kradle {
                 version("${versions.jacoco}")
                 includes("...")
             }
+            kover.enable {
+                includes("...")
+            }
             useArchUnit("${versions.archUnit}")
             useTestcontainers("${versions.testcontainers}")
             */
@@ -696,6 +700,8 @@ kradle {
 - `jacoco.enable`: Generates [JaCoCo](https://www.jacoco.org/jacoco/) code coverage report after test. Can be found under _build/reports/jacoco/_.
 - `jacoco.version`: [JaCoCo](https://www.jacoco.org/jacoco/) version used.
 - `jacoco.includes`: List of test tasks which should generate reports (in addition to `test`)
+- `kover.enable`: Generates [Kover](https://github.com/Kotlin/kotlinx-kover) code coverage report after test. Can be found under _build/reports/kover/_.
+- `kover.includes`: List of test tasks to consider when generating report (in addition to `test`)
 - `useArchUnit`: Adds [ArchUnit](https://www.archunit.org/) test dependencies.
 - `useTestcontainers`: Adds [Testcontainers](https://www.testcontainers.org/) test dependencies.
 
@@ -909,7 +915,7 @@ kradle {
             integrationTests(true)
             functionalTests(true)
             junitJupiter(true)
-            jacoco(true)
+            kover(true)
         }
 
         benchmark.enable()
@@ -968,7 +974,7 @@ kradle {
             integrationTests(true)
             functionalTests(true)
             junitJupiter(true)
-            jacoco(true)
+            kover(true)
         }
 
         benchmark.enable()
@@ -1027,7 +1033,7 @@ kradle {
             integrationTests(true)
             functionalTests(true)
             junitJupiter(true)
-            jacoco(true)
+            kover(true)
         }
 
         benchmark.enable()
@@ -1080,7 +1086,7 @@ kradle {
             integrationTests(true)
             functionalTests(true)
             junitJupiter(true)
-            jacoco(true)
+            kover(true)
         }
 
         benchmark.enable()
@@ -1183,6 +1189,9 @@ kradle {
             }
             jacoco {
                 version("${versions.jacoco}")
+                includes("...")
+            }
+            kover {
                 includes("...")
             }
             useArchUnit("${versions.archUnit}")

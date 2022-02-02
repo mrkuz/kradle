@@ -38,7 +38,6 @@ dependencies {
     implementation(Catalog.Build.Dependencies.Plugins.kotlinSerialization)
     implementation(Catalog.Build.Dependencies.Plugins.dokka)
     implementation(Catalog.Build.Dependencies.Plugins.kotlinBenchmark)
-
     implementation(Catalog.Build.Dependencies.Plugins.testLogger)
     implementation(Catalog.Build.Dependencies.Plugins.shadow)
     implementation(Catalog.Build.Dependencies.Plugins.jib)
@@ -46,6 +45,7 @@ dependencies {
     implementation(Catalog.Build.Dependencies.Plugins.detekt)
     implementation(Catalog.Build.Dependencies.Plugins.ktlint)
     implementation(Catalog.Build.Dependencies.Plugins.owaspDependencyCheck)
+    implementation(Catalog.Build.Dependencies.Plugins.kover)
 
     implementation(Catalog.Build.Dependencies.Plugins.spotbugs)
 
@@ -102,7 +102,6 @@ tasks.withType<Test> {
 
 // Not sure why this hack is needed
 afterEvaluate {
-
     tasks.withType<KotlinCompile> {
         kotlinOptions {
             jvmTarget = "11"

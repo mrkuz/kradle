@@ -125,6 +125,7 @@ object Catalog {
                 const val detekt = "io.gitlab.arturbosch.detekt:detekt-gradle-plugin:1.19.0"
                 const val ktlint = "org.jlleitschuh.gradle:ktlint-gradle:10.2.1"
                 const val owaspDependencyCheck = "org.owasp:dependency-check-gradle:6.5.1"
+                const val kover = "org.jetbrains.kotlinx:kover:0.5.0"
 
                 // Java
                 const val spotbugs = "com.github.spotbugs.snom:spotbugs-gradle-plugin:5.0.4"

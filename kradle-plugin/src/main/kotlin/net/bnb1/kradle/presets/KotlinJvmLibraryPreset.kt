@@ -41,7 +41,7 @@ class KotlinJvmLibraryPreset(lock: AtomicBoolean) : Preset<KradleExtensionDsl>(l
                     integrationTests()
                     functionalTests()
                     junitJupiter()
-                    jacoco()
+                    kover()
                 }
 
                 benchmark.enable()
