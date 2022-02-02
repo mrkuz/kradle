@@ -24,15 +24,6 @@ class JacocoBlueprintTests : CompatSpec({
         )
     }
 
-    test("Generate report after test") {
-        bootstrapCompatAppProject()
-        createAppTest("test")
-
-        val result = runTask("test")
-
-        result.task(":jacocoTestReport")!!.outcome shouldBe TaskOutcome.SUCCESS
-    }
-
     test("Run tests when generating report") {
         bootstrapCompatAppProject()
         createAppTest("test")

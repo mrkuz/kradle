@@ -8,6 +8,7 @@ import org.gradle.api.Project
 import org.gradle.api.tasks.SourceSet
 import org.gradle.api.tasks.testing.Test
 import org.gradle.kotlin.dsl.configure
+import org.gradle.kotlin.dsl.named
 import org.gradle.kotlin.dsl.withType
 import org.gradle.testing.jacoco.plugins.JacocoPlugin
 import org.gradle.testing.jacoco.plugins.JacocoPluginExtension
@@ -52,6 +53,10 @@ class JacocoBlueprint(project: Project) : Blueprint(project) {
     override fun doConfigure() {
         project.configure<JacocoPluginExtension> {
             toolVersion = jacocoProperties.version.get()
+        }
+
+        project.tasks.named<JacocoReport>("jacocoTestReport").configure {
+            dependsOn("test")
         }
 
         project.tasks.withType<Test> {

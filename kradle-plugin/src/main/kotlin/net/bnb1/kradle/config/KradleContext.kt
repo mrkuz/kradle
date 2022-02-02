@@ -178,7 +178,7 @@ class KradleContext(project: Project) {
                 blueprints.jacoco,
                 blueprints.kover.also {
                     it.extendsTask = features.codeCoverage.defaultTaskName
-                },
+                }
             )
         }
         features.benchmark.also { me ->
