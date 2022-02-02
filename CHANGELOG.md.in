@@ -10,6 +10,7 @@
 - __Defaults change__: JaCoCo coverage reports are only created for `test` (other test tasks can be configured)
 - Add support for [Kover](https://github.com/Kotlin/kotlinx-kover)
 -  __Defaults change__: Kover is used for coverage reports instead of JaCoCo in all presets
+-  __Defaults change__: Integration and functional tests are isolated and have no access to unit test classes
 - Add `useArchUnit` and `useTestcontainers`
 - Add task `runTests`
 - Fix support for target JVM 8

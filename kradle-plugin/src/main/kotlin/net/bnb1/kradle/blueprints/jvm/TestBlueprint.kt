@@ -74,10 +74,10 @@ class TestBlueprint(project: Project) : Blueprint(project) {
             return
         }
 
-        val testSourceSet = project.sourceSets.getByName(SourceSet.TEST_SOURCE_SET_NAME)
+        val mainSourceSet = project.sourceSets.getByName(SourceSet.MAIN_SOURCE_SET_NAME)
         val sourceSet = project.sourceSets.create(name)
-        sourceSet.compileClasspath += testSourceSet.compileClasspath
-        sourceSet.runtimeClasspath += testSourceSet.runtimeClasspath
+        sourceSet.compileClasspath += mainSourceSet.output
+        sourceSet.runtimeClasspath += mainSourceSet.output
 
         project.configurations.names
             .filter { it.startsWith("test") }
@@ -91,7 +91,6 @@ class TestBlueprint(project: Project) : Blueprint(project) {
         project.createHelperTask<Test>(name, description) {
             testClassesDirs = sourceSet.output.classesDirs
             classpath = sourceSet.runtimeClasspath
-            mustRunAfter("test")
         }
 
         project.tasks.getByName("check").dependsOn(name)
