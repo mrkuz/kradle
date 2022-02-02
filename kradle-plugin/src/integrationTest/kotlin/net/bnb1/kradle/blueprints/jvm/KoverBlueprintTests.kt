@@ -2,6 +2,7 @@ package net.bnb1.kradle.blueprints.jvm
 
 import io.kotest.core.spec.style.BehaviorSpec
 import io.kotest.matchers.file.shouldExist
+import io.kotest.matchers.file.shouldNotExist
 import io.kotest.matchers.shouldBe
 import kotlinx.kover.KoverPlugin
 import net.bnb1.kradle.TestProject
@@ -71,15 +72,15 @@ class KoverBlueprintTests : BehaviorSpec({
         }
 
         When("Run test") {
-            val result = project.runTask("test")
+            project.runTask("test")
 
-            Then("koverHtmlReport is called") {
-                result.task(":koverHtmlReport")!!.outcome shouldBe TaskOutcome.SUCCESS
+            Then("Binary report is generated") {
+                project.buildDir.resolve("kover/test.ic").shouldExist()
             }
         }
     }
 
-    Given("test.withIntegrationTests = true && kover.includes = integrationTest") {
+    Given("test.integrationTests = true") {
         project.setUp {
             """
             jvm {
@@ -87,9 +88,7 @@ class KoverBlueprintTests : BehaviorSpec({
                 test {
                     junitJupiter()
                     integrationTests(true)
-                    kover {
-                        includes("integrationTest")
-                    }
+                    kover()
                 }
             }
             """.trimIndent()
@@ -107,16 +106,46 @@ class KoverBlueprintTests : BehaviorSpec({
                 project.buildDir.resolve("reports/kover/project-html/index.html").shouldExist()
             }
 
+            Then("test is called") {
+                result.task(":test")!!.outcome shouldBe TaskOutcome.NO_SOURCE
+            }
+
             Then("integrationTest is called") {
                 result.task(":integrationTest")!!.outcome shouldBe TaskOutcome.SUCCESS
             }
         }
 
         When("Run integrationTest") {
-            val result = project.runTask("integrationTest")
+            project.runTask("integrationTest")
 
-            Then("koverHtmlReport is called") {
-                result.task(":koverHtmlReport")!!.outcome shouldBe TaskOutcome.SUCCESS
+            Then("Binary report is generated") {
+                project.buildDir.resolve("kover/integrationTest.ic").shouldExist()
+            }
+        }
+    }
+
+    Given("test.withIntegrationTests = true AND kover.excludes = integrationTest") {
+        project.setUp {
+            """
+            jvm {
+                kotlin.enable()
+                test {
+                    junitJupiter()
+                    integrationTests(true)
+                    kover {
+                        excludes("integrationTest")
+                    }
+                }
+            }
+            """.trimIndent()
+        }
+        createAppTest("integrationTest")
+
+        When("Run integrationTest") {
+            project.runTask("integrationTest")
+
+            Then("Binary report is not generated") {
+                project.buildDir.resolve("kover/integrationTest.ic").shouldNotExist()
             }
         }
     }

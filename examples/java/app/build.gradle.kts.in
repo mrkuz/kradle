@@ -79,11 +79,11 @@ kradle {
             /*
             jacoco {
                 version("${versions.jacoco}")
-                includes("...")
+                excludes("...")
             }
             */
             kover {
-                // includes("...")
+                // excludes("...")
             }
             // useArchUnit("${versions.archUnit}")
             // useTestcontainers("${versions.testcontainers}")

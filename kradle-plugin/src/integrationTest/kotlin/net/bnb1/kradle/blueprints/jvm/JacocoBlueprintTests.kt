@@ -2,6 +2,7 @@ package net.bnb1.kradle.blueprints.jvm
 
 import io.kotest.core.spec.style.BehaviorSpec
 import io.kotest.matchers.file.shouldExist
+import io.kotest.matchers.file.shouldNotExist
 import io.kotest.matchers.shouldBe
 import net.bnb1.kradle.TestProject
 import org.gradle.testing.jacoco.plugins.JacocoPlugin
@@ -57,19 +58,19 @@ class JacocoBlueprintTests : BehaviorSpec({
             }
         }
 
-        Then("Task jacocoTestReport is available") {
-            project.shouldHaveTask("jacocoTestReport")
+        Then("Task jacocoHtmlReport is available") {
+            project.shouldHaveTask("jacocoHtmlReport")
         }
 
-        When("Run jacocoTestReport") {
-            val result = project.runTask("jacocoTestReport")
+        When("Run jacocoHtmlReport") {
+            val result = project.runTask("jacocoHtmlReport")
 
             Then("Succeed") {
-                result.task(":jacocoTestReport")!!.outcome shouldBe TaskOutcome.SUCCESS
+                result.task(":jacocoHtmlReport")!!.outcome shouldBe TaskOutcome.SUCCESS
             }
 
             Then("Report is generated") {
-                project.buildDir.resolve("reports/jacoco/test/index.html").shouldExist()
+                project.buildDir.resolve("reports/jacoco/project-html/index.html").shouldExist()
             }
 
             Then("test is called") {
@@ -78,15 +79,15 @@ class JacocoBlueprintTests : BehaviorSpec({
         }
 
         When("Run test") {
-            val result = project.runTask("test")
+            project.runTask("test")
 
-            Then("jacocoTestReport is called") {
-                result.task(":jacocoTestReport")!!.outcome shouldBe TaskOutcome.SUCCESS
+            Then("Binary report is generated") {
+                project.buildDir.resolve("jacoco/test.exec").shouldExist()
             }
         }
     }
 
-    Given("test.withIntegrationTests = true && jacoco.includes = integrationTest") {
+    Given("test.withIntegrationTests = true") {
         project.setUp {
             """
             jvm {
@@ -94,31 +95,26 @@ class JacocoBlueprintTests : BehaviorSpec({
                 test {
                     junitJupiter()
                     integrationTests(true)
-                    jacoco {
-                        includes("integrationTest")
-                    }
+                    jacoco()
                 }
             }
             """.trimIndent()
         }
         createAppTest("integrationTest")
 
-        When("Check for tasks") {
-
-            Then("Task jacocoIntegrationTestReport is available") {
-                project.shouldHaveTask("jacocoIntegrationTestReport")
-            }
-        }
-
-        When("Run jacocoIntegrationTestReport") {
-            val result = project.runTask("jacocoIntegrationTestReport")
+        When("Run jacocoHtmlReport") {
+            val result = project.runTask("jacocoHtmlReport")
 
             Then("Succeed") {
-                result.task(":jacocoIntegrationTestReport")!!.outcome shouldBe TaskOutcome.SUCCESS
+                result.task(":jacocoHtmlReport")!!.outcome shouldBe TaskOutcome.SUCCESS
             }
 
             Then("Report is generated") {
-                project.buildDir.resolve("reports/jacoco/integrationTest/index.html").shouldExist()
+                project.buildDir.resolve("reports/jacoco/project-html/index.html").shouldExist()
+            }
+
+            Then("test is called") {
+                result.task(":test")!!.outcome shouldBe TaskOutcome.NO_SOURCE
             }
 
             Then("integrationTest is called") {
@@ -127,10 +123,36 @@ class JacocoBlueprintTests : BehaviorSpec({
         }
 
         When("Run integrationTest") {
-            val result = project.runTask("integrationTest")
+            project.runTask("integrationTest")
 
-            Then("jacocoIntegrationTestReport is called") {
-                result.task(":jacocoIntegrationTestReport")!!.outcome shouldBe TaskOutcome.SUCCESS
+            Then("Binary report is generated") {
+                project.buildDir.resolve("jacoco/integrationTest.exec").shouldExist()
+            }
+        }
+    }
+
+    Given("test.withIntegrationTests = true AND jacoco.excludes = integrationTest") {
+        project.setUp {
+            """
+            jvm {
+                kotlin.enable()
+                test {
+                    junitJupiter()
+                    integrationTests(true)
+                    jacoco {
+                        excludes("integrationTest")
+                    }
+                }
+            }
+            """.trimIndent()
+        }
+        createAppTest("integrationTest")
+
+        When("Run integrationTest") {
+            project.runTask("integrationTest")
+
+            Then("Binary report is not generated") {
+                project.buildDir.resolve("jacoco/integrationTest.exec").shouldNotExist()
             }
         }
     }

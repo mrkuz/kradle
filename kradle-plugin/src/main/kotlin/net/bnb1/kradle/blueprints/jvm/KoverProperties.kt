@@ -4,5 +4,5 @@ import net.bnb1.kradle.dsl.Properties
 
 class KoverProperties : Properties() {
 
-    val includes = valueSet<String>()
+    val excludes = valueSet<String>()
 }
