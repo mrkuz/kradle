@@ -17,8 +17,6 @@ class TestDsl(blueprints: AllBlueprints, properties: AllProperties) {
         version(version)
     }
 
-    val kover = BlueprintDsl(blueprints.kover, properties.kover)
-
     val prettyPrint = properties.test.prettyPrint
     val standardStreams = properties.test.standardStreams
 

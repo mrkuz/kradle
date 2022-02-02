@@ -9,6 +9,7 @@ import net.bnb1.kradle.blueprints.jvm.ApplicationBlueprint
 import net.bnb1.kradle.blueprints.jvm.BenchmarksBlueprint
 import net.bnb1.kradle.blueprints.jvm.CheckstyleBlueprint
 import net.bnb1.kradle.blueprints.jvm.CodeAnalysisBlueprint
+import net.bnb1.kradle.blueprints.jvm.CodeCoverageBlueprint
 import net.bnb1.kradle.blueprints.jvm.DependencyUpdatesBlueprint
 import net.bnb1.kradle.blueprints.jvm.DetektBlueprint
 import net.bnb1.kradle.blueprints.jvm.DevelopmentModeBlueprint
@@ -86,6 +87,7 @@ class AllBlueprints(registry: Registry, properties: AllProperties, project: Proj
             javaProperties = properties.java
         }
     }
+    val codeCoverage = registry { CodeCoverageBlueprint(project) }
     val junitJupiter = registry {
         JunitJupiterBlueprint(project).inject {
             junitJupiterProperties = properties.junitJupiter

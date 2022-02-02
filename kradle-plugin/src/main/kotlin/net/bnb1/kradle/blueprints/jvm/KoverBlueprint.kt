@@ -13,6 +13,7 @@ import org.gradle.kotlin.dsl.withType
 class KoverBlueprint(project: Project) : Blueprint(project) {
 
     lateinit var koverProperties: KoverProperties
+    lateinit var extendsTask: String
 
     override fun doApplyPlugins() {
         project.apply(KoverPlugin::class.java)
@@ -32,5 +33,7 @@ class KoverBlueprint(project: Project) : Blueprint(project) {
             srcDirs.set(srcDirs.get().filter { !testSources.contains(it) })
             outputDirs.set(outputDirs.get().filter { !testOutputs.contains(it) })
         }
+
+        project.tasks.getByName(extendsTask).dependsOn("koverHtmlReport")
     }
 }

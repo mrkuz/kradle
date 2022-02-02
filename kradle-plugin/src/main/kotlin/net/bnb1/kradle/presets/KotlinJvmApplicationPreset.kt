@@ -42,6 +42,8 @@ class KotlinJvmApplicationPreset(lock: AtomicBoolean) : Preset<KradleExtensionDs
                     integrationTests()
                     functionalTests()
                     junitJupiter()
+                }
+                codeCoverage {
                     kover()
                 }
 

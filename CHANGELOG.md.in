@@ -4,22 +4,23 @@
 
 ### Version ${kradleVersion} (${new Date().format("yyyy-MM-dd")})
 
+- Add support for [Kover](https://github.com/Kotlin/kotlinx-kover)
+- Add new task `analyzeTestCoverage`
+- __Defaults change__: Use Kover for test coverage instead of JaCoCo in all presets
+- __Defaults change__: Don't create JaCoCo report automatically after test
+- Add JaCoCo option `excludes` to exclude test tasks from analysis
 - Add `mainClass` and `gitBranch` to project properties
 - Add option `standardStreams` for tests
-- Environment variables `PROJECT_DIR` and `PROJECT_ROOT_DIR` are set when running tests
-- Integration and functional tests are isolated and have no access to unit test classes
-- Add JaCoCo option `excludes` to exclude test tasks from analysis
-- __Defaults change__: JaCoCo coverage reports are not created after test, you need to run `jacocoHtmlReport`
-- Add support for [Kover](https://github.com/Kotlin/kotlinx-kover)
--  __Defaults change__: Kover is used for test coverage instead of JaCoCo in all presets
+- Set environment variables `PROJECT_DIR` and `PROJECT_ROOT_DIR` when running tests
+- Remove access to unit test classes for integration and functional tests
+- Add new task `runTests`
 - Add `useArchUnit` and `useTestcontainers`
-- Add task `runTests`
 - Fix support for target JVM 8
 - Fix benchmarks for pure Java projects
 - Fix `buildImage` in combination with `startupScript` or `withJvmKill` (first image created was missing extra files)
 - Fix: Don't overwrite existing _App.kt_ or _App.java_ file on `bootstrap`
-- `uberJar`, linters and code analysis tools can be disabled
-- Alternative syntax for JaCoCo and JUnit Jupiter
+- Add option to disable `uberJar`, linters and code analysis tools
+- Add alternative syntax for JUnit Jupiter
 
   Before
 
@@ -28,7 +29,6 @@
         jvm {
             test {
                 withJunitJupiter("5.8.2")
-                withJacoco("0.8.7")
             }
         }
     }
@@ -47,6 +47,31 @@
                 junitJupiter {
                     version("5.8.2")
                 }
+            }
+        }
+    }
+    ```
+
+- Move JaCoCo configuration to `codeCoverage`
+
+  Before
+
+    ```kotlin
+    kradle {
+        jvm {
+            test {
+                withJacoco("0.8.7")
+            }
+        }
+    }
+    ```
+
+  After
+
+    ```kotlin
+    kradle {
+        jvm {
+            codeCoverage {
                 jacoco {
                     version("0.8.7")
                 }

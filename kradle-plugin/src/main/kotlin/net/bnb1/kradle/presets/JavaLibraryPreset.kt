@@ -35,6 +35,8 @@ class JavaLibraryPreset(lock: AtomicBoolean) : Preset<KradleExtensionDsl>(lock) 
                     integrationTests()
                     functionalTests()
                     junitJupiter()
+                }
+                codeCoverage {
                     kover()
                 }
 

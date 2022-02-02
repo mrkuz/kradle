@@ -155,12 +155,30 @@ class KradleContext(project: Project) {
                     it.withJunitJupiter = { blueprints.junitJupiter.isEnabled }
                 },
                 blueprints.junitJupiter.also { it.disable() },
-                blueprints.jacoco.also { it.disable() },
-                blueprints.kover.also { it.disable() },
+                blueprints.codeCoverage.also {
+                    it dependsOn features.codeCoverage
+                    it.taskName = features.codeCoverage.defaultTaskName
+                },
+
+                blueprints.jacoco.also {
+                    it.extendsTask = features.codeCoverage.defaultTaskName
+                    it.disable()
+                },
                 blueprints.kotlinTest.also {
                     it dependsOn features.kotlin
                     it.withJunitJupiter = { blueprints.junitJupiter.isEnabled }
                 }
+            )
+        }
+        features.codeCoverage.also { me ->
+            me belongsTo featureSets.jvm
+            me activatesAfter features.test
+            me += setOf(
+                blueprints.codeCoverage,
+                blueprints.jacoco,
+                blueprints.kover.also {
+                    it.extendsTask = features.codeCoverage.defaultTaskName
+                },
             )
         }
         features.benchmark.also { me ->

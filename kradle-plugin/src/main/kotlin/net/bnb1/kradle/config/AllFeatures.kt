@@ -22,6 +22,7 @@ class AllFeatures(registry: Registry) {
     val codeAnalysis = registry("codeAnalysis") { Feature(it, "analyzeCode") }
     val developmentMode = registry("developmentMode") { Feature(it) }
     val test = registry("test") { Feature(it) }
+    val codeCoverage = registry("codeCoverage") { Feature(it, "analyzeTestCoverage") }
     val benchmark = registry("benchmark") { Feature(it) }
     val packaging = registry("packaging") { Feature(it) }
     val docker = registry("docker") { Feature(it) }

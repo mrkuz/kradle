@@ -76,17 +76,20 @@ kradle {
             junitJupiter {
                 // version("${versions.junit}")
             }
+            // useArchUnit("${versions.archUnit}")
+            // useTestcontainers("${versions.testcontainers}")
+        }
+
+        codeCoverage {
+            kover {
+                // excludes("...")
+            }
             /*
             jacoco {
                 version("${versions.jacoco}")
                 excludes("...")
             }
             */
-            kover {
-                // excludes("...")
-            }
-            // useArchUnit("${versions.archUnit}")
-            // useTestcontainers("${versions.testcontainers}")
         }
 
         benchmark {

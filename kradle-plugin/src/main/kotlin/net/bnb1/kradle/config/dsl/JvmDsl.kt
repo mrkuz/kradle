@@ -21,6 +21,7 @@ class JvmDsl(features: AllFeatures, blueprints: AllBlueprints, properties: AllPr
     val developmentMode = FeatureDsl(features.developmentMode, EmptyProperties)
     val devMode = developmentMode
     val test = FeatureDsl(features.test, TestDsl(blueprints, properties))
+    val codeCoverage = FeatureDsl(features.codeCoverage, CodeCoverageDsl(blueprints, properties))
     val benchmark = FeatureDsl(features.benchmark, properties.benchmark)
 
     @SuppressWarnings("VariableNaming")

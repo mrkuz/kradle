@@ -14,6 +14,7 @@ With a few lines of configuration, you will be able to:
 - [Run static code analysis](#feature-code-analysis)
 - [Add automatic restart on code change](#feature-development-mode)
 - [Add support for integration and functional testing](#feature-test)
+- [Run test coverage analysis](#feature-code-coverage)
 - [Run JMH benchmarks](#feature-benchmark)
 - [Create Uber-Jars](#feature-packaging)
 - [Create Docker images](#feature-docker)
@@ -37,6 +38,7 @@ Most of the functionality is provided by other well-known plugins. `kradle` just
     - [`runTests`](#task-run-tests)
     - [`integrationTest`](#task-integration-test)
     - [`functionalTest`](#task-functional-test)
+    - [`analyzeTestCoverage`](#task-analyze-test-coverage)
     - [`generateDocumentation`](#task-generate-documentation)
     - [`package`](#task-package)
     - [`uberJar`](#task-uber-jar)
@@ -62,6 +64,7 @@ Most of the functionality is provided by other well-known plugins. `kradle` just
     - [Code analysis](#feature-code-analysis)
     - [Development mode](#feature-development-mode)
     - [Test improvements](#feature-test)
+    - [Code coverage](#feature-code-coverage)
     - [Benchmarks](#feature-benchmark)
     - [Packaging](#feature-packaging)
     - [Docker](#feature-docker)
@@ -169,6 +172,7 @@ Which tasks are available, depends on the [features](#features) enabled.
 | <a id="task-run-tests"></a>[runTests](#feature-test) | Runs all tests | - | - |
 | <a id="task-integration-test"></a>[integrationTest](#feature-test) | Runs integration tests | - | - |
 | <a id="task-functional-test"></a>[functionalTest](#feature-test) | Runs functional tests | - | - |
+| <a id="task-analyze-test-coverage"></a>[analyzeTestCoverage](#feature-code-coverage) | Runs test coverage analysis | - | [Kover](https://github.com/Kotlin/kotlinx-kover), [JaCocCo Plugin](https://docs.gradle.org/current/userguide/jacoco_plugin.html) |
 | <a id="task-generate-documentation"></a>[generateDocumentation](#feature-documentation) | Generates [Dokka](https://kotlin.github.io/dokka/) HTML documentation | - | [Dokka Plugin](https://plugins.gradle.org/plugin/org.jetbrains.dokka) |
 | <a id="task-package"></a>[package](#feature-packaging) | Creates JAR | jar | [Java Plugin](https://docs.gradle.org/current/userguide/java_plugin.html) |
 | <a id="task-uber-jar"></a>[uberJar](#feature-packaging) | Creates Uber-JAR (applications only) | - | [Gradle Shadow Plugin](https://plugins.gradle.org/plugin/com.github.johnrengelman.shadow) |
@@ -643,7 +647,7 @@ Requires [application development](#application-development).
 
 ```kotlin
 kradle {
-    test {
+    jvm {
         test.enable()
     }
 }
@@ -656,8 +660,6 @@ When running tests, the environment variables `PROJECT_DIR` and `PROJECT_ROOT_DI
 Adds the task `runTests`, which runs all tests (unit, integration, functional, custom).
 
 Plugins used: [Java Plugin](https://docs.gradle.org/current/userguide/java_plugin.html)
-, [JaCocCo Plugin](https://docs.gradle.org/current/userguide/jacoco_plugin.html)
-, [Kover](https://github.com/Kotlin/kotlinx-kover)
 , [Gradle Test Logger Plugin](https://plugins.gradle.org/plugin/com.adarshr.test-logger)
 
 #### Options
@@ -675,13 +677,6 @@ kradle {
             junitJupiter.enable {
                 version("${versions.junit}")
             }
-            jacoco.enable {
-                version("${versions.jacoco}")
-                excludes("...")
-            }
-            kover.enable {
-                excludes("...")
-            }
             useArchUnit("${versions.archUnit}")
             useTestcontainers("${versions.testcontainers}")
             */
@@ -697,13 +692,57 @@ kradle {
 - `customTests`: Adds task `<NAME>Test`, which runs tests under _src/&lt;NAME&gt;_. The task is executed when running `check`. Can be called multiple times.
 - `junitJupiter.enable`: Sets up [JUnit Jupiter](https://junit.org/junit5/) for running tests.
 - `junitJupiter.version`: [JUnit Jupiter](https://junit.org/junit5/) version used.
-- `jacoco.enable`: Sets up [JaCoCo](https://www.jacoco.org/jacoco/) code coverage analysis. Reports can be found under _build/reports/jacoco/_.
-- `jacoco.version`: [JaCoCo](https://www.jacoco.org/jacoco/) version used.
-- `jacoco.excludes`: List of test tasks to exclude in code coverage analysis
-- `kover.enable`: Sets up [Kover](https://github.com/Kotlin/kotlinx-kover) code coverage analysis. Reports can be found under _build/reports/kover/_.
-- `kover.excludes`: List of test tasks to exclude in code coverage analysis
 - `useArchUnit`: Adds [ArchUnit](https://www.archunit.org/) test dependencies.
 - `useTestcontainers`: Adds [Testcontainers](https://www.testcontainers.org/) test dependencies.
+
+<a id="feature-code-coverage"></a>
+### Code coverage
+
+```kotlin
+kradle {
+    jvm {
+        codeCoverage.enable()
+    }
+}
+```
+
+Adds the task `analyzeTestCoverage`, which runs test coverage analysis and creates HTML reports.
+
+- [Kover](https://github.com/Kotlin/kotlinx-kover), report can be found in _build/reports/kover/_
+
+- [JaCocCo Plugin](https://www.jacoco.org/), report can be found in _build/reports/jacoco/_
+
+`analyzeTestCoverage` is executed when running `check`.
+
+Plugins used: [Kover](https://github.com/Kotlin/kotlinx-kover),
+[JaCocCo Plugin](https://docs.gradle.org/current/userguide/jacoco_plugin.html)
+
+#### Options
+
+```kotlin
+kradle {
+    jvm {
+        codeCoverage {
+            kover {
+                excludes("...")
+            }
+            // kover.disable()
+            /*
+            jacoco.enable {
+                version("${versions.jacoco}")
+                excludes("...")
+            }
+        }
+    }
+}
+```
+
+- `kover.*`: [Kover](https://github.com/Kotlin/kotlinx-kover) configuration
+- `kover.excludes`: List of test tasks to exclude from analysis
+- `kover.disable`: Disables Kover
+- `jacoco.enable`: Sets up [JaCoCo](https://www.jacoco.org/jacoco/) for code coverage analysis
+- `jacoco.version`: [JaCoCo](https://www.jacoco.org/jacoco/) version used.
+- `jacoco.excludes`: List of test tasks to exclude from analysis
 
 <a id="feature-benchmark"></a>
 ### Benchmarks
@@ -915,9 +954,8 @@ kradle {
             integrationTests(true)
             functionalTests(true)
             junitJupiter(true)
-            kover(true)
         }
-
+        codeCoverage.enable()
         benchmark.enable()
         packaging.enable()
         docker {
@@ -974,9 +1012,8 @@ kradle {
             integrationTests(true)
             functionalTests(true)
             junitJupiter(true)
-            kover(true)
         }
-
+        codeCoverage.enable()
         benchmark.enable()
         packaging.enable()
         documentation.enable()
@@ -1033,9 +1070,8 @@ kradle {
             integrationTests(true)
             functionalTests(true)
             junitJupiter(true)
-            kover(true)
         }
-
+        codeCoverage.enable()
         benchmark.enable()
         packaging.enable()
         docker {
@@ -1086,9 +1122,8 @@ kradle {
             integrationTests(true)
             functionalTests(true)
             junitJupiter(true)
-            kover(true)
         }
-
+        codeCoverage.enable()
         benchmark.enable()
         packaging.enable()
         documentation.enable()
@@ -1187,15 +1222,18 @@ kradle {
             junitJupiter {
                 version("${versions.junit}")
             }
+            useArchUnit("${versions.archUnit}")
+            useTestcontainers("${versions.testcontainers}")
+        }
+
+        codeCoverage {
+            kover {
+                excludes("...")
+            }
             jacoco {
                 version("${versions.jacoco}")
                 excludes("...")
             }
-            kover {
-                excludes("...")
-            }
-            useArchUnit("${versions.archUnit}")
-            useTestcontainers("${versions.testcontainers}")
         }
 
         benchmark {

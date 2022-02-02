@@ -20,6 +20,7 @@ import java.util.concurrent.Callable
 class JacocoBlueprint(project: Project) : Blueprint(project) {
 
     lateinit var jacocoProperties: JacocoProperties
+    lateinit var extendsTask: String
 
     override fun doApplyPlugins() {
         project.apply(JacocoPlugin::class.java)
@@ -36,12 +37,16 @@ class JacocoBlueprint(project: Project) : Blueprint(project) {
             .map { Callable<File?> { if (it.exists()) it else null } }
             .toList()
 
-        project.createHelperTask<JacocoReport>("jacocoHtmlReport", "Generates JaCoCo code coverage HTML report") {
+        val jacocoTask = project.createHelperTask<JacocoReport>(
+            "jacocoHtmlReport",
+            "Generates JaCoCo code coverage HTML report"
+        ) {
             dependsOn(testTasks)
             sourceSets(project.sourceSets.getByName(SourceSet.MAIN_SOURCE_SET_NAME))
             executionData(executionData)
             configureReports(reports)
         }
+        project.tasks.findByName(extendsTask)?.dependsOn(jacocoTask)
     }
 
     override fun doConfigure() {

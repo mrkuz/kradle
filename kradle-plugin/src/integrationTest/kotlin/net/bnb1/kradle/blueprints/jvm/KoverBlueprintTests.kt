@@ -37,6 +37,8 @@ class KoverBlueprintTests : BehaviorSpec({
                 kotlin.enable()
                 test {
                     junitJupiter()
+                }
+                codeCoverage {
                     kover()
                 }
             }
@@ -88,6 +90,8 @@ class KoverBlueprintTests : BehaviorSpec({
                 test {
                     junitJupiter()
                     integrationTests(true)
+                }
+                codeCoverage {
                     kover()
                 }
             }
@@ -132,6 +136,8 @@ class KoverBlueprintTests : BehaviorSpec({
                 test {
                     junitJupiter()
                     integrationTests(true)
+                }
+                codeCoverage {
                     kover {
                         excludes("integrationTest")
                     }
