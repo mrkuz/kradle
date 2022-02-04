@@ -5,12 +5,12 @@ import net.bnb1.kradle.CompatSpec
 
 class DevelopmentModeBlueprintTests : CompatSpec({
 
-    test("Check DEV_MODE environment variable") {
+    test("Check KRADLE_DEV_MODE environment variable") {
         bootstrapCompatAppProject()
-        writeAppKt("println(\"DEV_MODE=\" + System.getenv()[\"DEV_MODE\"])")
+        writeAppKt("println(\"KRADLE_DEV_MODE=\" + System.getenv()[\"KRADLE_DEV_MODE\"])")
 
         val result = runTask("dev")
-        result.output shouldContain "DEV_MODE=true"
+        result.output shouldContain "KRADLE_DEV_MODE=true"
     }
 
     test("Run 'dev'") {

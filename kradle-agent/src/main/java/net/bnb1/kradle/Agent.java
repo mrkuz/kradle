@@ -25,7 +25,7 @@ import java.util.regex.Pattern;
 public final class Agent {
 
     public static void premain(String args, Instrumentation instrumentation) throws IOException {
-        new Agent(System.getenv().get("PROJECT_ROOT")).start();
+        new Agent(System.getenv().get("KRADLE_PROJECT_ROOT_DIR")).start();
     }
 
     private final ExecutorService executor = Executors.newSingleThreadExecutor(runnable -> {

@@ -26,8 +26,8 @@ class TestBlueprintTests : BehaviorSpec({
                 @Test
                 fun doNothing() {
                     println("Hello Test!")
-                    println("PROJECT_DIR = " + System.getenv("PROJECT_DIR"))
-                    println("PROJECT_ROOT_DIR = " + System.getenv("PROJECT_ROOT_DIR"))
+                    println("KRADLE_PROJECT_DIR = " + System.getenv("KRADLE_PROJECT_DIR"))
+                    println("KRADLE_PROJECT_ROOT_DIR = " + System.getenv("KRADLE_PROJECT_ROOT_DIR"))
                 }
             }
             """.trimIndent()
@@ -241,11 +241,11 @@ class TestBlueprintTests : BehaviorSpec({
             Then("Show stdout") {
                 result.output shouldContain "Hello Test!"
 
-                // And: "PROJECT_DIR is set"
-                result.output shouldContain "PROJECT_DIR = " + project.projectDir.absoluteFile
+                // And: "KRADLE_PROJECT_DIR is set"
+                result.output shouldContain "KRADLE_PROJECT_DIR = " + project.projectDir.absoluteFile
 
-                // And: "PROJECT_ROOT_DIR is set"
-                result.output shouldContain "PROJECT_ROOT_DIR = " + project.projectDir.absoluteFile
+                // And: "KRADLE_PROJECT_ROOT_DIR is set"
+                result.output shouldContain "KRADLE_PROJECT_ROOT_DIR = " + project.projectDir.absoluteFile
             }
         }
     }

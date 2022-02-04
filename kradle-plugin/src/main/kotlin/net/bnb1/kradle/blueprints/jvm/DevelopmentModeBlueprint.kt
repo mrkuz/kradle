@@ -33,9 +33,9 @@ class DevelopmentModeBlueprint(project: Project) : Blueprint(project) {
                 agentFile.writeBytes(agentResource.readBytes())
             }
             // Allows the application to figure out we are running in development mode
-            environment("DEV_MODE", "true")
+            environment("KRADLE_DEV_MODE", "true")
             // Tell agent about the project root
-            environment("PROJECT_ROOT", project.rootDir)
+            environment("KRADLE_PROJECT_ROOT_DIR", project.rootDir)
             // Speed up start when developing
             jvmArgs = listOf("-XX:TieredStopAtLevel=1")
             if (javaProperties.previewFeatures.get()) {

@@ -20,7 +20,7 @@ class DevelopmentModeBlueprintTests : BehaviorSpec({
            }
             """.trimIndent()
         }
-        project.writeAppKt { "println(\"DEV_MODE=\" + System.getenv()[\"DEV_MODE\"])" }
+        project.writeAppKt { "println(\"KRADLE_DEV_MODE=\" + System.getenv()[\"KRADLE_DEV_MODE\"])" }
 
         When("Check for tasks") {
 
@@ -32,8 +32,8 @@ class DevelopmentModeBlueprintTests : BehaviorSpec({
         When("Run dev") {
             val result = project.runTask("dev")
 
-            Then("DEV_MODE environment variable is set") {
-                result.output shouldContain "DEV_MODE=true"
+            Then("KRADLE_DEV_MODE environment variable is set") {
+                result.output shouldContain "KRADLE_DEV_MODE=true"
 
                 // And: "Agent is attached"
                 result.output shouldContain "DEBUG Project root: ${project.projectDir.absolutePath}"
