@@ -14,12 +14,13 @@ With a few lines of configuration, you will be able to:
 - [Run static code analysis](#feature-code-analysis)
 - [Add automatic restart on code change](#feature-development-mode)
 - [Add support for integration and functional testing](#feature-test)
+- [Run test coverage analysis](#feature-code-coverage)
 - [Run JMH benchmarks](#feature-benchmark)
 - [Create Uber-Jars](#feature-packaging)
 - [Create Docker images](#feature-docker)
 - [Generate documentation](#feature-documentation)
 
-Most of the functionality is provided by other well-known plugins. `kradle` just takes care of the setup and provides a unified configuration DSL.
+Most of the functionality is provided by other well-known plugins. `kradle` takes care of the setup and provides a unified configuration DSL.
 
 ## Table of contents
 
@@ -34,9 +35,10 @@ Most of the functionality is provided by other well-known plugins. `kradle` just
     - [`analyzeCode`](#task-analyze-code)
     - [`dev`](#task-dev)
     - [`runBenchmarks`](#task-run-benchmarks)
-    - [`runTests`](#task-run-tests)
     - [`integrationTest`](#task-integration-test)
     - [`functionalTest`](#task-functional-test)
+    - [`runTests`](#task-run-tests)
+    - [`analyzeTestCoverage`](#task-analyze-test-coverage)
     - [`generateDocumentation`](#task-generate-documentation)
     - [`package`](#task-package)
     - [`uberJar`](#task-uber-jar)
@@ -62,6 +64,7 @@ Most of the functionality is provided by other well-known plugins. `kradle` just
     - [Code analysis](#feature-code-analysis)
     - [Development mode](#feature-development-mode)
     - [Test improvements](#feature-test)
+    - [Code coverage](#feature-code-coverage)
     - [Benchmarks](#feature-benchmark)
     - [Packaging](#feature-packaging)
     - [Docker](#feature-docker)
@@ -141,7 +144,7 @@ kradle {
 }
 ```
 
-Make sure you apply the Kotlin plugin before `kradle`. For applications, you also have to provide the `mainClass`.
+Make sure you apply the Kotlin plugin before `kradle`. For applications, you have to provide the `mainClass`.
 
 If you are starting from scratch, you can run `gradle boostrap` to initialize Git, add Gradle wrapper and create essential directories
 and files.
@@ -166,9 +169,10 @@ Which tasks are available, depends on the [features](#features) enabled.
 | <a id="task-analyze-dependencies"></a>[analyzeDependencies](#feature-vulnerability-scan) | Analyzes dependencies for vulnerabilities | - | [OWASP Dependency Check Plugin](https://plugins.gradle.org/plugin/org.owasp.dependencycheck) |
 | <a id="task-dev"></a>[dev](#feature-development-mode) | Runs the application and stops it when sources change (use with `-t`, applications only) | - | - |
 | <a id="task-run-benchmarks"></a>[runBenchmarks](#feature-benchmark) | Runs [JMH](https://github.com/openjdk/jmh) benchmarks | benchmark | [kotlinx.benchmark Plugin](https://plugins.gradle.org/plugin/org.jetbrains.kotlinx.benchmark) |
-| <a id="task-run-tests"></a>[runTests](#feature-test) | Runs all tests | test | - |
 | <a id="task-integration-test"></a>[integrationTest](#feature-test) | Runs integration tests | - | - |
 | <a id="task-functional-test"></a>[functionalTest](#feature-test) | Runs functional tests | - | - |
+| <a id="task-run-tests"></a>[runTests](#feature-test) | Runs all tests | - | - |
+| <a id="task-analyze-test-coverage"></a>[analyzeTestCoverage](#feature-code-coverage) | Runs test coverage analysis | - | [Kover](https://github.com/Kotlin/kotlinx-kover), [JaCocCo Plugin](https://docs.gradle.org/current/userguide/jacoco_plugin.html) |
 | <a id="task-generate-documentation"></a>[generateDocumentation](#feature-documentation) | Generates [Dokka](https://kotlin.github.io/dokka/) HTML documentation | - | [Dokka Plugin](https://plugins.gradle.org/plugin/org.jetbrains.dokka) |
 | <a id="task-package"></a>[package](#feature-packaging) | Creates JAR | jar | [Java Plugin](https://docs.gradle.org/current/userguide/java_plugin.html) |
 | <a id="task-uber-jar"></a>[uberJar](#feature-packaging) | Creates Uber-JAR (applications only) | - | [Gradle Shadow Plugin](https://plugins.gradle.org/plugin/com.github.johnrengelman.shadow) |
@@ -201,21 +205,21 @@ benchmark(true)
 benchmark()
 ```
 
-If the feature has options, it takes a configuration code block.
+If the feature has options, `enable` takes a configuration code block as argument.
 
 ```kotlin
 kradle {
     jvm {
-        benchmark {
+        benchmark.enable {
             jmhVersion("1.34")
         }
     }
 }
 ```
 
-This configures and enables the feature. Alternatively you can use `benchmark.enable { ... }`.
+This configures and enables the feature. You can omit `enable` and use `benchmark { … }`.
 
-It is also possible to deactivate features. This can be useful if you are using [presets](#presets).
+It is also possible to deactivate features. This can be useful if you are using [presets](#presets) and want to disable inherited features.
 
 ```kotlin
 benchmark.disable()
@@ -230,7 +234,7 @@ Options shown in this section of the documentation represent the defaults.
 ```kotlin
 kradle {
     general {
-        ...
+        …
     }
 }
 ```
@@ -297,16 +301,16 @@ kradle {
 Adds the task `generateBuildProperties`, which generates a file _build.properties_ containing the project name, group, version and the
 build timestamp.
 
-If [Git integration](#feature-git) is enabled, the Git commit id is also added.
+If [Git integration](#feature-git) is enabled, the Git commit id is added.
 
 The task is executed after `processResources`.
 
 ```properties
-project.name=...
-project.group=...
-project.version=...
-build.timestamp=...
-git.commit-id=...
+project.name=…
+project.group=…
+project.version=…
+build.timestamp=…
+git.commit-id=…
 ```
 
 <a id="feature-set-jvm"></a>
@@ -315,7 +319,7 @@ git.commit-id=...
 ```kotlin
 kradle {
     jvm {
-        ...
+        …
     }
 }
 ```
@@ -366,7 +370,7 @@ kradle {
                 ktlint {
                     version("0.43.2")
                     rules {
-                        // disable("...")
+                        // disable("…")
                     }
                 }
                 // ktlint.disable()
@@ -390,12 +394,12 @@ kradle {
 - `useCoroutines`: Adds Kotlin coroutines dependency
 - `ktlint.*`: [ktlint](https://ktlint.github.io/) configuration (only relevant if [linting](#feature-lint) enabled)
 - `ktlint.version`: ktlint version used
-- `ktlint.rules.disable`: Disable ktlint rule. Can be called multiple times
-- `ktlint.disable`: Disable ktlint
+- `ktlint.rules.disable`: Disables ktlint rule. Can be called multiple times
+- `ktlint.disable`: Disables ktlint
 - `detekt.*`: [detekt](https://detekt.github.io/detekt/) configuration (only relevant if [static code analysis](#feature-code-analysis) is enabled)
 - `detekt.version`: detekt version used
 - `detekt.configFile`: detekt configuration file used
-- `detekt.disable`: Disable detekt
+- `detekt.disable`: Disables detekt
 - `useKoTest`: Adds [kotest](https://kotest.io/) test dependencies (only if [test improvements](#feature-test) are enabled)
 - `useMockk`: Adds [mockk](https://mockk.io/) test dependency (only if [test improvements](#feature-test) are enabled)
 
@@ -453,20 +457,20 @@ kradle {
 }
 ```
 
-- `previewFeatures`: Enable preview features
+- `previewFeatures`: Enables preview features
 - `checkstyle.*`: [checkstyle](https://checkstyle.sourceforge.io/) configuration (only relevant if [linting](#feature-lint) is enabled)
 - `checkstyle.version`: checkstyle version used
 - `checkstyle.configFile`: checkstyle configuration file used
-- `checkstyle.disable`: Disable checkstyle
+- `checkstyle.disable`: Disables checkstyle
 - `pmd.*`: [PMD](https://pmd.github.io/) configuration (only relevant if [code analysis](#feature-code-analysis) is enabled)
 - `pmd.version`: PMD version used
-- `pmd.ruleSets.*`: Enable/disable PMD rule sets
-- `pmd.disable`: Disable PMD
+- `pmd.ruleSets.*`: Enables/disables PMD rule sets
+- `pmd.disable`: Disables PMD
 - `spotBugs.version`: [SpotBugs](https://spotbugs.github.io/) configuration (only relevant if [code analysis](#code-analysis) is enabled)
 - `spotBugs.version`: SpotBugs version used
-- `spotBugs.useFbContrib`: Use [fb-contrib](http://fb-contrib.sourceforge.net/) plugin
-- `spotBugs.useFbContrib`: Use [Find Security Bugs](https://find-sec-bugs.github.io/) plugin
-- `spotBugs.disable`: Disable SpotBugs
+- `spotBugs.useFbContrib`: Enables [fb-contrib](http://fb-contrib.sourceforge.net/) plugin
+- `spotBugs.useFbContrib`: Enables [Find Security Bugs](https://find-sec-bugs.github.io/) plugin
+- `spotBugs.disable`: Disables SpotBugs
 
 <a id="feature-application"></a>
 ### Application development
@@ -489,7 +493,7 @@ Plugins used: [Application Plugin](https://docs.gradle.org/current/userguide/app
 kradle {
     jvm {
         application {
-            // mainClass("...")
+            // mainClass("…")
         }
     }
 }
@@ -643,7 +647,7 @@ Requires [application development](#application-development).
 
 ```kotlin
 kradle {
-    test {
+    jvm {
         test.enable()
     }
 }
@@ -656,8 +660,7 @@ When running tests, the environment variables `PROJECT_DIR` and `PROJECT_ROOT_DI
 Adds the task `runTests`, which runs all tests (unit, integration, functional, custom).
 
 Plugins used: [Java Plugin](https://docs.gradle.org/current/userguide/java_plugin.html)
-, [JaCocCo Plugin](https://docs.gradle.org/current/userguide/jacoco_plugin.html),
-[Gradle Test Logger Plugin](https://plugins.gradle.org/plugin/com.adarshr.test-logger)
+, [Gradle Test Logger Plugin](https://plugins.gradle.org/plugin/com.adarshr.test-logger)
 
 #### Options
 
@@ -674,9 +677,6 @@ kradle {
             junitJupiter.enable {
                 version("5.8.2")
             }
-            jacoco.enable {
-                version("0.8.7")
-            }
             useArchUnit("0.22.0")
             useTestcontainers("1.16.3")
             */
@@ -686,16 +686,63 @@ kradle {
 ```
 
 - `prettyPrint`: Prettifies test output with [Gradle Test Logger Plugin](https://plugins.gradle.org/plugin/com.adarshr.test-logger)
-- `standardStreams`: Show stdout and stderr in test output
-- `integrationTests`: Adds task `integrationTest`, which runs tests under _src/integrationTest_. The task is executed when running `check`.
-- `functionalTests`: Adds task `functionalTest`, which runs tests under _src/functionalTest_. The task is executed when running `check`.
-- `customTests`: Adds task `<NAME>Test`, which runs tests under _src/&lt;NAME&gt;_. The task is executed when running `check`. Can be called multiple times.
-- `junitJupiter.enable`: Sets up [JUnit Jupiter](https://junit.org/junit5/) for running tests.
-- `junitJupiter.version`: [JUnit Jupiter](https://junit.org/junit5/) version used.
-- `jacoco.enable`: Generates [JaCoCo](https://www.jacoco.org/jacoco/) code coverage reports after tests. They can be found under _build/reports/jacoco/_.
+- `standardStreams`: Shows stdout and stderr in test output
+- `integrationTests`: Adds task `integrationTest`, which runs tests under _src/integrationTest_. The task is executed when running `check`
+- `functionalTests`: Adds task `functionalTest`, which runs tests under _src/functionalTest_. The task is executed when running `check`
+- `customTests`: Adds task `<NAME>Test`, which runs tests under _src/&lt;NAME&gt;_. The task is executed when running `check`. Can be called multiple times
+- `junitJupiter.enable`: Sets up [JUnit Jupiter](https://junit.org/junit5/) for running tests
+- `junitJupiter.version`: [JUnit Jupiter](https://junit.org/junit5/) version used
+- `useArchUnit`: Adds [ArchUnit](https://www.archunit.org/) test dependencies
+- `useTestcontainers`: Adds [Testcontainers](https://www.testcontainers.org/) test dependencies
+
+<a id="feature-code-coverage"></a>
+### Code coverage
+
+```kotlin
+kradle {
+    jvm {
+        codeCoverage.enable()
+    }
+}
+```
+
+Adds the task `analyzeTestCoverage`, which runs test coverage analysis and creates HTML reports.
+
+- [Kover](https://github.com/Kotlin/kotlinx-kover), report can be found in _build/reports/kover/_
+
+- [JaCocCo Plugin](https://www.jacoco.org/), report can be found in _build/reports/jacoco/_
+
+`analyzeTestCoverage` is executed when running `check`.
+
+Plugins used: [Kover](https://github.com/Kotlin/kotlinx-kover),
+[JaCocCo Plugin](https://docs.gradle.org/current/userguide/jacoco_plugin.html)
+
+#### Options
+
+```kotlin
+kradle {
+    jvm {
+        codeCoverage {
+            kover {
+                excludes("…")
+            }
+            // kover.disable()
+            /*
+            jacoco.enable {
+                version("0.8.7")
+                excludes("…")
+            }
+        }
+    }
+}
+```
+
+- `kover.*`: [Kover](https://github.com/Kotlin/kotlinx-kover) configuration
+- `kover.excludes`: List of test tasks to exclude from analysis
+- `kover.disable`: Disables Kover
+- `jacoco.enable`: Sets up [JaCoCo](https://www.jacoco.org/jacoco/) for code coverage analysis
 - `jacoco.version`: [JaCoCo](https://www.jacoco.org/jacoco/) version used.
-- `useArchUnit`: Adds [ArchUnit](https://www.archunit.org/) test dependencies.
-- `useTestcontainers`: Adds [Testcontainers](https://www.testcontainers.org/) test dependencies.
+- `jacoco.excludes`: List of test tasks to exclude from analysis
 
 <a id="feature-benchmark"></a>
 ### Benchmarks
@@ -791,18 +838,18 @@ kradle {
             baseImage("bellsoft/liberica-openjdk-alpine:17")
             startupScript(false)
             // withJvmKill(1.16.0")
-            // ports(...)
-            // jvmOpts("...")
+            // ports(…)
+            // jvmOpts("…")
         }
     }
 }
 ```
 
-- `baseImage`: The base image used
+- `baseImage`: Base image used
 - `ports`: List of exposed ports
 - `jvmOpts`: Options passed to the JVM
-- `withJvmKill`: Adds [jvmkill](https://github.com/airlift/jvmkill) to the image. [jvmkill](https://github.com/airlift/jvmkill) terminates the JVM if it is unable to allocate memory.
-- `startupScript`: Uses a script as entrypoint for the container. You can provide your own script at _src/main/extra/app.sh_. Otherwise `kradle` will create one.
+- `withJvmKill`: Adds [jvmkill](https://github.com/airlift/jvmkill) to the image, which terminates the JVM if it is unable to allocate memory
+- `startupScript`: Uses a script as entrypoint for the container. Either you provide your own script at _src/main/extra/app.sh_ or `kradle` will create one
 
 <a id="feature-documentation"></a>
 ### Documentation
@@ -818,7 +865,7 @@ kradle {
 Adds the task `generateDocumentation`, which uses [Dokka](https://kotlin.github.io/dokka/) to generate a HTML documentation based on
 KDoc comments. The documentation can be found under _build/docs_.
 
-Package and module documentation can be placed in files _package.md_ or _module.md_ in the project or any source directory.
+Package and module documentation can be placed in _package.md_ or _module.md_ in the project or any source directory.
 
 Plugins used: [Dokka Plugin](https://plugins.gradle.org/plugin/org.jetbrains.dokka)
 
@@ -859,7 +906,7 @@ kradle {
     kotlinJvmApplication {
         jvm {
             application {
-                mainClass("...")
+                mainClass("…")
             }
         }
     }
@@ -893,7 +940,7 @@ kradle {
             }
         }
         application {
-            mainClass("...")
+            mainClass("…")
         }
 
         dependencyUpdates.enable()
@@ -907,9 +954,8 @@ kradle {
             integrationTests(true)
             functionalTests(true)
             junitJupiter(true)
-            jacoco(true)
         }
-
+        codeCoverage.enable()
         benchmark.enable()
         packaging.enable()
         docker {
@@ -966,9 +1012,8 @@ kradle {
             integrationTests(true)
             functionalTests(true)
             junitJupiter(true)
-            jacoco(true)
         }
-
+        codeCoverage.enable()
         benchmark.enable()
         packaging.enable()
         documentation.enable()
@@ -984,7 +1029,7 @@ kradle {
     javaApplication {
         jvm {
             application {
-                mainClass("...")
+                mainClass("…")
             }
         }
     }
@@ -1012,7 +1057,7 @@ kradle {
             }
         }
         application {
-            mainClass("...")
+            mainClass("…")
         }
         dependencyUpdates.enable()
         vulnerabilityScan.enable()
@@ -1025,9 +1070,8 @@ kradle {
             integrationTests(true)
             functionalTests(true)
             junitJupiter(true)
-            jacoco(true)
         }
-
+        codeCoverage.enable()
         benchmark.enable()
         packaging.enable()
         docker {
@@ -1078,9 +1122,8 @@ kradle {
             integrationTests(true)
             functionalTests(true)
             junitJupiter(true)
-            jacoco(true)
         }
-
+        codeCoverage.enable()
         benchmark.enable()
         packaging.enable()
         documentation.enable()
@@ -1111,7 +1154,7 @@ kradle {
                 ktlint {
                     version("0.43.2")
                     rules {
-                        disable("...")
+                        disable("…")
                     }
                 }
             }
@@ -1156,7 +1199,7 @@ kradle {
             }
         }
         application {
-            mainClass("...")
+            mainClass("…")
         }
         library.enable() // Conflicts with application
 
@@ -1175,15 +1218,22 @@ kradle {
             standardStreams(false)
             integrationTests(false)
             functionalTests(false)
-            customTests("...")
+            customTests("…")
             junitJupiter {
                 version("5.8.2")
             }
-            jacoco {
-                version("0.8.7")
-            }
             useArchUnit("0.22.0")
             useTestcontainers("1.16.3")
+        }
+
+        codeCoverage {
+            kover {
+                excludes("…")
+            }
+            jacoco {
+                version("0.8.7")
+                excludes("…")
+            }
         }
 
         benchmark {
@@ -1200,8 +1250,8 @@ kradle {
             baseImage("bellsoft/liberica-openjdk-alpine:17")
             withJvmKill("1.16.0")
             startupScript(false)
-            ports(...)
-            jvmOpts("...")
+            ports(…)
+            jvmOpts("…")
         }
 
         documentation.enable()
@@ -1219,9 +1269,25 @@ Please open a new [issue](https://github.com/mrkuz/kradle/issues) and if possibl
 
 `kradle` uses a `MAJOR.MINOR.PATCH` pattern.
 
-- `PATCH`: Bug fixes. Configuration DSL will not change.
-- `MINOR`: New features. Configuration DSL changes, but will stay backwards compatible. Default values might change (__Defaults change__ in the [CHANGELOG](CHANGELOG.md)).
-- `MAJOR`: New features, that break the configuration DSL or functional backwards compatibility (__Breaking change__ in the [CHANGELOG](CHANGELOG.md)).
+### Patch release
+
+- Contains only bug fixes.
+- Configuration DSL will not change.
+- Dependencies are only updated when required to fix an issue.
+
+### Minor release
+
+- Introduces new features.
+- Contains dependency upgrades.
+- Configuration DSL can change, but in a backwards compatible manner.
+- Default values for options can change.
+- Functionality can change.
+- Make sure to check the [CHANGELOG](CHANGELOG.md) before updating.
+
+### Major release
+
+- Configuration DSL can change and violate backwards compatibilty (__Breaking change__ in the [CHANGELOG](CHANGELOG.md)).
+- Otherwise same as minor release.
 
 <a id="license"></a>
 ## License

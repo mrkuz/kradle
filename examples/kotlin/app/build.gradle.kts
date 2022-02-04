@@ -8,7 +8,7 @@ version = "1.0.0"
 
 kradle {
 
-    // Defaults are commented out, but kept for reference
+    // Default values and unused features are commented out, but kept for reference
 
     general {
         bootstrap.enable()
@@ -66,11 +66,20 @@ kradle {
             junitJupiter {
                 // version("5.8.2")
             }
-            jacoco {
-                // version("0.8.7")
-            }
             // useArchUnit("0.22.0")
             // useTestcontainers("1.16.3")
+        }
+
+        codeCoverage {
+            kover {
+                // excludes("...")
+            }
+            /*
+            jacoco {
+                version("0.8.7")
+                excludes("...")
+            }
+            */
         }
 
         benchmark {
@@ -88,7 +97,7 @@ kradle {
             withJvmKill(/* "1.16.0" */)
             // startupScript(false)
             // ports(...)
-            // javaOpts("")
+            // jvmOpts("...")
         }
 
         documentation.enable()
