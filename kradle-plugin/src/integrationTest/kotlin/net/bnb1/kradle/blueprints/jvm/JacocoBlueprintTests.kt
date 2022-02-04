@@ -58,8 +58,10 @@ class JacocoBlueprintTests : BehaviorSpec({
             }
         }
 
-        Then("Task jacocoHtmlReport is available") {
-            project.shouldHaveTask("jacocoHtmlReport")
+        When("Check for tasks") {
+            Then("Task jacocoHtmlReport is available") {
+                project.shouldHaveTask("jacocoHtmlReport")
+            }
         }
 
         When("Run jacocoHtmlReport") {

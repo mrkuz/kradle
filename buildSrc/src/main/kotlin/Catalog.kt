@@ -21,6 +21,7 @@ object Catalog {
         const val slf4j = "1.7.32"
         const val archUnit = "0.22.0"
         const val testcontainers = "1.16.3"
+        const val lombok = "1.18.22"
     }
 
     object Dependencies {
@@ -42,6 +43,7 @@ object Catalog {
         val kotlinCoroutines = artifact("org.jetbrains.kotlinx", "kotlinx-coroutines-core", Versions.kotlinCoroutines)
         val kotlinStdlib = artifact("org.jetbrains.kotlin", "kotlin-stdlib-jdk8", Versions.kotlin)
         val kotlinReflect = artifact("org.jetbrains.kotlin", "kotlin-reflect", Versions.kotlin)
+        val lombok = artifact("org.projectlombok", "lombok", Versions.lombok)
 
         object Tools {
             val kotlinxBenchmarkRuntime = artifact(

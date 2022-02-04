@@ -1,13 +1,20 @@
 package net.bnb1.kradle.blueprints.jvm
 
+import net.bnb1.kradle.Catalog
+import net.bnb1.kradle.annotationProcessor
 import net.bnb1.kradle.apply
+import net.bnb1.kradle.compileOnly
 import net.bnb1.kradle.core.Blueprint
+import net.bnb1.kradle.createTask
+import net.bnb1.kradle.implementation
+import net.bnb1.kradle.support.tasks.GenerateLombokConfigTask
 import org.gradle.api.GradleException
 import org.gradle.api.JavaVersion
 import org.gradle.api.Project
 import org.gradle.api.plugins.JavaPlugin
 import org.gradle.api.plugins.JavaPluginExtension
 import org.gradle.api.tasks.compile.JavaCompile
+import org.gradle.kotlin.dsl.dependencies
 import org.gradle.kotlin.dsl.withType
 
 private const val MIN_JAVA_VERSION = 8
@@ -36,6 +43,23 @@ class JavaBlueprint(project: Project) : Blueprint(project) {
 
     override fun doApplyPlugins() {
         project.apply(JavaPlugin::class.java)
+    }
+
+    override fun doCreateTasks() {
+        if (javaProperties.useLombok.hasValue) {
+            project.createTask<GenerateLombokConfigTask>("generateLombokConfig", "Generates lombok.config")
+            project.tasks.getByName("compileJava").dependsOn("generateLombokConfig")
+        }
+    }
+
+    override fun doAddDependencies() {
+        if (javaProperties.useLombok.hasValue) {
+            project.dependencies {
+                implementation("${Catalog.Dependencies.lombok}:${javaProperties.useLombok.get()}")
+                annotationProcessor("${Catalog.Dependencies.lombok}:${javaProperties.useLombok.get()}")
+                compileOnly("${Catalog.Dependencies.Tools.findBugsAnnotations}:${Catalog.Versions.findBugs}")
+            }
+        }
     }
 
     override fun doConfigure() {

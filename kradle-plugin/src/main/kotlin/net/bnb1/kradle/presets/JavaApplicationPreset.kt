@@ -17,6 +17,7 @@ class JavaApplicationPreset(lock: AtomicBoolean) : Preset<KradleExtensionDsl>(lo
 
             jvm.configureOnly {
                 java {
+                    useLombok()
                     codeAnalysis {
                         spotBugs {
                             useFbContrib()

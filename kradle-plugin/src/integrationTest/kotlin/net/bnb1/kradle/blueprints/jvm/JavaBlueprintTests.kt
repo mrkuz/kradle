@@ -2,9 +2,12 @@ package net.bnb1.kradle.blueprints.jvm
 
 import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.spec.style.BehaviorSpec
+import io.kotest.matchers.file.shouldExist
+import io.kotest.matchers.shouldBe
 import io.kotest.matchers.string.shouldContain
 import net.bnb1.kradle.TestProject
 import org.gradle.api.plugins.JavaPlugin
+import org.gradle.testkit.runner.TaskOutcome
 import org.gradle.testkit.runner.UnexpectedBuildFailure
 
 class JavaBlueprintTests : BehaviorSpec({
@@ -80,6 +83,76 @@ class JavaBlueprintTests : BehaviorSpec({
 
             Then("Fail") {
                 ex.message shouldContain "'targetJvm' must be ≤ toolchain language version"
+            }
+        }
+    }
+
+    Given("java.useLombok = true") {
+        project.setUp {
+            """
+            jvm {
+                java {
+                   useLombok()
+                }
+            }
+            """.trimIndent()
+        }
+
+        val sourceDir = project.projectDir.resolve("src/main/java/com/example/demo")
+        sourceDir.mkdirs()
+        sourceDir.resolve("Point.java").writeText(
+            """
+            package com.example.demo;
+            
+            import lombok.Data;
+            
+            @Data            
+            public class Point {
+                private int x;
+                private int y;
+            }
+            """.trimIndent()
+        )
+
+        When("Check dependencies") {
+
+            Then("lombok is available") {
+                project.shouldHaveDependency("implementation", "org.projectlombok:lombok")
+
+                // And: "annotation processor is available"
+                project.shouldHaveDependency("annotationProcessor", "org.projectlombok:lombok")
+
+                // And: "findbugs:annotations is available"
+                project.shouldHaveDependency("compileOnly", "com.google.code.findbugs:annotations")
+            }
+        }
+
+        When("Check for tasks") {
+
+            Then("Task generateLombokConfig is available") {
+                project.shouldHaveTask("generateLombokConfig")
+            }
+        }
+
+        When("Run generateLombokConfig") {
+            val result = project.runTask("generateLombokConfig")
+
+            Then("Succeed") {
+                result.task(":generateLombokConfig")!!.outcome shouldBe TaskOutcome.SUCCESS
+
+                // And: "lombok.config is created"
+                project.projectDir.resolve("lombok.config").shouldExist()
+            }
+        }
+
+        When("Run compileJava") {
+            val result = project.runTask("compileJava")
+
+            Then("Succeed") {
+                result.task(":compileJava")!!.outcome shouldBe TaskOutcome.SUCCESS
+
+                // And: "generateLombokConfig is called"
+                result.task(":generateLombokConfig")!!.outcome shouldBe TaskOutcome.SUCCESS
             }
         }
     }

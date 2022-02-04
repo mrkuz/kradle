@@ -61,6 +61,8 @@ val Project.sourceSets
 fun DependencyHandlerScope.implementation(notation: Any) = add("implementation", notation)
 fun DependencyHandlerScope.testImplementation(notation: Any) = add("testImplementation", notation)
 fun DependencyHandlerScope.testRuntimeOnly(notation: Any) = add("testRuntimeOnly", notation)
+fun DependencyHandlerScope.annotationProcessor(notation: Any) = add("annotationProcessor", notation)
+fun DependencyHandlerScope.compileOnly(notation: Any) = add("compileOnly", notation)
 
 // ObjectFactory
 

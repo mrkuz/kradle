@@ -47,6 +47,7 @@ class JavaLibBootstrapBlueprintTests : BehaviorSpec({
                 project.projectDir.resolve("src/test/resources").shouldExist()
                 project.projectDir.resolve("src/benchmark/java").shouldExist()
                 project.projectDir.resolve("checkstyle.xml").shouldExist()
+                project.projectDir.resolve("lombok.config").shouldExist()
                 project.projectDir.resolve("README.md").shouldExist()
                 project.projectDir.resolve("LICENSE").shouldExist()
                 project.projectDir.resolve("project.properties").shouldExist()

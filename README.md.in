@@ -48,6 +48,7 @@ Most of the functionality is provided by other well-known plugins. `kradle` take
     - [`generateBuildProperties`](#task-generate-build-properties)
     - [`generateCheckstyleConfig`](#task-generate-checkstyle-config)
     - [`generateDetektConfig`](#task-generate-detekt-config)
+    - [`generateLombokConfig`](#task-generate-lombok-config)
 
 - [Features](#features)
     - [Bootstrapping](#feature-bootstrap)
@@ -182,6 +183,7 @@ Which tasks are available, depends on the [features](#features) enabled.
 | <a id="task-generate-build-properties"></a>[generateBuildProperties](#feature-build-properties) | Generates _build.properties_ | - | - |
 | <a id="task-generate-detekt-config"></a>[generateDetektConfig](#feature-code-analysis) | Generates _detekt-config.yml_ | - | - |
 | <a id="task-generate-checkstyle-config"></a>[generateCheckstyleConfig](#feature-code-analysis) | Generates _checkstyle.xml_ | - | - |
+| <a id="task-generate-lombok-config"></a>[generateLombokConfig](#feature-java) | Generates _lombok.config_ | - | - |
 | kradleDump | Dumps kradle diagnostic information | - | - |
 
 <a id="features"></a>
@@ -422,6 +424,7 @@ Plugins used: [Java Plugin](https://docs.gradle.org/current/userguide/java_plugi
 kradle {
     jvm {
         java {
+            // useLombok("${versions.lombok}")
             previewFeatures(false)
             lint {
                 checkstyle {
@@ -456,7 +459,7 @@ kradle {
     }
 }
 ```
-
+- `useLombok`: Enables [Project Lombok](https://projectlombok.org/). Adds the task `generateLombokConfig`, which generates _lombok.config_ with sane defaults
 - `previewFeatures`: Enables preview features
 - `checkstyle.*`: [checkstyle](https://checkstyle.sourceforge.io/) configuration (only relevant if [linting](#feature-lint) is enabled)
 - `checkstyle.version`: checkstyle version used
@@ -1049,6 +1052,7 @@ kradle {
 
     jvm {
         java {
+            useLombok()
             codeAnalysis {
                 spotBugs {
                     useFbContrib()
@@ -1104,6 +1108,7 @@ kradle {
 
     jvm {
         java {
+            useLombok()
             codeAnalysis {
                 spotBugs {
                     useFbContrib()
@@ -1170,6 +1175,7 @@ kradle {
             }
         }
         java {
+            useLombok("${versions.lombok}")
             previewFeatures(false)
             lint {
                 checkstyle {

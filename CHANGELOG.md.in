@@ -15,6 +15,7 @@
 
 - New project properties: `mainClass` and `gitBranch`
 - New feature `codeCoverage` and task `analyzeTestCoverage`
+- Add support for [Project Lombok](https://projectlombok.org/)
 - Add support for [Kover](https://github.com/Kotlin/kotlinx-kover)
 - `jacoco`: New option `excludes`
 - `jacoco`: Add configuration to `codeCoverage`
@@ -86,6 +87,7 @@
 - Use Kover for test coverage instead of JaCoCo in all presets
 - `jacoco`: No longer creates report after running tests
 - `test`: Remove access to unit test classes from integration and functional tests
+- Enable Lombok in all Java presets
 
 ### Version 2.1.0 (2022-01-06)
 

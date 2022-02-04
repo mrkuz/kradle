@@ -16,6 +16,7 @@ open class BootstrapJavaAppTask : BootstrapBaseTask() {
         createDirectories("java")
         createFiles()
         copyTextResource("checkstyle.xml")
+        copyTextResource("lombok.config")
 
         val packageName = mainClass.get().replace(Regex(".[^.]+$"), "")
         val path = Path.of(mainClass.get().replace(".", "/"))

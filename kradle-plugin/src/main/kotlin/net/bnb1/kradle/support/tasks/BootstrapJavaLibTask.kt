@@ -10,5 +10,6 @@ open class BootstrapJavaLibTask : BootstrapBaseTask() {
         createDirectories("java")
         createFiles()
         copyTextResource("checkstyle.xml")
+        copyTextResource("lombok.config")
     }
 }
