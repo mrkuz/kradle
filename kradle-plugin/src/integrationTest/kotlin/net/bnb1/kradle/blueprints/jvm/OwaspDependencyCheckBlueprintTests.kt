@@ -40,9 +40,8 @@ class OwaspDependencyCheckBlueprintTests : BehaviorSpec({
 
             Then("Succeed") {
                 result.task(":analyzeDependencies")!!.outcome shouldBe TaskOutcome.SUCCESS
-            }
 
-            Then("Report is created") {
+                // And: "Report is created"
                 project.buildDir.resolve("reports/dependency-check-report.html").shouldExist()
             }
         }

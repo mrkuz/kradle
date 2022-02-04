@@ -53,8 +53,11 @@ class KoverBlueprintTests : BehaviorSpec({
             }
         }
 
-        Then("Task koverHtmlReport is available") {
-            project.shouldHaveTask("koverHtmlReport")
+        When("Check for tasks") {
+
+            Then("Task koverHtmlReport is available") {
+                project.shouldHaveTask("koverHtmlReport")
+            }
         }
 
         When("Run koverHtmlReport") {
@@ -62,13 +65,11 @@ class KoverBlueprintTests : BehaviorSpec({
 
             Then("Succeed") {
                 result.task(":koverHtmlReport")!!.outcome shouldBe TaskOutcome.SUCCESS
-            }
 
-            Then("Report is generated") {
+                // And: "Report is generated"
                 project.buildDir.resolve("reports/kover/project-html/index.html").shouldExist()
-            }
 
-            Then("test is called") {
+                // And: "test is called"
                 result.task(":test")!!.outcome shouldBe TaskOutcome.SUCCESS
             }
         }
@@ -104,17 +105,14 @@ class KoverBlueprintTests : BehaviorSpec({
 
             Then("Succeed") {
                 result.task(":koverHtmlReport")!!.outcome shouldBe TaskOutcome.SUCCESS
-            }
 
-            Then("Report is generated") {
+                // And: "Report is generated"
                 project.buildDir.resolve("reports/kover/project-html/index.html").shouldExist()
-            }
 
-            Then("test is called") {
+                // And: "test is called"
                 result.task(":test")!!.outcome shouldBe TaskOutcome.NO_SOURCE
-            }
 
-            Then("integrationTest is called") {
+                // And: "integrationTest is called"
                 result.task(":integrationTest")!!.outcome shouldBe TaskOutcome.SUCCESS
             }
         }

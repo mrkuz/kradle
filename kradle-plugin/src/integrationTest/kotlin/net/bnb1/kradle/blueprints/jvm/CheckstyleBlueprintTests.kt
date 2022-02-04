@@ -27,9 +27,8 @@ class CheckstyleBlueprintTests : BehaviorSpec({
 
             Then("Task checkstyleMain is available") {
                 project.shouldHaveTask("checkstyleMain")
-            }
 
-            Then("Task generateCheckstyleConfig is available") {
+                // And: "Task generateCheckstyleConfig is available"
                 project.shouldHaveTask("generateCheckstyleConfig")
             }
         }
@@ -47,9 +46,8 @@ class CheckstyleBlueprintTests : BehaviorSpec({
 
             Then("Succeed") {
                 result.task(":checkstyleMain")!!.outcome shouldBe TaskOutcome.SUCCESS
-            }
 
-            Then("Report is generated") {
+                // And: "Report is generated"
                 project.buildDir.resolve("reports/checkstyle/main.html").shouldExist()
             }
         }
@@ -59,9 +57,8 @@ class CheckstyleBlueprintTests : BehaviorSpec({
 
             Then("Succeed") {
                 result.task(":generateCheckstyleConfig")!!.outcome shouldBe TaskOutcome.SUCCESS
-            }
 
-            Then("checkstyle.xml is generated") {
+                // And: "checkstyle.xml is generated"
                 project.projectDir.resolve("checkstyle.xml").shouldExist()
             }
         }

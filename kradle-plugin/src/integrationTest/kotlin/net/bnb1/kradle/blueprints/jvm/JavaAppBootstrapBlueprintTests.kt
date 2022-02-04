@@ -38,9 +38,8 @@ class JavaAppBootstrapBlueprintTests : BehaviorSpec({
 
             Then("Succeed") {
                 result.task(":bootstrapJavaApp")!!.outcome shouldBe TaskOutcome.SUCCESS
-            }
 
-            Then("Project files and directories are created") {
+                // And: "Project files and directories are created"
                 project.projectDir.resolve(".git").shouldExist()
                 project.projectDir.resolve(".gitignore").shouldExist()
                 project.projectDir.resolve("gradlew").shouldExist()

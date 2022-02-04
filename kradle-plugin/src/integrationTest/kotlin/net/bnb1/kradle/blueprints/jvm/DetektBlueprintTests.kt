@@ -27,9 +27,8 @@ class DetektBlueprintTests : BehaviorSpec({
 
             Then("Task detektMain is available") {
                 project.shouldHaveTask("detektMain")
-            }
 
-            Then("Task generateDetektConfig is available") {
+                // And: "Task generateDetektConfig is available"
                 project.shouldHaveTask("generateDetektConfig")
             }
         }
@@ -47,9 +46,8 @@ class DetektBlueprintTests : BehaviorSpec({
 
             Then("Succeed") {
                 result.task(":detektMain")!!.outcome shouldBe TaskOutcome.SUCCESS
-            }
 
-            Then("Report is generated") {
+                // And: "Report is generated"
                 project.buildDir.resolve("reports/detekt/main.html").shouldExist()
             }
         }
@@ -59,9 +57,8 @@ class DetektBlueprintTests : BehaviorSpec({
 
             Then("Succeed") {
                 result.task(":generateDetektConfig")!!.outcome shouldBe TaskOutcome.SUCCESS
-            }
 
-            Then("detekt-config.yml is generated") {
+                // And: "detekt-config.yml is generated"
                 project.projectDir.resolve("detekt-config.yml").shouldExist()
             }
         }

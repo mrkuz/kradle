@@ -34,10 +34,8 @@ class DevelopmentModeBlueprintTests : BehaviorSpec({
 
             Then("DEV_MODE environment variable is set") {
                 result.output shouldContain "DEV_MODE=true"
-            }
 
-            Then("Agent is attached") {
-                // Agent output
+                // And: "Agent is attached"
                 result.output shouldContain "DEBUG Project root: ${project.projectDir.absolutePath}"
             }
         }

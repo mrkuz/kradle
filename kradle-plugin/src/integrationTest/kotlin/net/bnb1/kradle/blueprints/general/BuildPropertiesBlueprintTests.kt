@@ -48,9 +48,8 @@ class BuildPropertiesBlueprintTests : BehaviorSpec({
 
             Then("Succeed") {
                 result.task(":generateBuildProperties")!!.outcome shouldBe TaskOutcome.SUCCESS
-            }
 
-            Then("build.properties exists") {
+                // And: "build.properties exists"
                 val output = project.buildDir.resolve("resources/main/build.properties")
                 output.shouldExist()
 

@@ -43,9 +43,8 @@ class SpotBugsBlueprintTests : BehaviorSpec({
 
             Then("Succeed") {
                 result.task(":spotbugsMain")!!.outcome shouldBe TaskOutcome.SUCCESS
-            }
 
-            Then("Report is generated") {
+                // And: "Report is generated"
                 project.buildDir.resolve("reports/spotbugs/main.html").shouldExist()
             }
         }

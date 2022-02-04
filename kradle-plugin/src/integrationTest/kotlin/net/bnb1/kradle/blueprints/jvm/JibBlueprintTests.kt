@@ -78,9 +78,8 @@ class JibBlueprintTests : BehaviorSpec({
 
             Then("Succeed") {
                 result.task(":buildImage")!!.outcome shouldBe TaskOutcome.SUCCESS
-            }
 
-            Then("Docker image is available") {
+                // And: "Docker image is available"
                 val images = dockerClient.listImagesCmd().exec()
                 images.forOne { it.repoTags.shouldContain("$name:latest") }
                 images.forOne { it.repoTags.shouldContain("$name:1.0.0") }

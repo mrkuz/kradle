@@ -48,9 +48,8 @@ class GitBlueprintTests : BehaviorSpec({
 
             Then("Succeed") {
                 result.task(":generateGitignore")!!.outcome shouldBe TaskOutcome.SUCCESS
-            }
 
-            Then(".gitignore exists") {
+                // And: ".gitignore exists"
                 project.projectDir.resolve(".gitignore").shouldExist()
             }
         }
@@ -77,9 +76,8 @@ class GitBlueprintTests : BehaviorSpec({
 
                 Then("gitCommit is set") {
                     project.shouldHaveProperty("gitCommit", Regex("[a-z0-9]{7}"))
-                }
 
-                Then("gitBranch is set") {
+                    // And: "gitBranch is set"
                     project.shouldHaveProperty("gitBranch", "main")
                 }
             }

@@ -28,13 +28,11 @@ class KotlinBlueprintTests : BehaviorSpec({
 
             Then("kotlin-stdlib-jdk8 is available") {
                 project.shouldHaveDependency("implementation", "org.jetbrains.kotlin:kotlin-stdlib-jdk8")
-            }
 
-            Then("kotlin-reflect is available") {
+                // And: "kotlin-reflect is available"
                 project.shouldHaveDependency("implementation", "org.jetbrains.kotlin:kotlin-reflect")
-            }
 
-            Then("kotlin-test is available") {
+                // And: "kotlin-test is available"
                 project.shouldHaveDependency("testImplementation", "org.jetbrains.kotlin:kotlin-test")
             }
         }

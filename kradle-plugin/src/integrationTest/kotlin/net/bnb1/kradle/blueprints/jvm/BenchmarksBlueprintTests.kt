@@ -47,9 +47,7 @@ class BenchmarksBlueprintTests : BehaviorSpec({
 
             Then("Benchmarks plugin is applied") {
                 project.shouldHavePlugin(BenchmarksPlugin::class)
-            }
-
-            Then("All-open plugin is applied") {
+                // And: All-open plugin is applied
                 project.shouldHavePlugin(AllOpenGradleSubplugin::class)
             }
         }
@@ -73,16 +71,14 @@ class BenchmarksBlueprintTests : BehaviorSpec({
 
             Then("Succeed") {
                 result.task(":runBenchmarks")!!.outcome shouldBe TaskOutcome.SUCCESS
-            }
 
-            Then("Benchmarks should be run") {
+                // And: "Benchmarks should be run"
                 result.output shouldContain "Running 'main' benchmarks for 'benchmark'"
                 result.output shouldContain "com.example.DummyBenchmark.doNothing"
                 result.output shouldContain "Iteration 1:"
                 result.output shouldContain Regex("Success: [0-9]+")
-            }
 
-            Then("Report is available") {
+                // And: "Report is available"
                 project.buildDir.resolve("reports/benchmarks").shouldExist()
             }
         }

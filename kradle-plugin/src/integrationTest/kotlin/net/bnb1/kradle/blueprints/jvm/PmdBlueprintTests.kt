@@ -44,9 +44,8 @@ class PmdBlueprintTests : BehaviorSpec({
 
             Then("Succeed") {
                 result.task(":pmdMain")!!.outcome shouldBe TaskOutcome.SUCCESS
-            }
 
-            Then("Report is generated") {
+                // And: "Report is generated"
                 project.buildDir.resolve("reports/pmd/main.html").shouldExist()
             }
         }

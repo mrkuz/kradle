@@ -51,9 +51,8 @@ class TestBlueprintTests : BehaviorSpec({
 
             Then("Task test is available") {
                 project.shouldHaveTask("test")
-            }
 
-            Then("Task runTests is available") {
+                // And: "Task runTests is available"
                 project.shouldHaveTask("runTests")
             }
         }
@@ -63,9 +62,8 @@ class TestBlueprintTests : BehaviorSpec({
 
             Then("Succeed") {
                 result.task(":test")!!.outcome shouldBe TaskOutcome.SUCCESS
-            }
 
-            Then("Hide stdout") {
+                // And: "Hide stdout"
                 result.output shouldNotContain "Hello Test!"
             }
         }
@@ -242,13 +240,11 @@ class TestBlueprintTests : BehaviorSpec({
 
             Then("Show stdout") {
                 result.output shouldContain "Hello Test!"
-            }
 
-            Then("PROJECT_DIR is set") {
+                // And: "PROJECT_DIR is set"
                 result.output shouldContain "PROJECT_DIR = " + project.projectDir.absoluteFile
-            }
 
-            Then("PROJECT_ROOT_DIR is set") {
+                // And: "PROJECT_ROOT_DIR is set"
                 result.output shouldContain "PROJECT_ROOT_DIR = " + project.projectDir.absoluteFile
             }
         }
@@ -362,9 +358,8 @@ class TestBlueprintTests : BehaviorSpec({
 
             Then("testcontainers is available") {
                 project.shouldHaveDependency("testImplementation", "org.testcontainers:testcontainers")
-            }
 
-            Then("testcontainers.junit-jupiter is available") {
+                // And: "testcontainers.junit-jupiter is available"
                 project.shouldHaveDependency("testImplementation", "org.testcontainers:junit-jupiter")
             }
         }

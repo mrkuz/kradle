@@ -31,13 +31,7 @@ class PackageApplicationBlueprintTests : BehaviorSpec({
                 val jarFile = project.buildDir.resolve("libs/app-1.0.0.jar")
                 jarFile.shouldExist()
 
-                And("Is executable") {
-                    "java -jar ${jarFile.absolutePath}".execute() shouldContain "Hello World"
-                }
-            }
-
-            Then("Jar file is executable") {
-                val jarFile = project.buildDir.resolve("libs/app-1.0.0.jar")
+                // And: "Jar file is executable"
                 "java -jar ${jarFile.absolutePath}".execute() shouldContain "Hello World"
             }
         }

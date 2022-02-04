@@ -65,9 +65,8 @@ class KtlintBlueprintTests : BehaviorSpec({
 
             Then("Succeed") {
                 result.task(":ktlintMainSourceSetCheck")!!.outcome shouldBe TaskOutcome.SUCCESS
-            }
 
-            Then("Report is generated") {
+                // And: "Report is generated"
                 project.buildDir.resolve("reports/ktlint/ktlintMainSourceSetCheck/ktlintMainSourceSetCheck.html")
                     .shouldExist()
             }

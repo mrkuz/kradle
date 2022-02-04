@@ -23,9 +23,8 @@ class JunitJupiterBlueprintTests : BehaviorSpec({
 
             Then("junit-jupiter-api is available") {
                 project.shouldHaveDependency("testImplementation", "org.junit.jupiter:junit-jupiter-api")
-            }
 
-            Then("junit-jupiter-engine is available") {
+                // And: "junit-jupiter-engine is available"
                 project.shouldHaveDependency("testRuntimeOnly", "org.junit.jupiter:junit-jupiter-engine")
             }
         }
@@ -49,9 +48,8 @@ class JunitJupiterBlueprintTests : BehaviorSpec({
 
             Then("Specified junit-jupiter-api version is used") {
                 project.shouldHaveDependency("testImplementation", "org.junit.jupiter:junit-jupiter-api:5.8.1")
-            }
 
-            Then("Specified junit-jupiter-engine is used") {
+                // And: "Specified junit-jupiter-engine is used"
                 project.shouldHaveDependency("testRuntimeOnly", "org.junit.jupiter:junit-jupiter-engine:5.8.1")
             }
         }

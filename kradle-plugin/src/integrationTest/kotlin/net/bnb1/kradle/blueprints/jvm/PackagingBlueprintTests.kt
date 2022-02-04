@@ -30,9 +30,8 @@ class PackagingBlueprintTests : BehaviorSpec({
 
             Then("Succeed") {
                 result.task(":package")!!.outcome shouldBe TaskOutcome.SUCCESS
-            }
 
-            Then("jar is called") {
+                // And: "jar is called"
                 result.task(":jar")!!.outcome shouldBe TaskOutcome.SUCCESS
             }
         }

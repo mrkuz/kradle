@@ -41,15 +41,11 @@ class ShadowBlueprintTests : BehaviorSpec({
             Then("Jar file is created") {
                 val jarFile = project.buildDir.resolve("libs/app-1.0.0-uber.jar")
                 jarFile.shouldExist()
-            }
 
-            Then("Jar file is executable") {
-                val jarFile = project.buildDir.resolve("libs/app-1.0.0-uber.jar")
+                // And: "Jar file is executable"
                 "java -jar ${jarFile.absolutePath}".execute() shouldContain "Hello World"
-            }
 
-            Then("Jar file size is not minified") {
-                val jarFile = project.buildDir.resolve("libs/app-1.0.0-uber.jar")
+                // And: "Jar file size is not minified"
                 jarFile.length() shouldBeGreaterThan MINIFIED_THRESHOLD
             }
         }
@@ -79,15 +75,11 @@ class ShadowBlueprintTests : BehaviorSpec({
             Then("Jar file is created") {
                 val jarFile = project.buildDir.resolve("libs/app-1.0.0-uber.jar")
                 jarFile.shouldExist()
-            }
 
-            Then("Jar file is executable") {
-                val jarFile = project.buildDir.resolve("libs/app-1.0.0-uber.jar")
+                // And: "Jar file is executable"
                 "java -jar ${jarFile.absolutePath}".execute() shouldContain "Hello World"
-            }
 
-            Then("Jar file size is minified") {
-                val jarFile = project.buildDir.resolve("libs/app-1.0.0-uber.jar")
+                // And: "Jar file size is minified"
                 jarFile.length() shouldBeLessThan MINIFIED_THRESHOLD
             }
         }
