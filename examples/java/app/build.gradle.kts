@@ -51,7 +51,7 @@ kradle {
                 */
                 spotBugs {
                     // version("4.5.3")
-                    useFbContrib(/* "7.4.7"* /)
+                    useFbContrib(/* "7.4.7" */)
                     useFindSecBugs(/* "1.11.0" */)
                 }
             }

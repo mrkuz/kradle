@@ -51,7 +51,7 @@ kradle {
                 */
                 spotBugs {
                     // version("${versions.spotbugs}")
-                    useFbContrib(/* "${versions.fbContrib}"* /)
+                    useFbContrib(/* "${versions.fbContrib}" */)
                     useFindSecBugs(/* "${versions.findSecBugs}" */)
                 }
             }
