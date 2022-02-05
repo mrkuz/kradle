@@ -42,6 +42,7 @@ class KotlinJvmApplicationPreset(lock: AtomicBoolean) : Preset<KradleExtensionDs
                     withIntegrationTests()
                     withFunctionalTests()
                 }
+                codeCoverage.enable()
 
                 benchmark.enable()
                 packaging.enable()

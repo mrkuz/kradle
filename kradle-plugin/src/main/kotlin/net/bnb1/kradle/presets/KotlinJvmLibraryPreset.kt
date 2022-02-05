@@ -41,6 +41,7 @@ class KotlinJvmLibraryPreset(lock: AtomicBoolean) : Preset<KradleExtensionDsl>(l
                     withIntegrationTests()
                     withFunctionalTests()
                 }
+                codeCoverage.enable()
 
                 benchmark.enable()
                 packaging.enable()

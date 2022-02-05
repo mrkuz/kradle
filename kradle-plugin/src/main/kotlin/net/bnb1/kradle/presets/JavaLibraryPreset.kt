@@ -36,6 +36,7 @@ class JavaLibraryPreset(lock: AtomicBoolean) : Preset<KradleExtensionDsl>(lock) 
                     withIntegrationTests()
                     withFunctionalTests()
                 }
+                codeCoverage.enable()
 
                 benchmark.enable()
                 packaging.enable()
