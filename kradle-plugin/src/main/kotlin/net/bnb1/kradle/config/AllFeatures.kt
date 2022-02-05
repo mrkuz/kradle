@@ -27,4 +27,14 @@ class AllFeatures(registry: Registry) {
     val packaging = registry("packaging") { Feature(it) }
     val docker = registry("docker") { Feature(it) }
     val documentation = registry("documentation") { Feature(it) }
+
+    // Sub-features
+    val checkstyle = registry("checkstyle") { Feature(it) }
+    val pmd = registry("pmd") { Feature(it) }
+    val spotBugs = registry("spotBugs") { Feature(it) }
+    val ktlint = registry("ktlint") { Feature(it) }
+    val detekt = registry("detekt") { Feature(it) }
+    val jacoco = registry("jacoco") { Feature(it) }
+    val kover = registry("kover") { Feature(it) }
+    val junitJupiter = registry("junitJupiter") { Feature(it) }
 }

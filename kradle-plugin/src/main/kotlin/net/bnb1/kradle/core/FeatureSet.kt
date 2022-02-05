@@ -54,12 +54,12 @@ class FeatureSet(val name: String) {
         if (!visited.add(feature)) {
             throw IllegalStateException("Dependency loop detected")
         }
+        tracer.trace("${feature.name} (F)")
         tracer.branch {
             feature.shouldActivateAfter().asSequence()
                 .filter { it.isEnabled }
                 .filter { it.isInactive }
                 .forEach { activateOrdered(tracer, visited, it) }
-            tracer.trace("${feature.name} (F)")
             feature.activate(tracer)
         }
     }

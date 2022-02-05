@@ -35,7 +35,6 @@ class KradleCompatLibPlugin : Plugin<Project> {
             tracer,
             context.featureSets,
             context.features,
-            context.blueprints,
             context.properties
         )
         KradleCompat(

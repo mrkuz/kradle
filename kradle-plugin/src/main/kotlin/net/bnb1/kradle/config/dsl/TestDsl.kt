@@ -1,18 +1,18 @@
 package net.bnb1.kradle.config.dsl
 
 import net.bnb1.kradle.Catalog
-import net.bnb1.kradle.config.AllBlueprints
+import net.bnb1.kradle.config.AllFeatures
 import net.bnb1.kradle.config.AllProperties
-import net.bnb1.kradle.core.dsl.BlueprintDsl
+import net.bnb1.kradle.core.dsl.FeatureDsl
 
-class TestDsl(blueprints: AllBlueprints, properties: AllProperties) {
+class TestDsl(features: AllFeatures, properties: AllProperties) {
 
-    val junitJupiter = BlueprintDsl(blueprints.junitJupiter, properties.junitJupiter)
+    val junitJupiter = FeatureDsl(features.junitJupiter, properties.junitJupiter)
     fun withJunitJupiter(version: String = Catalog.Versions.junit) = junitJupiter.enable {
         version(version)
     }
 
-    val jacoco = BlueprintDsl(blueprints.jacoco, properties.jacoco)
+    val jacoco = FeatureDsl(features.jacoco, properties.jacoco)
     fun withJacoco(version: String = Catalog.Versions.jacoco) = jacoco.enable {
         version(version)
     }

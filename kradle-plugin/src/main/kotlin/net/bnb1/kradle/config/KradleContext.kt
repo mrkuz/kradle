@@ -6,6 +6,7 @@ import net.bnb1.kradle.dsl.Properties
 import net.bnb1.kradle.support.Registry
 import org.gradle.api.Project
 
+@Suppress("LongMethod", "ComplexMethod")
 class KradleContext(project: Project) {
 
     private val registry = Registry()
@@ -20,8 +21,9 @@ class KradleContext(project: Project) {
     fun featuresSetsAsList() = registry.withType<FeatureSet>()
     fun propertiesAsList() = registry.withType<Properties>()
 
-    @Suppress("LongMethod", "ComplexMethod")
     fun initialize() {
+        initializeSubFeatures()
+
         features.bootstrap.also { me ->
             me belongsTo featureSets.general
             me += blueprints.bootstrap.also {
@@ -110,14 +112,6 @@ class KradleContext(project: Project) {
             me += setOf(
                 blueprints.lint.also {
                     it.taskName = features.lint.defaultTaskName
-                },
-                blueprints.ktlint.also {
-                    it dependsOn features.kotlin
-                    it.extendsTask = features.lint.defaultTaskName
-                },
-                blueprints.checkstyle.also {
-                    it dependsOn features.java
-                    it.extendsTask = features.lint.defaultTaskName
                 }
             )
         }
@@ -128,18 +122,6 @@ class KradleContext(project: Project) {
             me += setOf(
                 blueprints.codeAnalysis.also {
                     it.taskName = features.codeAnalysis.defaultTaskName
-                },
-                blueprints.detekt.also {
-                    it dependsOn features.kotlin
-                    it.extendsTask = features.codeAnalysis.defaultTaskName
-                },
-                blueprints.pmd.also {
-                    it dependsOn features.java
-                    it.extendsTask = features.codeAnalysis.defaultTaskName
-                },
-                blueprints.spotBugs.also {
-                    it dependsOn features.java
-                    it.extendsTask = features.codeAnalysis.defaultTaskName
                 }
             )
         }
@@ -152,33 +134,20 @@ class KradleContext(project: Project) {
             me belongsTo featureSets.jvm
             me += setOf(
                 blueprints.test.also {
-                    it.withJunitJupiter = { blueprints.junitJupiter.isEnabled }
-                },
-                blueprints.junitJupiter,
-                blueprints.codeCoverage.also {
-                    it dependsOn features.codeCoverage
-                    it.taskName = features.codeCoverage.defaultTaskName
-                },
-                blueprints.jacoco.also {
-                    it.extendsTask = features.codeCoverage.defaultTaskName
-                    it.disable()
+                    it.withJunitJupiter = { features.junitJupiter.isEnabled }
                 },
                 blueprints.kotlinTest.also {
                     it dependsOn features.kotlin
-                    it.withJunitJupiter = { blueprints.junitJupiter.isEnabled }
+                    it.withJunitJupiter = { features.junitJupiter.isEnabled }
                 }
             )
         }
         features.codeCoverage.also { me ->
             me belongsTo featureSets.jvm
             me activatesAfter features.test
-            me += setOf(
-                blueprints.codeCoverage,
-                blueprints.jacoco,
-                blueprints.kover.also {
-                    it.extendsTask = features.codeCoverage.defaultTaskName
-                }
-            )
+            me += blueprints.codeCoverage.also {
+                it.taskName = features.codeCoverage.defaultTaskName
+            }
         }
         features.benchmark.also { me ->
             me belongsTo featureSets.jvm
@@ -204,6 +173,90 @@ class KradleContext(project: Project) {
         features.documentation.also { me ->
             me belongsTo featureSets.jvm
             me += blueprints.dokka
+        }
+    }
+
+    private fun initializeSubFeatures() {
+        features.checkstyle.also { me ->
+            me.enable()
+            me belongsTo featureSets.jvm
+            me activatesAfter features.lint
+            me += blueprints.checkstyle.also {
+                it dependsOn features.lint
+                it dependsOn features.java
+                it.extendsTask = features.lint.defaultTaskName
+            }
+        }
+        features.pmd.also { me ->
+            me.enable()
+            me belongsTo featureSets.jvm
+            me activatesAfter features.codeAnalysis
+            me += blueprints.pmd.also {
+                it dependsOn features.codeAnalysis
+                it dependsOn features.java
+                it.extendsTask = features.codeAnalysis.defaultTaskName
+            }
+        }
+        features.spotBugs.also { me ->
+            me.enable()
+            me belongsTo featureSets.jvm
+            me activatesAfter features.codeAnalysis
+            me += blueprints.spotBugs.also {
+                it dependsOn features.codeAnalysis
+                it dependsOn features.java
+                it.extendsTask = features.codeAnalysis.defaultTaskName
+            }
+        }
+        features.ktlint.also { me ->
+            me.enable()
+            me belongsTo featureSets.jvm
+            me activatesAfter features.lint
+            me += blueprints.ktlint.also {
+                it dependsOn features.lint
+                it dependsOn features.kotlin
+                it.extendsTask = features.lint.defaultTaskName
+            }
+        }
+        features.detekt.also { me ->
+            me.enable()
+            me belongsTo featureSets.jvm
+            me activatesAfter features.codeAnalysis
+            me += blueprints.detekt.also {
+                it dependsOn features.codeAnalysis
+                it dependsOn features.kotlin
+                it.extendsTask = features.codeAnalysis.defaultTaskName
+            }
+        }
+        features.jacoco.also { me ->
+            me.disable()
+            me belongsTo featureSets.jvm
+            me activatesAfter features.test
+            me += setOf(
+                // Compatibility
+                blueprints.codeCoverage,
+                blueprints.jacoco.also {
+                    // Compatibility: no dependsOn
+                    it.extendsTask = features.codeCoverage.defaultTaskName
+                }
+            )
+        }
+        features.kover.also { me ->
+            me.enable()
+            me belongsTo featureSets.jvm
+            me activatesAfter features.test
+            me activatesAfter features.codeCoverage
+            me += blueprints.kover.also {
+                it dependsOn features.codeCoverage
+                it.extendsTask = features.codeCoverage.defaultTaskName
+            }
+        }
+        features.junitJupiter.also { me ->
+            me.enable()
+            me belongsTo featureSets.jvm
+            me activatesAfter features.test
+            me += blueprints.junitJupiter.also {
+                it dependsOn features.test
+            }
         }
     }
 }
