@@ -33,7 +33,7 @@ class DokkaBlueprintTests : BehaviorSpec({
 
             Then("Succeed") {
                 result.task(":generateDocumentation")!!.outcome shouldBe TaskOutcome.SUCCESS
-            
+
                 // And: "Documentation should exist"
                 project.buildDir.resolve("docs/index.html").shouldExist()
             }
