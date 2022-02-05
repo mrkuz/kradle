@@ -48,6 +48,7 @@ Most of the functionality is provided by other well-known plugins. `kradle` take
     - [`generateBuildProperties`](#task-generate-build-properties)
     - [`generateCheckstyleConfig`](#task-generate-checkstyle-config)
     - [`generateDetektConfig`](#task-generate-detekt-config)
+    - [`generateLombokConfig`](#task-generate-lombok-config)
 
 - [Features](#features)
     - [Bootstrapping](#feature-bootstrap)
@@ -182,6 +183,7 @@ Which tasks are available, depends on the [features](#features) enabled.
 | <a id="task-generate-build-properties"></a>[generateBuildProperties](#feature-build-properties) | Generates _build.properties_ | - | - |
 | <a id="task-generate-detekt-config"></a>[generateDetektConfig](#feature-code-analysis) | Generates _detekt-config.yml_ | - | - |
 | <a id="task-generate-checkstyle-config"></a>[generateCheckstyleConfig](#feature-code-analysis) | Generates _checkstyle.xml_ | - | - |
+| <a id="task-generate-lombok-config"></a>[generateLombokConfig](#feature-java) | Generates _lombok.config_ | - | - |
 | kradleDump | Dumps kradle diagnostic information | - | - |
 
 <a id="features"></a>
@@ -211,7 +213,9 @@ If the feature has options, `enable` takes a configuration code block as argumen
 kradle {
     jvm {
         benchmark.enable {
-            jmhVersion("1.34")
+            jmh {
+                version("1.34")
+            }
         }
     }
 }
@@ -367,7 +371,7 @@ kradle {
         kotlin {
             // useCoroutines("1.6.0")
             lint {
-                ktlint {
+                ktlint.enable {
                     version("0.43.2")
                     rules {
                         // disable("…")
@@ -376,7 +380,7 @@ kradle {
                 // ktlint.disable()
             }
             codeAnalysis {
-                detekt {
+                detekt.enable {
                     version("1.19.0")
                     configFile("detekt-config.yml")
                 }
@@ -423,15 +427,16 @@ kradle {
     jvm {
         java {
             previewFeatures(false)
+            // withLombok("1.18.22")
             lint {
-                checkstyle {
+                checkstyle.enable {
                     version("9.2.1")
                     configFile("checkstyle.xml")
                 }
                 // checkstyle.disable()
             }
             codeAnalysis {
-                pmd {
+                pmd.enable {
                     version("6.41.0")
                     ruleSets {
                         bestPractices(false)
@@ -445,7 +450,7 @@ kradle {
                     }
                 }
                 // pmd.disable()
-                spotBugs {
+                spotBugs.enable {
                     version("4.5.3")
                     // useFbContrib(7.4.7)
                     // useFindSecBugs(1.11.0)
@@ -456,8 +461,8 @@ kradle {
     }
 }
 ```
-
 - `previewFeatures`: Enables preview features
+- `withLombok`: Enables [Project Lombok](https://projectlombok.org/). Adds the task `generateLombokConfig`, which generates _lombok.config_ with sane defaults
 - `checkstyle.*`: [checkstyle](https://checkstyle.sourceforge.io/) configuration (only relevant if [linting](#feature-lint) is enabled)
 - `checkstyle.version`: checkstyle version used
 - `checkstyle.configFile`: checkstyle configuration file used
@@ -466,7 +471,7 @@ kradle {
 - `pmd.version`: PMD version used
 - `pmd.ruleSets.*`: Enables/disables PMD rule sets
 - `pmd.disable`: Disables PMD
-- `spotBugs.version`: [SpotBugs](https://spotbugs.github.io/) configuration (only relevant if [code analysis](#code-analysis) is enabled)
+- `spotBugs.*`: [SpotBugs](https://spotbugs.github.io/) configuration (only relevant if [code analysis](#code-analysis) is enabled)
 - `spotBugs.version`: SpotBugs version used
 - `spotBugs.useFbContrib`: Enables [fb-contrib](http://fb-contrib.sourceforge.net/) plugin
 - `spotBugs.useFbContrib`: Enables [Find Security Bugs](https://find-sec-bugs.github.io/) plugin
@@ -559,7 +564,7 @@ kradle {
 }
 ```
 
-Adds the task `lint`, which runs:
+Adds the task `lint`, which runs enabled linters:
 
 - [ktlint](https://ktlint.github.io/) on Kotlin source files. It uses all standard and experimental rules per default.
 
@@ -594,7 +599,7 @@ kradle {
 }
 ```
 
-Adds the task `analyzeCode`, which runs:
+Adds the task `analyzeCode`, which runs enabled code analysis tools:
 
 - [detekt](https://detekt.github.io/detekt/) static code analysis for Kotlin
 
@@ -636,7 +641,7 @@ kradle {
 Adds the task `dev`, which watches the directories _src/main/kotlin_, _src/main/java_ and _src/main/resource_. If changes are detected, the
 application is stopped. Should be used with continuous build flag `-t` to archive automatic rebuilds and restarts.
 
-When launching the application with `dev`, the environment variable `DEV_MODE=true` is set.
+When launching the application with `dev`, the environment variable `KRADLE_DEV_MODE=true` is set.
 
 To speed up application start, the JVM flag `-XX:TieredStopAtLevel=1` is used.
 
@@ -655,7 +660,7 @@ kradle {
 
 Test file names can end with `Test`, `Tests`, `Spec` or `IT`.
 
-When running tests, the environment variables `PROJECT_DIR` and `PROJECT_ROOT_DIR` are set.
+When running tests, the environment variables `KRADLE_PROJECT_DIR` and `KRADLE_PROJECT_ROOT_DIR` are set.
 
 Adds the task `runTests`, which runs all tests (unit, integration, functional, custom).
 
@@ -668,15 +673,16 @@ Plugins used: [Java Plugin](https://docs.gradle.org/current/userguide/java_plugi
 kradle {
     jvm {
         test {
-            prettyPrint(false)
-            standardStreams(false)
-            integrationTests(false)
-            functionalTests(false)
-            /*
-            customTests("<NAME>")
             junitJupiter.enable {
                 version("5.8.2")
             }
+            // junitJupiter.disable()
+            prettyPrint(false)
+            showStandardStreams(false)
+            withIntegrationTests(false)
+            withFunctionalTests(false)
+            /*
+            withCustomTests("<NAME>")
             useArchUnit("0.22.0")
             useTestcontainers("1.16.3")
             */
@@ -685,13 +691,14 @@ kradle {
 }
 ```
 
+- `junitJupiter.*`: [JUnit Jupiter](https://junit.org/junit5/) configuration
+- `junitJupiter.version`: JUnit Jupiter version used
+- `junitJupiter.disable`: Disables JUnit Jupiter](https://junit.org/junit5/) for running tests
 - `prettyPrint`: Prettifies test output with [Gradle Test Logger Plugin](https://plugins.gradle.org/plugin/com.adarshr.test-logger)
-- `standardStreams`: Shows stdout and stderr in test output
-- `integrationTests`: Adds task `integrationTest`, which runs tests under _src/integrationTest_. The task is executed when running `check`
-- `functionalTests`: Adds task `functionalTest`, which runs tests under _src/functionalTest_. The task is executed when running `check`
-- `customTests`: Adds task `<NAME>Test`, which runs tests under _src/&lt;NAME&gt;_. The task is executed when running `check`. Can be called multiple times
-- `junitJupiter.enable`: Sets up [JUnit Jupiter](https://junit.org/junit5/) for running tests
-- `junitJupiter.version`: [JUnit Jupiter](https://junit.org/junit5/) version used
+- `showStandardStreams`: Shows stdout and stderr in test output
+- `withIntegrationTests`: Adds task `integrationTest`, which runs tests under _src/integrationTest_. The task is executed when running `check`
+- `withFunctionalTests`: Adds task `functionalTest`, which runs tests under _src/functionalTest_. The task is executed when running `check`
+- `withCustomTests`: Adds task `<NAME>Test`, which runs tests under _src/&lt;NAME&gt;_. The task is executed when running `check`. Can be called multiple times
 - `useArchUnit`: Adds [ArchUnit](https://www.archunit.org/) test dependencies
 - `useTestcontainers`: Adds [Testcontainers](https://www.testcontainers.org/) test dependencies
 
@@ -706,7 +713,7 @@ kradle {
 }
 ```
 
-Adds the task `analyzeTestCoverage`, which runs test coverage analysis and creates HTML reports.
+Adds the task `analyzeTestCoverage`, which runs enabled test coverage tools and creates HTML reports.
 
 - [Kover](https://github.com/Kotlin/kotlinx-kover), report can be found in _build/reports/kover/_
 
@@ -732,6 +739,7 @@ kradle {
                 version("0.8.7")
                 excludes("…")
             }
+            */
         }
     }
 }
@@ -740,8 +748,9 @@ kradle {
 - `kover.*`: [Kover](https://github.com/Kotlin/kotlinx-kover) configuration
 - `kover.excludes`: List of test tasks to exclude from analysis
 - `kover.disable`: Disables Kover
-- `jacoco.enable`: Sets up [JaCoCo](https://www.jacoco.org/jacoco/) for code coverage analysis
-- `jacoco.version`: [JaCoCo](https://www.jacoco.org/jacoco/) version used.
+- `jacoco.*`: [JaCoCo](https://www.jacoco.org/jacoco/) configuration
+- `jacoco.enable`: Sets up JaCoCo for code coverage analysis
+- `jacoco.version`: JaCoCo version used
 - `jacoco.excludes`: List of test tasks to exclude from analysis
 
 <a id="feature-benchmark"></a>
@@ -765,13 +774,15 @@ Plugins used: [kotlinx.benchmark Plugin](https://plugins.gradle.org/plugin/org.j
 kradle {
     jvm {
         benchmark {
-            jmhVersion("1.34")
+            jmh {
+                version("1.34")
+            }
         }
     }
 }
 ```
 
-- `jmhVersion`: [JMH](https://github.com/openjdk/jmh) version used
+- `jmh.version`: [JMH](https://github.com/openjdk/jmh) version used
 
 <a id="feature-packaging"></a>
 ### Packaging
@@ -801,14 +812,12 @@ kradle {
             uberJar {
                 minimize(false)
             }
-            // uberJar.disable()
         }
     }
 }
 ```
 
 - `minimize`: Minimizes Uber-Jar, only required classes are added
-- `disable`: Disables `uberJar` task
 
 <a id="feature-docker"></a>
 ### Docker
@@ -836,10 +845,10 @@ kradle {
     jvm {
         docker {
             baseImage("bellsoft/liberica-openjdk-alpine:17")
-            startupScript(false)
-            // withJvmKill(1.16.0")
             // ports(…)
             // jvmOpts("…")
+            // withJvmKill(1.16.0")
+            withStartupScript(false)
         }
     }
 }
@@ -849,7 +858,7 @@ kradle {
 - `ports`: List of exposed ports
 - `jvmOpts`: Options passed to the JVM
 - `withJvmKill`: Adds [jvmkill](https://github.com/airlift/jvmkill) to the image, which terminates the JVM if it is unable to allocate memory
-- `startupScript`: Uses a script as entrypoint for the container. Either you provide your own script at _src/main/extra/app.sh_ or `kradle` will create one
+- `withStartupScript`: Uses a script as entrypoint for the container. Either you provide your own script at _src/main/extra/app.sh_ or `kradle` will create one
 
 <a id="feature-documentation"></a>
 ### Documentation
@@ -872,9 +881,9 @@ Plugins used: [Dokka Plugin](https://plugins.gradle.org/plugin/org.jetbrains.dok
 <a id="presets"></a>
 ## Presets
 
-Presets preconfigure `kradle` for specific use cases.
+Presets preconfigure `kradle` for specific use cases. The options set by the preset can be overridden.
 
-Configuration can be overriden. Example: You create a new library, but don't want _build.properties_ to be generated:
+Example:
 
 ```kotlin
 kradle {
@@ -882,18 +891,6 @@ kradle {
         jvm {
             buildProperties.disable()
         }
-    }
-}
-```
-
-The configuration must be placed inside the preset block. Following will **NOT** work:
-
-```kotlin
-kradle {
-    kotlinJvmLibrary {
-    }
-    jvm {
-        buildProperties.disable()
     }
 }
 ```
@@ -951,9 +948,8 @@ kradle {
 
         test {
             prettyPrint(true)
-            integrationTests(true)
-            functionalTests(true)
-            junitJupiter(true)
+            withIntegrationTests()
+            withFunctionalTests()
         }
         codeCoverage.enable()
         benchmark.enable()
@@ -1009,9 +1005,8 @@ kradle {
 
         test {
             prettyPrint(true)
-            integrationTests(true)
-            functionalTests(true)
-            junitJupiter(true)
+            withIntegrationTests()
+            withFunctionalTests()
         }
         codeCoverage.enable()
         benchmark.enable()
@@ -1049,6 +1044,7 @@ kradle {
 
     jvm {
         java {
+            withLombok()
             codeAnalysis {
                 spotBugs {
                     useFbContrib()
@@ -1067,9 +1063,8 @@ kradle {
 
         test {
             prettyPrint(true)
-            integrationTests(true)
-            functionalTests(true)
-            junitJupiter(true)
+            withIntegrationTests()
+            withFunctionalTests()
         }
         codeCoverage.enable()
         benchmark.enable()
@@ -1104,6 +1099,7 @@ kradle {
 
     jvm {
         java {
+            withLombok()
             codeAnalysis {
                 spotBugs {
                     useFbContrib()
@@ -1119,9 +1115,8 @@ kradle {
 
         test {
             prettyPrint(true)
-            integrationTests(true)
-            functionalTests(true)
-            junitJupiter(true)
+            withIntegrationTests()
+            withFunctionalTests()
         }
         codeCoverage.enable()
         benchmark.enable()
@@ -1134,7 +1129,7 @@ kradle {
 <a id="configuration-reference"></a>
 ## Configuration DSL reference
 
-This example configuration shows all available options.
+This example shows all features enabled with their default configuration.
 
 ```kotlin
 kradle {
@@ -1149,36 +1144,37 @@ kradle {
     jvm {
         targetJvm("17")
         kotlin {
-            useCoroutines("1.6.0")
+            // useCoroutines("1.6.0")
             lint {
-                ktlint {
+                ktlint.enable {
                     version("0.43.2")
                     rules {
-                        disable("…")
+                        // disable("…")
                     }
                 }
             }
             codeAnalysis {
-                detekt {
+                detekt.enable {
                     version("1.19.0")
                     configFile("detekt-config.yml")
                 }
             }
             test {
-                useKotest("5.0.3")
-                useMockk("1.12.2")
+                // useKotest("5.0.3")
+                // useMockk("1.12.2")
             }
         }
         java {
             previewFeatures(false)
+            // withLombok("1.18.22")
             lint {
-                checkstyle {
+                checkstyle.enable {
                     version("9.2.1")
                     configFile("checkstyle.xml")
                 }
             }
             codeAnalysis {
-                pmd {
+                pmd.enable {
                     version("6.41.0")
                     ruleSets {
                         bestPractices(false)
@@ -1191,7 +1187,7 @@ kradle {
                         security(true)
                     }
                 }
-                spotBugs {
+                spotBugs.enable {
                     version("4.5.3")
                     useFbContrib("7.4.7")
                     useFindSecBugs("1.11.0")
@@ -1199,7 +1195,7 @@ kradle {
             }
         }
         application {
-            mainClass("…")
+            // mainClass("…")
         }
         library.enable() // Conflicts with application
 
@@ -1214,30 +1210,32 @@ kradle {
         developmentMode.enable()
 
         test {
-            prettyPrint(false)
-            standardStreams(false)
-            integrationTests(false)
-            functionalTests(false)
-            customTests("…")
-            junitJupiter {
+            junitJupiter.enable {
                 version("5.8.2")
             }
-            useArchUnit("0.22.0")
-            useTestcontainers("1.16.3")
+            prettyPrint(false)
+            showStandardStreams(false)
+            withIntegrationTests(false)
+            withFunctionalTests(false)
+            // withCustomTests("…")
+            // useArchUnit("0.22.0")
+            // useTestcontainers("1.16.3")
         }
 
         codeCoverage {
-            kover {
-                excludes("…")
+            kover.enable {
+                // excludes("…")
             }
-            jacoco {
+            jacoco.configureOnly {
                 version("0.8.7")
-                excludes("…")
+                // excludes("…")
             }
         }
 
         benchmark {
-            jmhVersion("1.34")
+            jmh {
+                version("1.34")
+            }
         }
 
         packaging {
@@ -1248,10 +1246,10 @@ kradle {
 
         docker {
             baseImage("bellsoft/liberica-openjdk-alpine:17")
-            withJvmKill("1.16.0")
-            startupScript(false)
-            ports(…)
-            jvmOpts("…")
+            // jvmOpts("…")
+            // ports(…)
+            // withJvmKill("1.16.0")
+            withStartupScript(false)
         }
 
         documentation.enable()
@@ -1286,7 +1284,7 @@ Please open a new [issue](https://github.com/mrkuz/kradle/issues) and if possibl
 
 ### Major release
 
-- Configuration DSL can change and violate backwards compatibilty (__Breaking change__ in the [CHANGELOG](CHANGELOG.md)).
+- Configuration DSL can change and violate backwards compatibility (__Breaking change__ in the [CHANGELOG](CHANGELOG.md)).
 - Otherwise same as minor release.
 
 <a id="license"></a>

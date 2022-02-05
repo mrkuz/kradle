@@ -2,7 +2,7 @@
 
 ## Changelog
 
-### Version main-SNAPSHOT (2022-02-04)
+### Version main-SNAPSHOT (2022-02-05)
 
 #### Bugfixes
 
@@ -15,6 +15,7 @@
 
 - New project properties: `mainClass` and `gitBranch`
 - New feature `codeCoverage` and task `analyzeTestCoverage`
+- Add support for [Project Lombok](https://projectlombok.org/)
 - Add support for [Kover](https://github.com/Kotlin/kotlinx-kover)
 - `jacoco`: New option `excludes`
 - `jacoco`: Add configuration to `codeCoverage`
@@ -45,9 +46,10 @@
     }
     ```
 - `test`: New task `runTests`
-- `test`: New option `standardStreams`
-- `test`: Set environment variables `PROJECT_DIR` and `PROJECT_ROOT_DIR`
+- `test`: New option `showStandardStreams`
+- `test`: Set environment variables `KRADLE_PROJECT_DIR` and `KRADLE_PROJECT_ROOT_DIR`
 - `test`: New options `useArchUnit` and `useTestcontainers`
+- `test`: Add `test.withCustomTests` as alternative to `test.customTests`
 - `test`: Alternative configuration for JUnit Jupiter
 
     Before
@@ -80,12 +82,41 @@
     }
     ```
 
+- `docker`: Add `test.withStartupScript` as alternative to `test.startupScript`
+- `benchmark`: Alternative configuration for JMH version
+
+    Before
+
+    ```kotlin
+    kradle {
+        benchmark {
+            jmhVersion("1.34")
+        }
+    }
+    ```
+
+    After
+
+    ```kotlin
+    kradle {
+        benchmark {
+            jmh {
+                version("1.34")
+            }
+        }
+    }
+    ```
+
 #### Changes
 
-- Add possibility to disable `uberJar`, linters and code analysis tools
-- Use Kover for test coverage instead of JaCoCo in all presets
-- `jacoco`: No longer creates report after running tests
+- Add possibility to disable linters and code analysis tools
+- Use Kover as default for test coverage instead of JaCoCo
+- Enable Lombok in all Java presets
+- `jacoco`: Use one report task which handles all test source sets instead of one task per set
+- `jacoco`: No longer create report after running tests
 - `test`: Remove access to unit test classes from integration and functional tests
+- `test`: Enable JUnit Jupiter per default
+- `dev`: Rename environment variable DEV_MODE to KRADLE_DEV_MODE
 
 ### Version 2.1.0 (2022-01-06)
 
@@ -244,7 +275,7 @@
 - The tasks `showDependencyUpdates`, `analyzeCode`, `analyzeDependencies`, `generateDocumentation`,  `uberJar` and `buildImage` are now independent tasks, not aliases
 - Add `kotlin-reflect` to project dependencies
 - Enable strict JSR-305 processing
-- `DEV_MODE=true` is no longer set when lauching the application with `run`
+- `DEV_MODE=true` is no longer set when launching the application with `run`
 - `uberJar`: JAR is no longer minimized
 - `generateBuildProperties`: Content of _build.properties_ changed
 

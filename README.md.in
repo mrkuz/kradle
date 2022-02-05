@@ -857,8 +857,8 @@ kradle {
 - `baseImage`: Base image used
 - `ports`: List of exposed ports
 - `jvmOpts`: Options passed to the JVM
-- `withStartupScript`: Uses a script as entrypoint for the container. Either you provide your own script at _src/main/extra/app.sh_ or `kradle` will create one
 - `withJvmKill`: Adds [jvmkill](https://github.com/airlift/jvmkill) to the image, which terminates the JVM if it is unable to allocate memory
+- `withStartupScript`: Uses a script as entrypoint for the container. Either you provide your own script at _src/main/extra/app.sh_ or `kradle` will create one
 
 <a id="feature-documentation"></a>
 ### Documentation

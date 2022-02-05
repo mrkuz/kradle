@@ -26,7 +26,7 @@ kradle {
         kotlin {
             useCoroutines(/* "1.6.0" */)
             lint {
-                ktlint {
+                ktlint.enable {
                     // version("0.43.2")
                     rules {
                         disable("no-wildcard-imports")
@@ -35,7 +35,7 @@ kradle {
             }
             /*
             codeAnalysis {
-                detekt {
+                detekt.enable {
                     version("1.19.0")
                     configFile("detekt-config.yml")
                 }
@@ -58,24 +58,26 @@ kradle {
         developmentMode.enable()
 
         test {
-            prettyPrint(true)
-            // standardStreams(false)
-            integrationTests(true)
-            functionalTests(true)
-            // customTests("...")
-            junitJupiter {
-                // version("5.8.2")
+            /*
+            junitJupiter.enable {
+                version("5.8.2")
             }
+            */
+            prettyPrint(true)
+            // showStandardStreams(false)
+            withIntegrationTests(true)
+            withFunctionalTests(true)
+            // withCustomTests("...")
             // useArchUnit("0.22.0")
             // useTestcontainers("1.16.3")
         }
 
         codeCoverage {
-            kover {
-                // excludes("...")
-            }
             /*
-            jacoco {
+            kover.enable {
+                excludes("...")
+            }
+            jacoco.configureOnly {
                 version("0.8.7")
                 excludes("...")
             }
@@ -83,21 +85,27 @@ kradle {
         }
 
         benchmark {
-            // jmhVersion("1.34")
+            /*
+            jmh {
+                version("1.34")
+            }
+            */
         }
 
         packaging {
+            /*
             uberJar {
-                // minimize(false)
+                minimize(false)
             }
+            */
         }
 
         docker {
             // baseImage("bellsoft/liberica-openjdk-alpine:17")
-            withJvmKill(/* "1.16.0" */)
-            // startupScript(false)
             // ports(...)
             // jvmOpts("...")
+            withJvmKill(/* "1.16.0" */)
+            // withStartupScript(false)
         }
 
         documentation.enable()

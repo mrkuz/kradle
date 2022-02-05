@@ -24,10 +24,11 @@ kradle {
 
         // targetJvm("17")
         java {
+            // previewFeatures(false)
+            withLombok("1.18.22")
             /*
-            previewFeatures(false)
             lint {
-                checkstyle {
+                checkstyle.enable {
                     version("9.2.1")
                     configFile("checkstyle.xml")
                 }
@@ -35,7 +36,7 @@ kradle {
             */
             codeAnalysis {
                 /*
-                pmd {
+                pmd.enable {
                     version("6.41.0")
                     ruleSets {
                         bestPractices(false)
@@ -49,7 +50,7 @@ kradle {
                     }
                 }
                 */
-                spotBugs {
+                spotBugs.enable {
                     // version("4.5.3")
                     useFbContrib(/* "7.4.7" */)
                     useFindSecBugs(/* "1.11.0" */)
@@ -68,24 +69,26 @@ kradle {
         developmentMode.enable()
 
         test {
-            prettyPrint(true)
-            // standardStreams(false)
-            integrationTests(true)
-            functionalTests(true)
-            // customTests("...")
-            junitJupiter {
-                // version("5.8.2")
+            /*
+            junitJupiter.enable {
+                version("5.8.2")
             }
+            */
+            prettyPrint(true)
+            // showStandardStreams(false)
+            withIntegrationTests(true)
+            withFunctionalTests(true)
+            // withCustomTests("...")
             // useArchUnit("0.22.0")
             // useTestcontainers("1.16.3")
         }
 
         codeCoverage {
-            kover {
-                // excludes("...")
-            }
             /*
-            jacoco {
+            kover.enable {
+                excludes("...")
+            }
+            jacoco.configureOnly {
                 version("0.8.7")
                 excludes("...")
             }
@@ -93,21 +96,27 @@ kradle {
         }
 
         benchmark {
-            // jmhVersion("1.34")
+            /*
+            jmh {
+                version("1.34")
+            }
+            */
         }
 
         packaging {
+            /*
             uberJar {
-                // minimize(false)
+                minimize(false)
             }
+            */
         }
 
         docker {
             // baseImage("bellsoft/liberica-openjdk-alpine:17")
+            // jvmOpts("...")
+            // ports(...)
             withJvmKill(/* "1.16.0" */)
             // startupScript(false)
-            // ports(...)
-            // jvmOpts("...")
         }
 
         documentation.enable()
