@@ -24,11 +24,11 @@ kradle {
 
         // targetJvm("${versions.jvm}")
         java {
-            useLombok("${versions.lombok}")
+            // previewFeatures(false)
+            withLombok("${versions.lombok}")
             /*
-            previewFeatures(false)
             lint {
-                checkstyle {
+                checkstyle.enable {
                     version("${versions.checkstyle}")
                     configFile("checkstyle.xml")
                 }
@@ -36,7 +36,7 @@ kradle {
             */
             codeAnalysis {
                 /*
-                pmd {
+                pmd.enable {
                     version("${versions.pmd}")
                     ruleSets {
                         bestPractices(false)
@@ -50,7 +50,7 @@ kradle {
                     }
                 }
                 */
-                spotBugs {
+                spotBugs.enable {
                     // version("${versions.spotbugs}")
                     useFbContrib(/* "${versions.fbContrib}" */)
                     useFindSecBugs(/* "${versions.findSecBugs}" */)
@@ -69,24 +69,26 @@ kradle {
         developmentMode.enable()
 
         test {
-            prettyPrint(true)
-            // standardStreams(false)
-            integrationTests(true)
-            functionalTests(true)
-            // customTests("...")
-            junitJupiter {
-                // version("${versions.junit}")
+            /*
+            junitJupiter.enable {
+                version("${versions.junit}")
             }
+            */
+            prettyPrint(true)
+            // showStandardStreams(false)
+            withIntegrationTests(true)
+            withFunctionalTests(true)
+            // withCustomTests("...")
             // useArchUnit("${versions.archUnit}")
             // useTestcontainers("${versions.testcontainers}")
         }
 
         codeCoverage {
-            kover {
-                // excludes("...")
-            }
             /*
-            jacoco {
+            kover.enable {
+                excludes("...")
+            }
+            jacoco.configureOnly {
                 version("${versions.jacoco}")
                 excludes("...")
             }
@@ -94,21 +96,27 @@ kradle {
         }
 
         benchmark {
-            // jmhVersion("${versions.jmh}")
+            /*
+            jmh {
+                version("${versions.jmh}")
+            }
+            */
         }
 
         packaging {
+            /*
             uberJar {
-                // minimize(false)
+                minimize(false)
             }
+            */
         }
 
         docker {
             // baseImage("bellsoft/liberica-openjdk-alpine:${versions.jvm}")
+            // jvmOpts("...")
+            // ports(...)
             withJvmKill(/* "${versions.jvmKill}" */)
             // startupScript(false)
-            // ports(...)
-            // jvmOpts("...")
         }
 
         documentation.enable()

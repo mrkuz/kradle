@@ -105,7 +105,7 @@ class AllBlueprints(registry: Registry, properties: AllProperties, project: Proj
     }
     val benchmarks = registry {
         BenchmarksBlueprint(project).inject {
-            benchmarkProperties = properties.benchmark
+            jmhProperties = properties.jmh
             javaProperties = properties.java
         }
     }
@@ -117,7 +117,7 @@ class AllBlueprints(registry: Registry, properties: AllProperties, project: Proj
     }
     val shadow = registry {
         ShadowBlueprint(project).inject {
-            uberJarProperties = properties.uberJar
+            shadowProperties = properties.shadow
         }
     }
     val dokka = registry { DokkaBlueprint(project) }

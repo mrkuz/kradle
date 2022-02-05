@@ -17,7 +17,7 @@ class JavaApplicationPreset(lock: AtomicBoolean) : Preset<KradleExtensionDsl>(lo
 
             jvm.configureOnly {
                 java {
-                    useLombok()
+                    withLombok()
                     codeAnalysis {
                         spotBugs {
                             useFbContrib()
@@ -33,12 +33,8 @@ class JavaApplicationPreset(lock: AtomicBoolean) : Preset<KradleExtensionDsl>(lo
 
                 test {
                     prettyPrint(true)
-                    integrationTests()
-                    functionalTests()
-                    junitJupiter()
-                }
-                codeCoverage {
-                    kover()
+                    withIntegrationTests()
+                    withFunctionalTests()
                 }
 
                 benchmark.enable()

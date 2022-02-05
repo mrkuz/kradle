@@ -154,12 +154,11 @@ class KradleContext(project: Project) {
                 blueprints.test.also {
                     it.withJunitJupiter = { blueprints.junitJupiter.isEnabled }
                 },
-                blueprints.junitJupiter.also { it.disable() },
+                blueprints.junitJupiter,
                 blueprints.codeCoverage.also {
                     it dependsOn features.codeCoverage
                     it.taskName = features.codeCoverage.defaultTaskName
                 },
-
                 blueprints.jacoco.also {
                     it.extendsTask = features.codeCoverage.defaultTaskName
                     it.disable()

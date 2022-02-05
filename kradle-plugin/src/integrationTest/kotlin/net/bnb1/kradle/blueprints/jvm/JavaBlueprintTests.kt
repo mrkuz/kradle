@@ -92,7 +92,7 @@ class JavaBlueprintTests : BehaviorSpec({
             """
             jvm {
                 java {
-                   useLombok()
+                   withLombok()
                 }
             }
             """.trimIndent()

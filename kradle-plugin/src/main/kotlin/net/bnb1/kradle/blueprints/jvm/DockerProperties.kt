@@ -10,6 +10,7 @@ class DockerProperties : Properties() {
     val withJvmKill = optional(Catalog.Versions.jvmKill)
 
     val withAppSh = flag()
+    val withStartupScript = withAppSh
     val startupScript = withAppSh
 
     val javaOpts = optional<String>()

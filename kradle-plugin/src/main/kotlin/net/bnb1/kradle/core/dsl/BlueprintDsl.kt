@@ -14,6 +14,10 @@ class BlueprintDsl<T : Any>(private val blueprint: Blueprint, private val target
 
     operator fun invoke(action: T.() -> Unit) = enable(action)
 
+    fun configureOnly(action: T.() -> Unit = {}) {
+        action(target)
+    }
+
     fun enable(action: T.() -> Unit = {}) {
         action(target)
         blueprint.enable()

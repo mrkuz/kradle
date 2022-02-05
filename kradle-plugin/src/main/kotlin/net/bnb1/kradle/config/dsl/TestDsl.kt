@@ -18,15 +18,16 @@ class TestDsl(blueprints: AllBlueprints, properties: AllProperties) {
     }
 
     val prettyPrint = properties.test.prettyPrint
-    val standardStreams = properties.test.standardStreams
+    val showStandardStreams = properties.test.showStandardStreams
 
-    val integrationTests = properties.test.integrationTests
-    val withIntegrationTests = integrationTests
+    val withIntegrationTests = properties.test.withIntegrationTests
+    val integrationTests = withIntegrationTests
 
-    val functionalTests = properties.test.functionalTests
-    val withFunctionalTests = functionalTests
+    val withFunctionalTests = properties.test.withFunctionalTests
+    val functionalTests = withFunctionalTests
 
-    val customTests = properties.test.customTests
+    val withCustomTests = properties.test.withCustomTests
+    val customTests = withCustomTests
 
     val useArchUnit = properties.test.useArchUnit
     val useTestcontainers = properties.test.useTestcontainers

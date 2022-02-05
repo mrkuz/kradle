@@ -39,12 +39,8 @@ class KotlinJvmApplicationPreset(lock: AtomicBoolean) : Preset<KradleExtensionDs
 
                 test {
                     prettyPrint(true)
-                    integrationTests()
-                    functionalTests()
-                    junitJupiter()
-                }
-                codeCoverage {
-                    kover()
+                    withIntegrationTests()
+                    withFunctionalTests()
                 }
 
                 benchmark.enable()

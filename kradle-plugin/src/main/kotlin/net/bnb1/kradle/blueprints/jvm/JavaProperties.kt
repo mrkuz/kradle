@@ -6,5 +6,5 @@ import net.bnb1.kradle.dsl.Properties
 class JavaProperties : Properties() {
 
     val previewFeatures = flag()
-    val useLombok = optional(Catalog.Versions.lombok)
+    val withLombok = optional(Catalog.Versions.lombok)
 }

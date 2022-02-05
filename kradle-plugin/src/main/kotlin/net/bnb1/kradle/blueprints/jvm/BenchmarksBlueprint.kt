@@ -21,7 +21,7 @@ private const val SOURCE_SET_NAME = "benchmark"
 
 class BenchmarksBlueprint(project: Project) : Blueprint(project) {
 
-    lateinit var benchmarkProperties: BenchmarkProperties
+    lateinit var jmhProperties: JmhProperties
     lateinit var javaProperties: JavaProperties
 
     override fun shouldActivate(): Boolean {
@@ -72,7 +72,7 @@ class BenchmarksBlueprint(project: Project) : Blueprint(project) {
             project.sourceSets.getByName(SOURCE_SET_NAME)
         )
 
-        javaBenchmarkTarget.jmhVersion = benchmarkProperties.jmhVersion.get()
+        javaBenchmarkTarget.jmhVersion = jmhProperties.version.get()
         project.afterEvaluate {
             project.processJavaSourceSet(javaBenchmarkTarget)
 

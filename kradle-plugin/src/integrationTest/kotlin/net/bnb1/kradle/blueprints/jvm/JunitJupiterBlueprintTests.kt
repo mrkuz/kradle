@@ -12,9 +12,7 @@ class JunitJupiterBlueprintTests : BehaviorSpec({
             """
             jvm {
                 kotlin.enable()
-                test {
-                    junitJupiter()
-                }
+                test.enable()
             }
             """.trimIndent()
         }

@@ -43,8 +43,8 @@ class KradleCompat(
 
         // Source sets need to be created early
         properties.test.apply {
-            integrationTests(true)
-            functionalTests(true)
+            withIntegrationTests(true)
+            withFunctionalTests(true)
         }
 
         project.apply(AllOpenGradleSubplugin::class.java)
@@ -107,15 +107,20 @@ class KradleCompat(
                 test {
                     prettyPrint(true)
                     if (compatExtension.tests.junitJupiterVersion.isPresent) {
-                        junitJupiter.enable {
+                        junitJupiter {
                             version(compatExtension.tests.junitJupiterVersion.get())
                         }
+                    } else {
+                        junitJupiter.disable()
                     }
                     if (compatExtension.tests.jacocoVersion.isPresent) {
                         jacoco.enable {
                             version(compatExtension.tests.jacocoVersion.get())
                         }
                     }
+                }
+                codeCoverage {
+                    kover.disable()
                 }
                 benchmark {
                     jmhVersion.set(compatExtension.jmhVersion.orNull)

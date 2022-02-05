@@ -38,9 +38,7 @@ class KoverBlueprintTests : BehaviorSpec({
                 test {
                     junitJupiter()
                 }
-                codeCoverage {
-                    kover()
-                }
+                codeCoverage.enable()
             }
             """.trimIndent()
         }
@@ -92,9 +90,7 @@ class KoverBlueprintTests : BehaviorSpec({
                     junitJupiter()
                     integrationTests(true)
                 }
-                codeCoverage {
-                    kover()
-                }
+                codeCoverage.enable()
             }
             """.trimIndent()
         }

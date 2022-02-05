@@ -1,13 +1,13 @@
 package net.bnb1.kradle.config
 
 import net.bnb1.kradle.blueprints.jvm.ApplicationProperties
-import net.bnb1.kradle.blueprints.jvm.BenchmarkProperties
 import net.bnb1.kradle.blueprints.jvm.CheckstyleProperties
 import net.bnb1.kradle.blueprints.jvm.CodeAnalysisProperties
 import net.bnb1.kradle.blueprints.jvm.DetektProperties
 import net.bnb1.kradle.blueprints.jvm.DockerProperties
 import net.bnb1.kradle.blueprints.jvm.JacocoProperties
 import net.bnb1.kradle.blueprints.jvm.JavaProperties
+import net.bnb1.kradle.blueprints.jvm.JmhProperties
 import net.bnb1.kradle.blueprints.jvm.JunitJupiterProperties
 import net.bnb1.kradle.blueprints.jvm.JvmProperties
 import net.bnb1.kradle.blueprints.jvm.KotlinProperties
@@ -42,9 +42,9 @@ class AllProperties(registry: Registry) {
     val junitJupiter = registry { JunitJupiterProperties() }
     val jacoco = registry { JacocoProperties() }
     val kover = registry { KoverProperties() }
-    val benchmark = registry { BenchmarkProperties() }
 
-    val uberJar = registry { ShadowProperties() }
+    val jmh = registry { JmhProperties() }
+    val shadow = registry { ShadowProperties() }
 
     val docker = registry { DockerProperties() }
 }

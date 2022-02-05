@@ -22,10 +22,10 @@ class JvmDsl(features: AllFeatures, blueprints: AllBlueprints, properties: AllPr
     val devMode = developmentMode
     val test = FeatureDsl(features.test, TestDsl(blueprints, properties))
     val codeCoverage = FeatureDsl(features.codeCoverage, CodeCoverageDsl(blueprints, properties))
-    val benchmark = FeatureDsl(features.benchmark, properties.benchmark)
+    val benchmark = FeatureDsl(features.benchmark, BenchmarkDsl(properties))
 
     @SuppressWarnings("VariableNaming")
-    val `package` = FeatureDsl(features.packaging, PackagingDsl(blueprints, properties))
+    val `package` = FeatureDsl(features.packaging, PackagingDsl(properties))
     val packaging = `package`
     val docker = FeatureDsl(features.docker, properties.docker)
     val documentation = FeatureDsl(features.documentation, EmptyProperties)

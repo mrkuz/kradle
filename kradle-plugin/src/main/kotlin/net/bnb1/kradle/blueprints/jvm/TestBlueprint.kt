@@ -41,16 +41,16 @@ class TestBlueprint(project: Project) : Blueprint(project) {
         }
 
         val customTests = mutableListOf<String>()
-        testProperties.customTests.get().forEach {
+        testProperties.withCustomTests.get().forEach {
             customTests.remove(it)
             customTests.add(it)
         }
 
-        if (testProperties.functionalTests.get()) {
+        if (testProperties.withFunctionalTests.get()) {
             customTests.remove("functional")
             customTests.add(0, "functional")
         }
-        if (testProperties.integrationTests.get()) {
+        if (testProperties.withIntegrationTests.get()) {
             customTests.remove("integration")
             customTests.add(0, "integration")
         }
@@ -125,7 +125,7 @@ class TestBlueprint(project: Project) : Blueprint(project) {
 
     override fun doConfigure() {
         var testEvents = setOf(TestLogEvent.SKIPPED, TestLogEvent.PASSED, TestLogEvent.FAILED)
-        if (testProperties.standardStreams.get()) {
+        if (testProperties.showStandardStreams.get()) {
             testEvents += setOf(TestLogEvent.STANDARD_OUT, TestLogEvent.STANDARD_ERROR)
         }
 
@@ -146,7 +146,7 @@ class TestBlueprint(project: Project) : Blueprint(project) {
 
         if (testProperties.prettyPrint.get()) {
             project.extensions.getByType(TestLoggerExtension::class.java).apply {
-                showStandardStreams = testProperties.standardStreams.get()
+                showStandardStreams = testProperties.showStandardStreams.get()
             }
         }
     }

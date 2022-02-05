@@ -7,7 +7,7 @@ import net.bnb1.kradle.dsl.Configurable
 class JavaDsl(blueprints: AllBlueprints, properties: AllProperties) {
 
     val previewFeatures = properties.java.previewFeatures
-    val useLombok = properties.java.useLombok
+    val withLombok = properties.java.withLombok
     val lint = Configurable(JavaLintDsl(blueprints, properties))
     val codeAnalysis = Configurable(JavaCodeAnalysisDsl(blueprints, properties))
 }

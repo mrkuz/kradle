@@ -46,17 +46,17 @@ class JavaBlueprint(project: Project) : Blueprint(project) {
     }
 
     override fun doCreateTasks() {
-        if (javaProperties.useLombok.hasValue) {
+        if (javaProperties.withLombok.hasValue) {
             project.createTask<GenerateLombokConfigTask>("generateLombokConfig", "Generates lombok.config")
             project.tasks.getByName("compileJava").dependsOn("generateLombokConfig")
         }
     }
 
     override fun doAddDependencies() {
-        if (javaProperties.useLombok.hasValue) {
+        if (javaProperties.withLombok.hasValue) {
             project.dependencies {
-                implementation("${Catalog.Dependencies.lombok}:${javaProperties.useLombok.get()}")
-                annotationProcessor("${Catalog.Dependencies.lombok}:${javaProperties.useLombok.get()}")
+                implementation("${Catalog.Dependencies.lombok}:${javaProperties.withLombok.get()}")
+                annotationProcessor("${Catalog.Dependencies.lombok}:${javaProperties.withLombok.get()}")
                 compileOnly("${Catalog.Dependencies.Tools.findBugsAnnotations}:${Catalog.Versions.findBugs}")
             }
         }

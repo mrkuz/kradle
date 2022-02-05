@@ -29,7 +29,7 @@ class JibBlueprint(project: Project) : Blueprint(project) {
             dependsOn(project.configurations.getByName("runtimeClasspath"))
             setJibExtension(createExtension())
             doFirst {
-                if (dockerProperties.withAppSh.get()) {
+                if (dockerProperties.withStartupScript.get()) {
                     createAppSh(project)
                 }
                 if (dockerProperties.withJvmKill.hasValue) {
@@ -55,7 +55,7 @@ class JibBlueprint(project: Project) : Blueprint(project) {
                 ports = dockerProperties.ports.get().map { it.toString() }
 
                 if (dockerProperties.javaOpts.hasValue) {
-                    if (dockerProperties.withAppSh.get()) {
+                    if (dockerProperties.withStartupScript.get()) {
                         environment = mapOf("JAVA_OPTS" to dockerProperties.javaOpts.get())
                     } else {
                         jvmFlags = dockerProperties.javaOpts.get().split(" ")
@@ -64,14 +64,14 @@ class JibBlueprint(project: Project) : Blueprint(project) {
 
                 if (dockerProperties.withJvmKill.hasValue) {
                     val jvmKillFileName = "jvmkill-${dockerProperties.withJvmKill.get()}.so"
-                    if (dockerProperties.withAppSh.get()) {
+                    if (dockerProperties.withStartupScript.get()) {
                         environment = environment + mapOf("JAVA_AGENT" to "/app/extra/$jvmKillFileName")
                     } else {
                         jvmFlags = jvmFlags + listOf("-agentpath:/app/extra/$jvmKillFileName")
                     }
                 }
 
-                if (dockerProperties.withAppSh.get()) {
+                if (dockerProperties.withStartupScript.get()) {
                     val mainClass = applicationProperties.mainClass.get()
                     environment = environment + mapOf("MAIN_CLASS" to mainClass)
                     entrypoint = listOf("/bin/sh", "/app/extra/app.sh")
@@ -79,7 +79,7 @@ class JibBlueprint(project: Project) : Blueprint(project) {
             }
 
             if (project.extraDir.exists() ||
-                dockerProperties.withAppSh.get() ||
+                dockerProperties.withStartupScript.get() ||
                 dockerProperties.withJvmKill.hasValue
             ) {
                 extraDirectories {

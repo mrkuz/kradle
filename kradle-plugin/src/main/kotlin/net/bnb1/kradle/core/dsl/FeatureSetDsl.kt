@@ -11,13 +11,13 @@ class FeatureSetDsl<T : Any>(
 
     operator fun invoke(action: T.() -> Unit = {}) = activate(action)
 
+    fun configureOnly(action: T.() -> Unit = {}) {
+        action(target)
+    }
+
     fun activate(action: T.() -> Unit = {}) {
         action(target)
         featureSet.activate(tracer)
-    }
-
-    fun configureOnly(action: T.() -> Unit = {}) {
-        action(target)
     }
 
     fun tryActivate(action: T.() -> Unit = {}): Boolean {

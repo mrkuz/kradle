@@ -13,7 +13,7 @@ private const val TASK_NAME = "uberJar"
 
 class ShadowBlueprint(project: Project) : Blueprint(project) {
 
-    lateinit var uberJarProperties: ShadowProperties
+    lateinit var shadowProperties: ShadowProperties
 
     override fun doCreateTasks() {
         val jar = project.tasks.named<Jar>("jar").get()
@@ -36,7 +36,7 @@ class ShadowBlueprint(project: Project) : Blueprint(project) {
 
     override fun doConfigure() {
         project.tasks.named<ShadowJar>(TASK_NAME).configure {
-            if (uberJarProperties.minimize.get()) {
+            if (shadowProperties.minimize.get()) {
                 minimize()
             }
         }

@@ -26,7 +26,7 @@ kradle {
         kotlin {
             useCoroutines(/* "${versions.kotlinCoroutines}" */)
             lint {
-                ktlint {
+                ktlint.enable {
                     // version("${versions.ktlint}")
                     rules {
                         disable("no-wildcard-imports")
@@ -35,7 +35,7 @@ kradle {
             }
             /*
             codeAnalysis {
-                detekt {
+                detekt.enable {
                     version("${versions.detekt}")
                     configFile("detekt-config.yml")
                 }
@@ -58,24 +58,26 @@ kradle {
         developmentMode.enable()
 
         test {
-            prettyPrint(true)
-            // standardStreams(false)
-            integrationTests(true)
-            functionalTests(true)
-            // customTests("...")
-            junitJupiter {
-                // version("${versions.junit}")
+            /*
+            junitJupiter.enable {
+                version("${versions.junit}")
             }
+            */
+            prettyPrint(true)
+            // showStandardStreams(false)
+            withIntegrationTests(true)
+            withFunctionalTests(true)
+            // withCustomTests("...")
             // useArchUnit("${versions.archUnit}")
             // useTestcontainers("${versions.testcontainers}")
         }
 
         codeCoverage {
-            kover {
-                // excludes("...")
-            }
             /*
-            jacoco {
+            kover.enable {
+                excludes("...")
+            }
+            jacoco.configureOnly {
                 version("${versions.jacoco}")
                 excludes("...")
             }
@@ -83,21 +85,27 @@ kradle {
         }
 
         benchmark {
-            // jmhVersion("${versions.jmh}")
+            /*
+            jmh {
+                version("${versions.jmh}")
+            }
+            */
         }
 
         packaging {
+            /*
             uberJar {
-                // minimize(false)
+                minimize(false)
             }
+            */
         }
 
         docker {
             // baseImage("bellsoft/liberica-openjdk-alpine:${versions.jvm}")
-            withJvmKill(/* "${versions.jvmKill}" */)
-            // startupScript(false)
             // ports(...)
             // jvmOpts("...")
+            withJvmKill(/* "${versions.jvmKill}" */)
+            // withStartupScript(false)
         }
 
         documentation.enable()
