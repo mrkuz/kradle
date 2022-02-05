@@ -221,14 +221,14 @@ class TestBlueprintTests : BehaviorSpec({
         }
     }
 
-    Given("test.standardStreams = true") {
+    Given("test.showStandardStreams = true") {
         project.setUp {
             """
            jvm {
                kotlin.enable()
                test {
                    withJunitJupiter()
-                   standardStreams(true)
+                   showStandardStreams(true)
                }
            }
             """.trimIndent()
@@ -250,7 +250,7 @@ class TestBlueprintTests : BehaviorSpec({
         }
     }
 
-    Given("test.standardStreams = true && test.prettyPrint = true") {
+    Given("test.showStandardStreams = true && test.prettyPrint = true") {
         project.setUp {
             """
            jvm {
@@ -258,7 +258,7 @@ class TestBlueprintTests : BehaviorSpec({
                test {
                    withJunitJupiter()
                    prettyPrint(true)
-                   standardStreams(true)
+                   showStandardStreams(true)
                }
            }
             """.trimIndent()
