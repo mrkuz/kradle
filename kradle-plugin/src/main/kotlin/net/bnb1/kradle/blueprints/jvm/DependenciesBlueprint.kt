@@ -20,18 +20,18 @@ class DependenciesBlueprint(project: Project) : Blueprint(project) {
 
         dependenciesProperties.useCaffeine.get {
             project.dependencies {
-                implementation("${Catalog.Dependencies.caffeine}:$it}")
+                implementation("${Catalog.Dependencies.caffeine}:$it")
             }
             if (useGuava.hasValue) {
                 project.dependencies {
-                    implementation("${Catalog.Dependencies.caffeineGuava}:$it}")
+                    implementation("${Catalog.Dependencies.caffeineGuava}:$it")
                 }
             }
         }
 
         dependenciesProperties.useLog4j.get {
             project.dependencies {
-                implementation("${Catalog.Dependencies.log4j}:$it}")
+                implementation("${Catalog.Dependencies.log4j}:$it")
             }
         }
     }
