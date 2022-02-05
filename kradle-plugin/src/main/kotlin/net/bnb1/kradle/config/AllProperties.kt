@@ -3,6 +3,7 @@ package net.bnb1.kradle.config
 import net.bnb1.kradle.blueprints.jvm.ApplicationProperties
 import net.bnb1.kradle.blueprints.jvm.CheckstyleProperties
 import net.bnb1.kradle.blueprints.jvm.CodeAnalysisProperties
+import net.bnb1.kradle.blueprints.jvm.DependenciesProperties
 import net.bnb1.kradle.blueprints.jvm.DetektProperties
 import net.bnb1.kradle.blueprints.jvm.DockerProperties
 import net.bnb1.kradle.blueprints.jvm.JacocoProperties
@@ -36,6 +37,7 @@ class AllProperties(registry: Registry) {
     val java = registry { JavaProperties() }
 
     val application = registry { ApplicationProperties() }
+    val dependencies = registry { DependenciesProperties() }
     val lint = registry { LintProperties() }
     val codeAnalysis = registry { CodeAnalysisProperties() }
     val test = registry { TestProperties() }

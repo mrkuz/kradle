@@ -14,6 +14,7 @@ class JvmDsl(features: AllFeatures, properties: AllProperties) {
     val application = FeatureDsl(features.application, properties.application)
     val library = FeatureDsl(features.library, EmptyProperties)
     val dependencyUpdates = FeatureDsl(features.dependencyUpdates, EmptyProperties)
+    val dependencies = FeatureDsl(features.dependencies, properties.dependencies)
     val vulnerabilityScan = FeatureDsl(features.vulnerabilityScan, EmptyProperties)
     val lint = FeatureDsl(features.lint, properties.lint)
     val codeAnalysis = FeatureDsl(features.codeAnalysis, properties.codeAnalysis)

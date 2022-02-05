@@ -9,7 +9,7 @@ Swiss army knife for Kotlin/JVM (and also Java) development.
 With a few lines of configuration, you will be able to:
 
 - [Bootstrap new projects](#feature-bootstrap)
-- [Check for dependency updates](#feature-dependency-updates)
+- [Check for dependency updates](#feature-dependencies)
 - [Run vulnerability scans](#feature-vulnerability-scan)
 - [Run static code analysis](#feature-code-analysis)
 - [Add automatic restart on code change](#feature-development-mode)
@@ -59,7 +59,7 @@ Most of the functionality is provided by other well-known plugins. `kradle` take
     - [Java development](#feature-java)
     - [Application development](#feature-application)
     - [Library development](#feature-library)
-    - [Dependency updates](#feature-dependency-updates)
+    - [Dependency management](#feature-dependencies)
     - [Vulnerability scans](#feature-vulnerability-scan)
     - [Linting](#feature-lint)
     - [Code analysis](#feature-code-analysis)
@@ -164,7 +164,7 @@ Which tasks are available, depends on the [features](#features) enabled.
 | Task | Description | Alias for | Plugins used |
 |---|---|---|---|
 | <a id="task-bootstrap"></a>[bootstrap](#feature-bootstrap) | Bootstraps app/lib project | - | - |
-| <a id="task-show-dependency-updates"></a>[showDependencyUpdates](#feature-dependency-updates) | Displays dependency updates | - | [Gradle Versions Plugin](https://plugins.gradle.org/plugin/com.github.ben-manes.versions) |
+| <a id="task-show-dependency-updates"></a>[showDependencyUpdates](#feature-dependencies) | Displays dependency updates | - | [Gradle Versions Plugin](https://plugins.gradle.org/plugin/com.github.ben-manes.versions) |
 | <a id="task-lint-"></a>[lint](#feature-linti) | Runs [ktlint](https://ktlint.github.io/) (Kotlin) and [checkstyle](https://checkstyle.sourceforge.io/) (Java) | - | [ktlint Plugin](https://plugins.gradle.org/plugin/org.jlleitschuh.gradle.ktlint), [Checkstyle Plugin](https://docs.gradle.org/current/userguide/checkstyle_plugin.html) |
 | <a id="task-analyze-code"></a>[analyzeCode](#feature-code-analysis) | Runs [detekt](https://detekt.github.io/detekt/) (Kotlin), [PMD](https://pmd.github.io/) (Java) and [SpotBugs](https://spotbugs.github.io/) (Java) code analysis | - | [detekt Plugin](https://plugins.gradle.org/plugin/io.gitlab.arturbosch.detekt), [PMD Plugin](https://docs.gradle.org/current/userguide/pmd_plugin.html), [SpotBugs Plugin](https://plugins.gradle.org/plugin/com.github.spotbugs) |
 | <a id="task-analyze-dependencies"></a>[analyzeDependencies](#feature-vulnerability-scan) | Analyzes dependencies for vulnerabilities | - | [OWASP Dependency Check Plugin](https://plugins.gradle.org/plugin/org.owasp.dependencycheck) |
@@ -222,8 +222,9 @@ kradle {
 ```
 
 This configures and enables the feature. You can omit `enable` and use `benchmark { … }`.
+To configure the feature without enabling it, use `configureOnly`.
 
-It is also possible to deactivate features. This can be useful if you are using [presets](#presets) and want to disable inherited features.
+It is also possible to disable features. This can be useful if you are using [presets](#presets) and want to get rid of inherited features.
 
 ```kotlin
 benchmark.disable()
@@ -231,6 +232,24 @@ benchmark(false)
 ```
 
 Options shown in this section of the documentation represent the defaults.
+
+If the name of the option starts with `use`, it adds dependencies to your project (e.g. `useKotest`).
+
+Features can have sub-features. For example, `junitJupiter` is a sub-feature of `test`.
+
+```kotlin
+kradle {
+    jvm {
+        test {
+            junitJupiter.enable {
+                version("5.8.2")
+            }
+        }
+    }
+}
+```
+
+In contrast to normal features, some of them are enabled per default.
 
 <a id="feature-set-general"></a>
 ### General
@@ -359,9 +378,23 @@ Enables [Opt-ins](https://kotlinlang.org/docs/opt-in-requirements.html).
 
 [JSR-305](https://jcp.org/en/jsr/detail?id=305) nullability mismatches are reported as error (`"-Xjsr305=strict"`).
 
-Plugins used: [kotlinx.serialization Plugin](https://plugins.gradle.org/plugin/org.jetbrains.kotlin.plugin.serialization)
-, [All-open Compiler Plugin](https://plugins.gradle.org/plugin/org.jetbrains.kotlin.plugin.allopen),
- [Java Plugin](https://docs.gradle.org/current/userguide/java_plugin.html)
+Plugins used: [kotlinx.serialization Plugin](https://plugins.gradle.org/plugin/org.jetbrains.kotlin.plugin.serialization),
+[All-open Compiler Plugin](https://plugins.gradle.org/plugin/org.jetbrains.kotlin.plugin.allopen),
+[Java Plugin](https://docs.gradle.org/current/userguide/java_plugin.html),
+[detekt Plugin](https://plugins.gradle.org/plugin/io.gitlab.arturbosch.detekt),
+[ktlint Plugin](https://plugins.gradle.org/plugin/org.jlleitschuh.gradle.ktlint)
+
+#### Sub-features
+
+- [detekt](https://detekt.github.io/detekt/) static code analysis
+  - Enabled per default
+  - Requires feature [code analysis](#feature-code-analysis)
+  - Adds the tasks `generateDetektConfig`, which generates a configuration file with sane defaults
+
+- [ktlint](https://ktlint.github.io/)
+  - Enabled per default
+  - Requires feature [linting](#feature-lint)
+  - Uses all standard and experimental rules per default
 
 #### Options
 
@@ -377,14 +410,12 @@ kradle {
                         // disable("…")
                     }
                 }
-                // ktlint.disable()
             }
             codeAnalysis {
                 detekt.enable {
                     version("1.19.0")
                     configFile("detekt-config.yml")
                 }
-                // detekt.disable()
             }
             test {
                 // useKotest("5.0.3")
@@ -396,16 +427,12 @@ kradle {
 ```
 
 - `useCoroutines`: Adds Kotlin coroutines dependency
-- `ktlint.*`: [ktlint](https://ktlint.github.io/) configuration (only relevant if [linting](#feature-lint) enabled)
+- `test.useKoTest`: Adds [kotest](https://kotest.io/) test dependencies (only if [test improvements](#feature-test) are enabled)
+- `test.useMockk`: Adds [mockk](https://mockk.io/) test dependency (only if [test improvements](#feature-test) are enabled)
 - `ktlint.version`: ktlint version used
 - `ktlint.rules.disable`: Disables ktlint rule. Can be called multiple times
-- `ktlint.disable`: Disables ktlint
-- `detekt.*`: [detekt](https://detekt.github.io/detekt/) configuration (only relevant if [static code analysis](#feature-code-analysis) is enabled)
 - `detekt.version`: detekt version used
 - `detekt.configFile`: detekt configuration file used
-- `detekt.disable`: Disables detekt
-- `useKoTest`: Adds [kotest](https://kotest.io/) test dependencies (only if [test improvements](#feature-test) are enabled)
-- `useMockk`: Adds [mockk](https://mockk.io/) test dependency (only if [test improvements](#feature-test) are enabled)
 
 <a id="feature-java"></a>
 ### Java development
@@ -418,7 +445,23 @@ kradle {
 }
 ```
 
-Plugins used: [Java Plugin](https://docs.gradle.org/current/userguide/java_plugin.html)
+Plugins used: [Java Plugin](https://docs.gradle.org/current/userguide/java_plugin.html),
+[PMD Plugin](https://docs.gradle.org/current/userguide/pmd_plugin.html),
+[SpotBugs Plugin](https://plugins.gradle.org/plugin/com.github.spotbugs),
+[Checkstyle Plugin](https://docs.gradle.org/current/userguide/checkstyle_plugin.html)
+
+#### Sub-features
+
+- [PMD](https://pmd.github.io/)
+  - Enabled per default
+  - Active rule sets: `errorprone`, `multithreading`, `performance` and `security`
+- [SpotBugs](https://spotbugs.github.io/)
+  - Requires feature [code analysis](#feature-code-analysis)
+  - Enabled per default
+- [checkstyle](https://checkstyle.sourceforge.io/)
+  - Enabled per default
+  - Requires feature [linting](#feature-lint)
+  - Looks for the configuration file _checkstyle.xml_ in the project root. If not found, `kradle` generates one
 
 #### Options
 
@@ -433,7 +476,6 @@ kradle {
                     version("9.2.1")
                     configFile("checkstyle.xml")
                 }
-                // checkstyle.disable()
             }
             codeAnalysis {
                 pmd.enable {
@@ -449,13 +491,11 @@ kradle {
                         security(true)
                     }
                 }
-                // pmd.disable()
                 spotBugs.enable {
                     version("4.5.3")
                     // useFbContrib(7.4.7)
                     // useFindSecBugs(1.11.0)
                 }
-                // spotBugs.disable()
             }
         }
     }
@@ -463,19 +503,13 @@ kradle {
 ```
 - `previewFeatures`: Enables preview features
 - `withLombok`: Enables [Project Lombok](https://projectlombok.org/). Adds the task `generateLombokConfig`, which generates _lombok.config_ with sane defaults
-- `checkstyle.*`: [checkstyle](https://checkstyle.sourceforge.io/) configuration (only relevant if [linting](#feature-lint) is enabled)
 - `checkstyle.version`: checkstyle version used
 - `checkstyle.configFile`: checkstyle configuration file used
-- `checkstyle.disable`: Disables checkstyle
-- `pmd.*`: [PMD](https://pmd.github.io/) configuration (only relevant if [code analysis](#feature-code-analysis) is enabled)
 - `pmd.version`: PMD version used
 - `pmd.ruleSets.*`: Enables/disables PMD rule sets
-- `pmd.disable`: Disables PMD
-- `spotBugs.*`: [SpotBugs](https://spotbugs.github.io/) configuration (only relevant if [code analysis](#code-analysis) is enabled)
 - `spotBugs.version`: SpotBugs version used
 - `spotBugs.useFbContrib`: Enables [fb-contrib](http://fb-contrib.sourceforge.net/) plugin
 - `spotBugs.useFbContrib`: Enables [Find Security Bugs](https://find-sec-bugs.github.io/) plugin
-- `spotBugs.disable`: Disables SpotBugs
 
 <a id="feature-application"></a>
 ### Application development
@@ -523,13 +557,13 @@ Conflicts with [application development](#feature-application).
 
 Plugins used: [Java Library Plugin](https://docs.gradle.org/current/userguide/java_library_plugin.html), [Maven Publish Plugin](https://docs.gradle.org/current/userguide/publishing_maven.html)
 
-<a id="feature-dependency-updates"></a>
-### Dependency updates
+<a id="feature-dependencies"></a>
+### Dependency management
 
 ```kotlin
 kradle {
     jvm {
-        dependencyUpdates.enable()
+        dependencies.enable()
     }
 }
 ```
@@ -537,6 +571,24 @@ kradle {
 Adds the task `showDependencyUpdates`, which shows all available dependency updates. It only considers stable versions; no alpha, beta, release candidate or milestone builds.
 
 Plugins used: [Gradle Versions Plugin](https://plugins.gradle.org/plugin/com.github.ben-manes.versions)
+
+#### Options
+
+```kotlin
+kradle {
+    jvm {
+        dependencies {
+            useCaffeine("3.0.5")
+            useGuava("31.0.1-jre")
+            useLog4j("2.17.1")
+        }
+    }
+}
+```
+
+- `useCaffeine`: Adds [Caffeine](https://github.com/ben-manes/caffeine) caching library
+- `useGuava`: Adds [Guava](https://github.com/google/guava) Google core libraries
+- `useLog4j`: Adds [log4j](https://logging.apache.org/log4j/2.x/) logging
 
 <a id="feature-vulnerability-scan"></a>
 ### Vulnerability scans
@@ -564,15 +616,9 @@ kradle {
 }
 ```
 
-Adds the task `lint`, which runs enabled linters:
-
-- [ktlint](https://ktlint.github.io/) on Kotlin source files. It uses all standard and experimental rules per default.
-
-- [checkstyle](https://checkstyle.sourceforge.io/) on Java source files. Looks for the configuration file _checkstyle.xml_ in the project root. If not found, `kradle` generates one.
+Adds the task `lint`, which runs enabled linters.
 
 `lint` is executed when running `check`.
-
-Plugins used: [ktlint Plugin](https://plugins.gradle.org/plugin/org.jlleitschuh.gradle.ktlint), [Checkstyle Plugin](https://docs.gradle.org/current/userguide/checkstyle_plugin.html)
 
 #### Options
 
@@ -601,17 +647,7 @@ kradle {
 
 Adds the task `analyzeCode`, which runs enabled code analysis tools:
 
-- [detekt](https://detekt.github.io/detekt/) static code analysis for Kotlin
-
-- [PMD](https://pmd.github.io/) code analysis for Java. Enabled rule sets: `errorprone`, `multithreading`, `performance` and `security`
-
-- [SpotBugs](https://spotbugs.github.io/) code analysis for Java
-
-Adds the tasks `generateDetektConfig`, which generates a configuration file with sane defaults.
-
 `analyzeCode` is executed when running `check`.
-
-Plugins used: [detekt Plugin](https://plugins.gradle.org/plugin/io.gitlab.arturbosch.detekt), [PMD Plugin](https://docs.gradle.org/current/userguide/pmd_plugin.html), [SpotBugs Plugin](https://plugins.gradle.org/plugin/com.github.spotbugs)
 
 #### Options
 
@@ -667,6 +703,11 @@ Adds the task `runTests`, which runs all tests (unit, integration, functional, c
 Plugins used: [Java Plugin](https://docs.gradle.org/current/userguide/java_plugin.html)
 , [Gradle Test Logger Plugin](https://plugins.gradle.org/plugin/com.adarshr.test-logger)
 
+#### Sub-features
+
+- [JUnit Jupiter](https://junit.org/junit5/) testing framework
+  - Enabled per defaults
+
 #### Options
 
 ```kotlin
@@ -676,7 +717,6 @@ kradle {
             junitJupiter.enable {
                 version("5.8.2")
             }
-            // junitJupiter.disable()
             prettyPrint(false)
             showStandardStreams(false)
             withIntegrationTests(false)
@@ -691,9 +731,7 @@ kradle {
 }
 ```
 
-- `junitJupiter.*`: [JUnit Jupiter](https://junit.org/junit5/) configuration
 - `junitJupiter.version`: JUnit Jupiter version used
-- `junitJupiter.disable`: Disables JUnit Jupiter](https://junit.org/junit5/) for running tests
 - `prettyPrint`: Prettifies test output with [Gradle Test Logger Plugin](https://plugins.gradle.org/plugin/com.adarshr.test-logger)
 - `showStandardStreams`: Shows stdout and stderr in test output
 - `withIntegrationTests`: Adds task `integrationTest`, which runs tests under _src/integrationTest_. The task is executed when running `check`
@@ -713,16 +751,20 @@ kradle {
 }
 ```
 
-Adds the task `analyzeTestCoverage`, which runs enabled test coverage tools and creates HTML reports.
-
-- [Kover](https://github.com/Kotlin/kotlinx-kover), report can be found in _build/reports/kover/_
-
-- [JaCocCo Plugin](https://www.jacoco.org/), report can be found in _build/reports/jacoco/_
+Adds the task `analyzeTestCoverage`, which runs enabled test coverage tools.
 
 `analyzeTestCoverage` is executed when running `check`.
 
 Plugins used: [Kover](https://github.com/Kotlin/kotlinx-kover),
 [JaCocCo Plugin](https://docs.gradle.org/current/userguide/jacoco_plugin.html)
+
+#### Sub-features
+
+- [Kover](https://github.com/Kotlin/kotlinx-kover)
+  - Enabled per default
+  - Generates HTML report in _build/reports/kover/_
+- [JaCocCo](https://www.jacoco.org/)
+  - Generates HTML report in _build/reports/jacoco/_
 
 #### Options
 
@@ -733,7 +775,6 @@ kradle {
             kover {
                 excludes("…")
             }
-            // kover.disable()
             /*
             jacoco.enable {
                 version("0.8.7")
@@ -745,11 +786,7 @@ kradle {
 }
 ```
 
-- `kover.*`: [Kover](https://github.com/Kotlin/kotlinx-kover) configuration
 - `kover.excludes`: List of test tasks to exclude from analysis
-- `kover.disable`: Disables Kover
-- `jacoco.*`: [JaCoCo](https://www.jacoco.org/jacoco/) configuration
-- `jacoco.enable`: Sets up JaCoCo for code coverage analysis
 - `jacoco.version`: JaCoCo version used
 - `jacoco.excludes`: List of test tasks to exclude from analysis
 
@@ -940,7 +977,7 @@ kradle {
             mainClass("…")
         }
 
-        dependencyUpdates.enable()
+        dependencies.enable()
         vulnerabilityScan.enable()
         lint.enable()
         codeAnalysis.enable()
@@ -998,7 +1035,7 @@ kradle {
             }
         }
         library.enable()
-        dependencyUpdates.enable()
+        dependencies.enable()
         vulnerabilityScan.enable()
         lint.enable()
         codeAnalysis.enable()
@@ -1055,7 +1092,7 @@ kradle {
         application {
             mainClass("…")
         }
-        dependencyUpdates.enable()
+        dependencies.enable()
         vulnerabilityScan.enable()
         lint.enable()
         codeAnalysis.enable()
@@ -1108,7 +1145,7 @@ kradle {
             }
         }
         library.enable()
-        dependencyUpdates.enable()
+        dependencies.enable()
         vulnerabilityScan.enable()
         lint.enable()
         codeAnalysis.enable()
@@ -1199,7 +1236,12 @@ kradle {
         }
         library.enable() // Conflicts with application
 
-        dependencyUpdates.enable()
+        dependencies {
+            // useCaffeine("3.0.5")
+            // useGuava("31.0.1-jre")
+            // useLog4j("2.17.1")
+        }
+
         vulnerabilityScan.enable()
         lint {
             ignoreFailures(false)

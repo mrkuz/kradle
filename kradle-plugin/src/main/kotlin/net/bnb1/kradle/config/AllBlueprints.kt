@@ -10,6 +10,7 @@ import net.bnb1.kradle.blueprints.jvm.BenchmarksBlueprint
 import net.bnb1.kradle.blueprints.jvm.CheckstyleBlueprint
 import net.bnb1.kradle.blueprints.jvm.CodeAnalysisBlueprint
 import net.bnb1.kradle.blueprints.jvm.CodeCoverageBlueprint
+import net.bnb1.kradle.blueprints.jvm.DependenciesBlueprint
 import net.bnb1.kradle.blueprints.jvm.DependencyUpdatesBlueprint
 import net.bnb1.kradle.blueprints.jvm.DetektBlueprint
 import net.bnb1.kradle.blueprints.jvm.DevelopmentModeBlueprint
@@ -71,6 +72,11 @@ class AllBlueprints(registry: Registry, properties: AllProperties, project: Proj
     val library = registry { LibraryBlueprint(project) }
     val mavenPublish = registry { MavenPublishBlueprint(project) }
     val dependencyUpdates = registry { DependencyUpdatesBlueprint(project) }
+    val dependencies = registry {
+        DependenciesBlueprint(project).inject {
+            dependenciesProperties = properties.dependencies
+        }
+    }
     val owaspDependencyCheck = registry { OwaspDependencyCheckBlueprint(project) }
     val lint = registry { LintBlueprint(project) }
     val codeAnalysis = registry { CodeAnalysisBlueprint(project) }

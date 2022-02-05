@@ -58,7 +58,12 @@ kradle {
             }
         }
 
-        dependencyUpdates.enable()
+        dependencies {
+            // useCaffeine("3.0.5")
+            // useGuava("31.0.1-jre")
+            // useLog4j("2.17.1")
+        }
+
         vulnerabilityScan.enable()
         lint {
             // ignoreFailures(false)

@@ -22,6 +22,9 @@ object Catalog {
         const val archUnit = "0.22.0"
         const val testcontainers = "1.16.3"
         const val lombok = "1.18.22"
+        const val guava = "31.0.1-jre"
+        const val caffeine = "3.0.5"
+        const val log4j = "2.17.1"
     }
 
     object Dependencies {
@@ -44,6 +47,10 @@ object Catalog {
         val kotlinStdlib = artifact("org.jetbrains.kotlin", "kotlin-stdlib-jdk8", Versions.kotlin)
         val kotlinReflect = artifact("org.jetbrains.kotlin", "kotlin-reflect", Versions.kotlin)
         val lombok = artifact("org.projectlombok", "lombok", Versions.lombok)
+        val guava = artifact("com.google.guava", "guava", Versions.guava)
+        val caffeine = artifact("com.github.ben-manes.caffeine", "caffeine", Versions.caffeine)
+        val caffeineGuava = artifact("com.github.ben-manes.caffeine", "guava", Versions.caffeine)
+        val log4j = artifact("org.apache.logging.log4j", "log4j", Versions.log4j)
 
         object Tools {
             val kotlinxBenchmarkRuntime = artifact(

@@ -101,6 +101,13 @@ class KradleContext(project: Project) {
             me belongsTo featureSets.jvm
             me += blueprints.dependencyUpdates
         }
+        features.dependencies.also { me ->
+            me belongsTo featureSets.jvm
+            me += setOf(
+                blueprints.dependencyUpdates,
+                blueprints.dependencies
+            )
+        }
         features.vulnerabilityScan.also { me ->
             me belongsTo featureSets.jvm
             me += blueprints.owaspDependencyCheck

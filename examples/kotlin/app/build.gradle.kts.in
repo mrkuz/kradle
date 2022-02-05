@@ -47,7 +47,12 @@ kradle {
             }
         }
 
-        dependencyUpdates.enable()
+        dependencies {
+            // useCaffeine("${versions.caffeine}")
+            // useGuava("${versions.guava}")
+            // useLog4j("${versions.log4j}")
+        }
+
         vulnerabilityScan.enable()
         lint {
             // ignoreFailures(false)

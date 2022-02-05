@@ -17,6 +17,7 @@ class AllFeatures(registry: Registry) {
     val application = registry("application") { Feature(it) }
     val library = registry("library") { Feature(it) }
     val dependencyUpdates = registry("dependencyUpdates") { Feature(it) }
+    val dependencies = registry("dependencies") { Feature(it) }
     val vulnerabilityScan = registry("vulnerabilityScan") { Feature(it) }
     val lint = registry("lint") { Feature(it, "lint") }
     val codeAnalysis = registry("codeAnalysis") { Feature(it, "analyzeCode") }

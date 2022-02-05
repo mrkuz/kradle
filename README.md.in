@@ -9,7 +9,7 @@ Swiss army knife for Kotlin/JVM (and also Java) development.
 With a few lines of configuration, you will be able to:
 
 - [Bootstrap new projects](#feature-bootstrap)
-- [Check for dependency updates](#feature-dependency-updates)
+- [Check for dependency updates](#feature-dependencies)
 - [Run vulnerability scans](#feature-vulnerability-scan)
 - [Run static code analysis](#feature-code-analysis)
 - [Add automatic restart on code change](#feature-development-mode)
@@ -59,7 +59,7 @@ Most of the functionality is provided by other well-known plugins. `kradle` take
     - [Java development](#feature-java)
     - [Application development](#feature-application)
     - [Library development](#feature-library)
-    - [Dependency updates](#feature-dependency-updates)
+    - [Dependency management](#feature-dependencies)
     - [Vulnerability scans](#feature-vulnerability-scan)
     - [Linting](#feature-lint)
     - [Code analysis](#feature-code-analysis)
@@ -164,7 +164,7 @@ Which tasks are available, depends on the [features](#features) enabled.
 | Task | Description | Alias for | Plugins used |
 |---|---|---|---|
 | <a id="task-bootstrap"></a>[bootstrap](#feature-bootstrap) | Bootstraps app/lib project | - | - |
-| <a id="task-show-dependency-updates"></a>[showDependencyUpdates](#feature-dependency-updates) | Displays dependency updates | - | [Gradle Versions Plugin](https://plugins.gradle.org/plugin/com.github.ben-manes.versions) |
+| <a id="task-show-dependency-updates"></a>[showDependencyUpdates](#feature-dependencies) | Displays dependency updates | - | [Gradle Versions Plugin](https://plugins.gradle.org/plugin/com.github.ben-manes.versions) |
 | <a id="task-lint-"></a>[lint](#feature-linti) | Runs [ktlint](https://ktlint.github.io/) (Kotlin) and [checkstyle](https://checkstyle.sourceforge.io/) (Java) | - | [ktlint Plugin](https://plugins.gradle.org/plugin/org.jlleitschuh.gradle.ktlint), [Checkstyle Plugin](https://docs.gradle.org/current/userguide/checkstyle_plugin.html) |
 | <a id="task-analyze-code"></a>[analyzeCode](#feature-code-analysis) | Runs [detekt](https://detekt.github.io/detekt/) (Kotlin), [PMD](https://pmd.github.io/) (Java) and [SpotBugs](https://spotbugs.github.io/) (Java) code analysis | - | [detekt Plugin](https://plugins.gradle.org/plugin/io.gitlab.arturbosch.detekt), [PMD Plugin](https://docs.gradle.org/current/userguide/pmd_plugin.html), [SpotBugs Plugin](https://plugins.gradle.org/plugin/com.github.spotbugs) |
 | <a id="task-analyze-dependencies"></a>[analyzeDependencies](#feature-vulnerability-scan) | Analyzes dependencies for vulnerabilities | - | [OWASP Dependency Check Plugin](https://plugins.gradle.org/plugin/org.owasp.dependencycheck) |
@@ -557,13 +557,13 @@ Conflicts with [application development](#feature-application).
 
 Plugins used: [Java Library Plugin](https://docs.gradle.org/current/userguide/java_library_plugin.html), [Maven Publish Plugin](https://docs.gradle.org/current/userguide/publishing_maven.html)
 
-<a id="feature-dependency-updates"></a>
-### Dependency updates
+<a id="feature-dependencies"></a>
+### Dependency management
 
 ```kotlin
 kradle {
     jvm {
-        dependencyUpdates.enable()
+        dependencies.enable()
     }
 }
 ```
@@ -571,6 +571,24 @@ kradle {
 Adds the task `showDependencyUpdates`, which shows all available dependency updates. It only considers stable versions; no alpha, beta, release candidate or milestone builds.
 
 Plugins used: [Gradle Versions Plugin](https://plugins.gradle.org/plugin/com.github.ben-manes.versions)
+
+#### Options
+
+```kotlin
+kradle {
+    jvm {
+        dependencies {
+            useCaffeine("${versions.caffeine}")
+            useGuava("${versions.guava}")
+            useLog4j("${versions.log4j}")
+        }
+    }
+}
+```
+
+- `useCaffeine`: Adds [Caffeine](https://github.com/ben-manes/caffeine) caching library
+- `useGuava`: Adds [Guava](https://github.com/google/guava) Google core libraries
+- `useLog4j`: Adds [log4j](https://logging.apache.org/log4j/2.x/) logging
 
 <a id="feature-vulnerability-scan"></a>
 ### Vulnerability scans
@@ -959,7 +977,7 @@ kradle {
             mainClass("…")
         }
 
-        dependencyUpdates.enable()
+        dependencies.enable()
         vulnerabilityScan.enable()
         lint.enable()
         codeAnalysis.enable()
@@ -1017,7 +1035,7 @@ kradle {
             }
         }
         library.enable()
-        dependencyUpdates.enable()
+        dependencies.enable()
         vulnerabilityScan.enable()
         lint.enable()
         codeAnalysis.enable()
@@ -1074,7 +1092,7 @@ kradle {
         application {
             mainClass("…")
         }
-        dependencyUpdates.enable()
+        dependencies.enable()
         vulnerabilityScan.enable()
         lint.enable()
         codeAnalysis.enable()
@@ -1127,7 +1145,7 @@ kradle {
             }
         }
         library.enable()
-        dependencyUpdates.enable()
+        dependencies.enable()
         vulnerabilityScan.enable()
         lint.enable()
         codeAnalysis.enable()
@@ -1218,7 +1236,12 @@ kradle {
         }
         library.enable() // Conflicts with application
 
-        dependencyUpdates.enable()
+        dependencies {
+            // useCaffeine("${versions.caffeine}")
+            // useGuava("${versions.guava}")
+            // useLog4j("${versions.log4j}")
+        }
+
         vulnerabilityScan.enable()
         lint {
             ignoreFailures(false)

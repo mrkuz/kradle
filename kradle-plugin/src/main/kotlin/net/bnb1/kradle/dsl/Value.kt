@@ -21,6 +21,12 @@ open class Value<T : Any>(
 
     fun get(default: T) = value ?: default
 
+    fun get(consumer: (T) -> Unit) {
+        if (hasValue) {
+            consumer(value!!)
+        }
+    }
+
     fun reset() {
         value = defaultValue
     }

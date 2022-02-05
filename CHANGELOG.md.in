@@ -14,6 +14,7 @@
 #### Additions
 
 - New project properties: `mainClass` and `gitBranch`
+- New feature `dependencies` (supersedes `dependencyUpdates`)
 - New feature `codeCoverage` and task `analyzeTestCoverage`
 - Add support for [Project Lombok](https://projectlombok.org/)
 - Add support for [Kover](https://github.com/Kotlin/kotlinx-kover)
