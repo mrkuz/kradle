@@ -6,4 +6,4 @@ pluginManagement {
 }
 
 rootProject.name = "kradle"
-include("plugin", "agent")
+include("kradle-plugin", "kradle-agent")
