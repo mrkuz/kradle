@@ -5,6 +5,12 @@
 ### Version main-SNAPSHOT (2022-02-06)
 
 #### Bugfixes
+#### Additions
+#### Changes
+
+### Version 2.2.0 (2022-02-06)
+
+#### Bugfixes
 
 - `jvm`: Fix support for target JVM 8
 - `benchmarks`: Fix pure Java projects with benchmarks enabled
