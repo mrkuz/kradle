@@ -29,7 +29,7 @@ kradle {
             /*
             lint {
                 checkstyle.enable {
-                    version("9.2.1")
+                    version("9.3")
                     configFile("checkstyle.xml")
                 }
             }
@@ -37,7 +37,7 @@ kradle {
             codeAnalysis {
                 /*
                 pmd.enable {
-                    version("6.41.0")
+                    version("6.42.0")
                     ruleSets {
                         bestPractices(false)
                         codeStyle(false)
@@ -121,7 +121,7 @@ kradle {
             // jvmOpts("...")
             // ports(...)
             withJvmKill(/* "1.16.0" */)
-            // startupScript(false)
+            // withStartupScript(false)
         }
 
         documentation.enable()

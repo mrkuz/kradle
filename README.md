@@ -418,7 +418,7 @@ kradle {
                 }
             }
             test {
-                // useKotest("5.0.3")
+                // useKotest("5.1.0")
                 // useMockk("1.12.2")
             }
         }
@@ -473,13 +473,13 @@ kradle {
             // withLombok("1.18.22")
             lint {
                 checkstyle.enable {
-                    version("9.2.1")
+                    version("9.3")
                     configFile("checkstyle.xml")
                 }
             }
             codeAnalysis {
                 pmd.enable {
-                    version("6.41.0")
+                    version("6.42.0")
                     ruleSets {
                         bestPractices(false)
                         codeStyle(false)
@@ -1197,7 +1197,7 @@ kradle {
                 }
             }
             test {
-                // useKotest("5.0.3")
+                // useKotest("5.1.0")
                 // useMockk("1.12.2")
             }
         }
@@ -1206,13 +1206,13 @@ kradle {
             // withLombok("1.18.22")
             lint {
                 checkstyle.enable {
-                    version("9.2.1")
+                    version("9.3")
                     configFile("checkstyle.xml")
                 }
             }
             codeAnalysis {
                 pmd.enable {
-                    version("6.41.0")
+                    version("6.42.0")
                     ruleSets {
                         bestPractices(false)
                         codeStyle(false)

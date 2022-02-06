@@ -1,10 +1,11 @@
 package net.bnb1.kradle.blueprints.jvm
 
-import com.github.dockerjava.api.DockerClient
 import com.github.dockerjava.api.async.ResultCallback
 import com.github.dockerjava.api.command.WaitContainerResultCallback
 import com.github.dockerjava.api.model.Frame
-import com.github.dockerjava.core.DockerClientBuilder
+import com.github.dockerjava.core.DefaultDockerClientConfig
+import com.github.dockerjava.core.DockerClientImpl
+import com.github.dockerjava.jaxrs.JerseyDockerHttpClient
 import io.kotest.core.spec.style.BehaviorSpec
 import io.kotest.inspectors.forOne
 import io.kotest.matchers.collections.shouldContain
@@ -17,7 +18,12 @@ import java.util.*
 
 class JibBlueprintTests : BehaviorSpec({
 
-    val dockerClient: DockerClient = DockerClientBuilder.getInstance().build()
+    val config = DefaultDockerClientConfig.createDefaultConfigBuilder().build()
+    val httpClient = JerseyDockerHttpClient.Builder()
+        .dockerHost(config.dockerHost)
+        .sslConfig(config.sslConfig)
+        .build()
+    val dockerClient = DockerClientImpl.getInstance(config, httpClient)
 
     val name = "app-" + UUID.randomUUID()
     val project = TestProject(this)
@@ -38,6 +44,7 @@ class JibBlueprintTests : BehaviorSpec({
                     super.onNext(frame)
                 }
             })
+            .awaitCompletion()
         dockerClient.removeContainerCmd(container).exec()
         return output
     }
@@ -146,6 +153,9 @@ class JibBlueprintTests : BehaviorSpec({
 
             Then("app.sh is created") {
                 project.projectDir.resolve("src/main/extra/app.sh").shouldExist()
+
+                // And: "tini is downloaded"
+                project.projectDir.resolve("src/main/extra/tini").shouldExist()
             }
         }
 
@@ -183,6 +193,9 @@ class JibBlueprintTests : BehaviorSpec({
 
             Then("jvmkill is downloaded") {
                 project.projectDir.resolve("src/main/extra/jvmkill-1.16.0.so").shouldExist()
+
+                // And: "tini is downloaded"
+                project.projectDir.resolve("src/main/extra/tini").shouldExist()
             }
         }
 

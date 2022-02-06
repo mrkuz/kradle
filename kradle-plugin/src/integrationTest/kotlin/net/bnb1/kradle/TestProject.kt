@@ -34,7 +34,7 @@ class TestProject(spec: Spec) {
     fun runTask(task: String, vararg arguments: String) = GradleRunner.create()
         .withProjectDir(projectDir)
         .withPluginClasspath()
-        .withArguments(listOf(task) + arguments)
+        .withArguments(listOf(task) + arguments + listOf("--stacktrace"))
         .forwardOutput()
         .build()
 

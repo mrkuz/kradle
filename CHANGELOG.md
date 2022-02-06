@@ -2,7 +2,7 @@
 
 ## Changelog
 
-### Version main-SNAPSHOT (2022-02-05)
+### Version main-SNAPSHOT (2022-02-06)
 
 #### Bugfixes
 
@@ -118,6 +118,7 @@
 - `test`: Remove access to unit test classes from integration and functional tests
 - `test`: Enable JUnit Jupiter per default
 - `dev`: Rename environment variable DEV_MODE to KRADLE_DEV_MODE
+- `docker`: Add [tini](https://github.com/krallin/tini) when using `startupScript` or `withJvmKill`
 
 ### Version 2.1.0 (2022-01-06)
 

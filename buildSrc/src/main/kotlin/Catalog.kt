@@ -4,6 +4,7 @@ object Catalog {
         const val jvm = "17"
         const val kotlin = "1.6.0"
         const val jmh = "1.34"
+        const val tini = "0.19.0"
         const val jvmKill = "1.16.0"
         const val detekt = "1.19.0"
         const val ktlint = "0.43.2"

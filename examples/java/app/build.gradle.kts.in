@@ -121,7 +121,7 @@ kradle {
             // jvmOpts("...")
             // ports(...)
             withJvmKill(/* "${versions.jvmKill}" */)
-            // startupScript(false)
+            // withStartupScript(false)
         }
 
         documentation.enable()
