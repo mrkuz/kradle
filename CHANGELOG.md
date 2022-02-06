@@ -2,20 +2,139 @@
 
 ## Changelog
 
+### Version 2.2.0 (2022-02-06)
+
+#### Bugfixes
+
+- `jvm`: Fix support for target JVM 8
+- `benchmarks`: Fix pure Java projects with benchmarks enabled
+- `docker`:  Fix `buildImage` in combination with `startupScript` or `withJvmKill` (first image created was missing extra files)
+- `bootstrap`: Don't overwrite existing _App.kt_ or _App.java_ files
+
+#### Additions
+
+- New project properties: `mainClass` and `gitBranch`
+- New feature `dependencies` (supersedes `dependencyUpdates`)
+- New feature `codeCoverage` and task `analyzeTestCoverage`
+- Add support for [Project Lombok](https://projectlombok.org/)
+- Add support for [Kover](https://github.com/Kotlin/kotlinx-kover)
+- `jacoco`: New option `excludes`
+- `jacoco`: Add configuration to `codeCoverage`
+
+    Before
+
+    ```kotlin
+    kradle {
+        jvm {
+            test {
+                withJacoco("0.8.7")
+            }
+        }
+    }
+    ```
+
+    After
+
+    ```kotlin
+    kradle {
+        jvm {
+            codeCoverage {
+                jacoco {
+                    version("0.8.7")
+                }
+            }
+        }
+    }
+    ```
+- `test`: New task `runTests`
+- `test`: New option `showStandardStreams`
+- `test`: Set environment variables `KRADLE_PROJECT_DIR` and `KRADLE_PROJECT_ROOT_DIR`
+- `test`: New options `useArchUnit` and `useTestcontainers`
+- `test`: Add `test.withCustomTests` as alternative to `test.customTests`
+- `test`: Alternative configuration for JUnit Jupiter
+
+    Before
+
+    ```kotlin
+    kradle {
+        jvm {
+            test {
+                withJunitJupiter("5.8.2")
+            }
+        }
+    }
+    ```
+
+    After
+
+    ```kotlin
+    kradle {
+        jvm {
+            test {
+                // junitJupiter()
+                // junitJupiter(true)
+                // junitJupiter.enable()
+                // junitJupiter.enable { … }
+                junitJupiter {
+                    version("5.8.2")
+                }
+            }
+        }
+    }
+    ```
+
+- `docker`: Add `test.withStartupScript` as alternative to `test.startupScript`
+- `benchmark`: Alternative configuration for JMH version
+
+    Before
+
+    ```kotlin
+    kradle {
+        benchmark {
+            jmhVersion("1.34")
+        }
+    }
+    ```
+
+    After
+
+    ```kotlin
+    kradle {
+        benchmark {
+            jmh {
+                version("1.34")
+            }
+        }
+    }
+    ```
+
+#### Changes
+
+- Add possibility to disable linters and code analysis tools
+- Use Kover as default for test coverage instead of JaCoCo
+- Enable Lombok in all Java presets
+- `jacoco`: Use one report task which handles all test source sets instead of one task per set
+- `jacoco`: No longer create report after running tests
+- `test`: Remove access to unit test classes from integration and functional tests
+- `test`: Enable JUnit Jupiter per default
+- `dev`: Rename environment variable DEV_MODE to KRADLE_DEV_MODE
+- `docker`: Add [tini](https://github.com/krallin/tini) when using `startupScript` or `withJvmKill`
+
 ### Version 2.1.0 (2022-01-06)
 
-- Support for [Java development](README.md#feature-java) (linting, code analysis, bootstrapping, preview features)
-- Fix `dev` in combination with Gradle toolchains
-- ktlint rules are configurable
-- __Defaults change__:  ktlint rule 'no-wildcard-imports' no longer disabled (it still is disabled in presets)
-- Add [`customTests`](README.md#feature-test) option
-- Add `kradleDump` task for diagnostics
-- Exclude beta versions in `showDependencyUpdates`
-- Add option `ignoreFailures` for linting and code analysis
-- Files ending with `Spec` are recognized as tests
-- Add alternative configuration syntax for ktlint and detekt
+#### Bugfixes
 
-  Before
+- `developmentMode`: Make sure `dev` works with Gradle toolchains
+
+#### Additions
+
+- New feature [Java development](README.md#feature-java) (linting, code analysis, bootstrapping, preview features)
+- New task `kradleDump`
+- `lint`, `codeAnalysis`: New option `ignoreFailures`
+- `ktlint`: Rules are configurable
+- `ktlint`, `detekt`: Alternative configuration
+
+    Before
 
     ```kotlin
     kradle {
@@ -33,7 +152,7 @@
     }
     ```
 
-  After
+    After
 
     ```kotlin
     kradle {
@@ -54,137 +173,143 @@
         }
     }
     ```
-- More syntactic sugar:
+- `test`: Add support for [custom tests](README.md#feature-test)
+- `test`: Alternative configuration
 
-   Before
+    Before
 
-       ```
-       kradle {
-           jvm {
-               test {
-                   withIntegrationTests(true)
-                   withFunctionalTests(true)
-               }
-           }
-       }
-       ```
+    ```kotlin
+    kradle {
+        jvm {
+            test {
+                withIntegrationTests(true)
+                withFunctionalTests(true)
+            }
+        }
+    }
+    ```
 
-   After
+    After
 
-       ```
-       kradle {
-           jvm {
-               test {
-                   integrationTests(true)
-                   functionalTests(true)
-               }
-           }
-       }
-       ```
+    ```kotlin
+    kradle {
+        jvm {
+            test {
+                integrationTests(true)
+                functionalTests(true)
+            }
+        }
+    }
+    ```
 
-   Before
+- `docker`: Alternative configuration
+
+    Before
 
       ```
       kradle {
           jvm {
             docker {
                 withAppSh(true)
-                ports.add(...)
+                ports.add(…)
             }
           }
       }
       ```
 
-   After
+    After
 
       ```
       kradle {
           jvm {
             docker {
                 startupScript(true)
-                ports(...)
+                ports(…)
             }
           }
       }
       ```
 
-   Before
+#### Changes
 
-      ```
-      kradle {
-          jvm {
-            codeAnalysis.enable()
-          }
-      }
-      ```
-
-   After
-
-      ```
-      kradle {
-          jvm {
-            codeAnalysis(true)
-          }
-      }
-      ```
+- `ktlint`: Rule `no-wildcard-imports` is no longer disabled (it still is in presets)
+- `showDependencyUpdates`: Exclude beta versions
+- `test`: Recognize files ending with `Spec`
 
 ### Version 2.0.1 (2022-01-01)
 
+#### Bugfixes
+
 - `kradle` now works in combination with [Gradle toolchains](https://docs.gradle.org/current/userguide/toolchains.html)
-- Fix `analyzeDependencies`
 
 ### Version 2.0.0 (2021-12-29)
 
-- Fix `bootstrap` for multi-project builds
-- Fix exclusion of alpha versions and RCs in `showDependencyUpdates`
-- Set default target JVM to 17
-- Update plugins and dependencies
+#### Bugfixes
+
+- `bootstrap`: Fix for multi-project builds
+- `showDependencyUpdates`: Fix regular expression for exclusion of alpha versions and RCs
+
+#### Additions
+
 - New plugin `net.bitsandbobs.kradle`, which combines the functionality of `kradle-app` and `kradle-lib`
 - New configuration DSL (see [configuration reference](README.md#configuration-reference))
+
+#### Changes
+
+- `jvm`: Set default target JVM to 17
 - Deprecate `kradle-app` and `kradle-lib`. They still work, but won't receive any new features. Consider using `net.bitsandbobs.kradle` instead.
 - __Breaking change__: [`disable`](https://github.com/mrkuz/kradle/tree/v1.2.0#blueprints) for `kradle-app` and `kradle-lib` removed
 
 ### Version 1.2.0 (2021-09-23)
 
-- The tasks `showDependencyUpdates`, `analyzeCode`, `analyzeDependencies`, `generateDocumentation`,
-  `uberJar` and `buildImage` are no longer aliases. Instead, they are independent tasks.
-- Support use of `@JvmName`
-- Automatically add `kotlin-reflect` to project dependencies
-- __Breaking change__: `run` no longer sets `DEV_MODE=true`
-- JMH and detekt versions are now configurable
-- Strict JSR-305 processing
+#### Bugfixes
+
 - Fix package statement of main class generated by `bootstrap`
-- __Defaults change__: The JAR created by `uberJar` is no longer minimized
-- __Breaking change__: Content of _build.properties_ generated by `generateBuildProperties` changed
 
-  Before
+#### Additions
 
-  ```properties
-  version=...
-  timestamp=...
-  git.commit-id=...
-  ```
+- Support use of `@JvmName`
+- New option `jmhVersion`
+- New option `detektVersion`
 
-  After
+#### Changes
 
-  ```properties
-  project.name=...
-  project.group=...
-  project.version=...
-  build.timestamp=...
-  git.commit-id=...
-  ```
+- The tasks `showDependencyUpdates`, `analyzeCode`, `analyzeDependencies`, `generateDocumentation`,  `uberJar` and `buildImage` are now independent tasks, not aliases
+- Add `kotlin-reflect` to project dependencies
+- Enable strict JSR-305 processing
+- `DEV_MODE=true` is no longer set when launching the application with `run`
+- `uberJar`: JAR is no longer minimized
+- `generateBuildProperties`: Content of _build.properties_ changed
+
+    Before
+
+    ```properties
+    version=…
+    timestamp=…
+    git.commit-id=…
+    ```
+
+    After
+
+    ```properties
+    project.name=…
+    project.group=…
+    project.version=…
+    build.timestamp=…
+    git.commit-id=…
+    ```
 
 ### Version 1.1.0 (2021-09-09)
+
+#### Additions
 
 - New task `bootstrap`: Bootstraps new app/lib project
 - New task `dev`: Runs the application and stops it when sources change (for automatic rebuilds and restarts)
 - New task `generateGitignore`: Generates _.gitignore_
-- Added source sets and tasks for integration and functional tests
-- module.md and package.md for Dokka can also be placed in any source directory
-- Syntactic sugar: Added methods for configuration
+- Add source sets and tasks for integration and functional tests
+- Syntactic sugar: Overload invoke operator for setting options
 
-  Before
+    Before
 
     ```kotlin
     kradle {
@@ -192,7 +317,7 @@
     }
     ```
 
-  After
+    After
 
     ```kotlin
     kradle {
@@ -200,9 +325,9 @@
     }
     ```
 
-- Added configuration for main class
+- Add option for main class inside `kradle` configuration
 
-  Before
+    Before
 
     ```kotlin
     application {
@@ -210,7 +335,7 @@
     }
     ```
 
-  After
+    After
 
     ```kotlin
     kradle {
@@ -218,10 +343,9 @@
     }
     ```
 
+- Add `jacocoVersion` to `test`
 
-- Moved JaCoCo version to `tests`
-
-  Before
+    Before
 
     ```kotlin
     kradle {
@@ -229,7 +353,7 @@
     }
     ```
 
-  After
+    After
 
     ```kotlin
     kradle {
@@ -238,3 +362,7 @@
         }
     }
     ```
+
+#### Changes
+
+- `generateDocumentation`: _module.md_ and _package.md_ can be placed inside source directories

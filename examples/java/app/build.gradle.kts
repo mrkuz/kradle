@@ -1,11 +1,6 @@
 plugins {
-<<<<<<< HEAD:examples/app/build.gradle.kts
-    id("org.jetbrains.kotlin.jvm") version "1.6.0"
-    id("net.bitsandbobs.kradle") version "2.1.0"
-=======
     `java`
-    id("net.bitsandbobs.kradle") version "main-SNAPSHOT"
->>>>>>> main:examples/java/app/build.gradle.kts
+    id("net.bitsandbobs.kradle") version "2.2.0"
 }
 
 group = "com.example"
