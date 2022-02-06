@@ -101,7 +101,7 @@ class TestGenerator(context: KradleContext, private val metadata: BlueprintMetad
 
     private val className = metadata.blueprint::class.simpleName + "Tests"
     private val dir = Path.of(
-        System.getenv("PROJECT_DIR"),
+        System.getenv("KRADLE_PROJECT_DIR"),
         "src",
         SOURCE_SET,
         "kotlin",

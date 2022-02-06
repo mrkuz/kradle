@@ -42,6 +42,7 @@ class JibBlueprint(project: Project) : Blueprint(project) {
         }
     }
 
+    @Suppress("LongMethod", "ComplexMethod")
     private fun createExtension(): JibExtension {
         val withJvmKill = dockerProperties.withJvmKill.hasValue
         val withStartupScript = dockerProperties.withStartupScript.get()
