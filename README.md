@@ -384,7 +384,7 @@ kradle {
     general {
         scripts {
             "release" {
-                description("Creates release branch and tag")
+                description("Create release branch and tag")
                 prompt(key = "version", text = "Version?", default = project.version.toString())
                 commands {
                     """
@@ -397,6 +397,8 @@ kradle {
     }
 }
 ```
+
+Adds the task `release` which can be called like any other task: `./gradlew release`.
 
 <a id="feature-set-jvm"></a>
 ### JVM features
