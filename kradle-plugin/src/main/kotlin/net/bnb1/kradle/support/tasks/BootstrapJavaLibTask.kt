@@ -6,10 +6,11 @@ open class BootstrapJavaLibTask : BootstrapBaseTask() {
 
     @TaskAction
     fun run() {
-        initializeGit()
+        val git = initializeGit()
         createDirectories("java")
         createFiles()
         copyTextResource("checkstyle.xml")
         copyTextResource("lombok.config")
+        git.add().addFilepattern(".").call()
     }
 }

@@ -281,6 +281,7 @@ Adds the task `bootstrap`, which
 - Initializes Git
 - Adds Gradle wrapper
 - Creates essentials directories and files
+- Stages new files
 
 <a id="feature-git"></a>
 ### Git integration

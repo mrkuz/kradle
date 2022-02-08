@@ -12,6 +12,8 @@
 
 #### Changes
 
+- `bootstrap`: Call `git add -u` when done
+
 ### Version 2.2.0 (2022-02-06)
 
 #### Bugfixes

@@ -12,7 +12,7 @@ open class BootstrapJavaAppTask : BootstrapBaseTask() {
 
     @TaskAction
     fun run() {
-        initializeGit()
+        val git = initializeGit()
         createDirectories("java")
         createFiles()
         copyTextResource("checkstyle.xml")
@@ -43,5 +43,7 @@ open class BootstrapJavaAppTask : BootstrapBaseTask() {
                 """.trimIndent()
             )
         }
+
+        git.add().addFilepattern(".").call()
     }
 }

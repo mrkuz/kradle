@@ -9,11 +9,12 @@ open class BootstrapBaseTask : DefaultTask() {
         dependsOn(":wrapper")
     }
 
-    protected fun initializeGit() {
+    protected fun initializeGit(): Git {
         copyTextResource("gitignore", ".gitignore")
         if (!project.rootDir.resolve(".git").exists()) {
-            Git.init().setDirectory(project.rootDir).call()
+            return Git.init().setDirectory(project.rootDir).call()
         }
+        return Git.open(project.rootDir)
     }
 
     protected fun copyTextResource(name: String) = copyTextResource(name, name)
