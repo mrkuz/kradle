@@ -17,6 +17,7 @@ import net.bnb1.kradle.blueprints.jvm.KoverProperties
 import net.bnb1.kradle.blueprints.jvm.KtlintProperties
 import net.bnb1.kradle.blueprints.jvm.LintProperties
 import net.bnb1.kradle.blueprints.jvm.PmdProperties
+import net.bnb1.kradle.blueprints.jvm.ScriptsProperties
 import net.bnb1.kradle.blueprints.jvm.ShadowProperties
 import net.bnb1.kradle.blueprints.jvm.SpotBugsProperties
 import net.bnb1.kradle.blueprints.jvm.TestProperties
@@ -24,6 +25,10 @@ import net.bnb1.kradle.support.Registry
 
 class AllProperties(registry: Registry) {
 
+    // General
+    val scripts = registry { ScriptsProperties() }
+
+    // JVM
     val jvm = registry { JvmProperties() }
 
     val ktlint = registry { KtlintProperties() }

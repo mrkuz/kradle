@@ -2,10 +2,14 @@
 
 ## Changelog
 
-### Version main-SNAPSHOT (2022-02-06)
+### Version main-SNAPSHOT (2022-02-08)
 
 #### Bugfixes
+
 #### Additions
+
+- New feature `scripts`
+
 #### Changes
 
 ### Version 2.2.0 (2022-02-06)

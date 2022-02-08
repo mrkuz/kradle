@@ -10,6 +10,7 @@ class AllFeatures(registry: Registry) {
     val git = registry("git") { Feature(it) }
     val projectProperties = registry("projectProperties") { Feature(it) }
     val buildProperties = registry("buildProperties") { Feature(it) }
+    val scripts = registry("scripts") { Feature(it) }
 
     // JVM
     val kotlin = registry("kotlin") { Feature(it) }

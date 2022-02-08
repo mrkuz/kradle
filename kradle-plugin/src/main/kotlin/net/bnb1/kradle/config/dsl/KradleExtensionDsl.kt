@@ -13,6 +13,6 @@ open class KradleExtensionDsl(
     properties: AllProperties
 ) {
 
-    val general = FeatureSetDsl(tracer, featureSets.general, GeneralDsl(features))
+    val general = FeatureSetDsl(tracer, featureSets.general, GeneralDsl(features, properties))
     val jvm = FeatureSetDsl(tracer, featureSets.jvm, JvmDsl(features, properties))
 }

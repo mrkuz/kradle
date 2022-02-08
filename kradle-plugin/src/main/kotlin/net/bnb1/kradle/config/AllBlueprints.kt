@@ -34,6 +34,7 @@ import net.bnb1.kradle.blueprints.jvm.OwaspDependencyCheckBlueprint
 import net.bnb1.kradle.blueprints.jvm.PackageApplicationBlueprint
 import net.bnb1.kradle.blueprints.jvm.PackagingBlueprint
 import net.bnb1.kradle.blueprints.jvm.PmdBlueprint
+import net.bnb1.kradle.blueprints.jvm.ScriptsBlueprint
 import net.bnb1.kradle.blueprints.jvm.ShadowBlueprint
 import net.bnb1.kradle.blueprints.jvm.SpotBugsBlueprint
 import net.bnb1.kradle.blueprints.jvm.TestBlueprint
@@ -48,6 +49,11 @@ class AllBlueprints(registry: Registry, properties: AllProperties, project: Proj
     val git = registry { GitBlueprint(project) }
     val projectProperties = registry { ProjectPropertiesBlueprint(project) }
     val buildProperties = registry { BuildPropertiesBlueprint(project) }
+    val scripts = registry {
+        ScriptsBlueprint(project).inject {
+            scriptsProperties = properties.scripts
+        }
+    }
 
     // JVM
     val java = registry {

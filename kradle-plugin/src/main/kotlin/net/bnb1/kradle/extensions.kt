@@ -1,5 +1,6 @@
 package net.bnb1.kradle
 
+import net.bnb1.kradle.support.tasks.ScriptsTask
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.api.Task
@@ -10,6 +11,7 @@ import org.gradle.kotlin.dsl.DependencyHandlerScope
 
 const val KRADLE_TASK_GROUP = "Kradle"
 const val HELPER_TASK_GROUP = "Kradle helper"
+const val SCRIPT_TASK_GROUP = "Kradle scripts"
 
 // Project
 
@@ -29,6 +31,14 @@ inline fun <reified T : Task> Project.createHelperTask(
     noinline configure: T.() -> Unit = {}
 ): T {
     return createTask(HELPER_TASK_GROUP, name, description, T::class.java, configure)
+}
+
+fun Project.createScriptTask(
+    name: String,
+    description: String,
+    configure: ScriptsTask.() -> Unit = {}
+): ScriptsTask {
+    return createTask(SCRIPT_TASK_GROUP, name, description, ScriptsTask::class.java, configure)
 }
 
 fun <T : Task> Project.createTask(

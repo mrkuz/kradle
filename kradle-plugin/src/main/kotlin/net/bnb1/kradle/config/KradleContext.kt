@@ -41,6 +41,10 @@ class KradleContext(project: Project) {
         features.buildProperties.also { me ->
             me belongsTo featureSets.general
         }
+        features.scripts.also { me ->
+            me belongsTo featureSets.general
+            me += blueprints.scripts
+        }
 
         features.kotlin.also { me ->
             me belongsTo featureSets.jvm

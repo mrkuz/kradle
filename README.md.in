@@ -55,6 +55,7 @@ Most of the functionality is provided by other well-known plugins. `kradle` take
     - [Git integration](#feature-git)
     - [Project properties](#feature-project-properties)
     - [Build properties](#feature-build-properties)
+    - [Custom scripts](#feature-scripts)
     - [Kotlin development](#feature-kotlin)
     - [Java development](#feature-java)
     - [Application development](#feature-application)
@@ -334,6 +335,67 @@ project.group=…
 project.version=…
 build.timestamp=…
 git.commit-id=…
+```
+
+<a id="feature-scripts"></a>
+### Custom scripts
+
+```kotlin
+kradle {
+    general {
+        scripts.enable()
+    }
+}
+```
+
+Creates new tasks which execute a chain of shell commands.
+
+#### Options
+
+```kotlin
+kradle {
+    general {
+        scripts {
+            "<NAME>" {
+                description("…")
+                prompt(key = "…", text = "…", default = "…")
+                commands {
+                    """
+                    <COMMAND>
+                    <COMMAND>
+                    …
+                    """
+                }
+            }
+        }
+    }
+}
+```
+
+- `<NAME>`: Name of the created task
+- `description`: Description of the created task
+- `prompt`: Asks for user input. The entered values are stored in a map named `inputs`. Can be called zero, once or multiple times
+- `commands`: List of commands to execute. If any fails, the execution is stopped and the build fails
+
+#### Example
+
+```kotlin
+kradle {
+    general {
+        scripts {
+            "release" {
+                description("Creates release branch and tag")
+                prompt(key = "version", text = "Version?", default = project.version.toString())
+                commands {
+                    """
+                    git checkout -b release/\${inputs["version"]}
+                    git tag v\${inputs["version"]}
+                    """
+                }
+            }
+        }
+    }
+}
 ```
 
 <a id="feature-set-jvm"></a>

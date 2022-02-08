@@ -5,7 +5,11 @@
 ### Version ${kradleVersion} (${new Date().format("yyyy-MM-dd")})
 
 #### Bugfixes
+
 #### Additions
+
+- New feature `scripts`
+
 #### Changes
 
 ### Version 2.2.0 (2022-02-06)
