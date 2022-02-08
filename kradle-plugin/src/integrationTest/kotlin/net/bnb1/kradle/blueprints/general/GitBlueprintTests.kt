@@ -7,6 +7,7 @@ import io.kotest.matchers.file.shouldExist
 import io.kotest.matchers.shouldBe
 import net.bnb1.kradle.TestProject
 import net.bnb1.kradle.support.plugins.GitPlugin
+import org.eclipse.jgit.api.Git
 import org.gradle.testkit.runner.TaskOutcome
 
 class GitBlueprintTests : BehaviorSpec({
@@ -79,6 +80,27 @@ class GitBlueprintTests : BehaviorSpec({
 
                     // And: "gitBranch is set"
                     project.shouldHaveProperty("gitBranch", "main")
+
+                    // And: "gitBranchPrefix is set"
+                    project.shouldHaveProperty("gitBranchPrefix", "main")
+                }
+            }
+        }
+
+        And("Feature branch is checked out") {
+            project.gitInit()
+            Git.open(project.projectDir)
+                .checkout()
+                .setName("feature/whatever")
+                .setCreateBranch(true).call()
+
+            When("Check for project properties") {
+
+                Then("gitBranch is set") {
+                    project.shouldHaveProperty("gitBranch", "feature/whatever")
+
+                    // And: "gitBranchPrefix is set"
+                    project.shouldHaveProperty("gitBranchPrefix", "feature")
                 }
             }
         }

@@ -9,8 +9,13 @@
 #### Additions
 
 - New feature `scripts`
+- New alias `compile` for `classes`
+- New alias `verify` for `check`
+- New project property `gitBranchPrefix`
 
 #### Changes
+
+- `bootstrap`: Call `git add -u` when done
 
 ### Version 2.2.0 (2022-02-06)
 

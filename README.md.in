@@ -298,7 +298,8 @@ kradle {
 
 Adds the task `generateGitignore`, which generates _.gitignore_ with sane defaults.
 
-`gitCommit` is added to the project properties.
+`gitCommit`, `gitBranch` and `gitBranchPrefix` are added to the project properties.
+The `gitBranchPrefix` is the branch name up to the first occurrence of `/`, `-` or `_`.
 
 <a id="feature-project-properties"></a>
 ### Project properties

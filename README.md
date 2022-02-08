@@ -185,6 +185,8 @@ Which tasks are available, depends on the [features](#features) enabled.
 | <a id="task-generate-detekt-config"></a>[generateDetektConfig](#feature-code-analysis) | Generates _detekt-config.yml_ | - | - |
 | <a id="task-generate-checkstyle-config"></a>[generateCheckstyleConfig](#feature-code-analysis) | Generates _checkstyle.xml_ | - | - |
 | <a id="task-generate-lombok-config"></a>[generateLombokConfig](#feature-java) | Generates _lombok.config_ | - | - |
+| compile | Compiles main classes | classes | - |
+| verify | Runs all checks and tests | check | - |
 | kradleDump | Dumps kradle diagnostic information | - | - |
 
 <a id="features"></a>
@@ -281,6 +283,7 @@ Adds the task `bootstrap`, which
 - Initializes Git
 - Adds Gradle wrapper
 - Creates essentials directories and files
+- Stages new files
 
 <a id="feature-git"></a>
 ### Git integration
@@ -295,7 +298,8 @@ kradle {
 
 Adds the task `generateGitignore`, which generates _.gitignore_ with sane defaults.
 
-`gitCommit` is added to the project properties.
+`gitCommit`, `gitBranch` and `gitBranchPrefix` are added to the project properties.
+The `gitBranchPrefix` is the branch name up to the first occurrence of `/`, `-` or `_`.
 
 <a id="feature-project-properties"></a>
 ### Project properties

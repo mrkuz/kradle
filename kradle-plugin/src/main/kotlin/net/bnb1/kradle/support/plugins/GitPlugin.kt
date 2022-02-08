@@ -21,6 +21,12 @@ class GitPlugin : Plugin<Project> {
             }
             git.repository.branch?.let {
                 project.extra["gitBranch"] = it
+                val index = it.indexOfAny(setOf("/", "-", "_"))
+                if (index == -1) {
+                    project.extra["gitBranchPrefix"] = project.extra["gitBranch"]
+                } else {
+                    project.extra["gitBranchPrefix"] = it.substring(0, index)
+                }
             }
         }
 
