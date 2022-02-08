@@ -9,6 +9,8 @@
 #### Additions
 
 - New feature `scripts`
+- New alias `compile` for `classes`
+- New alias `verify` for `check`
 
 #### Changes
 

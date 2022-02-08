@@ -185,6 +185,8 @@ Which tasks are available, depends on the [features](#features) enabled.
 | <a id="task-generate-detekt-config"></a>[generateDetektConfig](#feature-code-analysis) | Generates _detekt-config.yml_ | - | - |
 | <a id="task-generate-checkstyle-config"></a>[generateCheckstyleConfig](#feature-code-analysis) | Generates _checkstyle.xml_ | - | - |
 | <a id="task-generate-lombok-config"></a>[generateLombokConfig](#feature-java) | Generates _lombok.config_ | - | - |
+| compile | Compiles main classes | classes | - |
+| verify | Runs all checks and tests | check | - |
 | kradleDump | Dumps kradle diagnostic information | - | - |
 
 <a id="features"></a>

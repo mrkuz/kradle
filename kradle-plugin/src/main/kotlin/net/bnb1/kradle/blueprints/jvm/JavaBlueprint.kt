@@ -1,6 +1,7 @@
 package net.bnb1.kradle.blueprints.jvm
 
 import net.bnb1.kradle.Catalog
+import net.bnb1.kradle.alias
 import net.bnb1.kradle.annotationProcessor
 import net.bnb1.kradle.apply
 import net.bnb1.kradle.compileOnly
@@ -43,6 +44,11 @@ class JavaBlueprint(project: Project) : Blueprint(project) {
 
     override fun doApplyPlugins() {
         project.apply(JavaPlugin::class.java)
+    }
+
+    override fun doAddAliases() {
+        project.alias("compile", "Compiles main classes", "classes")
+        project.alias("verify", "Runs all checks and tests", "check")
     }
 
     override fun doCreateTasks() {

@@ -29,6 +29,33 @@ class JavaBlueprintTests : BehaviorSpec({
                 project.shouldHavePlugin(JavaPlugin::class)
             }
         }
+
+        When("Check for tasks") {
+
+            Then("Task compile is available") {
+                project.shouldHaveTask("compile")
+            }
+
+            Then("Task verify is available") {
+                project.shouldHaveTask("verify")
+            }
+        }
+
+        When("Run compile") {
+            val result = project.runTask("compile")
+
+            Then("classes is called") {
+                result.task(":classes")!!.outcome shouldBe TaskOutcome.UP_TO_DATE
+            }
+        }
+
+        When("Run verify") {
+            val result = project.runTask("verify")
+
+            Then("check is called") {
+                result.task(":check")!!.outcome shouldBe TaskOutcome.UP_TO_DATE
+            }
+        }
     }
 
     Given("jvm.targetJvm = 7") {
