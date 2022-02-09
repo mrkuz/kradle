@@ -1,4 +1,4 @@
-package net.bnb1.kradle.blueprints.jvm
+package net.bnb1.kradle.blueprints.general
 
 import net.bnb1.kradle.dsl.Properties
 import net.bnb1.kradle.dsl.Value

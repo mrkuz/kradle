@@ -4,6 +4,7 @@ import net.bnb1.kradle.blueprints.general.BootstrapBlueprint
 import net.bnb1.kradle.blueprints.general.BuildPropertiesBlueprint
 import net.bnb1.kradle.blueprints.general.GitBlueprint
 import net.bnb1.kradle.blueprints.general.ProjectPropertiesBlueprint
+import net.bnb1.kradle.blueprints.general.ScriptsBlueprint
 import net.bnb1.kradle.blueprints.jvm.AllOpenBlueprint
 import net.bnb1.kradle.blueprints.jvm.ApplicationBlueprint
 import net.bnb1.kradle.blueprints.jvm.BenchmarksBlueprint
@@ -34,7 +35,6 @@ import net.bnb1.kradle.blueprints.jvm.OwaspDependencyCheckBlueprint
 import net.bnb1.kradle.blueprints.jvm.PackageApplicationBlueprint
 import net.bnb1.kradle.blueprints.jvm.PackagingBlueprint
 import net.bnb1.kradle.blueprints.jvm.PmdBlueprint
-import net.bnb1.kradle.blueprints.jvm.ScriptsBlueprint
 import net.bnb1.kradle.blueprints.jvm.ShadowBlueprint
 import net.bnb1.kradle.blueprints.jvm.SpotBugsBlueprint
 import net.bnb1.kradle.blueprints.jvm.TestBlueprint

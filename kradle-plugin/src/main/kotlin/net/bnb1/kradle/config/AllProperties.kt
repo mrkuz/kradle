@@ -1,5 +1,6 @@
 package net.bnb1.kradle.config
 
+import net.bnb1.kradle.blueprints.general.ScriptsProperties
 import net.bnb1.kradle.blueprints.jvm.ApplicationProperties
 import net.bnb1.kradle.blueprints.jvm.CheckstyleProperties
 import net.bnb1.kradle.blueprints.jvm.CodeAnalysisProperties
@@ -17,7 +18,6 @@ import net.bnb1.kradle.blueprints.jvm.KoverProperties
 import net.bnb1.kradle.blueprints.jvm.KtlintProperties
 import net.bnb1.kradle.blueprints.jvm.LintProperties
 import net.bnb1.kradle.blueprints.jvm.PmdProperties
-import net.bnb1.kradle.blueprints.jvm.ScriptsProperties
 import net.bnb1.kradle.blueprints.jvm.ShadowProperties
 import net.bnb1.kradle.blueprints.jvm.SpotBugsProperties
 import net.bnb1.kradle.blueprints.jvm.TestProperties
