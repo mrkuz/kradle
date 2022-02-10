@@ -1,17 +1,16 @@
 package net.bnb1.kradle.blueprints.jvm
 
-import net.bnb1.kradle.Catalog
-import net.bnb1.kradle.dsl.Properties
+import net.bnb1.kradle.core.Properties
 
-class TestProperties : Properties() {
+class TestProperties : Properties {
 
-    val prettyPrint = flag()
-    val showStandardStreams = flag()
+    var prettyPrint = false
+    var showStandardStreams = false
 
-    val withIntegrationTests = flag()
-    val withFunctionalTests = flag()
-    val withCustomTests = valueSet<String>()
+    var withIntegrationTests = false
+    var withFunctionalTests = false
+    var withCustomTests = mutableSetOf<String>()
 
-    val useArchUnit = optional(Catalog.Versions.archUnit)
-    val useTestcontainers = optional(Catalog.Versions.testcontainers)
+    var useArchUnit: String? = null
+    var useTestcontainers: String? = null
 }

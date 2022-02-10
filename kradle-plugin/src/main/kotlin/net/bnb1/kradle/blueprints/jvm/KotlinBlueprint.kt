@@ -39,9 +39,9 @@ class KotlinBlueprint(project: Project) : Blueprint(project) {
             implementation(platform(Catalog.Dependencies.Platform.kotlin))
             implementation(Catalog.Dependencies.kotlinStdlib)
             implementation(Catalog.Dependencies.kotlinReflect)
-            if (kotlinProperties.kotlinxCoroutinesVersion.hasValue) {
+            kotlinProperties.useCoroutines?.let {
                 implementation(
-                    "${Catalog.Dependencies.kotlinCoroutines}:${kotlinProperties.kotlinxCoroutinesVersion.get()}"
+                    "${Catalog.Dependencies.kotlinCoroutines}:$it"
                 )
             }
             testImplementation(Catalog.Dependencies.Test.kotlinTest)
@@ -51,10 +51,10 @@ class KotlinBlueprint(project: Project) : Blueprint(project) {
     override fun doConfigure() {
         project.tasks.withType<KotlinCompile> {
             kotlinOptions {
-                jvmTarget = if (jvmProperties.targetJvm.get() == "8") {
+                jvmTarget = if (jvmProperties.targetJvm == "8") {
                     "1.8"
                 } else {
-                    jvmProperties.targetJvm.get()
+                    jvmProperties.targetJvm
                 }
                 freeCompilerArgs = listOf("-Xopt-in=kotlin.RequiresOptIn", "-Xjsr305=strict")
             }

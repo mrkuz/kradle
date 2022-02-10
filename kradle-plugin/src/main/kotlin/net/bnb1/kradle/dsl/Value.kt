@@ -2,39 +2,29 @@ package net.bnb1.kradle.dsl
 
 @Suppress("MemberNameEqualsClassName")
 open class Value<T : Any>(
-    private val defaultValue: T?,
-    private val suggestion: T?
+    private val defaultValue: T,
+    private val target: (T) -> Unit
 ) : SimpleProvider<T> {
 
-    private var value: T? = defaultValue
+    private var value: T = defaultValue
 
-    override val notNull: Boolean
-        get() = value != null
-
-    override fun get() = value!!
-
-    operator fun invoke(value: T? = suggestion) = set(value)
-
-    fun set(value: T? = suggestion) {
-        this.value = value
+    init {
+        target(defaultValue)
     }
 
-    fun get(default: T) = value ?: default
+    override val notNull: Boolean
+        get() = true
 
-    fun get(consumer: (T) -> Unit) {
-        if (hasValue) {
-            consumer(value!!)
-        }
+    override fun get() = value
+
+    operator fun invoke(value: T) = set(value)
+
+    fun set(value: T) {
+        this.value = value
+        target(value)
     }
 
     fun reset() {
-        value = defaultValue
+        set(defaultValue)
     }
-
-    fun unset() {
-        value = null
-    }
-
-    val hasValue by ::notNull
-    val hasSuggestion = suggestion != null
 }

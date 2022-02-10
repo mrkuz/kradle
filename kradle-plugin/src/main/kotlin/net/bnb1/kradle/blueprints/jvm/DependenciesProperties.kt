@@ -1,11 +1,10 @@
 package net.bnb1.kradle.blueprints.jvm
 
-import net.bnb1.kradle.Catalog
-import net.bnb1.kradle.dsl.Properties
+import net.bnb1.kradle.core.Properties
 
-class DependenciesProperties : Properties() {
+class DependenciesProperties : Properties {
 
-    val useGuava = optional(Catalog.Versions.guava)
-    val useCaffeine = optional(Catalog.Versions.caffeine)
-    val useLog4j = optional(Catalog.Versions.log4j)
+    var useGuava: String? = null
+    var useCaffeine: String? = null
+    var useLog4j: String? = null
 }

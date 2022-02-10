@@ -36,7 +36,7 @@ class ShadowBlueprint(project: Project) : Blueprint(project) {
 
     override fun doConfigure() {
         project.tasks.named<ShadowJar>(TASK_NAME).configure {
-            if (shadowProperties.minimize.get()) {
+            if (shadowProperties.minimize) {
                 minimize()
             }
         }

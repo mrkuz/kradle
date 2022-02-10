@@ -43,8 +43,8 @@ class KradleCompat(
 
         // Source sets need to be created early
         properties.test.apply {
-            withIntegrationTests(true)
-            withFunctionalTests(true)
+            withIntegrationTests = true
+            withFunctionalTests = true
         }
 
         project.apply(AllOpenGradleSubplugin::class.java)
@@ -68,20 +68,20 @@ class KradleCompat(
             }
 
             jvm.configureOnly {
-                targetJvm.set(compatExtension.targetJvm.orNull)
+                targetJvm.set(compatExtension.targetJvm.get())
                 kotlin {
                     kotlinxCoroutinesVersion.set(compatExtension.kotlinxCoroutinesVersion.orNull)
                     lint {
                         ktlint {
-                            version.set(compatExtension.ktlintVersion.orNull)
+                            version.set(compatExtension.ktlintVersion.get())
                             rules {
                                 disable("no-wildcard-imports")
                             }
                         }
                     }
                     codeAnalysis {
-                        detektConfigFile.set(compatExtension.detektConfigFile.orNull)
-                        detektVersion.set(compatExtension.detektVersion.orNull)
+                        detektConfigFile.set(compatExtension.detektConfigFile.get())
+                        detektVersion.set(compatExtension.detektVersion.get())
                     }
                     test {
                         useMockk.set(compatExtension.tests.mockkVersion.orNull)
@@ -123,7 +123,7 @@ class KradleCompat(
                     kover.disable()
                 }
                 benchmark {
-                    jmhVersion.set(compatExtension.jmhVersion.orNull)
+                    jmhVersion.set(compatExtension.jmhVersion.get())
                 }
                 `package` {
                     uberJar {
@@ -133,7 +133,7 @@ class KradleCompat(
 
                 if (type == ProjectType.APPLICATION) {
                     docker.enable {
-                        baseImage.set(compatExtension.image.baseImage.orNull)
+                        baseImage.set(compatExtension.image.baseImage.get())
                         compatExtension.image.ports.get().forEach { ports.add(it) }
                         withJvmKill.set(compatExtension.image.jvmKillVersion.orNull)
                         withAppSh.set(compatExtension.image.withAppSh.get())

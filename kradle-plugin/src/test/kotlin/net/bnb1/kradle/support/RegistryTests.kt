@@ -6,7 +6,8 @@ import io.kotest.core.spec.style.BehaviorSpec
 import io.kotest.matchers.collections.shouldContainExactly
 import io.kotest.matchers.shouldBe
 import net.bnb1.kradle.core.Feature
-import net.bnb1.kradle.dsl.Properties
+import net.bnb1.kradle.core.FeatureSet
+import net.bnb1.kradle.core.Properties
 
 class RegistryTests : BehaviorSpec({
 
@@ -16,20 +17,20 @@ class RegistryTests : BehaviorSpec({
         val registry = Registry()
 
         When("Registering two instances for one class") {
-            val properties1 = Properties()
-            registry.add(properties1)
+            val featureSet1 = FeatureSet("1")
+            registry.add(featureSet1)
 
-            val properties2 = Properties()
+            val featureSet2 = FeatureSet("2")
             Then("The second attempt should fail") {
-                shouldThrow<IllegalArgumentException> { registry.add(properties2) }
+                shouldThrow<IllegalArgumentException> { registry.add(featureSet2) }
             }
         }
 
         When("Registering two instances for one class with different name") {
-            val properties1 = Properties()
-            registry.add("properties1", properties1)
-            val properties2 = Properties()
-            registry.add("properties2", properties2)
+            val featureSet1 = FeatureSet("1")
+            registry.add("featureSet1", featureSet1)
+            val featureSet2 = FeatureSet("2")
+            registry.add("featureSet2", featureSet2)
 
             Then("Succeed") {
                 registry.map.size shouldBe 2
@@ -37,28 +38,28 @@ class RegistryTests : BehaviorSpec({
         }
 
         And("With two entries of different type") {
-            val properties = Properties()
-            registry.add(properties)
+            val featureSet = FeatureSet("1")
+            registry.add(featureSet)
             registry.add(Feature("feature1"))
 
             When("Fetching entries per type") {
-                val result = registry.withType<Properties>()
+                val result = registry.withType<FeatureSet>()
 
                 Then("Only entries of type should be returned") {
-                    result.shouldContainExactly(properties)
+                    result.shouldContainExactly(featureSet)
                 }
             }
         }
 
         And("With one entry") {
-            val properties = Properties()
-            registry.add("properties", properties)
+            val featureSet = FeatureSet("1")
+            registry.add("featureSet", featureSet)
 
             When("Fetching entry with correct name") {
-                val result = registry.named<Properties>("properties")
+                val result = registry.named<FeatureSet>("featureSet")
 
                 Then("Entry should be returned") {
-                    result shouldBe properties
+                    result shouldBe featureSet
                 }
             }
 

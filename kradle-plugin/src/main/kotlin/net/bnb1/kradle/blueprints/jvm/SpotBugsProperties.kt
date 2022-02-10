@@ -1,12 +1,11 @@
 package net.bnb1.kradle.blueprints.jvm
 
-import net.bnb1.kradle.Catalog
-import net.bnb1.kradle.dsl.Properties
+import net.bnb1.kradle.core.Properties
 
-class SpotBugsProperties : Properties() {
+class SpotBugsProperties : Properties {
 
-    val version = value(Catalog.Versions.spotbugs)
+    lateinit var version: String
 
-    val useFindSecBugs = optional(Catalog.Versions.findSecBugs)
-    val useFbContrib = optional(Catalog.Versions.fbContrib)
+    var useFindSecBugs: String? = null
+    var useFbContrib: String? = null
 }

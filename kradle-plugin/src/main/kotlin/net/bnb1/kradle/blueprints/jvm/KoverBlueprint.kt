@@ -22,7 +22,7 @@ class KoverBlueprint(project: Project) : Blueprint(project) {
     override fun doConfigure() {
         project.tasks.withType<Test> {
             val extension = extensions.getByType(KoverTaskExtension::class.java)
-            extension.isDisabled = koverProperties.excludes.get().contains(name)
+            extension.isDisabled = koverProperties.excludes.contains(name)
         }
 
         // Kover only excludes test source set, but we have 'integrationTest', 'functionalTest', ...

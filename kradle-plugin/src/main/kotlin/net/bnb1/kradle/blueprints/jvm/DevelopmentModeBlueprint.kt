@@ -38,7 +38,7 @@ class DevelopmentModeBlueprint(project: Project) : Blueprint(project) {
             environment("KRADLE_PROJECT_ROOT_DIR", project.rootDir)
             // Speed up start when developing
             jvmArgs = listOf("-XX:TieredStopAtLevel=1")
-            if (javaProperties.previewFeatures.get()) {
+            if (javaProperties.previewFeatures) {
                 jvmArgs = jvmArgs + "--enable-preview"
             }
             classpath = mainSourceSet.runtimeClasspath
@@ -50,6 +50,6 @@ class DevelopmentModeBlueprint(project: Project) : Blueprint(project) {
 
     override fun doConfigure() {
         val mainClass = applicationProperties.mainClass
-        project.tasks.named<JavaExec>("dev").configure { this.mainClass.set(mainClass.get()) }
+        project.tasks.named<JavaExec>("dev").configure { this.mainClass.set(mainClass) }
     }
 }

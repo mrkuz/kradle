@@ -11,13 +11,13 @@ class ScriptsBlueprint(project: Project) : Blueprint(project) {
 
     override fun doCreateTasks() {
         scriptsProperties.scripts.forEach { script ->
-            if (!script.description.hasValue) {
+            if (script.description == null) {
                 throw GradleException("Missing description for '${script.name}'")
             }
             if (script.commands == null) {
                 throw GradleException("No commands for '${script.name}'")
             }
-            project.createScriptTask(script.name.get(), script.description.get()) {
+            project.createScriptTask(script.name, script.description!!) {
                 commands.set(project.provider { script.commands!!.invoke() })
                 prompts.set(script.prompts)
                 inputListener.set(script.inputListener)

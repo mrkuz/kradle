@@ -1,10 +1,9 @@
 package net.bnb1.kradle.blueprints.jvm
 
-import net.bnb1.kradle.Catalog
-import net.bnb1.kradle.dsl.Properties
+import net.bnb1.kradle.core.Properties
 
-class KotlinTestProperties : Properties() {
+class KotlinTestProperties : Properties {
 
-    val useKotest = optional(Catalog.Versions.kotest)
-    val useMockk = optional(Catalog.Versions.mockk)
+    var useKotest: String? = null
+    var useMockk: String? = null
 }

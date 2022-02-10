@@ -41,7 +41,7 @@ class SpotBugsBlueprint(project: Project) : Blueprint(project) {
                         required.set(true)
                         outputLocation.set(project.buildDir.resolve("reports/spotbugs/${sourceSet.name}.html"))
                     }
-                    ignoreFailures = codeAnalysisProperties.ignoreFailures.get()
+                    ignoreFailures = codeAnalysisProperties.ignoreFailures
                 }
                 spotbugsTask.dependsOn(taskName)
             }
@@ -51,24 +51,18 @@ class SpotBugsBlueprint(project: Project) : Blueprint(project) {
         project.dependencies {
             add("compileOnly", "${Catalog.Dependencies.Tools.findBugsAnnotations}:${Catalog.Versions.findBugs}")
             add("spotbugsSlf4j", "${Catalog.Dependencies.Tools.slf4jSimple}:${Catalog.Versions.slf4j}")
-            if (spotBugsProperties.useFindSecBugs.hasValue) {
-                add(
-                    "spotbugsPlugins",
-                    "${Catalog.Dependencies.Tools.findSecBugs}:${spotBugsProperties.useFindSecBugs.get()}"
-                )
+            spotBugsProperties.useFindSecBugs?.let {
+                add("spotbugsPlugins", "${Catalog.Dependencies.Tools.findSecBugs}:$it")
             }
-            if (spotBugsProperties.useFbContrib.hasValue) {
-                add(
-                    "spotbugsPlugins",
-                    "${Catalog.Dependencies.Tools.fbContrib}:${spotBugsProperties.useFbContrib.get()}"
-                )
+            spotBugsProperties.useFbContrib?.let {
+                add("spotbugsPlugins", "${Catalog.Dependencies.Tools.fbContrib}:$it")
             }
         }
     }
 
     override fun doConfigure() {
         project.configure<SpotBugsExtension> {
-            toolVersion.set(spotBugsProperties.version.get())
+            toolVersion.set(spotBugsProperties.version)
         }
     }
 }

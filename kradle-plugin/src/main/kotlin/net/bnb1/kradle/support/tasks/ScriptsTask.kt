@@ -49,6 +49,6 @@ open class ScriptsTask @Inject constructor(private val execOperations: ExecOpera
 
 data class Prompt(val key: String, val text: String, val default: String)
 
-interface InputListener {
+fun interface InputListener {
     fun onInput(key: String, value: String)
 }

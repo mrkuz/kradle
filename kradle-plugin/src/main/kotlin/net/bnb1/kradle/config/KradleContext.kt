@@ -2,7 +2,7 @@ package net.bnb1.kradle.config
 
 import net.bnb1.kradle.core.Feature
 import net.bnb1.kradle.core.FeatureSet
-import net.bnb1.kradle.dsl.Properties
+import net.bnb1.kradle.core.Properties
 import net.bnb1.kradle.support.Registry
 import org.gradle.api.Project
 

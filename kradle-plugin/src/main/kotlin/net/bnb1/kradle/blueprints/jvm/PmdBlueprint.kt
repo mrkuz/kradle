@@ -21,7 +21,7 @@ class PmdBlueprint(project: Project) : Blueprint(project) {
     override fun doCreateTasks() {
         project.configurations.create(CONFIGURATION_NAME) {
             val dependencyProvider = project.provider {
-                project.dependencies.create("${Catalog.Dependencies.Tools.pmd}:${pmdProperties.version.get()}")
+                project.dependencies.create("${Catalog.Dependencies.Tools.pmd}:${pmdProperties.version}")
             }
             dependencies.addLater(dependencyProvider)
         }
@@ -35,14 +35,14 @@ class PmdBlueprint(project: Project) : Blueprint(project) {
 
             val enabledRuleSets = mutableListOf<String>()
             with(pmdProperties.ruleSets) {
-                if (bestPractices.get()) enabledRuleSets.add("category/java/bestpractices.xml")
-                if (codeStyle.get()) enabledRuleSets.add("category/java/codestyle.xml")
-                if (design.get()) enabledRuleSets.add("category/java/design.xml")
-                if (documentation.get()) enabledRuleSets.add("category/java/documentation.xml")
-                if (errorProne.get()) enabledRuleSets.add("category/java/errorprone.xml")
-                if (multithreading.get()) enabledRuleSets.add("category/java/multithreading.xml")
-                if (performance.get()) enabledRuleSets.add("category/java/performance.xml")
-                if (security.get()) enabledRuleSets.add("category/java/security.xml")
+                if (bestPractices) enabledRuleSets.add("category/java/bestpractices.xml")
+                if (codeStyle) enabledRuleSets.add("category/java/codestyle.xml")
+                if (design) enabledRuleSets.add("category/java/design.xml")
+                if (documentation) enabledRuleSets.add("category/java/documentation.xml")
+                if (errorProne) enabledRuleSets.add("category/java/errorprone.xml")
+                if (multithreading) enabledRuleSets.add("category/java/multithreading.xml")
+                if (performance) enabledRuleSets.add("category/java/performance.xml")
+                if (security) enabledRuleSets.add("category/java/security.xml")
             }
 
             project.createHelperTask<Pmd>(taskName, "Runs PMD on '${sourceSet.name}'") {
@@ -63,7 +63,7 @@ class PmdBlueprint(project: Project) : Blueprint(project) {
                 reports.forEach {
                     it.outputLocation.set(project.buildDir.resolve("reports/pmd/${sourceSet.name}.${it.name}"))
                 }
-                ignoreFailures = codeAnalysisProperties.ignoreFailures.get()
+                ignoreFailures = codeAnalysisProperties.ignoreFailures
             }
             pmdTask.dependsOn(taskName)
         }

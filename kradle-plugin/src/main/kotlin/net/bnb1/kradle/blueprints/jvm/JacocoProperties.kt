@@ -1,10 +1,9 @@
 package net.bnb1.kradle.blueprints.jvm
 
-import net.bnb1.kradle.Catalog
-import net.bnb1.kradle.dsl.Properties
+import net.bnb1.kradle.core.Properties
 
-class JacocoProperties : Properties() {
+class JacocoProperties : Properties {
 
-    val version = value(Catalog.Versions.jacoco)
-    val excludes = valueSet<String>()
+    lateinit var version: String
+    val excludes = mutableSetOf<String>()
 }

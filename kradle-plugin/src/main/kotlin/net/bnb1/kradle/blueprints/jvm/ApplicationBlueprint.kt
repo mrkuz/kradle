@@ -34,24 +34,23 @@ class ApplicationBlueprint(project: Project) : Blueprint(project) {
     }
 
     override fun doAddExtraProperties() {
-        project.extra["mainClass"] = applicationProperties.mainClass.get()
+        project.extra["mainClass"] = applicationProperties.mainClass
     }
 
     override fun doConfigure() {
-        val mainClass = applicationProperties.mainClass
         val javaExtension = project.extensions.getByType(JavaApplication::class.java)
-        if (!mainClass.hasValue) {
+        if (applicationProperties.mainClass == null) {
             // Backward compatibility: Allow setting main class in application extension
             if (javaExtension.mainClass.isPresent) {
-                mainClass.set(javaExtension.mainClass.get())
+                applicationProperties.mainClass = javaExtension.mainClass.get()
             } else {
                 throw GradleException("Main class is not set")
             }
         } else {
-            javaExtension.mainClass.set(mainClass.get())
+            javaExtension.mainClass.set(applicationProperties.mainClass)
         }
 
-        if (javaProperties.previewFeatures.get()) {
+        if (javaProperties.previewFeatures) {
             project.tasks.withType<JavaExec> {
                 jvmArgs = jvmArgs + "--enable-preview"
             }
