@@ -15,6 +15,17 @@ kradle {
         git.enable()
         projectProperties.enable()
         buildProperties.enable()
+        scripts {
+            "dockerRun" {
+                description("Runs Docker image")
+                dependsOn("buildImage")
+                commands {
+                    """
+                    docker run --rm ${project.rootProject.name}
+                    """
+                }
+            }
+        }
     }
 
     jvm {

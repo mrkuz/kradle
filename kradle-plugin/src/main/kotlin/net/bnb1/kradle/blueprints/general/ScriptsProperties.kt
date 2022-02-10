@@ -10,6 +10,7 @@ class ScriptsProperties : Properties {
 
     class Script(val name: String) {
         var description: String? = null
+        val dependsOn = mutableSetOf<String>()
         var commands: (() -> String)? = null
 
         val prompts = mutableListOf<Prompt>()

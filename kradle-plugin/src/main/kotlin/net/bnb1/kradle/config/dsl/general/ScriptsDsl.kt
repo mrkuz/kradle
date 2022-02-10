@@ -3,6 +3,7 @@ package net.bnb1.kradle.config.dsl.general
 import net.bnb1.kradle.blueprints.general.ScriptsProperties
 import net.bnb1.kradle.config.AllProperties
 import net.bnb1.kradle.dsl.Optional
+import net.bnb1.kradle.dsl.ValueSet
 import net.bnb1.kradle.support.tasks.InputListener
 import net.bnb1.kradle.support.tasks.Prompt
 
@@ -17,6 +18,7 @@ class ScriptsDsl(private val properties: AllProperties) {
     class Spec(private val script: ScriptsProperties.Script) {
 
         val description = Optional<String>(null) { script.description = it }
+        val dependsOn = ValueSet(script.dependsOn)
         val inputs = mutableMapOf<String, String>()
 
         init {

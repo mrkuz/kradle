@@ -18,6 +18,7 @@ class ScriptsBlueprint(project: Project) : Blueprint(project) {
                 throw GradleException("No commands for '${script.name}'")
             }
             project.createScriptTask(script.name, script.description!!) {
+                dependsOn(script.dependsOn)
                 commands.set(project.provider { script.commands!!.invoke() })
                 prompts.set(script.prompts)
                 inputListener.set(script.inputListener)

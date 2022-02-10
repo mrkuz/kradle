@@ -49,6 +49,34 @@ class ScriptsBlueprintTests : BehaviorSpec({
         }
     }
 
+    Given("Script printHelloWorld with dependency on test") {
+        project.setUp {
+            """
+            general {
+                scripts {
+                    "printHelloWorld" {
+                        description("Print hello world")
+                        dependsOn("check")
+                        commands {
+                            ""${'"'}
+                            echo "Hello World"
+                            ""${'"'}
+                        }
+                    }
+                }
+            }
+            """
+        }
+
+        When("Run printHelloWorld") {
+            val result = project.runTask("printHelloWorld")
+
+            Then("check is called") {
+                result.task(":check")!!.outcome shouldBe TaskOutcome.UP_TO_DATE
+            }
+        }
+    }
+
     Given("Script printHelloWorld with inputs") {
         project.setUp {
             """

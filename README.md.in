@@ -362,6 +362,7 @@ kradle {
         scripts {
             "<NAME>" {
                 description("…")
+                dependsOn("…")
                 prompt(key = "…", text = "…", default = "…")
                 commands {
                     """
@@ -378,6 +379,7 @@ kradle {
 
 - `<NAME>`: Name of the created task
 - `description`: Description of the created task
+- `dependsOn`: List of task dependencies
 - `prompt`: Asks for user input. The entered values are stored in a map named `inputs`. Can be called zero, once or multiple times
 - `commands`: List of commands to execute. If any fails, the execution is stopped and the build fails
 
@@ -1244,6 +1246,22 @@ kradle {
         git.enable()
         projectProperties.enable()
         buildProperties.enable()
+        scripts {
+            /*
+            "<NAME>" {
+                description("…")
+                dependsOn("…")
+                prompt(key = "…", text = "…", default = "…")
+                commands {
+                    """
+                    <COMMAND>
+                    <COMMAND>
+                    …
+                    """
+                }
+            }
+            */
+        }
     }
 
     jvm {
