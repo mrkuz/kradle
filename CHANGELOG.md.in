@@ -14,6 +14,8 @@
 - New alias `compile` for `classes`
 - New alias `verify` for `check`
 - New project property `gitBranchPrefix`
+- `docker`: New task `pushImage`
+- `docker`: New options `imageName` and `allowInsecureRegistries`
 
 #### Changes
 

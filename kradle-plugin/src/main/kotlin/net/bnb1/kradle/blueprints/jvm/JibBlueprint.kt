@@ -1,7 +1,9 @@
 package net.bnb1.kradle.blueprints.jvm
 
 import com.google.cloud.tools.jib.gradle.BuildDockerTask
+import com.google.cloud.tools.jib.gradle.BuildImageTask
 import com.google.cloud.tools.jib.gradle.JibExtension
+import com.google.cloud.tools.jib.gradle.JibTask
 import net.bnb1.kradle.Catalog
 import net.bnb1.kradle.core.Blueprint
 import net.bnb1.kradle.createTask
@@ -9,11 +11,11 @@ import net.bnb1.kradle.extraDir
 import net.bnb1.kradle.sourceSets
 import org.gradle.api.Project
 import org.gradle.api.tasks.SourceSet
-import org.gradle.kotlin.dsl.named
 import java.net.URL
 import java.nio.file.Files
 
-private const val TASK_NAME = "buildImage"
+private const val TASK_BUILD_IMAGE = "buildImage"
+private const val TASK_PUSH_IMAGE = "pushImage"
 
 class JibBlueprint(project: Project) : Blueprint(project) {
 
@@ -21,23 +23,25 @@ class JibBlueprint(project: Project) : Blueprint(project) {
     lateinit var applicationProperties: ApplicationProperties
 
     override fun doCreateTasks() {
-        project.createTask<BuildDockerTask>(TASK_NAME, "Builds Docker image")
+        val extension = createExtension()
+        project.createTask<BuildDockerTask>(TASK_BUILD_IMAGE, "Builds Docker image")
+            .also { configureTask(it, extension) }
+        project.createTask<BuildImageTask>(TASK_PUSH_IMAGE, "Pushes container image to remote registry")
+            .also { configureTask(it, extension) }
     }
 
-    override fun doConfigure() {
-        project.tasks.named<BuildDockerTask>(TASK_NAME).configure {
-            dependsOn(project.sourceSets.getByName(SourceSet.MAIN_SOURCE_SET_NAME).runtimeClasspath)
-            dependsOn(project.configurations.getByName("runtimeClasspath"))
-            setJibExtension(createExtension())
-            doFirst {
-                if (dockerProperties.withStartupScript) {
-                    copyResource(project, "app.sh")
-                    downloadTini(project)
-                }
-                if (dockerProperties.withJvmKill != null) {
-                    downloadTini(project)
-                    downloadJvmKill(project)
-                }
+    private fun configureTask(task: JibTask, extension: JibExtension) = task.apply {
+        dependsOn(project.sourceSets.getByName(SourceSet.MAIN_SOURCE_SET_NAME).runtimeClasspath)
+        dependsOn(project.configurations.getByName("runtimeClasspath"))
+        setJibExtension(extension)
+        doFirst {
+            if (dockerProperties.withStartupScript) {
+                copyResource(project, "app.sh")
+                downloadTini(project)
+            }
+            if (dockerProperties.withJvmKill != null) {
+                downloadTini(project)
+                downloadJvmKill(project)
             }
         }
     }
@@ -47,12 +51,18 @@ class JibBlueprint(project: Project) : Blueprint(project) {
         val withJvmKill = dockerProperties.withJvmKill != null
         val withStartupScript = dockerProperties.withStartupScript
         val jibExtension = JibExtension(project).apply {
+            setAllowInsecureRegistries(dockerProperties.allowInsecureRegistries)
+
             from {
                 image = dockerProperties.baseImage
             }
 
             to {
-                image = "${project.rootProject.name}:latest"
+                image = if (dockerProperties.imageName != null) {
+                    "${dockerProperties.imageName}:latest"
+                } else {
+                    "${project.rootProject.name}:latest"
+                }
                 tags = setOf(project.version.toString())
             }
 

@@ -43,6 +43,7 @@ Most of the functionality is provided by other well-known plugins. `kradle` take
     - [`package`](#task-package)
     - [`uberJar`](#task-uber-jar)
     - [`buildImage`](#task-build-image)
+    - [`pushImage`](#task-push-image)
     - [`install`](#task-install)
     - [`generateGitignore`](#task-generate-git-ignore)
     - [`generateBuildProperties`](#task-generate-build-properties)
@@ -179,6 +180,7 @@ Which tasks are available, depends on the [features](#features) enabled.
 | <a id="task-package"></a>[package](#feature-packaging) | Creates JAR | jar | [Java Plugin](https://docs.gradle.org/current/userguide/java_plugin.html) |
 | <a id="task-uber-jar"></a>[uberJar](#feature-packaging) | Creates Uber-JAR (applications only) | - | [Gradle Shadow Plugin](https://plugins.gradle.org/plugin/com.github.johnrengelman.shadow) |
 | <a id="task-build-image"></a>[buildImage](#feature-docker) | Builds Docker image (applications only) | - | [Jib Plugin](https://plugins.gradle.org/plugin/com.google.cloud.tools.jib) |
+| <a id="task-push-image"></a>[pushImage](#feature-docker) | Pushes container image to remote registry (applications only) | - | [Jib Plugin](https://plugins.gradle.org/plugin/com.google.cloud.tools.jib) |
 | <a id="task-install"></a>[install](#feature-library) | Installs JAR to local Maven repository (libraries only) |  publishToMavenLocal | [Maven Publish Plugin](https://docs.gradle.org/current/userguide/publishing_maven.html) |
 | <a id="task-generate-git-ignore"></a>[generateGitignore](#feature-git) | Generates _.gitignore_ | - | - |
 | <a id="task-generate-build-properties"></a>[generateBuildProperties](#feature-build-properties) | Generates _build.properties_ | - | - |
@@ -939,6 +941,8 @@ kradle {
 
 Adds the task `buildImage`, which creates a Docker image using [Jib](https://github.com/GoogleContainerTools/jib).
 
+Adds the task `pushImage`, which pushes the container image to remote registry.
+
 Files in _src/main/extra/_ will be copied to the image directory _/app/extra/_.
 
 Plugins used: [Jib Plugin](https://plugins.gradle.org/plugin/com.google.cloud.tools.jib)
@@ -952,6 +956,8 @@ kradle {
     jvm {
         docker {
             baseImage("bellsoft/liberica-openjdk-alpine:${versions.jvm}")
+            imageName(project.rootProject.name)
+            allowInsecureRegistries(false)
             // ports(…)
             // jvmOpts("…")
             // withJvmKill(${versions.jvmKill}")
@@ -962,6 +968,8 @@ kradle {
 ```
 
 - `baseImage`: Base image used
+- `imageName`: Name of the created image (without tag)
+- `allowInsecureRegistries`: Allows use of insecure registries
 - `ports`: List of exposed ports
 - `jvmOpts`: Options passed to the JVM
 - `withJvmKill`: Adds [jvmkill](https://github.com/airlift/jvmkill) to the image, which terminates the JVM if it is unable to allocate memory
@@ -1374,6 +1382,8 @@ kradle {
 
         docker {
             baseImage("bellsoft/liberica-openjdk-alpine:${versions.jvm}")
+            imageName(project.rootProject.name)
+            allowInsecureRegistries(false)
             // jvmOpts("…")
             // ports(…)
             // withJvmKill("${versions.jvmKill}")

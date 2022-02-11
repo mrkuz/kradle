@@ -76,6 +76,9 @@ class JibBlueprintTests : BehaviorSpec({
 
             Then("Task buildImage is available") {
                 project.shouldHaveTask("buildImage")
+
+                // And: "Task pushImage is available"
+                project.shouldHaveTask("pushImage")
             }
         }
 

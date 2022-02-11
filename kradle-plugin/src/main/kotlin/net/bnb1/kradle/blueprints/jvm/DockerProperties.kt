@@ -4,6 +4,8 @@ import net.bnb1.kradle.core.Properties
 
 class DockerProperties(var baseImage: String) : Properties {
 
+    var imageName: String? = null
+    var allowInsecureRegistries = false
     val ports = mutableSetOf<Int>()
     var withJvmKill: String? = null
     var withStartupScript = false
