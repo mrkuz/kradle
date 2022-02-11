@@ -6,6 +6,8 @@
 
 #### Bugfixes
 
+- `kover`: Exclude `benchmark` sources from analysis
+
 #### Additions
 
 - New feature `scripts`
