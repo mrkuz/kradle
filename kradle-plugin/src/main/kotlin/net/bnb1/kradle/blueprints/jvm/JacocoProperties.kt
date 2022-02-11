@@ -2,8 +2,7 @@ package net.bnb1.kradle.blueprints.jvm
 
 import net.bnb1.kradle.core.Properties
 
-class JacocoProperties : Properties {
+class JacocoProperties(var version: String) : Properties {
 
-    lateinit var version: String
     val excludes = mutableSetOf<String>()
 }

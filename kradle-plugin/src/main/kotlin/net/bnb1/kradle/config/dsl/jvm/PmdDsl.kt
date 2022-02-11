@@ -1,6 +1,5 @@
 package net.bnb1.kradle.config.dsl.jvm
 
-import net.bnb1.kradle.Catalog
 import net.bnb1.kradle.blueprints.jvm.PmdProperties
 import net.bnb1.kradle.config.AllProperties
 import net.bnb1.kradle.dsl.Configurable
@@ -9,7 +8,7 @@ import net.bnb1.kradle.dsl.Value
 
 class PmdDsl(properties: AllProperties) {
 
-    val version = Value(Catalog.Versions.pmd) { properties.pmd.version = it }
+    val version = Value(properties.pmd.version) { properties.pmd.version = it }
     val ruleSets = Configurable(RuleSets(properties.pmd.ruleSets))
 
     class RuleSets(ruleSets: PmdProperties.RuleSets) {

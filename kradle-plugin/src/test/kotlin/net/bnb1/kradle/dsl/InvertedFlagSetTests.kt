@@ -5,7 +5,7 @@ import io.kotest.core.spec.style.BehaviorSpec
 import io.kotest.matchers.collections.shouldBeEmpty
 import io.kotest.matchers.shouldBe
 
-class InvertedFalgs : BehaviorSpec({
+class InvertedFlagSetTests : BehaviorSpec({
 
     isolationMode = IsolationMode.InstancePerLeaf
 
@@ -13,7 +13,7 @@ class InvertedFalgs : BehaviorSpec({
 
     Given("Inverted flags") {
 
-        val flags = InvertedFlags(target)
+        val flags = InvertedFlagSet(target)
 
         When("Call disable") {
             flags.disable("1")
@@ -34,7 +34,7 @@ class InvertedFalgs : BehaviorSpec({
 
     Given("Inverted flags with one disabled entry") {
 
-        val flags = InvertedFlags(target)
+        val flags = InvertedFlagSet(target)
         flags.disable("1")
 
         When("Call get") {

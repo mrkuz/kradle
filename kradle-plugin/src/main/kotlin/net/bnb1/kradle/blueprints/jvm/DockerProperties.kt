@@ -2,9 +2,8 @@ package net.bnb1.kradle.blueprints.jvm
 
 import net.bnb1.kradle.core.Properties
 
-class DockerProperties : Properties {
+class DockerProperties(var baseImage: String) : Properties {
 
-    lateinit var baseImage: String
     val ports = mutableSetOf<Int>()
     var withJvmKill: String? = null
     var withStartupScript = false

@@ -1,13 +1,13 @@
 package net.bnb1.kradle.dsl
 
-open class InvertedFlags(private val target: MutableSet<String>) : SimpleProvider<Set<String>> {
+open class InvertedFlagSet(private val target: MutableSet<String>) : SimpleProvider<Set<String>> {
 
     override val notNull: Boolean
         get() = true
 
     override fun get(): Set<String> = target.toSet()
 
-    operator fun invoke(action: InvertedFlags.() -> Unit = {}) = action(this)
+    operator fun invoke(action: InvertedFlagSet.() -> Unit = {}) = action(this)
 
     fun enable(value: String) {
         target.remove(value)

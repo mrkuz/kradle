@@ -9,9 +9,7 @@ import net.bnb1.kradle.dsl.ValueSet
 
 class DockerDsl(properties: AllProperties) {
 
-    val baseImage = Value("bellsoft/liberica-openjdk-alpine:${Catalog.Versions.jvm}") {
-        properties.docker.baseImage = it
-    }
+    val baseImage = Value(properties.docker.baseImage) { properties.docker.baseImage = it }
     val ports = ValueSet(properties.docker.ports)
     val withJvmKill = Optional(Catalog.Versions.jvmKill) { properties.docker.withJvmKill = it }
 

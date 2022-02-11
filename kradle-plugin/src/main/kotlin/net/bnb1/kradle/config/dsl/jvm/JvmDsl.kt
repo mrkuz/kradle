@@ -1,6 +1,5 @@
 package net.bnb1.kradle.config.dsl.jvm
 
-import net.bnb1.kradle.Catalog
 import net.bnb1.kradle.config.AllFeatures
 import net.bnb1.kradle.config.AllProperties
 import net.bnb1.kradle.core.dsl.FeatureDsl
@@ -9,7 +8,7 @@ import net.bnb1.kradle.dsl.Value
 
 class JvmDsl(features: AllFeatures, properties: AllProperties) {
 
-    val targetJvm = Value(Catalog.Versions.jvm) { properties.jvm.targetJvm = it }
+    val targetJvm = Value(properties.jvm.targetJvm) { properties.jvm.targetJvm = it }
 
     val kotlin = FeatureDsl(features.kotlin, KotlinDsl(features, properties))
     val java = FeatureDsl(features.java, JavaDsl(features, properties))
