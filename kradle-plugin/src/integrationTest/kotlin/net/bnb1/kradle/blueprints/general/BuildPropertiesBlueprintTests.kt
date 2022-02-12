@@ -7,7 +7,6 @@ import io.kotest.matchers.file.shouldExist
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.string.shouldMatch
 import net.bnb1.kradle.TestProject
-import net.bnb1.kradle.support.plugins.BuildPropertiesPlugin
 import org.gradle.testkit.runner.TaskOutcome
 
 private const val LINES_WITHOUT_GIT = 4
@@ -27,13 +26,6 @@ class BuildPropertiesBlueprintTests : BehaviorSpec({
                 kotlin.enable()
             }
             """.trimIndent()
-        }
-
-        When("Check for plugins") {
-
-            Then("Build properties plugin is applied") {
-                project.shouldHavePlugin(BuildPropertiesPlugin::class)
-            }
         }
 
         When("Check for tasks") {
