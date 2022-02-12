@@ -11,6 +11,7 @@ import net.bnb1.kradle.extraDir
 import net.bnb1.kradle.sourceSets
 import org.gradle.api.Project
 import org.gradle.api.tasks.SourceSet
+import org.gradle.kotlin.dsl.extra
 import java.net.URL
 import java.nio.file.Files
 
@@ -21,6 +22,10 @@ class JibBlueprint(project: Project) : Blueprint(project) {
 
     lateinit var dockerProperties: DockerProperties
     lateinit var applicationProperties: ApplicationProperties
+
+    override fun doAddExtraProperties() {
+        project.extra["imageName"] = dockerProperties.imageName ?: project.rootProject.name
+    }
 
     override fun doCreateTasks() {
         val extension = createExtension()
@@ -58,11 +63,7 @@ class JibBlueprint(project: Project) : Blueprint(project) {
             }
 
             to {
-                image = if (dockerProperties.imageName != null) {
-                    "${dockerProperties.imageName}:latest"
-                } else {
-                    "${project.rootProject.name}:latest"
-                }
+                image = project.extra["imageName"].toString()
                 tags = setOf(project.version.toString())
             }
 

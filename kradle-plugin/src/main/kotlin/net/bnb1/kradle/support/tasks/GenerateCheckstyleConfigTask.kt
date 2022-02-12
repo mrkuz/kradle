@@ -6,7 +6,7 @@ import org.gradle.api.tasks.TaskAction
 
 open class GenerateCheckstyleConfigTask : DefaultTask() {
 
-    @Internal
+    @get:Internal
     val outputFile = project.objects.fileProperty()
 
     init {

@@ -45,6 +45,10 @@ class KradleContext(project: Project) {
             me belongsTo featureSets.general
             me += blueprints.scripts
         }
+        features.helm.also { me ->
+            me belongsTo featureSets.general
+            me += blueprints.helm
+        }
 
         features.kotlin.also { me ->
             me belongsTo featureSets.jvm

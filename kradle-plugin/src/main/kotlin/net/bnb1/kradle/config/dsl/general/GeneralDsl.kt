@@ -12,4 +12,5 @@ class GeneralDsl(features: AllFeatures, properties: AllProperties) {
     val projectProperties = FeatureDsl(features.projectProperties, Empty)
     val buildProperties = FeatureDsl(features.buildProperties, Empty)
     val scripts = FeatureDsl(features.scripts, ScriptsDsl(properties))
+    val helm = FeatureDsl(features.helm, HelmDsl(properties))
 }

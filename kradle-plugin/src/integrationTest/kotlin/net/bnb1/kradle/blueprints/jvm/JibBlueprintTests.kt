@@ -82,6 +82,13 @@ class JibBlueprintTests : BehaviorSpec({
             }
         }
 
+        When("Check for project properties") {
+
+            Then("imageName is set") {
+                project.shouldHaveProperty("imageName", name)
+            }
+        }
+
         // Requires docker
         xWhen("Run buildImage") {
             val result = project.runTask("buildImage")

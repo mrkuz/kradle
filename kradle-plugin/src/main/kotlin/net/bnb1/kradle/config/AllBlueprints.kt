@@ -3,6 +3,7 @@ package net.bnb1.kradle.config
 import net.bnb1.kradle.blueprints.general.BootstrapBlueprint
 import net.bnb1.kradle.blueprints.general.BuildPropertiesBlueprint
 import net.bnb1.kradle.blueprints.general.GitBlueprint
+import net.bnb1.kradle.blueprints.general.HelmBlueprint
 import net.bnb1.kradle.blueprints.general.ProjectPropertiesBlueprint
 import net.bnb1.kradle.blueprints.general.ScriptsBlueprint
 import net.bnb1.kradle.blueprints.jvm.AllOpenBlueprint
@@ -52,6 +53,12 @@ class AllBlueprints(registry: Registry, properties: AllProperties, project: Proj
     val scripts = registry {
         ScriptsBlueprint(project).inject {
             scriptsProperties = properties.scripts
+        }
+    }
+    val helm = registry {
+        HelmBlueprint(project).inject {
+            helmProperties = properties.helm
+            dockerProperties = properties.docker
         }
     }
 

@@ -11,11 +11,13 @@
 #### Additions
 
 - New feature `scripts`
+- New feature `helm` ([Helm](https://helm.sh/))
 - New alias `compile` for `classes`
 - New alias `verify` for `check`
 - New project property `gitBranchPrefix`
 - `docker`: New task `pushImage`
 - `docker`: New options `imageName` and `allowInsecureRegistries`
+- `docker`: Add project property `imageName`
 
 #### Changes
 

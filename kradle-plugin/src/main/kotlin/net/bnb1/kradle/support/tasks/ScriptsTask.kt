@@ -5,6 +5,7 @@ import org.gradle.api.GradleException
 import org.gradle.api.internal.tasks.userinput.UserInputHandler
 import org.gradle.api.tasks.Internal
 import org.gradle.api.tasks.TaskAction
+import org.gradle.api.tasks.options.Option
 import org.gradle.kotlin.dsl.support.serviceOf
 import org.gradle.process.ExecOperations
 import javax.inject.Inject
@@ -15,13 +16,17 @@ open class ScriptsTask @Inject constructor(private val execOperations: ExecOpera
         outputs.upToDateWhen { false }
     }
 
-    @Internal
+    @get:Internal
+    @Option(option = "echo", description = "Echo commands instead of executing them")
+    var echo: Boolean = false
+
+    @get:Internal
     val prompts = project.objects.listProperty(Prompt::class.java)
 
-    @Internal
+    @get:Internal
     val inputListener = project.objects.property(InputListener::class.java)
 
-    @Internal
+    @get:Internal
     val commands = project.objects.property(String::class.java)
 
     @TaskAction
@@ -41,7 +46,11 @@ open class ScriptsTask @Inject constructor(private val execOperations: ExecOpera
             .filter { it.isNotEmpty() }
             .forEach {
                 execOperations.exec {
-                    commandLine(it.split(" "))
+                    if (echo) {
+                        commandLine(("echo $it").split(" "))
+                    } else {
+                        commandLine(it.split(" "))
+                    }
                 }
             }
     }

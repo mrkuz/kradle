@@ -50,6 +50,8 @@ Most of the functionality is provided by other well-known plugins. `kradle` take
     - [`generateCheckstyleConfig`](#task-generate-checkstyle-config)
     - [`generateDetektConfig`](#task-generate-detekt-config)
     - [`generateLombokConfig`](#task-generate-lombok-config)
+    - [`generateHelmChart`](#task-generate-helm-chart)
+    - [`processHelmChart`](#task-process-helm-chart)
 
 - [Features](#features)
     - [Bootstrapping](#feature-bootstrap)
@@ -57,6 +59,7 @@ Most of the functionality is provided by other well-known plugins. `kradle` take
     - [Project properties](#feature-project-properties)
     - [Build properties](#feature-build-properties)
     - [Custom scripts](#feature-scripts)
+    - [Helm charts](#feature-helm)
     - [Kotlin development](#feature-kotlin)
     - [Java development](#feature-java)
     - [Application development](#feature-application)
@@ -187,6 +190,8 @@ Which tasks are available, depends on the [features](#features) enabled.
 | <a id="task-generate-detekt-config"></a>[generateDetektConfig](#feature-code-analysis) | Generates _detekt-config.yml_ | - | - |
 | <a id="task-generate-checkstyle-config"></a>[generateCheckstyleConfig](#feature-code-analysis) | Generates _checkstyle.xml_ | - | - |
 | <a id="task-generate-lombok-config"></a>[generateLombokConfig](#feature-java) | Generates _lombok.config_ | - | - |
+| <a id="task-generate-helm-chart"></a>[generateHelmChart](#feature-helm) | Generates Helm chart | - | - |
+| <a id="task-process-helm-chart"></a>[processHelmChart](#feature-helm) | Processes Helm chart | - | - |
 | compile | Compiles main classes | classes | - |
 | verify | Runs all checks and tests | check | - |
 | kradleDump | Dumps kradle diagnostic information | - | - |
@@ -354,7 +359,7 @@ kradle {
 }
 ```
 
-Creates new tasks which execute a chain of shell commands.
+Creates new script tasks which execute a chain of shell commands.
 
 #### Options
 
@@ -407,6 +412,41 @@ kradle {
 ```
 
 Adds the task `release` which can be called like any other task: `./gradlew release`.
+
+<a id="feature-helm"></a>
+### Helm charts
+
+```kotlin
+kradle {
+    general {
+        helm.enable()
+    }
+}
+```
+
+Adds the task `generateHelmChart`, which generates a basic [Helm](https://helm.sh/) chart in _src/main/helm_.
+
+Adds the task `processHelmChart`, which copies _src/main/helm_ to _build/helm_ and expands all property references in _Chart.yaml_ and _values.yaml_.
+
+Adds following script tasks:
+
+- `helmInstall`: Installs the chart _build/helm_
+- `helmUpgrade`: Upgrades the release
+- `helmUninstall`: Uninstalls the release
+
+#### Options
+
+```kotlin
+kradle {
+    general {
+        helm {
+            releaseName(project.rootProject.name)
+        }
+    }
+}
+```
+
+- `releaseName`: Release name
 
 <a id="feature-set-jvm"></a>
 ### JVM features
@@ -943,6 +983,8 @@ Adds the task `buildImage`, which creates a Docker image using [Jib](https://git
 
 Adds the task `pushImage`, which pushes the container image to remote registry.
 
+Adds the project property `imageName`.
+
 Files in _src/main/extra/_ will be copied to the image directory _/app/extra/_.
 
 Plugins used: [Jib Plugin](https://plugins.gradle.org/plugin/com.google.cloud.tools.jib)
@@ -1269,6 +1311,9 @@ kradle {
                 }
             }
             */
+        }
+        helm {
+            releaseName(project.rootProject.name)
         }
     }
 

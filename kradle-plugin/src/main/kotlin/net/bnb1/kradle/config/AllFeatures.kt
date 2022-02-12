@@ -11,6 +11,7 @@ class AllFeatures(registry: Registry) {
     val projectProperties = registry("projectProperties") { Feature(it) }
     val buildProperties = registry("buildProperties") { Feature(it) }
     val scripts = registry("scripts") { Feature(it) }
+    val helm = registry("helm") { Feature(it) }
 
     // JVM
     val kotlin = registry("kotlin") { Feature(it) }

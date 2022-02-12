@@ -26,6 +26,11 @@ kradle {
                 }
             }
         }
+        /*
+        helm {
+            releaseName(project.rootProject.name)
+        }
+        */
     }
 
     jvm {

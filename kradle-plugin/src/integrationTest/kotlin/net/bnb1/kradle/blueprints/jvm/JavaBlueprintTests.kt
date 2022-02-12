@@ -34,9 +34,8 @@ class JavaBlueprintTests : BehaviorSpec({
 
             Then("Task compile is available") {
                 project.shouldHaveTask("compile")
-            }
-
-            Then("Task verify is available") {
+            
+                // And: "Task verify is available"
                 project.shouldHaveTask("verify")
             }
         }

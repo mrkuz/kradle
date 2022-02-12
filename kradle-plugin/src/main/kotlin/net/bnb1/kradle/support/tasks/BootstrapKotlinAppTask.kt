@@ -7,7 +7,7 @@ import java.nio.file.Path
 
 open class BootstrapKotlinAppTask : BootstrapBaseTask() {
 
-    @Input
+    @get:Input
     val mainClass = project.objects.empty<String>()
 
     @TaskAction
