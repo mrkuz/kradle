@@ -20,7 +20,7 @@ open class BootstrapBaseTask : DefaultTask() {
     protected fun copyTextResource(name: String) = copyTextResource(name, name)
 
     fun copyTextResource(resource: String, to: String) {
-        val target = project.rootDir.resolve(to)
+        val target = project.projectDir.resolve(to)
         if (!target.exists()) {
             target.writeText(javaClass.getResource("/$resource")!!.readText())
         }
@@ -45,7 +45,7 @@ open class BootstrapBaseTask : DefaultTask() {
 
     protected fun createFiles() {
         listOf("README.md", "LICENSE", "project.properties").forEach {
-            project.rootDir.resolve(it).createNewFile()
+            project.projectDir.resolve(it).createNewFile()
         }
     }
 }

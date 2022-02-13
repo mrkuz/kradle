@@ -11,12 +11,12 @@ class ProjectPropertiesBlueprint(project: Project) : Blueprint(project) {
 
     override fun doAddExtraProperties() {
         val properties = Properties()
-        val projectProperties = project.rootDir.resolve("project.properties")
+        val projectProperties = project.projectDir.resolve("project.properties")
         if (projectProperties.exists()) {
             projectProperties.inputStream().use { properties.load(it) }
         }
         if (withBuildProfiles()) {
-            val profileProperties = project.rootDir.resolve("project-${project.extra["profile"]}.properties")
+            val profileProperties = project.projectDir.resolve("project-${project.extra["profile"]}.properties")
             if (profileProperties.exists()) {
                 profileProperties.inputStream().use { properties.load(it) }
             }

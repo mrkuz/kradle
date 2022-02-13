@@ -18,7 +18,7 @@ class CheckstyleBlueprint(project: Project) : Blueprint(project) {
     lateinit var extendsTask: String
 
     override fun doCreateTasks() {
-        val configFile = project.rootDir.resolve(checkstyleProperties.configFile)
+        val configFile = project.projectDir.resolve(checkstyleProperties.configFile)
 
         project.createHelperTask<GenerateCheckstyleConfigTask>("generateCheckstyleConfig", "Generates checkstyle.xml") {
             outputFile.set(configFile)
@@ -44,7 +44,7 @@ class CheckstyleBlueprint(project: Project) : Blueprint(project) {
                 setSource(sourceSet.java.files)
                 checkstyleClasspath = project.configurations.getAt(CONFIGURATION_NAME)
                 classpath = project.objects.fileCollection().from(sourceSet.java.classesDirectory)
-                configDirectory.set(project.rootDir.resolve("config"))
+                configDirectory.set(project.projectDir.resolve("config"))
                 setConfigFile(configFile)
                 maxErrors = 0
                 maxWarnings = 0

@@ -488,7 +488,7 @@ kradle {
 ```
 
 - `releaseName`: Release name
-- `valuesFile`: Use values file with `helmInstall` and `helmUpgrade`
+- `valuesFile`: Use values file with `helmInstall` and `helmUpgrade` ((relative to project directory))
 
 <a id="feature-set-jvm"></a>
 ### JVM features
@@ -586,7 +586,7 @@ kradle {
 - `ktlint.version`: ktlint version used
 - `ktlint.rules.disable`: Disables ktlint rule. Can be called multiple times
 - `detekt.version`: detekt version used
-- `detekt.configFile`: detekt configuration file used
+- `detekt.configFile`: detekt configuration file used (relative to project directory)
 
 <a id="feature-java"></a>
 ### Java development
@@ -615,7 +615,7 @@ Plugins used: [Java Plugin](https://docs.gradle.org/current/userguide/java_plugi
 - [checkstyle](https://checkstyle.sourceforge.io/)
   - Enabled per default
   - Requires feature [linting](#feature-lint)
-  - Looks for the configuration file _checkstyle.xml_ in the project root. If not found, `kradle` generates one
+  - Looks for the configuration file _checkstyle.xml_ in the project directory. If not found, `kradle` generates one
 
 #### Options
 
@@ -658,7 +658,7 @@ kradle {
 - `previewFeatures`: Enables preview features
 - `withLombok`: Enables [Project Lombok](https://projectlombok.org/). Adds the task `generateLombokConfig`, which generates _lombok.config_ with sane defaults
 - `checkstyle.version`: checkstyle version used
-- `checkstyle.configFile`: checkstyle configuration file used
+- `checkstyle.configFile`: checkstyle configuration file used (relative to project directory)
 - `pmd.version`: PMD version used
 - `pmd.ruleSets.*`: Enables/disables PMD rule sets
 - `spotBugs.version`: SpotBugs version used

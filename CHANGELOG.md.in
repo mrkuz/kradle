@@ -25,6 +25,10 @@
 - `bootstrap`: Call `git add -u` when done
 - `docker`: Use project name as default image name (instead of root project name)
 - `package`: Use project name as default artifact name (instead of root project name)
+- `detekt`: Config file is relative to project directory (instead of root project directory)
+- `checkstyle`: Config file is relative to project directory (instead of root project directory)
+- `generateLombokConfig`: Config file is generated in project directory (instead of root project directory)
+- Look for _project.properties_ in project directory (instead of root project directory)
 
 ### Version 2.2.0 (2022-02-06)
 

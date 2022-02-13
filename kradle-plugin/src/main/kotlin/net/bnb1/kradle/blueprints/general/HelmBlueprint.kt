@@ -29,7 +29,7 @@ class HelmBlueprint(project: Project) : Blueprint(project) {
             project.name
         }
         val valuesArg = if (helmProperties.valuesFile != null) {
-            "-f " + project.rootDir.resolve(project.render(helmProperties.valuesFile!!))
+            "-f " + project.projectDir.resolve(project.render(helmProperties.valuesFile!!))
         } else {
             ""
         }

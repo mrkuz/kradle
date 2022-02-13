@@ -6,7 +6,7 @@ import java.io.File
 
 open class GenerateLombokConfigTask : DefaultTask() {
 
-    private val file: File = project.rootDir.resolve("lombok.config")
+    private val file: File = project.projectDir.resolve("lombok.config")
 
     init {
         outputs.upToDateWhen { file.exists() }
@@ -14,7 +14,7 @@ open class GenerateLombokConfigTask : DefaultTask() {
 
     @TaskAction
     fun run() {
-        if (!project.rootDir.resolve("lombok.config").exists()) {
+        if (!project.projectDir.resolve("lombok.config").exists()) {
             file.writeText(javaClass.getResource("/lombok.config")!!.readText())
         }
     }
