@@ -480,7 +480,7 @@ Adds following script tasks:
 kradle {
     general {
         helm {
-            releaseName(project.rootProject.name)
+            releaseName(project.name)
             // valuesFile("…")
         }
     }
@@ -1046,7 +1046,7 @@ kradle {
     jvm {
         docker {
             baseImage("bellsoft/liberica-openjdk-alpine:${versions.jvm}")
-            imageName(project.rootProject.name)
+            imageName(project.name)
             allowInsecureRegistries(false)
             // ports(…)
             // jvmOpts("…")
@@ -1358,7 +1358,7 @@ kradle {
             */
         }
         helm {
-            releaseName(project.rootProject.name)
+            releaseName(project.name)
             // valuesFile("…")
         }
     }
@@ -1473,7 +1473,7 @@ kradle {
 
         docker {
             baseImage("bellsoft/liberica-openjdk-alpine:${versions.jvm}")
-            imageName(project.rootProject.name)
+            imageName(project.name)
             allowInsecureRegistries(false)
             // jvmOpts("…")
             // ports(…)

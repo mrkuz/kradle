@@ -24,7 +24,7 @@ class JibBlueprint(project: Project) : Blueprint(project) {
     lateinit var applicationProperties: ApplicationProperties
 
     override fun doAddExtraProperties() {
-        project.extra["imageName"] = jibProperties.imageName ?: project.rootProject.name
+        project.extra["imageName"] = jibProperties.imageName ?: project.name
     }
 
     override fun doCreateTasks() {

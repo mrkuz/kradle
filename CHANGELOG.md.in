@@ -23,6 +23,8 @@
 #### Changes
 
 - `bootstrap`: Call `git add -u` when done
+- `docker`: Use project name as default image name (instead of root project name)
+- `package`: Use project name as default artifact name (instead of root project name)
 
 ### Version 2.2.0 (2022-02-06)
 

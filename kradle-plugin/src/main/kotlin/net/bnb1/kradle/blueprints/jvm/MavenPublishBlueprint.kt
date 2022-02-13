@@ -23,7 +23,7 @@ class MavenPublishBlueprint(project: Project) : Blueprint(project) {
         project.configure<PublishingExtension> {
             publications {
                 create("default", MavenPublication::class.java) {
-                    artifactId = project.rootProject.name
+                    artifactId = project.name
                     from(project.components.getByName("java"))
                 }
             }

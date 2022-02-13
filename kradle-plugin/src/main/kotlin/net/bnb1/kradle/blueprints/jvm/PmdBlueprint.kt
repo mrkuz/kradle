@@ -57,7 +57,7 @@ class PmdBlueprint(project: Project) : Blueprint(project) {
                 maxFailures.set(0)
                 rulesMinimumPriority.set(DEFAULT_MINIMUM_PRIORITY)
                 incrementalAnalysis.set(true)
-                ruleSetFiles = project.rootProject.files()
+                ruleSetFiles = project.files()
                 ruleSets = enabledRuleSets
                 targetJdk = TargetJdk.VERSION_1_7
                 reports.forEach {

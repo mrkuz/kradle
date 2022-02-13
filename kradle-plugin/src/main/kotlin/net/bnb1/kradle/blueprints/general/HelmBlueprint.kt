@@ -26,7 +26,7 @@ class HelmBlueprint(project: Project) : Blueprint(project) {
         val releaseName = if (helmProperties.releaseName != null) {
             project.render(helmProperties.releaseName!!)
         } else {
-            project.rootProject.name
+            project.name
         }
         val valuesArg = if (helmProperties.valuesFile != null) {
             "-f " + project.rootDir.resolve(project.render(helmProperties.valuesFile!!))

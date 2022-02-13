@@ -24,12 +24,12 @@ kradle {
             "dockerRun" {
                 description("Runs Docker image")
                 dependsOn("buildImage")
-                commands("docker run --rm \${project.rootProject.name}")
+                commands("docker run --rm \${project.name}")
             }
         }
         /*
         helm {
-            releaseName(project.rootProject.name)
+            releaseName(project.name)
             valuesFile("...")
         }
         */
@@ -126,7 +126,7 @@ kradle {
         docker {
             /*
             baseImage("bellsoft/liberica-openjdk-alpine:${versions.jvm}")
-            imageName(project.rootProject.name)
+            imageName(project.name)
             allowInsecureRegistries(false)
             ports(...)
             jvmOpts("...")
