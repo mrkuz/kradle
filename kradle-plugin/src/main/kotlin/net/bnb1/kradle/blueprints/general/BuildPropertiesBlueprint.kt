@@ -13,11 +13,11 @@ class BuildPropertiesBlueprint(project: Project) : Blueprint(project) {
 
     override fun doCreateTasks() {
         project.createTask<GenerateBuildPropertiesTask>("generateBuildProperties", "Generates build.properties") {
-            if (withGit() && project.extra.has("gitCommit")) {
-                gitCommit.set(project.extra["gitCommit"].toString())
+            if (withGit()) {
+                gitCommit.set(project.provider { project.extra["gitCommit"].toString() })
             }
             if (withBuildProfiles()) {
-                profile.set(project.extra["profile"].toString())
+                profile.set(project.provider { project.extra["profile"].toString() })
             }
         }
     }
