@@ -9,7 +9,7 @@ import net.bnb1.kradle.dsl.Optional
 
 class JavaDsl(features: AllFeatures, properties: AllProperties) {
 
-    val previewFeatures = Flag { properties.java.previewFeatures }
+    val previewFeatures = Flag { properties.java.previewFeatures = it }
     val withLombok = Optional(Catalog.Versions.lombok) { properties.java.withLombok = it }
     val lint = Configurable(JavaLintDsl(features, properties))
     val codeAnalysis = Configurable(JavaCodeAnalysisDsl(features, properties))

@@ -52,14 +52,11 @@ class ApplicationBlueprint(project: Project) : Blueprint(project) {
             javaExtension.mainClass.set(applicationProperties.mainClass)
         }
 
-        if (javaProperties.previewFeatures) {
-            project.tasks.withType<JavaExec> {
+        project.tasks.withType<JavaExec> {
+            if (javaProperties.previewFeatures) {
                 jvmArgs = jvmArgs + "--enable-preview"
             }
-        }
-
-        if (withBuildProfiles()) {
-            project.tasks.withType<JavaExec> {
+            if (withBuildProfiles()) {
                 environment("KRADLE_PROFILE", project.extra["profile"].toString())
             }
         }
