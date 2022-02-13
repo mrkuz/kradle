@@ -1,7 +1,6 @@
 package net.bnb1.kradle.blueprints.general
 
 import net.bnb1.kradle.core.Properties
-import net.bnb1.kradle.support.tasks.InputListener
 import net.bnb1.kradle.support.tasks.Prompt
 
 class ScriptsProperties : Properties {
@@ -11,9 +10,7 @@ class ScriptsProperties : Properties {
     class Script(val name: String) {
         var description: String? = null
         val dependsOn = mutableSetOf<String>()
-        var commands: (() -> String)? = null
-
+        val commands = mutableListOf<String>()
         val prompts = mutableListOf<Prompt>()
-        var inputListener: InputListener? = null
     }
 }

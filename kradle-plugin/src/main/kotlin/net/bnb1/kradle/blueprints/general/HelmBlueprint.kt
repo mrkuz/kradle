@@ -30,21 +30,21 @@ class HelmBlueprint(project: Project) : Blueprint(project) {
         val chart = project.buildDir.resolve("helm").absolutePath
 
         project.createScriptTask("helmInstall", "Installs Helm chart") {
-            commands.set(
+            commands.add(
                 """
                 helm install $releaseName $chart
                 """.trimIndent()
             )
         }
         project.createScriptTask("helmUpgrade", "Upgrades Helm chart") {
-            commands.set(
+            commands.add(
                 """
                 helm upgrade --install $releaseName $chart
                 """.trimIndent()
             )
         }
         project.createScriptTask("helmUninstall", "Uninstalls Helm chart") {
-            commands.set(
+            commands.add(
                 """
                 helm uninstall $releaseName
                 """.trimIndent()

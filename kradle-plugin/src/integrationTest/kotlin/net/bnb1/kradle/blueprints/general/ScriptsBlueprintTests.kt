@@ -19,11 +19,11 @@ class ScriptsBlueprintTests : BehaviorSpec({
                 scripts {
                     "printHelloWorld" {
                         description("Print hello world")
-                        commands {
+                        commands(
                             ""${'"'}
                             echo "Hello World"
                             ""${'"'}
-                        }
+                        )
                     }
                 }
             }
@@ -57,11 +57,11 @@ class ScriptsBlueprintTests : BehaviorSpec({
                     "printHelloWorld" {
                         description("Print hello world")
                         dependsOn("check")
-                        commands {
+                        commands(
                             ""${'"'}
                             echo "Hello World"
                             ""${'"'}
-                        }
+                        )
                     }
                 }
             }
@@ -77,48 +77,17 @@ class ScriptsBlueprintTests : BehaviorSpec({
         }
     }
 
-    Given("Script printHelloWorld with inputs") {
-        project.setUp {
-            """
-            general {
-                scripts {
-                    "printHelloWorld" {
-                        description("Print hello world")
-                        inputs["message"] = "Hello World"
-                        commands {
-                            ""${'"'}
-                            echo ${'$'}{inputs["message"]}
-                            ""${'"'}
-                        }
-                    }
-                }
-            }
-            """
-        }
-
-        When("Run printHelloWorld") {
-            val result = project.runTask("printHelloWorld")
-
-            Then("Succeed") {
-                result.task(":printHelloWorld")!!.outcome shouldBe TaskOutcome.SUCCESS
-
-                // And: "Print 'Hello World'"
-                result.output shouldContain "Hello World"
-            }
-        }
-    }
-
     Given("Script printHelloWorld without description") {
         project.setUp {
             """
             general {
                 scripts {
                     "printHelloWorld" {
-                        commands {
+                        commands(
                             ""${'"'}
                             echo "Hello World"
                             ""${'"'}
-                        }
+                        )
                     }
                 }
             }
@@ -164,11 +133,11 @@ class ScriptsBlueprintTests : BehaviorSpec({
                 scripts {
                     "invalidCommand" {
                         description("Fail")
-                        commands {
+                        commands(
                             ""${'"'}
                             invalidCommand
                             ""${'"'}
-                        }
+                        )
                     }
                 }
             }

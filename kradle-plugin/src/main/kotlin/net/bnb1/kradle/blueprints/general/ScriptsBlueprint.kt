@@ -14,14 +14,13 @@ class ScriptsBlueprint(project: Project) : Blueprint(project) {
             if (script.description == null) {
                 throw GradleException("Missing description for '${script.name}'")
             }
-            if (script.commands == null) {
+            if (script.commands.isEmpty()) {
                 throw GradleException("No commands for '${script.name}'")
             }
             project.createScriptTask(script.name, script.description!!) {
                 dependsOn(script.dependsOn)
-                commands.set(project.provider { script.commands!!.invoke() })
+                commands.set(script.commands)
                 prompts.set(script.prompts)
-                inputListener.set(script.inputListener)
             }
         }
     }

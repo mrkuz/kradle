@@ -19,11 +19,7 @@ kradle {
             "dockerRun" {
                 description("Runs Docker image")
                 dependsOn("buildImage")
-                commands {
-                    """
-                    docker run --rm \${project.rootProject.name}
-                    """
-                }
+                commands("docker run --rm \${project.rootProject.name}")
             }
         }
         /*

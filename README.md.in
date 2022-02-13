@@ -371,13 +371,7 @@ kradle {
                 description("…")
                 dependsOn("…")
                 prompt(key = "…", text = "…", default = "…")
-                commands {
-                    """
-                    <COMMAND>
-                    <COMMAND>
-                    …
-                    """
-                }
+                commands("…")
             }
         }
     }
@@ -387,8 +381,8 @@ kradle {
 - `<NAME>`: Name of the created task
 - `description`: Description of the created task
 - `dependsOn`: List of task dependencies
-- `prompt`: Asks for user input. The entered values are stored in a map named `inputs`. Can be called zero, once or multiple times
-- `commands`: List of commands to execute. If any fails, the execution is stopped and the build fails
+- `prompt`: Asks for user input. The entered values can be accessed with `$#{inputs.<KEY>}`. Can be called zero, once or multiple times
+- `commands`: Commands to execute. If any fails, the execution is stopped and the build fails
 
 #### Example
 
@@ -399,12 +393,10 @@ kradle {
             "release" {
                 description("Create release branch and tag")
                 prompt(key = "version", text = "Version?", default = project.version.toString())
-                commands {
-                    """
-                    git checkout -b release/\${inputs["version"]}
-                    git tag v\${inputs["version"]}
-                    """
-                }
+                commands(
+                    "git checkout -b release/$#{inputs.version}",
+                    "git tag v$#{inputs.version}"
+                )
             }
         }
     }
@@ -1302,13 +1294,7 @@ kradle {
                 description("…")
                 dependsOn("…")
                 prompt(key = "…", text = "…", default = "…")
-                commands {
-                    """
-                    <COMMAND>
-                    <COMMAND>
-                    …
-                    """
-                }
+                commands("…")
             }
             */
         }
