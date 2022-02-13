@@ -8,6 +8,7 @@ class AllFeatures(registry: Registry) {
     // General
     var bootstrap = registry.create("bootstrap") { Feature(it, "bootstrap") }
     val git = registry("git") { Feature(it) }
+    val buildProfiles = registry("buildProfiles") { Feature(it) }
     val projectProperties = registry("projectProperties") { Feature(it) }
     val buildProperties = registry("buildProperties") { Feature(it) }
     val scripts = registry("scripts") { Feature(it) }

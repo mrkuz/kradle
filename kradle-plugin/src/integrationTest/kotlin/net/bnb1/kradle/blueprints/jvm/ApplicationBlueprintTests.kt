@@ -68,6 +68,33 @@ class ApplicationBlueprintTests : BehaviorSpec({
         }
     }
 
+    Given("mainClass is set AND build profile set") {
+        project.setUp {
+            """
+            general {
+                buildProfiles {
+                    active("test")
+                }
+            }
+            jvm {
+                kotlin.enable()
+                application {
+                    mainClass("com.example.demo.AppKt")
+                }
+            }
+            """.trimIndent()
+        }
+        project.writeAppKt { "println(\"KRADLE_PROFILE=\" + System.getenv()[\"KRADLE_PROFILE\"])" }
+
+        When("Run 'run'") {
+            val result = project.runTask("run")
+
+            Then("KRADLE_PROFILE environment variable is set") {
+                result.output shouldContain "KRADLE_PROFILE=test"
+            }
+        }
+    }
+
     Given("Project without group") {
         project.writeSettingsFile()
         project.buildFile.writeText(

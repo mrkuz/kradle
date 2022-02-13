@@ -9,8 +9,7 @@ import io.kotest.matchers.string.shouldMatch
 import net.bnb1.kradle.TestProject
 import org.gradle.testkit.runner.TaskOutcome
 
-private const val LINES_WITHOUT_GIT = 4
-private const val LINES_WITH_GIT = 5
+private const val DEFAULT_LINES = 4
 
 class BuildPropertiesBlueprintTests : BehaviorSpec({
 
@@ -46,7 +45,7 @@ class BuildPropertiesBlueprintTests : BehaviorSpec({
                 output.shouldExist()
 
                 val lines = output.readLines()
-                lines.shouldHaveSize(LINES_WITHOUT_GIT)
+                lines.shouldHaveSize(DEFAULT_LINES)
                 lines.forOne { it shouldBe "project.name=test" }
                 lines.forOne { it shouldBe "project.group=com.example" }
                 lines.forOne { it shouldBe "project.version=1.0.0" }
@@ -85,8 +84,38 @@ class BuildPropertiesBlueprintTests : BehaviorSpec({
                 output.shouldExist()
 
                 val lines = output.readLines()
-                lines.shouldHaveSize(LINES_WITH_GIT)
+                lines.shouldHaveSize(DEFAULT_LINES + 1)
                 lines.forOne { it shouldMatch Regex("git.commit-id=[a-z0-9]{7}") }
+            }
+        }
+    }
+
+    Given("Default configuration AND build properties") {
+        project.setUp {
+            """
+            general {
+                buildProfiles {
+                    active("test")
+                }
+                buildProperties.enable()
+            }
+            jvm {
+                kotlin.enable()
+            }
+            """.trimIndent()
+        }
+        project.gitInit()
+
+        When("Run generateBuildProperties") {
+            project.runTask("generateBuildProperties")
+
+            Then("build.properties contains active profile") {
+                val output = project.buildDir.resolve("resources/main/build.properties")
+                output.shouldExist()
+
+                val lines = output.readLines()
+                lines.shouldHaveSize(DEFAULT_LINES + 1)
+                lines.forOne { it shouldBe "build.profile=test" }
             }
         }
     }

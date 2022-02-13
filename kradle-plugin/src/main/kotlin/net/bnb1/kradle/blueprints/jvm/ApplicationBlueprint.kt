@@ -17,6 +17,8 @@ class ApplicationBlueprint(project: Project) : Blueprint(project) {
     lateinit var applicationProperties: ApplicationProperties
     lateinit var javaProperties: JavaProperties
 
+    lateinit var withBuildProfiles: () -> Boolean
+
     override fun doCheckPreconditions() {
         if (project.group.toString().isEmpty()) {
             project.logger.warn("WARNING: Group is not specified")
@@ -53,6 +55,12 @@ class ApplicationBlueprint(project: Project) : Blueprint(project) {
         if (javaProperties.previewFeatures) {
             project.tasks.withType<JavaExec> {
                 jvmArgs = jvmArgs + "--enable-preview"
+            }
+        }
+
+        if (withBuildProfiles()) {
+            project.tasks.withType<JavaExec> {
+                environment("KRADLE_PROFILE", project.extra["profile"].toString())
             }
         }
     }

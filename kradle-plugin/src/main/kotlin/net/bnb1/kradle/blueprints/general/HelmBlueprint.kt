@@ -4,6 +4,7 @@ import net.bnb1.kradle.blueprints.jvm.DockerProperties
 import net.bnb1.kradle.core.Blueprint
 import net.bnb1.kradle.createScriptTask
 import net.bnb1.kradle.createTask
+import net.bnb1.kradle.render
 import net.bnb1.kradle.support.tasks.GenerateHelmChartTask
 import net.bnb1.kradle.support.tasks.ProcessHelmChartTask
 import org.gradle.api.Project
@@ -23,23 +24,29 @@ class HelmBlueprint(project: Project) : Blueprint(project) {
 
     override fun doCreateScriptTasks() {
         val releaseName = if (helmProperties.releaseName != null) {
-            helmProperties.releaseName
+            project.render(helmProperties.releaseName!!)
         } else {
             project.rootProject.name
         }
+        val valuesArg = if (helmProperties.valuesFile != null) {
+            "-f " + project.rootDir.resolve(project.render(helmProperties.valuesFile!!))
+        } else {
+            ""
+        }
+
         val chart = project.buildDir.resolve("helm").absolutePath
 
         project.createScriptTask("helmInstall", "Installs Helm chart") {
             commands.add(
                 """
-                helm install $releaseName $chart
+                helm install $releaseName $chart $valuesArg
                 """.trimIndent()
             )
         }
         project.createScriptTask("helmUpgrade", "Upgrades Helm chart") {
             commands.add(
                 """
-                helm upgrade --install $releaseName $chart
+                helm upgrade --install $releaseName $chart $valuesArg
                 """.trimIndent()
             )
         }

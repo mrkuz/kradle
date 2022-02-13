@@ -34,9 +34,16 @@ class KradleContext(project: Project) {
             me belongsTo featureSets.general
             me += blueprints.git
         }
+        features.buildProfiles.also { me ->
+            me belongsTo featureSets.general
+            me += blueprints.buildProfiles
+        }
         features.projectProperties.also { me ->
             me belongsTo featureSets.general
-            me += blueprints.projectProperties
+            me activatesAfter features.buildProfiles
+            me += blueprints.projectProperties.also {
+                it.withBuildProfiles = { features.buildProfiles.isEnabled }
+            }
         }
         features.buildProperties.also { me ->
             me belongsTo featureSets.general
@@ -69,7 +76,11 @@ class KradleContext(project: Project) {
                     it dependsOn features.library
                     it.extendsTask = features.bootstrap.defaultTaskName
                 },
-                blueprints.buildProperties.also { it dependsOn features.buildProperties }
+                blueprints.buildProperties.also {
+                    it dependsOn features.buildProperties
+                    it.withGit = { features.git.isEnabled }
+                    it.withBuildProfiles = { features.buildProfiles.isEnabled }
+                }
             )
         }
         features.java.also { me ->
@@ -95,7 +106,9 @@ class KradleContext(project: Project) {
         features.application.also { me ->
             me belongsTo featureSets.jvm
             me conflictsWith features.library
-            me += blueprints.application
+            me += blueprints.application.also {
+                it.withBuildProfiles = { features.buildProfiles.isEnabled }
+            }
         }
         features.library.also { me ->
             me belongsTo featureSets.jvm
@@ -143,13 +156,16 @@ class KradleContext(project: Project) {
         features.developmentMode.also { me ->
             me belongsTo featureSets.jvm
             me requires features.application
-            me += blueprints.developmentMode
+            me += blueprints.developmentMode.also {
+                it.withBuildProfiles = { features.buildProfiles.isEnabled }
+            }
         }
         features.test.also { me ->
             me belongsTo featureSets.jvm
             me += setOf(
                 blueprints.test.also {
                     it.withJunitJupiter = { features.junitJupiter.isEnabled }
+                    it.withBuildProfiles = { features.buildProfiles.isEnabled }
                 },
                 blueprints.kotlinTest.also {
                     it dependsOn features.kotlin
@@ -168,7 +184,9 @@ class KradleContext(project: Project) {
             me belongsTo featureSets.jvm
             me += setOf(
                 blueprints.allOpen.also { it dependsOn features.kotlin },
-                blueprints.benchmarks
+                blueprints.benchmarks.also {
+                    it.withBuildProfiles = { features.buildProfiles.isEnabled }
+                }
             )
         }
         features.packaging.also { me ->

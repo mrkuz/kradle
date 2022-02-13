@@ -1,6 +1,7 @@
 package net.bnb1.kradle.config
 
 import net.bnb1.kradle.Catalog
+import net.bnb1.kradle.blueprints.general.BuildProfilesProperties
 import net.bnb1.kradle.blueprints.general.HelmProperties
 import net.bnb1.kradle.blueprints.general.ScriptsProperties
 import net.bnb1.kradle.blueprints.jvm.ApplicationProperties
@@ -28,6 +29,7 @@ import net.bnb1.kradle.support.Registry
 class AllProperties(registry: Registry) {
 
     // General
+    val buildProfiles = registry { BuildProfilesProperties("default") }
     val scripts = registry { ScriptsProperties() }
     val helm = registry { HelmProperties() }
 

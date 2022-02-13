@@ -11,6 +11,7 @@
 #### Additions
 
 - New feature `scripts`
+- New feature `buildProfiles`
 - New feature `helm` ([Helm](https://helm.sh/))
 - New alias `compile` for `classes`
 - New alias `verify` for `check`

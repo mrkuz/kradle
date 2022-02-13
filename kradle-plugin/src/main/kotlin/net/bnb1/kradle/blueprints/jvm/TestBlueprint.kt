@@ -15,6 +15,7 @@ import org.gradle.api.tasks.SourceSet
 import org.gradle.api.tasks.testing.Test
 import org.gradle.api.tasks.testing.logging.TestLogEvent
 import org.gradle.kotlin.dsl.dependencies
+import org.gradle.kotlin.dsl.extra
 import org.gradle.kotlin.dsl.withType
 
 private const val RUN_TESTS_TASK = "runTests"
@@ -24,6 +25,8 @@ class TestBlueprint(project: Project) : Blueprint(project) {
     lateinit var testProperties: TestProperties
     lateinit var javaProperties: JavaProperties
     lateinit var withJunitJupiter: () -> Boolean
+
+    lateinit var withBuildProfiles: () -> Boolean
 
     override fun doApplyPlugins() {
         if (testProperties.prettyPrint) {
@@ -124,6 +127,10 @@ class TestBlueprint(project: Project) : Blueprint(project) {
         project.tasks.withType<Test> {
             environment("KRADLE_PROJECT_DIR", project.projectDir.absolutePath)
             environment("KRADLE_PROJECT_ROOT_DIR", project.rootDir.absolutePath)
+            if (withBuildProfiles()) {
+                environment("KRADLE_PROFILE", project.extra["profile"].toString())
+            }
+
             if (javaProperties.previewFeatures) {
                 jvmArgs = jvmArgs + "--enable-preview"
             }

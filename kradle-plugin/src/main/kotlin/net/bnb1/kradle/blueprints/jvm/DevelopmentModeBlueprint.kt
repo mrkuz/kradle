@@ -8,12 +8,15 @@ import org.gradle.api.plugins.JavaPluginExtension
 import org.gradle.api.tasks.JavaExec
 import org.gradle.api.tasks.SourceSet
 import org.gradle.jvm.toolchain.JavaToolchainService
+import org.gradle.kotlin.dsl.extra
 import org.gradle.kotlin.dsl.named
 
 class DevelopmentModeBlueprint(project: Project) : Blueprint(project) {
 
     lateinit var applicationProperties: ApplicationProperties
     lateinit var javaProperties: JavaProperties
+
+    lateinit var withBuildProfiles: () -> Boolean
 
     override fun doCreateTasks() {
         val mainSourceSet = project.sourceSets.getByName(SourceSet.MAIN_SOURCE_SET_NAME)
@@ -36,6 +39,11 @@ class DevelopmentModeBlueprint(project: Project) : Blueprint(project) {
             environment("KRADLE_DEV_MODE", "true")
             // Tell agent about the project root
             environment("KRADLE_PROJECT_ROOT_DIR", project.rootDir)
+
+            if (withBuildProfiles()) {
+                environment("KRADLE_PROFILE", project.extra["profile"].toString())
+            }
+
             // Speed up start when developing
             jvmArgs = listOf("-XX:TieredStopAtLevel=1")
             if (javaProperties.previewFeatures) {

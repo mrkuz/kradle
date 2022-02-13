@@ -13,6 +13,11 @@ kradle {
     general {
         bootstrap.enable()
         git.enable()
+        /*
+        buildProfiles {
+            active("default")
+        }
+        */
         projectProperties.enable()
         buildProperties.enable()
         scripts {
@@ -25,6 +30,7 @@ kradle {
         /*
         helm {
             releaseName(project.rootProject.name)
+            valuesFile("...")
         }
         */
     }

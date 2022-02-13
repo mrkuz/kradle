@@ -6,4 +6,5 @@ import net.bnb1.kradle.dsl.Optional
 class HelmDsl(properties: AllProperties) {
 
     val releaseName = Optional<String>(null) { properties.helm.releaseName = it }
+    val valuesFile = Optional<String>(null) { properties.helm.valuesFile = it }
 }

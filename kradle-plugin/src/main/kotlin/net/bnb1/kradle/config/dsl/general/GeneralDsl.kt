@@ -9,6 +9,7 @@ class GeneralDsl(features: AllFeatures, properties: AllProperties) {
 
     val bootstrap = FeatureDsl(features.bootstrap, Empty)
     val git = FeatureDsl(features.git, Empty)
+    val buildProfiles = FeatureDsl(features.buildProfiles, BuildProfilesDsl(properties))
     val projectProperties = FeatureDsl(features.projectProperties, Empty)
     val buildProperties = FeatureDsl(features.buildProperties, Empty)
     val scripts = FeatureDsl(features.scripts, ScriptsDsl(properties))

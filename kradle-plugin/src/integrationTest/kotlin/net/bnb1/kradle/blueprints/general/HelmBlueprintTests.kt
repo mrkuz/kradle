@@ -97,6 +97,42 @@ class HelmBlueprintTests : BehaviorSpec({
         }
     }
 
+    Given("helm.valuesFile = values-test.yaml") {
+        project.setUp("app") {
+            """
+            general {
+                helm {
+                    valuesFile("values-test.yaml")
+                }
+            }
+            """
+        }
+
+        When("Run helmInstall") {
+            val result = project.runTask("helmInstall", "--echo")
+
+            Then("Values file is used") {
+                result.output.shouldContain(
+                    "helm install app " +
+                        "${project.buildDir.resolve("helm")} " +
+                        "-f ${project.projectDir.resolve("values-test.yaml")}"
+                )
+            }
+        }
+
+        When("Run helmUpgrade") {
+            val result = project.runTask("helmUpgrade", "--echo")
+
+            Then("Values file is used") {
+                result.output.shouldContain(
+                    "helm upgrade --install app " +
+                        "${project.buildDir.resolve("helm")} " +
+                        "-f ${project.projectDir.resolve("values-test.yaml")}"
+                )
+            }
+        }
+    }
+
     Given("Default configuration and docker is enabled") {
         project.setUp("app") {
             """

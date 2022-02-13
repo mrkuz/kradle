@@ -1,6 +1,7 @@
 package net.bnb1.kradle.config
 
 import net.bnb1.kradle.blueprints.general.BootstrapBlueprint
+import net.bnb1.kradle.blueprints.general.BuildProfilesBlueprint
 import net.bnb1.kradle.blueprints.general.BuildPropertiesBlueprint
 import net.bnb1.kradle.blueprints.general.GitBlueprint
 import net.bnb1.kradle.blueprints.general.HelmBlueprint
@@ -48,6 +49,11 @@ class AllBlueprints(registry: Registry, properties: AllProperties, project: Proj
     // General
     val bootstrap = registry { BootstrapBlueprint(project) }
     val git = registry { GitBlueprint(project) }
+    val buildProfiles = registry {
+        BuildProfilesBlueprint(project).inject {
+            buildProfilesProperties = properties.buildProfiles
+        }
+    }
     val projectProperties = registry { ProjectPropertiesBlueprint(project) }
     val buildProperties = registry { BuildPropertiesBlueprint(project) }
     val scripts = registry {

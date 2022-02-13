@@ -24,6 +24,8 @@ class BenchmarksBlueprint(project: Project) : Blueprint(project) {
     lateinit var jmhProperties: JmhProperties
     lateinit var javaProperties: JavaProperties
 
+    lateinit var withBuildProfiles: () -> Boolean
+
     override fun shouldActivate(): Boolean {
         if (javaProperties.previewFeatures) {
             project.logger.warn("WARNING: Benchmarks are currently not working with preview features enabled")

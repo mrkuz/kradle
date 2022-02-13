@@ -56,6 +56,7 @@ Most of the functionality is provided by other well-known plugins. `kradle` take
 - [Features](#features)
     - [Bootstrapping](#feature-bootstrap)
     - [Git integration](#feature-git)
+    - [Build profiles](#feature-build-profiles)
     - [Project properties](#feature-project-properties)
     - [Build properties](#feature-build-properties)
     - [Custom scripts](#feature-scripts)
@@ -308,6 +309,47 @@ Adds the task `generateGitignore`, which generates _.gitignore_ with sane defaul
 `gitCommit`, `gitBranch` and `gitBranchPrefix` are added to the project properties.
 The `gitBranchPrefix` is the branch name up to the first occurrence of `/`, `-` or `_`.
 
+<a id="feature-build-profiles"></a>
+### Build profiles
+
+```kotlin
+kradle {
+    general {
+        buildProfiles.enable()
+    }
+}
+```
+
+Adds `profile` to the project properties.
+
+#### Options
+
+```kotlin
+kradle {
+    general {
+        buildProfiles {
+            active("default")
+        }
+    }
+}
+```
+
+- `active`: Sets the active build profile
+
+#### Example
+
+If you want to pass the profile via command line argument (`./gradlew -Pprofile=<PROFILE>`), you can use following snippet:
+
+```kotlin
+kradle {
+    general {
+        buildProfiles {
+            active(project.properties["profile"].toString())
+        }
+    }
+}
+```
+
 <a id="feature-project-properties"></a>
 ### Project properties
 
@@ -321,6 +363,9 @@ kradle {
 
 Looks for a file called _project.properties_ in the project directory. If found, the entries are added to the
 project properties.
+
+If [build profiles](#feature-build-profiles) are enabled, the entries of _project-<PROFILE>.properties_ are also added.
+They have precedence over _project.properties_.
 
 <a id="feature-build-properties"></a>
 ### Build properties
@@ -336,6 +381,8 @@ kradle {
 Adds the task `generateBuildProperties`, which generates a file _build.properties_ containing the project name, group, version and the
 build timestamp.
 
+If [build profiles](#feature-build-profiles) are enabled, the active profile is added.
+
 If [Git integration](#feature-git) is enabled, the Git commit id is added.
 
 The task is executed after `processResources`.
@@ -344,6 +391,7 @@ The task is executed after `processResources`.
 project.name=…
 project.group=…
 project.version=…
+build.profile=…
 build.timestamp=…
 git.commit-id=…
 ```
@@ -433,12 +481,14 @@ kradle {
     general {
         helm {
             releaseName(project.rootProject.name)
+            // valuesFile("…")
         }
     }
 }
 ```
 
 - `releaseName`: Release name
+- `valuesFile`: Use values file with `helmInstall` and `helmUpgrade`
 
 <a id="feature-set-jvm"></a>
 ### JVM features
@@ -628,6 +678,8 @@ kradle {
 
 Conflicts with [library development](#feature-library).
 
+If [build profiles](#feature-build-profiles) are enabled, the environment variable `KRADLE_PROFILE` is set when using `run`.
+
 Plugins used: [Application Plugin](https://docs.gradle.org/current/userguide/application_plugin.html)
 
 #### Options
@@ -783,6 +835,8 @@ application is stopped. Should be used with continuous build flag `-t` to archiv
 
 When launching the application with `dev`, the environment variable `KRADLE_DEV_MODE=true` is set.
 
+If [build profiles](#feature-build-profiles) are enabled, the environment variable `KRADLE_PROFILE` is set.
+
 To speed up application start, the JVM flag `-XX:TieredStopAtLevel=1` is used.
 
 Requires [application development](#application-development).
@@ -801,6 +855,8 @@ kradle {
 Test file names can end with `Test`, `Tests`, `Spec` or `IT`.
 
 When running tests, the environment variables `KRADLE_PROJECT_DIR` and `KRADLE_PROJECT_ROOT_DIR` are set.
+
+If [build profiles](#feature-build-profiles) are enabled, the environment variable `KRADLE_PROFILE` is set.
 
 Adds the task `runTests`, which runs all tests (unit, integration, functional, custom).
 
@@ -1286,6 +1342,9 @@ kradle {
     general {
         bootstrap.enable()
         git.enable()
+        buildProfiles {
+            active("default")
+        }
         projectProperties.enable()
         buildProperties.enable()
         scripts {
@@ -1300,6 +1359,7 @@ kradle {
         }
         helm {
             releaseName(project.rootProject.name)
+            // valuesFile("…")
         }
     }
 
