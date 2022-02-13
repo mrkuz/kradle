@@ -43,19 +43,24 @@ Most of the functionality is provided by other well-known plugins. `kradle` take
     - [`package`](#task-package)
     - [`uberJar`](#task-uber-jar)
     - [`buildImage`](#task-build-image)
+    - [`pushImage`](#task-push-image)
     - [`install`](#task-install)
     - [`generateGitignore`](#task-generate-git-ignore)
     - [`generateBuildProperties`](#task-generate-build-properties)
     - [`generateCheckstyleConfig`](#task-generate-checkstyle-config)
     - [`generateDetektConfig`](#task-generate-detekt-config)
     - [`generateLombokConfig`](#task-generate-lombok-config)
+    - [`generateHelmChart`](#task-generate-helm-chart)
+    - [`processHelmChart`](#task-process-helm-chart)
 
 - [Features](#features)
     - [Bootstrapping](#feature-bootstrap)
     - [Git integration](#feature-git)
+    - [Build profiles](#feature-build-profiles)
     - [Project properties](#feature-project-properties)
     - [Build properties](#feature-build-properties)
     - [Custom scripts](#feature-scripts)
+    - [Helm charts](#feature-helm)
     - [Kotlin development](#feature-kotlin)
     - [Java development](#feature-java)
     - [Application development](#feature-application)
@@ -179,12 +184,15 @@ Which tasks are available, depends on the [features](#features) enabled.
 | <a id="task-package"></a>[package](#feature-packaging) | Creates JAR | jar | [Java Plugin](https://docs.gradle.org/current/userguide/java_plugin.html) |
 | <a id="task-uber-jar"></a>[uberJar](#feature-packaging) | Creates Uber-JAR (applications only) | - | [Gradle Shadow Plugin](https://plugins.gradle.org/plugin/com.github.johnrengelman.shadow) |
 | <a id="task-build-image"></a>[buildImage](#feature-docker) | Builds Docker image (applications only) | - | [Jib Plugin](https://plugins.gradle.org/plugin/com.google.cloud.tools.jib) |
+| <a id="task-push-image"></a>[pushImage](#feature-docker) | Pushes container image to remote registry (applications only) | - | [Jib Plugin](https://plugins.gradle.org/plugin/com.google.cloud.tools.jib) |
 | <a id="task-install"></a>[install](#feature-library) | Installs JAR to local Maven repository (libraries only) |  publishToMavenLocal | [Maven Publish Plugin](https://docs.gradle.org/current/userguide/publishing_maven.html) |
 | <a id="task-generate-git-ignore"></a>[generateGitignore](#feature-git) | Generates _.gitignore_ | - | - |
 | <a id="task-generate-build-properties"></a>[generateBuildProperties](#feature-build-properties) | Generates _build.properties_ | - | - |
 | <a id="task-generate-detekt-config"></a>[generateDetektConfig](#feature-code-analysis) | Generates _detekt-config.yml_ | - | - |
 | <a id="task-generate-checkstyle-config"></a>[generateCheckstyleConfig](#feature-code-analysis) | Generates _checkstyle.xml_ | - | - |
 | <a id="task-generate-lombok-config"></a>[generateLombokConfig](#feature-java) | Generates _lombok.config_ | - | - |
+| <a id="task-generate-helm-chart"></a>[generateHelmChart](#feature-helm) | Generates Helm chart | - | - |
+| <a id="task-process-helm-chart"></a>[processHelmChart](#feature-helm) | Processes Helm chart | - | - |
 | compile | Compiles main classes | classes | - |
 | verify | Runs all checks and tests | check | - |
 | kradleDump | Dumps kradle diagnostic information | - | - |
@@ -301,6 +309,47 @@ Adds the task `generateGitignore`, which generates _.gitignore_ with sane defaul
 `gitCommit`, `gitBranch` and `gitBranchPrefix` are added to the project properties.
 The `gitBranchPrefix` is the branch name up to the first occurrence of `/`, `-` or `_`.
 
+<a id="feature-build-profiles"></a>
+### Build profiles
+
+```kotlin
+kradle {
+    general {
+        buildProfiles.enable()
+    }
+}
+```
+
+Adds `profile` to the project properties.
+
+#### Options
+
+```kotlin
+kradle {
+    general {
+        buildProfiles {
+            active("default")
+        }
+    }
+}
+```
+
+- `active`: Sets the active build profile
+
+#### Example
+
+If you want to pass the profile via command line argument (`./gradlew -Pprofile=<PROFILE>`), you can use following snippet:
+
+```kotlin
+kradle {
+    general {
+        buildProfiles {
+            active(project.properties["profile"].toString())
+        }
+    }
+}
+```
+
 <a id="feature-project-properties"></a>
 ### Project properties
 
@@ -314,6 +363,9 @@ kradle {
 
 Looks for a file called _project.properties_ in the project directory. If found, the entries are added to the
 project properties.
+
+If [build profiles](#feature-build-profiles) are enabled, the entries of _project-<PROFILE>.properties_ are also added.
+They have precedence over _project.properties_.
 
 <a id="feature-build-properties"></a>
 ### Build properties
@@ -329,6 +381,8 @@ kradle {
 Adds the task `generateBuildProperties`, which generates a file _build.properties_ containing the project name, group, version and the
 build timestamp.
 
+If [build profiles](#feature-build-profiles) are enabled, the active profile is added.
+
 If [Git integration](#feature-git) is enabled, the Git commit id is added.
 
 The task is executed after `processResources`.
@@ -337,6 +391,7 @@ The task is executed after `processResources`.
 project.name=…
 project.group=…
 project.version=…
+build.profile=…
 build.timestamp=…
 git.commit-id=…
 ```
@@ -352,7 +407,7 @@ kradle {
 }
 ```
 
-Creates new tasks which execute a chain of shell commands.
+Creates new script tasks which execute a chain of shell commands.
 
 #### Options
 
@@ -364,13 +419,7 @@ kradle {
                 description("…")
                 dependsOn("…")
                 prompt(key = "…", text = "…", default = "…")
-                commands {
-                    """
-                    <COMMAND>
-                    <COMMAND>
-                    …
-                    """
-                }
+                commands("…")
             }
         }
     }
@@ -380,8 +429,8 @@ kradle {
 - `<NAME>`: Name of the created task
 - `description`: Description of the created task
 - `dependsOn`: List of task dependencies
-- `prompt`: Asks for user input. The entered values are stored in a map named `inputs`. Can be called zero, once or multiple times
-- `commands`: List of commands to execute. If any fails, the execution is stopped and the build fails
+- `prompt`: Asks for user input. The entered values can be accessed with `$#{inputs.<KEY>}`. Can be called zero, once or multiple times
+- `commands`: Commands to execute. If any fails, the execution is stopped and the build fails
 
 #### Example
 
@@ -392,12 +441,10 @@ kradle {
             "release" {
                 description("Create release branch and tag")
                 prompt(key = "version", text = "Version?", default = project.version.toString())
-                commands {
-                    """
-                    git checkout -b release/${inputs["version"]}
-                    git tag v${inputs["version"]}
-                    """
-                }
+                commands(
+                    "git checkout -b release/$#{inputs.version}",
+                    "git tag v$#{inputs.version}"
+                )
             }
         }
     }
@@ -405,6 +452,43 @@ kradle {
 ```
 
 Adds the task `release` which can be called like any other task: `./gradlew release`.
+
+<a id="feature-helm"></a>
+### Helm charts
+
+```kotlin
+kradle {
+    general {
+        helm.enable()
+    }
+}
+```
+
+Adds the task `generateHelmChart`, which generates a basic [Helm](https://helm.sh/) chart in _src/main/helm_.
+
+Adds the task `processHelmChart`, which copies _src/main/helm_ to _build/helm_ and expands all property references in _Chart.yaml_ and _values.yaml_.
+
+Adds following script tasks:
+
+- `helmInstall`: Installs the chart _build/helm_
+- `helmUpgrade`: Upgrades the release
+- `helmUninstall`: Uninstalls the release
+
+#### Options
+
+```kotlin
+kradle {
+    general {
+        helm {
+            releaseName(project.name)
+            // valuesFile("…")
+        }
+    }
+}
+```
+
+- `releaseName`: Release name
+- `valuesFile`: Use values file with `helmInstall` and `helmUpgrade` ((relative to project directory))
 
 <a id="feature-set-jvm"></a>
 ### JVM features
@@ -502,7 +586,7 @@ kradle {
 - `ktlint.version`: ktlint version used
 - `ktlint.rules.disable`: Disables ktlint rule. Can be called multiple times
 - `detekt.version`: detekt version used
-- `detekt.configFile`: detekt configuration file used
+- `detekt.configFile`: detekt configuration file used (relative to project directory)
 
 <a id="feature-java"></a>
 ### Java development
@@ -531,7 +615,7 @@ Plugins used: [Java Plugin](https://docs.gradle.org/current/userguide/java_plugi
 - [checkstyle](https://checkstyle.sourceforge.io/)
   - Enabled per default
   - Requires feature [linting](#feature-lint)
-  - Looks for the configuration file _checkstyle.xml_ in the project root. If not found, `kradle` generates one
+  - Looks for the configuration file _checkstyle.xml_ in the project directory. If not found, `kradle` generates one
 
 #### Options
 
@@ -574,7 +658,7 @@ kradle {
 - `previewFeatures`: Enables preview features
 - `withLombok`: Enables [Project Lombok](https://projectlombok.org/). Adds the task `generateLombokConfig`, which generates _lombok.config_ with sane defaults
 - `checkstyle.version`: checkstyle version used
-- `checkstyle.configFile`: checkstyle configuration file used
+- `checkstyle.configFile`: checkstyle configuration file used (relative to project directory)
 - `pmd.version`: PMD version used
 - `pmd.ruleSets.*`: Enables/disables PMD rule sets
 - `spotBugs.version`: SpotBugs version used
@@ -593,6 +677,8 @@ kradle {
 ```
 
 Conflicts with [library development](#feature-library).
+
+If [build profiles](#feature-build-profiles) are enabled, the environment variable `KRADLE_PROFILE` is set when using `run`.
 
 Plugins used: [Application Plugin](https://docs.gradle.org/current/userguide/application_plugin.html)
 
@@ -749,6 +835,8 @@ application is stopped. Should be used with continuous build flag `-t` to archiv
 
 When launching the application with `dev`, the environment variable `KRADLE_DEV_MODE=true` is set.
 
+If [build profiles](#feature-build-profiles) are enabled, the environment variable `KRADLE_PROFILE` is set.
+
 To speed up application start, the JVM flag `-XX:TieredStopAtLevel=1` is used.
 
 Requires [application development](#application-development).
@@ -767,6 +855,8 @@ kradle {
 Test file names can end with `Test`, `Tests`, `Spec` or `IT`.
 
 When running tests, the environment variables `KRADLE_PROJECT_DIR` and `KRADLE_PROJECT_ROOT_DIR` are set.
+
+If [build profiles](#feature-build-profiles) are enabled, the environment variable `KRADLE_PROFILE` is set.
 
 Adds the task `runTests`, which runs all tests (unit, integration, functional, custom).
 
@@ -939,6 +1029,10 @@ kradle {
 
 Adds the task `buildImage`, which creates a Docker image using [Jib](https://github.com/GoogleContainerTools/jib).
 
+Adds the task `pushImage`, which pushes the container image to remote registry.
+
+Adds the project property `imageName`.
+
 Files in _src/main/extra/_ will be copied to the image directory _/app/extra/_.
 
 Plugins used: [Jib Plugin](https://plugins.gradle.org/plugin/com.google.cloud.tools.jib)
@@ -952,6 +1046,8 @@ kradle {
     jvm {
         docker {
             baseImage("bellsoft/liberica-openjdk-alpine:17")
+            imageName(project.name)
+            allowInsecureRegistries(false)
             // ports(…)
             // jvmOpts("…")
             // withJvmKill(1.16.0")
@@ -962,6 +1058,8 @@ kradle {
 ```
 
 - `baseImage`: Base image used
+- `imageName`: Name of the created image (without tag)
+- `allowInsecureRegistries`: Allows use of insecure registries
 - `ports`: List of exposed ports
 - `jvmOpts`: Options passed to the JVM
 - `withJvmKill`: Adds [jvmkill](https://github.com/airlift/jvmkill) to the image, which terminates the JVM if it is unable to allocate memory
@@ -1244,6 +1342,9 @@ kradle {
     general {
         bootstrap.enable()
         git.enable()
+        buildProfiles {
+            active("default")
+        }
         projectProperties.enable()
         buildProperties.enable()
         scripts {
@@ -1252,15 +1353,13 @@ kradle {
                 description("…")
                 dependsOn("…")
                 prompt(key = "…", text = "…", default = "…")
-                commands {
-                    """
-                    <COMMAND>
-                    <COMMAND>
-                    …
-                    """
-                }
+                commands("…")
             }
             */
+        }
+        helm {
+            releaseName(project.name)
+            // valuesFile("…")
         }
     }
 
@@ -1374,6 +1473,8 @@ kradle {
 
         docker {
             baseImage("bellsoft/liberica-openjdk-alpine:17")
+            imageName(project.name)
+            allowInsecureRegistries(false)
             // jvmOpts("…")
             // ports(…)
             // withJvmKill("1.16.0")

@@ -429,7 +429,7 @@ kradle {
 - `<NAME>`: Name of the created task
 - `description`: Description of the created task
 - `dependsOn`: List of task dependencies
-- `prompt`: Asks for user input. The entered values can be accessed with `$#{inputs.<KEY>}`. Can be called zero, once or multiple times
+- `prompt`: Asks for user input. The entered values can be accessed with `\$#{inputs.<KEY>}`. Can be called zero, once or multiple times
 - `commands`: Commands to execute. If any fails, the execution is stopped and the build fails
 
 #### Example
@@ -442,8 +442,8 @@ kradle {
                 description("Create release branch and tag")
                 prompt(key = "version", text = "Version?", default = project.version.toString())
                 commands(
-                    "git checkout -b release/$#{inputs.version}",
-                    "git tag v$#{inputs.version}"
+                    "git checkout -b release/\$#{inputs.version}",
+                    "git tag v\$#{inputs.version}"
                 )
             }
         }

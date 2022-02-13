@@ -2,6 +2,7 @@ package net.bnb1.kradle.support.tasks
 
 import org.eclipse.jgit.api.Git
 import org.gradle.api.DefaultTask
+import java.io.File
 
 open class BootstrapBaseTask : DefaultTask() {
 
@@ -10,17 +11,16 @@ open class BootstrapBaseTask : DefaultTask() {
     }
 
     protected fun initializeGit(): Git {
-        copyTextResource("gitignore", ".gitignore")
+        copyTextResource("gitignore", project.rootDir.resolve(".gitignore"))
         if (!project.rootDir.resolve(".git").exists()) {
             return Git.init().setDirectory(project.rootDir).call()
         }
         return Git.open(project.rootDir)
     }
 
-    protected fun copyTextResource(name: String) = copyTextResource(name, name)
+    protected fun copyTextResource(name: String) = copyTextResource(name, project.projectDir.resolve(name))
 
-    fun copyTextResource(resource: String, to: String) {
-        val target = project.projectDir.resolve(to)
+    private fun copyTextResource(resource: String, target: File) {
         if (!target.exists()) {
             target.writeText(javaClass.getResource("/$resource")!!.readText())
         }
