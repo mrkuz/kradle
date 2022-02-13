@@ -6,6 +6,6 @@ import net.bnb1.kradle.dsl.Value
 
 class BenchmarkDsl(properties: AllProperties) {
 
-    val jmh = Configurable(JmhDsl(properties))
+    val jmh = Configurable(JmhDsl(properties.jmh))
     val jmhVersion = Value(properties.jmh.version) { properties.jmh.version = it }
 }

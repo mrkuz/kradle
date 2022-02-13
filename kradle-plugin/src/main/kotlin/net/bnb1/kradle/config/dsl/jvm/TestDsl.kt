@@ -10,12 +10,12 @@ import net.bnb1.kradle.dsl.ValueSet
 
 class TestDsl(features: AllFeatures, properties: AllProperties) {
 
-    val junitJupiter = FeatureDsl(features.junitJupiter, JunitJupiterDsl(properties))
+    val junitJupiter = FeatureDsl(features.junitJupiter, JunitJupiterDsl(properties.junitJupiter))
     fun withJunitJupiter(version: String = Catalog.Versions.junit) = junitJupiter.enable {
         version(version)
     }
 
-    val jacoco = FeatureDsl(features.jacoco, JacocoDsl(properties))
+    val jacoco = FeatureDsl(features.jacoco, JacocoDsl(properties.jacoco))
     fun withJacoco(version: String = Catalog.Versions.jacoco) = jacoco.enable {
         version(version)
     }

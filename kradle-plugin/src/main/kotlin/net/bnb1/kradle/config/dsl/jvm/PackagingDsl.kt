@@ -5,5 +5,5 @@ import net.bnb1.kradle.dsl.Configurable
 
 class PackagingDsl(properties: AllProperties) {
 
-    val uberJar = Configurable(ShadowDsl(properties))
+    val uberJar = Configurable(ShadowDsl(properties.shadow))
 }

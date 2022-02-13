@@ -12,13 +12,13 @@ class JvmDsl(features: AllFeatures, properties: AllProperties) {
 
     val kotlin = FeatureDsl(features.kotlin, KotlinDsl(features, properties))
     val java = FeatureDsl(features.java, JavaDsl(features, properties))
-    val application = FeatureDsl(features.application, ApplicationDsl(properties))
+    val application = FeatureDsl(features.application, ApplicationDsl(properties.application))
     val library = FeatureDsl(features.library, Empty)
     val dependencyUpdates = FeatureDsl(features.dependencyUpdates, Empty)
-    val dependencies = FeatureDsl(features.dependencies, DependenciesDsl(properties))
+    val dependencies = FeatureDsl(features.dependencies, DependenciesDsl(properties.dependencies))
     val vulnerabilityScan = FeatureDsl(features.vulnerabilityScan, Empty)
-    val lint = FeatureDsl(features.lint, LintDsl(properties))
-    val codeAnalysis = FeatureDsl(features.codeAnalysis, CodeAnalysisDsl(properties))
+    val lint = FeatureDsl(features.lint, LintDsl(properties.lint))
+    val codeAnalysis = FeatureDsl(features.codeAnalysis, CodeAnalysisDsl(properties.codeAnalysis))
     val developmentMode = FeatureDsl(features.developmentMode, Empty)
     val devMode = developmentMode
 
@@ -29,6 +29,6 @@ class JvmDsl(features: AllFeatures, properties: AllProperties) {
     @SuppressWarnings("VariableNaming")
     val `package` = FeatureDsl(features.packaging, PackagingDsl(properties))
     val packaging = `package`
-    val docker = FeatureDsl(features.docker, DockerDsl(properties))
+    val docker = FeatureDsl(features.docker, DockerDsl(properties.jib))
     val documentation = FeatureDsl(features.documentation, Empty)
 }

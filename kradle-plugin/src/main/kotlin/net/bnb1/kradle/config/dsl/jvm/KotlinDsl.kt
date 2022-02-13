@@ -13,5 +13,5 @@ class KotlinDsl(features: AllFeatures, properties: AllProperties) {
 
     val lint = Configurable(KotlinLintDsl(features, properties))
     val codeAnalysis = Configurable(KotlinCodeAnalysisDsl(features, properties))
-    val test = Configurable(KotlinTestDsl(properties))
+    val test = Configurable(KotlinTestDsl(properties.kotlinTest))
 }

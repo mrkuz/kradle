@@ -6,5 +6,5 @@ import net.bnb1.kradle.core.dsl.FeatureDsl
 
 class JavaLintDsl(features: AllFeatures, properties: AllProperties) {
 
-    val checkstyle = FeatureDsl(features.checkstyle, CheckstyleDsl(properties))
+    val checkstyle = FeatureDsl(features.checkstyle, CheckstyleDsl(properties.checkstyle))
 }

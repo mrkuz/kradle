@@ -1,9 +1,9 @@
 package net.bnb1.kradle.config.dsl.general
 
-import net.bnb1.kradle.config.AllProperties
+import net.bnb1.kradle.blueprints.general.BuildProfilesProperties
 import net.bnb1.kradle.dsl.Value
 
-class BuildProfilesDsl(properties: AllProperties) {
+class BuildProfilesDsl(properties: BuildProfilesProperties) {
 
-    val active = Value(properties.buildProfiles.active) { properties.buildProfiles.active = it }
+    val active = Value(properties.active) { properties.active = it }
 }

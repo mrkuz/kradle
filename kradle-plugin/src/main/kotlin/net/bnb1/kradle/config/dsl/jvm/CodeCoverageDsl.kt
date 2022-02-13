@@ -6,6 +6,6 @@ import net.bnb1.kradle.core.dsl.FeatureDsl
 
 class CodeCoverageDsl(features: AllFeatures, properties: AllProperties) {
 
-    val jacoco = FeatureDsl(features.jacoco, JacocoDsl(properties))
-    val kover = FeatureDsl(features.kover, KoverDsl(properties))
+    val jacoco = FeatureDsl(features.jacoco, JacocoDsl(properties.jacoco))
+    val kover = FeatureDsl(features.kover, KoverDsl(properties.kover))
 }

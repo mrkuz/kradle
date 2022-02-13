@@ -7,6 +7,6 @@ import net.bnb1.kradle.dsl.Value
 
 class KotlinLintDsl(features: AllFeatures, properties: AllProperties) {
 
-    val ktlint = FeatureDsl(features.ktlint, KtlintDsl(properties))
+    val ktlint = FeatureDsl(features.ktlint, KtlintDsl(properties.ktlint))
     val ktlintVersion = Value(properties.ktlint.version) { properties.ktlint.version = it }
 }
