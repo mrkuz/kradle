@@ -20,11 +20,11 @@ private const val TASK_PUSH_IMAGE = "pushImage"
 
 class JibBlueprint(project: Project) : Blueprint(project) {
 
-    lateinit var dockerProperties: DockerProperties
+    lateinit var jibProperties: JibProperties
     lateinit var applicationProperties: ApplicationProperties
 
     override fun doAddExtraProperties() {
-        project.extra["imageName"] = dockerProperties.imageName ?: project.rootProject.name
+        project.extra["imageName"] = jibProperties.imageName ?: project.rootProject.name
     }
 
     override fun doCreateTasks() {
@@ -40,11 +40,11 @@ class JibBlueprint(project: Project) : Blueprint(project) {
         dependsOn(project.configurations.getByName("runtimeClasspath"))
         setJibExtension(extension)
         doFirst {
-            if (dockerProperties.withStartupScript) {
+            if (jibProperties.withStartupScript) {
                 copyResource(project, "app.sh")
                 downloadTini(project)
             }
-            if (dockerProperties.withJvmKill != null) {
+            if (jibProperties.withJvmKill != null) {
                 downloadTini(project)
                 downloadJvmKill(project)
             }
@@ -53,13 +53,13 @@ class JibBlueprint(project: Project) : Blueprint(project) {
 
     @Suppress("LongMethod", "ComplexMethod")
     private fun createExtension(): JibExtension {
-        val withJvmKill = dockerProperties.withJvmKill != null
-        val withStartupScript = dockerProperties.withStartupScript
+        val withJvmKill = jibProperties.withJvmKill != null
+        val withStartupScript = jibProperties.withStartupScript
         val jibExtension = JibExtension(project).apply {
-            setAllowInsecureRegistries(dockerProperties.allowInsecureRegistries)
+            setAllowInsecureRegistries(jibProperties.allowInsecureRegistries)
 
             from {
-                image = dockerProperties.baseImage
+                image = jibProperties.baseImage
             }
 
             to {
@@ -69,18 +69,18 @@ class JibBlueprint(project: Project) : Blueprint(project) {
 
             container {
                 creationTime = "USE_CURRENT_TIMESTAMP"
-                ports = dockerProperties.ports.map { it.toString() }
+                ports = jibProperties.ports.map { it.toString() }
 
-                if (dockerProperties.jvmOpts != null) {
+                if (jibProperties.jvmOpts != null) {
                     if (withStartupScript) {
-                        environment = mapOf("JAVA_OPTS" to dockerProperties.jvmOpts)
+                        environment = mapOf("JAVA_OPTS" to jibProperties.jvmOpts)
                     } else {
-                        jvmFlags = dockerProperties.jvmOpts!!.split(" ")
+                        jvmFlags = jibProperties.jvmOpts!!.split(" ")
                     }
                 }
 
                 if (withJvmKill) {
-                    val jvmKillFileName = "jvmkill-${dockerProperties.withJvmKill}.so"
+                    val jvmKillFileName = "jvmkill-${jibProperties.withJvmKill}.so"
                     if (withStartupScript) {
                         environment = environment + mapOf("JAVA_AGENT" to "/app/extra/$jvmKillFileName")
                     } else {
@@ -147,7 +147,7 @@ class JibBlueprint(project: Project) : Blueprint(project) {
     }
 
     private fun downloadJvmKill(project: Project) {
-        val jvmKillFile = project.extraDir.resolve("jvmkill-${dockerProperties.withJvmKill}.so")
+        val jvmKillFile = project.extraDir.resolve("jvmkill-${jibProperties.withJvmKill}.so")
         if (jvmKillFile.exists()) {
             return
         }
@@ -155,7 +155,7 @@ class JibBlueprint(project: Project) : Blueprint(project) {
         jvmKillFile.parentFile.mkdirs()
 
         val jvmKillBaseUrl = "https://java-buildpack.cloudfoundry.org/jvmkill/bionic/x86_64"
-        val url = URL(jvmKillBaseUrl + "/jvmkill-${dockerProperties.withJvmKill}-RELEASE.so")
+        val url = URL(jvmKillBaseUrl + "/jvmkill-${jibProperties.withJvmKill}-RELEASE.so")
         project.logger.lifecycle("Downloading $url")
         url.openStream().use { Files.copy(it, jvmKillFile.toPath()) }
     }

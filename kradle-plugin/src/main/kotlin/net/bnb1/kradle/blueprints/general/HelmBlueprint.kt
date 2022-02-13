@@ -1,6 +1,6 @@
 package net.bnb1.kradle.blueprints.general
 
-import net.bnb1.kradle.blueprints.jvm.DockerProperties
+import net.bnb1.kradle.blueprints.jvm.JibProperties
 import net.bnb1.kradle.core.Blueprint
 import net.bnb1.kradle.createScriptTask
 import net.bnb1.kradle.createTask
@@ -14,7 +14,7 @@ private const val PROCESS_TASK_NAME: String = "processHelmChart"
 class HelmBlueprint(project: Project) : Blueprint(project) {
 
     lateinit var helmProperties: HelmProperties
-    lateinit var dockerProperties: DockerProperties
+    lateinit var jibProperties: JibProperties
 
     override fun doCreateTasks() {
         project.createTask<GenerateHelmChartTask>("generateHelmChart", "Generates Helm chart")

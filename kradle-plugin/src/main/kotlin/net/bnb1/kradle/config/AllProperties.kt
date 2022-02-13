@@ -9,9 +9,9 @@ import net.bnb1.kradle.blueprints.jvm.CheckstyleProperties
 import net.bnb1.kradle.blueprints.jvm.CodeAnalysisProperties
 import net.bnb1.kradle.blueprints.jvm.DependenciesProperties
 import net.bnb1.kradle.blueprints.jvm.DetektProperties
-import net.bnb1.kradle.blueprints.jvm.DockerProperties
 import net.bnb1.kradle.blueprints.jvm.JacocoProperties
 import net.bnb1.kradle.blueprints.jvm.JavaProperties
+import net.bnb1.kradle.blueprints.jvm.JibProperties
 import net.bnb1.kradle.blueprints.jvm.JmhProperties
 import net.bnb1.kradle.blueprints.jvm.JunitJupiterProperties
 import net.bnb1.kradle.blueprints.jvm.JvmProperties
@@ -58,5 +58,5 @@ class AllProperties(registry: Registry) {
     val jmh = registry { JmhProperties(Catalog.Versions.jmh) }
     val shadow = registry { ShadowProperties() }
 
-    val docker = registry { DockerProperties("bellsoft/liberica-openjdk-alpine:${Catalog.Versions.jvm}") }
+    val jib = registry { JibProperties("bellsoft/liberica-openjdk-alpine:${Catalog.Versions.jvm}") }
 }

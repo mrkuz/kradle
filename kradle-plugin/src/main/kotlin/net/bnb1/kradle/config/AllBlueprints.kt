@@ -64,7 +64,7 @@ class AllBlueprints(registry: Registry, properties: AllProperties, project: Proj
     val helm = registry {
         HelmBlueprint(project).inject {
             helmProperties = properties.helm
-            dockerProperties = properties.docker
+            jibProperties = properties.jib
         }
     }
 
@@ -148,7 +148,7 @@ class AllBlueprints(registry: Registry, properties: AllProperties, project: Proj
     val dokka = registry { DokkaBlueprint(project) }
     val jib = registry {
         JibBlueprint(project).inject {
-            dockerProperties = properties.docker
+            jibProperties = properties.jib
             applicationProperties = properties.application
         }
     }

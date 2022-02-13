@@ -9,16 +9,16 @@ import net.bnb1.kradle.dsl.ValueSet
 
 class DockerDsl(properties: AllProperties) {
 
-    val baseImage = Value(properties.docker.baseImage) { properties.docker.baseImage = it }
-    val imageName = Optional<String>(null) { properties.docker.imageName = it }
-    val allowInsecureRegistries = Flag { properties.docker.allowInsecureRegistries = it }
-    val ports = ValueSet(properties.docker.ports)
-    val withJvmKill = Optional(Catalog.Versions.jvmKill) { properties.docker.withJvmKill = it }
+    val baseImage = Value(properties.jib.baseImage) { properties.jib.baseImage = it }
+    val imageName = Optional<String>(null) { properties.jib.imageName = it }
+    val allowInsecureRegistries = Flag { properties.jib.allowInsecureRegistries = it }
+    val ports = ValueSet(properties.jib.ports)
+    val withJvmKill = Optional(Catalog.Versions.jvmKill) { properties.jib.withJvmKill = it }
 
-    val withStartupScript = Flag { properties.docker.withStartupScript = it }
+    val withStartupScript = Flag { properties.jib.withStartupScript = it }
     val withAppSh = withStartupScript
     val startupScript = withStartupScript
 
-    val jvmOpts = Optional<String>(null) { properties.docker.jvmOpts = it }
+    val jvmOpts = Optional<String>(null) { properties.jib.jvmOpts = it }
     val javaOpts = jvmOpts
 }

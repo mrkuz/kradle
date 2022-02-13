@@ -47,7 +47,7 @@ class BuildProfilesBlueprintTests : BehaviorSpec({
         project.setUp {
             """
             general {
-                git.enable()                
+                git.enable()
                 buildProfiles {
                     active("$#{project.gitBranch}")
                 }
