@@ -2,7 +2,7 @@
 
 ## Changelog
 
-### Version main-SNAPSHOT (2022-02-14)
+### Version 2.3.0 (2022-02-14)
 
 #### Bugfixes
 

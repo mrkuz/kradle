@@ -98,8 +98,8 @@ Kotlin:
 
 ```shell
 mkdir demo && cd demo
-curl -O https://raw.githubusercontent.com/mrkuz/kradle/main/examples/kotlin/app/settings.gradle.kts
-curl -O https://raw.githubusercontent.com/mrkuz/kradle/main/examples/kotlin/app/build.gradle.kts
+curl -O https://raw.githubusercontent.com/mrkuz/kradle/stable/examples/kotlin/app/settings.gradle.kts
+curl -O https://raw.githubusercontent.com/mrkuz/kradle/stable/examples/kotlin/app/build.gradle.kts
 gradle bootstrap
 ```
 
@@ -107,8 +107,8 @@ Java:
 
 ```shell
 mkdir demo && cd demo
-curl -O https://raw.githubusercontent.com/mrkuz/kradle/main/examples/java/app/settings.gradle.kts
-curl -O https://raw.githubusercontent.com/mrkuz/kradle/main/examples/java/app/build.gradle.kts
+curl -O https://raw.githubusercontent.com/mrkuz/kradle/stable/examples/java/app/settings.gradle.kts
+curl -O https://raw.githubusercontent.com/mrkuz/kradle/stable/examples/java/app/build.gradle.kts
 gradle bootstrap
 ```
 
@@ -134,7 +134,7 @@ _build.gradle.kts_
 ```kotlin
 plugins {
     id("org.jetbrains.kotlin.jvm") version "1.6.0"
-    id("net.bitsandbobs.kradle") version "main-SNAPSHOT"
+    id("net.bitsandbobs.kradle") version "2.3.0"
 }
 
 group = "com.example"
