@@ -8,6 +8,7 @@ import net.bnb1.kradle.Catalog
 import net.bnb1.kradle.core.Blueprint
 import net.bnb1.kradle.createTask
 import net.bnb1.kradle.extraDir
+import net.bnb1.kradle.render
 import net.bnb1.kradle.sourceSets
 import org.gradle.api.Project
 import org.gradle.api.tasks.SourceSet
@@ -63,7 +64,7 @@ class JibBlueprint(project: Project) : Blueprint(project) {
             }
 
             to {
-                image = project.extra["imageName"].toString()
+                image = project.render(project.extra["imageName"].toString())
                 tags = setOf(project.version.toString())
             }
 
@@ -105,7 +106,7 @@ class JibBlueprint(project: Project) : Blueprint(project) {
                 }
 
                 if (jibProperties.arguments != null) {
-                    args = jibProperties.arguments!!.split(" ")
+                    args = project.render(jibProperties.arguments!!).split(" ")
                 }
             }
 
