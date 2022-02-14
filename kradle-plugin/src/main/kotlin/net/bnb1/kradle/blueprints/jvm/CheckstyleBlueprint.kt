@@ -18,7 +18,7 @@ class CheckstyleBlueprint(project: Project) : Blueprint(project) {
     lateinit var extendsTask: String
 
     override fun doCreateTasks() {
-        val configFile = project.rootDir.resolve(checkstyleProperties.configFile.get())
+        val configFile = project.projectDir.resolve(checkstyleProperties.configFile)
 
         project.createHelperTask<GenerateCheckstyleConfigTask>("generateCheckstyleConfig", "Generates checkstyle.xml") {
             outputFile.set(configFile)
@@ -27,8 +27,7 @@ class CheckstyleBlueprint(project: Project) : Blueprint(project) {
         project.configurations.create(CONFIGURATION_NAME) {
             val dependencyProvider = project.provider {
                 project.dependencies.create(
-                    "${Catalog.Dependencies.Tools.checkstyle}:" +
-                        "${checkstyleProperties.version.get()}"
+                    "${Catalog.Dependencies.Tools.checkstyle}:${checkstyleProperties.version}"
                 )
             }
             dependencies.addLater(dependencyProvider)
@@ -45,7 +44,7 @@ class CheckstyleBlueprint(project: Project) : Blueprint(project) {
                 setSource(sourceSet.java.files)
                 checkstyleClasspath = project.configurations.getAt(CONFIGURATION_NAME)
                 classpath = project.objects.fileCollection().from(sourceSet.java.classesDirectory)
-                configDirectory.set(project.rootDir.resolve("config"))
+                configDirectory.set(project.projectDir.resolve("config"))
                 setConfigFile(configFile)
                 maxErrors = 0
                 maxWarnings = 0
@@ -59,7 +58,7 @@ class CheckstyleBlueprint(project: Project) : Blueprint(project) {
                 if (!configFile.exists()) {
                     dependsOn("generateCheckstyleConfig")
                 }
-                ignoreFailures = lintProperties.ignoreFailures.get()
+                ignoreFailures = lintProperties.ignoreFailures
             }
             checkstyleTask.dependsOn(taskName)
         }

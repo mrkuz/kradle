@@ -1,8 +1,8 @@
 package net.bnb1.kradle.blueprints.jvm
 
-import net.bnb1.kradle.dsl.Properties
+import net.bnb1.kradle.core.Properties
 
-class LintProperties : Properties() {
+class LintProperties : Properties {
 
-    val ignoreFailures = flag()
+    var ignoreFailures = false
 }

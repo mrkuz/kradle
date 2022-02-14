@@ -29,7 +29,7 @@ class JacocoBlueprint(project: Project) : Blueprint(project) {
 
     override fun doCreateTasks() {
         val testTasks = project.tasks.withType(Test::class.java)
-            .filter { !jacocoProperties.excludes.get().contains(it.name) }
+            .filter { !jacocoProperties.excludes.contains(it.name) }
 
         val executionData = testTasks.asSequence()
             .map { it.extensions.getByType(JacocoTaskExtension::class.java) }
@@ -52,7 +52,7 @@ class JacocoBlueprint(project: Project) : Blueprint(project) {
 
     override fun doConfigure() {
         project.configure<JacocoPluginExtension> {
-            toolVersion = jacocoProperties.version.get()
+            toolVersion = jacocoProperties.version
         }
 
         project.tasks.named<JacocoReport>("jacocoTestReport").configure {
@@ -61,7 +61,7 @@ class JacocoBlueprint(project: Project) : Blueprint(project) {
 
         project.tasks.withType<Test> {
             val extension = extensions.getByType(JacocoTaskExtension::class.java)
-            extension.isEnabled = !jacocoProperties.excludes.get().contains(name)
+            extension.isEnabled = !jacocoProperties.excludes.contains(name)
         }
     }
 

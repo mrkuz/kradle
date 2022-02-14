@@ -21,7 +21,7 @@ class KotlinAppBootstrapBlueprint(project: Project) : Blueprint(project) {
     }
 
     override fun doConfigure() {
-        val mainClass = applicationProperties.mainClass.get()
+        val mainClass = applicationProperties.mainClass
         project.tasks.withType<BootstrapKotlinAppTask> {
             this.mainClass.set(mainClass)
         }

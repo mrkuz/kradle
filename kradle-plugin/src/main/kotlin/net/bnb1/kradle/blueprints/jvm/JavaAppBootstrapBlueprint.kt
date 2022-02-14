@@ -21,7 +21,7 @@ class JavaAppBootstrapBlueprint(project: Project) : Blueprint(project) {
     }
 
     override fun doConfigure() {
-        val mainClass = applicationProperties.mainClass.get()
+        val mainClass = applicationProperties.mainClass
         project.tasks.withType<BootstrapJavaAppTask> {
             this.mainClass.set(mainClass)
         }

@@ -2,6 +2,35 @@
 
 ## Changelog
 
+### Version main-SNAPSHOT (2022-02-14)
+
+#### Bugfixes
+
+- `kover`: Exclude `benchmark` sources from analysis
+
+#### Additions
+
+- New feature `scripts`
+- New feature `buildProfiles`
+- New feature `helm` ([Helm](https://helm.sh/))
+- New alias `compile` for `classes`
+- New alias `verify` for `check`
+- New project property `gitBranchPrefix`
+- `docker`: New task `pushImage`
+- `docker`: New options `imageName`, `arguments` and `allowInsecureRegistries`
+- `docker`: Add project property `imageName`
+- `docker`: Add `jvmOptions` as alternative to `jvmOpts`
+
+#### Changes
+
+- `bootstrap`: Call `git add -u` when done
+- `docker`: Use project name as default image name (instead of root project name)
+- `package`: Use project name as default artifact name (instead of root project name)
+- `detekt`: Config file is relative to project directory (instead of root project directory)
+- `checkstyle`: Config file is relative to project directory (instead of root project directory)
+- `generateLombokConfig`: Config file is generated in project directory (instead of root project directory)
+- Look for _project.properties_ in project directory (instead of root project directory)
+
 ### Version 2.2.0 (2022-02-06)
 
 #### Bugfixes

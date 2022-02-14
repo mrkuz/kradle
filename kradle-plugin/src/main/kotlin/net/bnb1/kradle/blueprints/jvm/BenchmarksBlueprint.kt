@@ -24,8 +24,10 @@ class BenchmarksBlueprint(project: Project) : Blueprint(project) {
     lateinit var jmhProperties: JmhProperties
     lateinit var javaProperties: JavaProperties
 
+    lateinit var withBuildProfiles: () -> Boolean
+
     override fun shouldActivate(): Boolean {
-        if (javaProperties.previewFeatures.get()) {
+        if (javaProperties.previewFeatures) {
             project.logger.warn("WARNING: Benchmarks are currently not working with preview features enabled")
             return false
         }
@@ -72,7 +74,7 @@ class BenchmarksBlueprint(project: Project) : Blueprint(project) {
             project.sourceSets.getByName(SOURCE_SET_NAME)
         )
 
-        javaBenchmarkTarget.jmhVersion = jmhProperties.version.get()
+        javaBenchmarkTarget.jmhVersion = jmhProperties.version
         project.afterEvaluate {
             project.processJavaSourceSet(javaBenchmarkTarget)
 

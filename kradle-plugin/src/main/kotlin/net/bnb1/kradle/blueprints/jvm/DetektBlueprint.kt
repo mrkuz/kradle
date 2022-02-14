@@ -18,15 +18,15 @@ class DetektBlueprint(project: Project) : Blueprint(project) {
     lateinit var extendsTask: String
 
     override fun doCreateTasks() {
-        val configFile = project.rootDir.resolve(detektProperties.configFile.get())
+        val configFile = project.projectDir.resolve(detektProperties.configFile)
 
         project.createHelperTask<GenerateDetektConfigTask>("generateDetektConfig", "Generates detekt-config.yml") {
-            outputFile.set(project.rootDir.resolve(detektProperties.configFile.get()))
+            outputFile.set(project.projectDir.resolve(detektProperties.configFile))
         }
 
         project.configurations.create(CONFIGURATION_NAME) {
             val dependencyProvider = project.provider {
-                project.dependencies.create("${Catalog.Dependencies.Tools.detekt}:${detektProperties.version.get()}")
+                project.dependencies.create("${Catalog.Dependencies.Tools.detekt}:${detektProperties.version}")
             }
             dependencies.addLater(dependencyProvider)
         }
@@ -58,7 +58,7 @@ class DetektBlueprint(project: Project) : Blueprint(project) {
                     buildUponDefaultConfig = false
                     config.setFrom(configFile)
                 }
-                ignoreFailures = codeAnalysisProperties.ignoreFailures.get()
+                ignoreFailures = codeAnalysisProperties.ignoreFailures
             }
 
             detektTask.dependsOn(taskName)

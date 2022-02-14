@@ -1,24 +1,20 @@
 package net.bnb1.kradle.blueprints.jvm
 
-import net.bnb1.kradle.Catalog
-import net.bnb1.kradle.dsl.ConfigurableSelf
-import net.bnb1.kradle.dsl.Flag
-import net.bnb1.kradle.dsl.Properties
+import net.bnb1.kradle.core.Properties
 
-class PmdProperties : Properties() {
+class PmdProperties(var version: String) : Properties {
 
-    val version = value(Catalog.Versions.pmd)
     val ruleSets = RuleSets()
 
-    class RuleSets : ConfigurableSelf<RuleSets> {
+    class RuleSets : Properties {
 
-        val bestPractices = Flag()
-        val codeStyle = Flag()
-        val design = Flag()
-        val documentation = Flag()
-        val errorProne = Flag().apply { enable() }
-        val multithreading = Flag().apply { enable() }
-        val performance = Flag().apply { enable() }
-        val security = Flag().apply { enable() }
+        var bestPractices = false
+        var codeStyle = false
+        var design = false
+        var documentation = false
+        var errorProne = false
+        var multithreading = false
+        var performance = false
+        var security = false
     }
 }

@@ -40,4 +40,32 @@ class DevelopmentModeBlueprintTests : BehaviorSpec({
             }
         }
     }
+
+    Given("Default configuration AND build profiles") {
+        project.setUp {
+            """
+            general {
+                buildProfiles {
+                    active("test")
+                }
+            }
+            jvm {
+                kotlin.enable()
+                application {
+                    mainClass("com.example.demo.AppKt")
+                }
+                developmentMode.enable()
+            }
+            """.trimIndent()
+        }
+        project.writeAppKt { "println(\"KRADLE_PROFILE=\" + System.getenv()[\"KRADLE_PROFILE\"])" }
+
+        When("Run dev") {
+            val result = project.runTask("dev")
+
+            Then("KRADLE_PROFILE environment variable is set") {
+                result.output shouldContain "KRADLE_PROFILE=test"
+            }
+        }
+    }
 })

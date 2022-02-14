@@ -14,9 +14,9 @@ import net.bnb1.kradle.config.KradleContext
 import net.bnb1.kradle.core.Blueprint
 import net.bnb1.kradle.core.Feature
 import net.bnb1.kradle.core.FeatureSet
+import net.bnb1.kradle.core.Properties
 import net.bnb1.kradle.dsl.Flag
-import net.bnb1.kradle.dsl.Properties
-import net.bnb1.kradle.dsl.Value
+import net.bnb1.kradle.dsl.Optional
 import net.bnb1.kradle.support.Registry
 import org.gradle.api.Project
 import org.gradle.api.artifacts.dsl.DependencyHandler
@@ -101,7 +101,7 @@ class TestGenerator(context: KradleContext, private val metadata: BlueprintMetad
 
     private val className = metadata.blueprint::class.simpleName + "Tests"
     private val dir = Path.of(
-        System.getenv("PROJECT_DIR"),
+        System.getenv("KRADLE_PROJECT_DIR"),
         "src",
         SOURCE_SET,
         "kotlin",
@@ -164,12 +164,14 @@ class TestGenerator(context: KradleContext, private val metadata: BlueprintMetad
                 }
                 value.toggle()
             }
-            if (value is Value<*> && !value.hasValue && value.hasSuggestion) {
+            if (value is Optional<*>) {
                 value.set()
-                generateGiven("$propertyName = ${value.get()}", 4) {
-                    guessProjectSetup(it, value.get())
+                if (value.notNull) {
+                    generateGiven("$propertyName = ${value.get()}", 4) {
+                        guessProjectSetup(it, value.get())
+                    }
+                    value.unset()
                 }
-                value.reset()
             }
         }
 

@@ -12,20 +12,18 @@ class KotlinTestBlueprint(project: Project) : Blueprint(project) {
     lateinit var withJunitJupiter: () -> Boolean
 
     override fun doAddDependencies() {
-        val useKotest = kotlinTestProperties.useKotest
-        if (useKotest.hasValue) {
+        kotlinTestProperties.useKotest?.let {
             project.dependencies {
-                testImplementation("${Catalog.Dependencies.Test.kotestAssertions}:${useKotest.get()}")
+                testImplementation("${Catalog.Dependencies.Test.kotestAssertions}:$it")
                 if (withJunitJupiter()) {
-                    testImplementation("${Catalog.Dependencies.Test.kotestJunit5}:${useKotest.get()}")
+                    testImplementation("${Catalog.Dependencies.Test.kotestJunit5}:$it")
                 }
             }
         }
 
-        val useMockk = kotlinTestProperties.useMockk
-        if (useMockk.hasValue) {
+        kotlinTestProperties.useMockk?.let {
             project.dependencies {
-                testImplementation("${Catalog.Dependencies.Test.mockk}:${useMockk.get()}")
+                testImplementation("${Catalog.Dependencies.Test.mockk}:$it")
             }
         }
     }

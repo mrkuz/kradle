@@ -15,6 +15,7 @@ import org.gradle.api.tasks.SourceSet
 import org.gradle.api.tasks.testing.Test
 import org.gradle.api.tasks.testing.logging.TestLogEvent
 import org.gradle.kotlin.dsl.dependencies
+import org.gradle.kotlin.dsl.extra
 import org.gradle.kotlin.dsl.withType
 
 private const val RUN_TESTS_TASK = "runTests"
@@ -25,8 +26,10 @@ class TestBlueprint(project: Project) : Blueprint(project) {
     lateinit var javaProperties: JavaProperties
     lateinit var withJunitJupiter: () -> Boolean
 
+    lateinit var withBuildProfiles: () -> Boolean
+
     override fun doApplyPlugins() {
-        if (testProperties.prettyPrint.get()) {
+        if (testProperties.prettyPrint) {
             project.apply(TestLoggerPlugin::class.java)
         }
     }
@@ -41,16 +44,16 @@ class TestBlueprint(project: Project) : Blueprint(project) {
         }
 
         val customTests = mutableListOf<String>()
-        testProperties.withCustomTests.get().forEach {
+        testProperties.withCustomTests.forEach {
             customTests.remove(it)
             customTests.add(it)
         }
 
-        if (testProperties.withFunctionalTests.get()) {
+        if (testProperties.withFunctionalTests) {
             customTests.remove("functional")
             customTests.add(0, "functional")
         }
-        if (testProperties.withIntegrationTests.get()) {
+        if (testProperties.withIntegrationTests) {
             customTests.remove("integration")
             customTests.add(0, "integration")
         }
@@ -99,25 +102,17 @@ class TestBlueprint(project: Project) : Blueprint(project) {
 
     override fun doAddDependencies() {
         project.dependencies {
-            if (testProperties.useArchUnit.hasValue) {
+            testProperties.useArchUnit?.let {
                 if (withJunitJupiter()) {
-                    testImplementation(
-                        "${Catalog.Dependencies.Test.archUnitJunit5}:${testProperties.useArchUnit.get()}"
-                    )
+                    testImplementation("${Catalog.Dependencies.Test.archUnitJunit5}:$it")
                 } else {
-                    testImplementation(
-                        "${Catalog.Dependencies.Test.archUnit}:${testProperties.useArchUnit.get()}"
-                    )
+                    testImplementation("${Catalog.Dependencies.Test.archUnit}:$it")
                 }
             }
-            if (testProperties.useTestcontainers.hasValue) {
-                testImplementation(
-                    "${Catalog.Dependencies.Test.testcontainers}:${testProperties.useTestcontainers.get()}"
-                )
+            testProperties.useTestcontainers?.let {
+                testImplementation("${Catalog.Dependencies.Test.testcontainers}:$it")
                 if (withJunitJupiter()) {
-                    testImplementation(
-                        "${Catalog.Dependencies.Test.testcontainersJunit5}:${testProperties.useTestcontainers.get()}"
-                    )
+                    testImplementation("${Catalog.Dependencies.Test.testcontainersJunit5}:$it")
                 }
             }
         }
@@ -125,14 +120,18 @@ class TestBlueprint(project: Project) : Blueprint(project) {
 
     override fun doConfigure() {
         var testEvents = setOf(TestLogEvent.SKIPPED, TestLogEvent.PASSED, TestLogEvent.FAILED)
-        if (testProperties.showStandardStreams.get()) {
+        if (testProperties.showStandardStreams) {
             testEvents += setOf(TestLogEvent.STANDARD_OUT, TestLogEvent.STANDARD_ERROR)
         }
 
         project.tasks.withType<Test> {
             environment("KRADLE_PROJECT_DIR", project.projectDir.absolutePath)
             environment("KRADLE_PROJECT_ROOT_DIR", project.rootDir.absolutePath)
-            if (javaProperties.previewFeatures.get()) {
+            if (withBuildProfiles()) {
+                environment("KRADLE_PROFILE", project.extra["profile"].toString())
+            }
+
+            if (javaProperties.previewFeatures) {
                 jvmArgs = jvmArgs + "--enable-preview"
             }
             testLogging {
@@ -144,9 +143,9 @@ class TestBlueprint(project: Project) : Blueprint(project) {
             include("**/*Spec.class")
         }
 
-        if (testProperties.prettyPrint.get()) {
+        if (testProperties.prettyPrint) {
             project.extensions.getByType(TestLoggerExtension::class.java).apply {
-                showStandardStreams = testProperties.showStandardStreams.get()
+                showStandardStreams = testProperties.showStandardStreams
             }
         }
     }

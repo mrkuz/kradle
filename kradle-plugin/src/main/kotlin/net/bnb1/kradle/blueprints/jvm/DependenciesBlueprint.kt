@@ -12,24 +12,24 @@ class DependenciesBlueprint(project: Project) : Blueprint(project) {
 
     override fun doAddDependencies() {
         val useGuava = dependenciesProperties.useGuava
-        useGuava.get {
+        useGuava?.let {
             project.dependencies {
                 implementation("${Catalog.Dependencies.guava}:$it")
             }
         }
 
-        dependenciesProperties.useCaffeine.get {
+        dependenciesProperties.useCaffeine?.let {
             project.dependencies {
                 implementation("${Catalog.Dependencies.caffeine}:$it")
             }
-            if (useGuava.hasValue) {
+            if (useGuava != null) {
                 project.dependencies {
                     implementation("${Catalog.Dependencies.caffeineGuava}:$it")
                 }
             }
         }
 
-        dependenciesProperties.useLog4j.get {
+        dependenciesProperties.useLog4j?.let {
             project.dependencies {
                 implementation("${Catalog.Dependencies.log4j}:$it")
             }

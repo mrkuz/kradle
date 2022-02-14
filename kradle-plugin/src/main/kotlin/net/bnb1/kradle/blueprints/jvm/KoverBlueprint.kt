@@ -22,16 +22,18 @@ class KoverBlueprint(project: Project) : Blueprint(project) {
     override fun doConfigure() {
         project.tasks.withType<Test> {
             val extension = extensions.getByType(KoverTaskExtension::class.java)
-            extension.isDisabled = koverProperties.excludes.get().contains(name)
+            extension.isDisabled = koverProperties.excludes.contains(name)
         }
 
-        // Kover only excludes test source set, but we have 'integrationTest', 'functionalTest', ...
-        val testSourceSets = project.sourceSets.filter { it.name.endsWith("test", true) }
-        val testSources = testSourceSets.flatMap { it.allSource.srcDirs }
-        val testOutputs = testSourceSets.flatMap { it.output.classesDirs }
+        // Kover only excludes the "test" source set, but we want to exclude all test variants and benchmarks.
+        val excludeSourceSets = project.sourceSets.filter {
+            it.name.endsWith("test", true) || it.name == "benchmark"
+        }
+        val excludeSources = excludeSourceSets.flatMap { it.allSource.srcDirs }
+        val excludeOutputs = excludeSourceSets.flatMap { it.output.classesDirs }
         project.tasks.withType<KoverHtmlReportTask> {
-            srcDirs.set(srcDirs.get().filter { !testSources.contains(it) })
-            outputDirs.set(outputDirs.get().filter { !testOutputs.contains(it) })
+            srcDirs.set(srcDirs.get().filter { !excludeSources.contains(it) })
+            outputDirs.set(outputDirs.get().filter { !excludeOutputs.contains(it) })
         }
 
         project.tasks.getByName(extendsTask).dependsOn("koverHtmlReport")

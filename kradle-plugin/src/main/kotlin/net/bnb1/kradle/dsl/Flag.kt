@@ -1,6 +1,6 @@
 package net.bnb1.kradle.dsl
 
-open class Flag : SimpleProvider<Boolean> {
+open class Flag(protected val target: (Boolean) -> Unit) : SimpleProvider<Boolean> {
 
     private var value: Boolean = false
 
@@ -13,6 +13,7 @@ open class Flag : SimpleProvider<Boolean> {
 
     fun set(value: Boolean) {
         this.value = value
+        target(value)
     }
 
     fun enable() = set(true)

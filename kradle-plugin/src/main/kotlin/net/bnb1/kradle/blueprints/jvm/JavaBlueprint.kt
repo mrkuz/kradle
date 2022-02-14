@@ -1,6 +1,7 @@
 package net.bnb1.kradle.blueprints.jvm
 
 import net.bnb1.kradle.Catalog
+import net.bnb1.kradle.alias
 import net.bnb1.kradle.annotationProcessor
 import net.bnb1.kradle.apply
 import net.bnb1.kradle.compileOnly
@@ -32,7 +33,7 @@ class JavaBlueprint(project: Project) : Blueprint(project) {
         project.afterEvaluate {
             val javaExtension = project.extensions.getByType(JavaPluginExtension::class.java)
             if (javaExtension.toolchain.languageVersion.isPresent) {
-                val target = Integer.parseInt(jvmProperties.targetJvm.get())
+                val target = Integer.parseInt(jvmProperties.targetJvm)
                 val toolchain = javaExtension.toolchain.languageVersion.get().asInt()
                 if (target > toolchain) {
                     throw GradleException("'targetJvm' must be ≤ toolchain language version ($toolchain)")
@@ -45,18 +46,23 @@ class JavaBlueprint(project: Project) : Blueprint(project) {
         project.apply(JavaPlugin::class.java)
     }
 
+    override fun doAddAliases() {
+        project.alias("compile", "Compiles main classes", "classes")
+        project.alias("verify", "Runs all checks and tests", "check")
+    }
+
     override fun doCreateTasks() {
-        if (javaProperties.withLombok.hasValue) {
+        javaProperties.withLombok?.let {
             project.createTask<GenerateLombokConfigTask>("generateLombokConfig", "Generates lombok.config")
             project.tasks.getByName("compileJava").dependsOn("generateLombokConfig")
         }
     }
 
     override fun doAddDependencies() {
-        if (javaProperties.withLombok.hasValue) {
+        javaProperties.withLombok?.let {
             project.dependencies {
-                implementation("${Catalog.Dependencies.lombok}:${javaProperties.withLombok.get()}")
-                annotationProcessor("${Catalog.Dependencies.lombok}:${javaProperties.withLombok.get()}")
+                implementation("${Catalog.Dependencies.lombok}:$it")
+                annotationProcessor("${Catalog.Dependencies.lombok}:$it")
                 compileOnly("${Catalog.Dependencies.Tools.findBugsAnnotations}:${Catalog.Versions.findBugs}")
             }
         }
@@ -68,7 +74,7 @@ class JavaBlueprint(project: Project) : Blueprint(project) {
             options.release.set(release)
         }
 
-        if (javaProperties.previewFeatures.get()) {
+        if (javaProperties.previewFeatures) {
             project.tasks.withType<JavaCompile> {
                 options.compilerArgs.add("--enable-preview")
             }
@@ -76,7 +82,7 @@ class JavaBlueprint(project: Project) : Blueprint(project) {
     }
 
     private fun getJavaRelease(): Int {
-        val major = JavaVersion.toVersion(jvmProperties.targetJvm.get()).majorVersion
+        val major = JavaVersion.toVersion(jvmProperties.targetJvm).majorVersion
         return Integer.parseInt(major)
     }
 }

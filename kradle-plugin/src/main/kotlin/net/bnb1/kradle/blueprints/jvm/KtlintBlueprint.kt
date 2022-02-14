@@ -21,9 +21,9 @@ class KtlintBlueprint(project: Project) : Blueprint(project) {
     override fun doConfigure() {
         project.configure<KtlintExtension> {
             enableExperimentalRules.set(true)
-            disabledRules.set(ktlintProperties.rules.get())
-            version.set(ktlintProperties.version.get())
-            ignoreFailures.set(lintProperties.ignoreFailures.get())
+            disabledRules.set(ktlintProperties.ruleExcludes)
+            version.set(ktlintProperties.version)
+            ignoreFailures.set(lintProperties.ignoreFailures)
             reporters {
                 reporter(ReporterType.HTML)
             }

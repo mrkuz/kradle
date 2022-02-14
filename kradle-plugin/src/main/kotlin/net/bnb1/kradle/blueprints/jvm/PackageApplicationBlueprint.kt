@@ -14,7 +14,7 @@ class PackageApplicationBlueprint(project: Project) : Blueprint(project) {
         val mainClass = applicationProperties.mainClass
         project.tasks.named<Jar>("jar").configure {
             manifest {
-                attributes(Pair("Main-Class", mainClass.get()))
+                attributes(Pair("Main-Class", mainClass))
             }
         }
     }

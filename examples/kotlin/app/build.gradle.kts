@@ -1,6 +1,6 @@
 plugins {
     id("org.jetbrains.kotlin.jvm") version "1.6.0"
-    id("net.bitsandbobs.kradle") version "2.2.0"
+    id("net.bitsandbobs.kradle") version "main-SNAPSHOT"
 }
 
 group = "com.example"
@@ -13,8 +13,26 @@ kradle {
     general {
         bootstrap.enable()
         git.enable()
+        /*
+        buildProfiles {
+            active("default")
+        }
+        */
         projectProperties.enable()
         buildProperties.enable()
+        scripts {
+            "dockerRun" {
+                description("Runs Docker image")
+                dependsOn("buildImage")
+                commands("docker run --rm ${project.name}")
+            }
+        }
+        /*
+        helm {
+            releaseName(project.name)
+            valuesFile("...")
+        }
+        */
     }
 
     jvm {
@@ -106,9 +124,14 @@ kradle {
         }
 
         docker {
-            // baseImage("bellsoft/liberica-openjdk-alpine:17")
-            // ports(...)
-            // jvmOpts("...")
+            /*
+            baseImage("bellsoft/liberica-openjdk-alpine:17")
+            imageName(project.name)
+            allowInsecureRegistries(false)
+            ports(...)
+            jvmOpts("...")
+            arguments("...")
+            */
             withJvmKill(/* "1.16.0" */)
             // withStartupScript(false)
         }

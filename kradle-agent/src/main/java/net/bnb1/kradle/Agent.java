@@ -64,10 +64,10 @@ public final class Agent {
         fileIncludes.add(Pattern.compile(".*\\.ya?ml", Pattern.CASE_INSENSITIVE));
     }
 
-    public void start() throws IOException {
-        var watcher = initializeWatcher();
+    public void start() {
         executor.submit(() -> {
             try {
+                var watcher = initializeWatcher();
                 while (true) {
                     var key = watcher.take();
                     if (detectChange(watcher, key)) {

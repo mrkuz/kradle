@@ -1,10 +1,8 @@
 package net.bnb1.kradle.blueprints.jvm
 
-import net.bnb1.kradle.Catalog
-import net.bnb1.kradle.dsl.Properties
+import net.bnb1.kradle.core.Properties
 
-class KtlintProperties : Properties() {
+class KtlintProperties(var version: String) : Properties {
 
-    val version = value(Catalog.Versions.ktlint)
-    val rules = flags(true)
+    var ruleExcludes = mutableSetOf<String>()
 }

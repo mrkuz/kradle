@@ -13,14 +13,14 @@ private const val KRADLE_RW = "/home/gradle/kradle-rw"
 class TestContainer(spec: Spec) {
 
     private val container = KGenericContainer(DockerImageName.parse("gradle:7-jdk17"))
-        .withFileSystemBind(System.getenv("PROJECT_ROOT_DIR"), KRADLE_RO, BindMode.READ_ONLY)
+        .withFileSystemBind(System.getenv("KRADLE_PROJECT_ROOT_DIR"), KRADLE_RO, BindMode.READ_ONLY)
         .withFileSystemBind(
-            Path.of(System.getenv("PROJECT_DIR"), "var", "gradle").toString(),
+            Path.of(System.getenv("KRADLE_PROJECT_DIR"), "var", "gradle").toString(),
             "/home/gradle/.gradle",
             BindMode.READ_WRITE
         )
         .withFileSystemBind(
-            Path.of(System.getenv("PROJECT_DIR"), "var", "m2").toString(),
+            Path.of(System.getenv("KRADLE_PROJECT_DIR"), "var", "m2").toString(),
             "/home/gradle/.m2",
             BindMode.READ_WRITE
         )

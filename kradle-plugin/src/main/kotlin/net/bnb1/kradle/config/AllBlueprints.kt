@@ -1,9 +1,12 @@
 package net.bnb1.kradle.config
 
 import net.bnb1.kradle.blueprints.general.BootstrapBlueprint
+import net.bnb1.kradle.blueprints.general.BuildProfilesBlueprint
 import net.bnb1.kradle.blueprints.general.BuildPropertiesBlueprint
 import net.bnb1.kradle.blueprints.general.GitBlueprint
+import net.bnb1.kradle.blueprints.general.HelmBlueprint
 import net.bnb1.kradle.blueprints.general.ProjectPropertiesBlueprint
+import net.bnb1.kradle.blueprints.general.ScriptsBlueprint
 import net.bnb1.kradle.blueprints.jvm.AllOpenBlueprint
 import net.bnb1.kradle.blueprints.jvm.ApplicationBlueprint
 import net.bnb1.kradle.blueprints.jvm.BenchmarksBlueprint
@@ -46,8 +49,24 @@ class AllBlueprints(registry: Registry, properties: AllProperties, project: Proj
     // General
     val bootstrap = registry { BootstrapBlueprint(project) }
     val git = registry { GitBlueprint(project) }
+    val buildProfiles = registry {
+        BuildProfilesBlueprint(project).inject {
+            buildProfilesProperties = properties.buildProfiles
+        }
+    }
     val projectProperties = registry { ProjectPropertiesBlueprint(project) }
     val buildProperties = registry { BuildPropertiesBlueprint(project) }
+    val scripts = registry {
+        ScriptsBlueprint(project).inject {
+            scriptsProperties = properties.scripts
+        }
+    }
+    val helm = registry {
+        HelmBlueprint(project).inject {
+            helmProperties = properties.helm
+            jibProperties = properties.jib
+        }
+    }
 
     // JVM
     val java = registry {
@@ -129,7 +148,7 @@ class AllBlueprints(registry: Registry, properties: AllProperties, project: Proj
     val dokka = registry { DokkaBlueprint(project) }
     val jib = registry {
         JibBlueprint(project).inject {
-            dockerProperties = properties.docker
+            jibProperties = properties.jib
             applicationProperties = properties.application
         }
     }

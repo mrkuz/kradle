@@ -10,11 +10,11 @@ plugins {
     `maven-publish`
     id(Catalog.Build.Plugins.gradlePublish.id) version Catalog.Build.Plugins.gradlePublish.version
     id(Catalog.Build.Plugins.kotlinJvm.id) version Catalog.Build.Plugins.kotlinJvm.version
-    id("net.bitsandbobs.kradle") version "2.1.0"
+    id("net.bitsandbobs.kradle") version "2.2.0"
 }
 
 group = "net.bitsandbobs.kradle"
-version = "2.2.0"
+version = "main-SNAPSHOT"
 
 buildscript {
     dependencies {
@@ -51,11 +51,8 @@ dependencies {
 
     // Testing
     testImplementation(Catalog.Build.Dependencies.Test.kotlinTest)
-    testImplementation(Catalog.Build.Dependencies.Test.mockk)
     testImplementation(Catalog.Build.Dependencies.Test.dockerJava)
     Catalog.Build.Dependencies.Test.kotestBundle.forEach { testImplementation(it) }
-    testImplementation(Catalog.Build.Dependencies.Test.archUnitJunit5)
-    Catalog.Build.Dependencies.Test.testcontainersBundle.forEach { testImplementation(it) }
 
     constraints {
         Catalog.Build.Constraints.ids.forEach {
@@ -79,24 +76,21 @@ kradle {
                     }
                 }
             }
+            test {
+                useMockk()
+            }
         }
-        dependencyUpdates.enable()
+        dependencies.enable()
         vulnerabilityScan.enable()
         lint.enable()
         codeAnalysis.enable()
         test {
             prettyPrint(true)
-            customTests("archUnit", "compat", "integration", "functional")
-            withJunitJupiter()
+            showStandardStreams(true)
+            withCustomTests("archUnit", "compat", "integration", "functional")
+            useArchUnit()
+            useTestcontainers()
         }
-    }
-}
-
-tasks.withType<Test> {
-    environment("PROJECT_DIR", project.projectDir)
-    environment("PROJECT_ROOT_DIR", project.rootDir)
-    testLogging {
-        showStandardStreams = true
     }
 }
 

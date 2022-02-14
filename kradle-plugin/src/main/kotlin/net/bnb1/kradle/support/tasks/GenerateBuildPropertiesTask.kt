@@ -1,6 +1,7 @@
 package net.bnb1.kradle.support.tasks
 
 import org.gradle.api.DefaultTask
+import org.gradle.api.tasks.Internal
 import org.gradle.api.tasks.TaskAction
 
 open class GenerateBuildPropertiesTask : DefaultTask() {
@@ -9,6 +10,12 @@ open class GenerateBuildPropertiesTask : DefaultTask() {
         // Ensure that this task is always executed
         outputs.upToDateWhen { false }
     }
+
+    @get:Internal
+    val gitCommit = project.objects.property(String::class.java)
+
+    @get:Internal
+    val profile = project.objects.property(String::class.java)
 
     @SuppressWarnings("MagicNumber")
     @TaskAction
@@ -19,9 +26,12 @@ open class GenerateBuildPropertiesTask : DefaultTask() {
             it.println("project.name=${project.name}")
             it.println("project.group=${project.group}")
             it.println("project.version=${project.properties["version"]}")
+            if (profile.isPresent) {
+                it.println("build.profile=${profile.get()}")
+            }
             it.println("build.timestamp=${System.currentTimeMillis() / 1000}")
-            if (project.hasProperty("gitCommit")) {
-                it.println("git.commit-id=${project.properties["gitCommit"]}")
+            if (gitCommit.isPresent) {
+                it.println("git.commit-id=${gitCommit.get()}")
             }
         }
     }

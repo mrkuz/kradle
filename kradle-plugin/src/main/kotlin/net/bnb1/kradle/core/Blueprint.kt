@@ -35,10 +35,11 @@ open class Blueprint(protected val project: Project) {
 
                 doCheckPreconditions()
                 doApplyPlugins()
+                doAddExtraProperties()
                 doCreateSourceSets()
                 doCreateTasks()
+                doCreateScriptTasks()
                 doAddAliases()
-                doAddExtraProperties()
                 doAddDependencies()
                 doConfigure()
             }
@@ -51,10 +52,11 @@ open class Blueprint(protected val project: Project) {
     protected open fun shouldActivate() = true
     protected open fun doCheckPreconditions() = Unit
     protected open fun doApplyPlugins() = Unit
+    protected open fun doAddExtraProperties() = Unit
     protected open fun doCreateSourceSets() = Unit
     protected open fun doCreateTasks() = Unit
+    protected open fun doCreateScriptTasks() = Unit
     protected open fun doAddAliases() = Unit
-    protected open fun doAddExtraProperties() = Unit
     protected open fun doAddDependencies() = Unit
     protected open fun doConfigure() = Unit
 }

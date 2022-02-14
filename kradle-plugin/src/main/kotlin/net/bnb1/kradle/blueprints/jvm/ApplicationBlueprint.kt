@@ -17,6 +17,8 @@ class ApplicationBlueprint(project: Project) : Blueprint(project) {
     lateinit var applicationProperties: ApplicationProperties
     lateinit var javaProperties: JavaProperties
 
+    lateinit var withBuildProfiles: () -> Boolean
+
     override fun doCheckPreconditions() {
         if (project.group.toString().isEmpty()) {
             project.logger.warn("WARNING: Group is not specified")
@@ -34,26 +36,28 @@ class ApplicationBlueprint(project: Project) : Blueprint(project) {
     }
 
     override fun doAddExtraProperties() {
-        project.extra["mainClass"] = applicationProperties.mainClass.get()
+        project.extra["mainClass"] = applicationProperties.mainClass
     }
 
     override fun doConfigure() {
-        val mainClass = applicationProperties.mainClass
         val javaExtension = project.extensions.getByType(JavaApplication::class.java)
-        if (!mainClass.hasValue) {
+        if (applicationProperties.mainClass == null) {
             // Backward compatibility: Allow setting main class in application extension
             if (javaExtension.mainClass.isPresent) {
-                mainClass.set(javaExtension.mainClass.get())
+                applicationProperties.mainClass = javaExtension.mainClass.get()
             } else {
                 throw GradleException("Main class is not set")
             }
         } else {
-            javaExtension.mainClass.set(mainClass.get())
+            javaExtension.mainClass.set(applicationProperties.mainClass)
         }
 
-        if (javaProperties.previewFeatures.get()) {
-            project.tasks.withType<JavaExec> {
+        project.tasks.withType<JavaExec> {
+            if (javaProperties.previewFeatures) {
                 jvmArgs = jvmArgs + "--enable-preview"
+            }
+            if (withBuildProfiles()) {
+                environment("KRADLE_PROFILE", project.extra["profile"].toString())
             }
         }
     }

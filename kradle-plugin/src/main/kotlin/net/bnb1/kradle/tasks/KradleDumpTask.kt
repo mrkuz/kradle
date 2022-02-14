@@ -1,16 +1,9 @@
 package net.bnb1.kradle.tasks
 
 import net.bnb1.kradle.core.Feature
-import net.bnb1.kradle.core.dsl.FeatureDsl
-import net.bnb1.kradle.dsl.Configurable
-import net.bnb1.kradle.dsl.ConfigurableSelf
-import net.bnb1.kradle.dsl.EmptyProperties
-import net.bnb1.kradle.dsl.Properties
-import net.bnb1.kradle.dsl.SimpleProvider
+import net.bnb1.kradle.core.Properties
 import net.bnb1.kradle.support.Tracer
 import org.gradle.api.DefaultTask
-import org.gradle.api.model.ObjectFactory
-import org.gradle.api.provider.Provider
 import org.gradle.api.tasks.Internal
 import org.gradle.api.tasks.TaskAction
 import org.gradle.util.GradleVersion
@@ -177,7 +170,6 @@ open class KradleDumpTask : DefaultTask() {
         )
 
         properties.asSequence()
-            .filterNot { it is EmptyProperties }
             .sortedBy { it::class.qualifiedName }
             .forEach {
                 dump("${it::class.qualifiedName} {")
@@ -191,41 +183,18 @@ open class KradleDumpTask : DefaultTask() {
         target::class.memberProperties
             .filter { it.visibility == KVisibility.PUBLIC }
             .forEach { member ->
-                val returnType = member.returnType.jvmErasure
                 val key = "${prefix}${member.name}"
-                if (returnType.isSubclassOf(SimpleProvider::class)) {
-                    val value = member.getter.call(target) as SimpleProvider<*>
-                    if (value.notNull) {
-                        dump("$key = ${value.get()}")
-                    } else {
-                        dump("$key = NOT SET")
-                    }
-                } else if (returnType.isSubclassOf(Provider::class)) {
-                    val value = member.getter.call(target) as Provider<*>
-                    if (value.isPresent) {
-                        dump("$key = ${value.get()}")
-                    } else {
-                        dump("$key = NOT SET")
-                    }
-                } else if (returnType.isSubclassOf(Collection::class) &&
-                    member.typeParameters.all { it.javaClass.isPrimitive }
-                ) {
-                    val value = member.getter.call(target) as Collection<*>
-                    dump("$key = $value")
-                } else if (returnType.isSubclassOf(ConfigurableSelf::class)) {
-                    member.getter.call(target)?.let {
+                val value = member.getter.call(target)
+                if (value != null) {
+                    if (member.returnType.jvmErasure.isSubclassOf(Properties::class)) {
                         dump("$key = {")
-                        printProperties(it, level + 1)
+                        printProperties(value, level + 1)
                         dump("$prefix}")
+                    } else {
+                        dump("$key = $value")
                     }
-                } else if (
-                    returnType.isSubclassOf(ObjectFactory::class) ||
-                    returnType.isSubclassOf(FeatureDsl::class) ||
-                    returnType.isSubclassOf(Configurable::class)
-                ) {
-                    // Ignore
                 } else {
-                    dump("$key = ${returnType::class.qualifiedName}")
+                    dump("$key = NOT SET")
                 }
             }
     }

@@ -76,6 +76,16 @@ class JibBlueprintTests : BehaviorSpec({
 
             Then("Task buildImage is available") {
                 project.shouldHaveTask("buildImage")
+
+                // And: "Task pushImage is available"
+                project.shouldHaveTask("pushImage")
+            }
+        }
+
+        When("Check for project properties") {
+
+            Then("imageName is set") {
+                project.shouldHaveProperty("imageName", name)
             }
         }
 
@@ -233,6 +243,89 @@ class JibBlueprintTests : BehaviorSpec({
 
             Then("Succeed") {
                 output shouldContain "Xmx = 96"
+            }
+        }
+    }
+
+    // Requires docker
+    xGiven("docker.arguments = Hello World") {
+        project.setUp(name) {
+            """
+            jvm {
+                java.enable()
+                application {
+                    mainClass("com.example.demo.App")
+                }
+                docker {
+                    arguments("Hello World")
+                }
+            }
+            """.trimIndent()
+        }
+        project.writeAppJava { "System.out.println(args[0] + \" \" + args[1]);" }
+
+        When("Build and run container") {
+            project.runTask("buildImage")
+            val output = runContainer()
+
+            Then("Succeed") {
+                output shouldContain "Hello World"
+            }
+        }
+    }
+
+    // Requires docker
+    xGiven("docker.arguments = Hello World AND docker.startupScript = true") {
+        project.setUp(name) {
+            """
+            jvm {
+                java.enable()
+                application {
+                    mainClass("com.example.demo.App")
+                }
+                docker {
+                    arguments("Hello World")
+                    withStartupScript()
+                }
+            }
+            """.trimIndent()
+        }
+        project.writeAppJava { "System.out.println(args[0] + \" \" + args[1]);" }
+
+        When("Build and run container") {
+            project.runTask("buildImage")
+            val output = runContainer()
+
+            Then("Succeed") {
+                output shouldContain "Hello World"
+            }
+        }
+    }
+
+    // Requires docker
+    xGiven("docker.arguments = Hello World AND docker.jvmKill = true") {
+        project.setUp(name) {
+            """
+            jvm {
+                java.enable()
+                application {
+                    mainClass("com.example.demo.App")
+                }
+                docker {
+                    arguments("Hello World")
+                    withJvmKill()
+                }
+            }
+            """.trimIndent()
+        }
+        project.writeAppJava { "System.out.println(args[0] + \" \" + args[1]);" }
+
+        When("Build and run container") {
+            project.runTask("buildImage")
+            val output = runContainer()
+
+            Then("Succeed") {
+                output shouldContain "Hello World"
             }
         }
     }

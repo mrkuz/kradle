@@ -1,14 +1,25 @@
 package net.bnb1.kradle.blueprints.general
 
-import net.bnb1.kradle.apply
 import net.bnb1.kradle.core.Blueprint
-import net.bnb1.kradle.support.plugins.BuildPropertiesPlugin
+import net.bnb1.kradle.createTask
+import net.bnb1.kradle.support.tasks.GenerateBuildPropertiesTask
 import org.gradle.api.Project
+import org.gradle.kotlin.dsl.extra
 
 class BuildPropertiesBlueprint(project: Project) : Blueprint(project) {
 
-    override fun doApplyPlugins() {
-        project.apply(BuildPropertiesPlugin::class.java)
+    lateinit var withGit: () -> Boolean
+    lateinit var withBuildProfiles: () -> Boolean
+
+    override fun doCreateTasks() {
+        project.createTask<GenerateBuildPropertiesTask>("generateBuildProperties", "Generates build.properties") {
+            if (withGit()) {
+                gitCommit.set(project.provider { project.extra["gitCommit"].toString() })
+            }
+            if (withBuildProfiles()) {
+                profile.set(project.provider { project.extra["profile"].toString() })
+            }
+        }
     }
 
     override fun doConfigure() {

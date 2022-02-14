@@ -100,10 +100,7 @@ object Catalog {
         object Versions {
             const val kotlin = "1.5.31"
             const val kotest = "4.6.3"
-            const val mockk = "1.12.2"
             const val kotlinxBenchmarkPlugin = "0.4.2"
-            const val archUnit = "0.22.0"
-            const val testcontainers = "1.16.3"
         }
 
         object Plugins {
@@ -143,15 +140,10 @@ object Catalog {
 
             object Test {
                 const val kotlinTest = "org.jetbrains.kotlin:kotlin-test:${Versions.kotlin}"
-                const val mockk = "io.mockk:mockk:${Versions.mockk}"
                 const val kotestJunit5 = "io.kotest:kotest-runner-junit5:${Versions.kotest}"
                 const val kotestProperty = "io.kotest:kotest-property:${Versions.kotest}"
                 const val dockerJava = "com.github.docker-java:docker-java:3.2.12"
-                const val archUnitJunit5 = "com.tngtech.archunit:archunit-junit5:${Versions.archUnit}"
-                const val testcontainers = "org.testcontainers:testcontainers:${Versions.testcontainers}"
-                const val testcontainersJunit5 = "org.testcontainers:junit-jupiter:${Versions.testcontainers}"
                 val kotestBundle = setOf(kotestJunit5, kotestProperty)
-                val testcontainersBundle = setOf(testcontainers, testcontainersJunit5)
             }
         }
 

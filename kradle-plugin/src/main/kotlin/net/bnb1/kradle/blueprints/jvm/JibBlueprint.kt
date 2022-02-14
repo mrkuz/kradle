@@ -1,74 +1,87 @@
 package net.bnb1.kradle.blueprints.jvm
 
 import com.google.cloud.tools.jib.gradle.BuildDockerTask
+import com.google.cloud.tools.jib.gradle.BuildImageTask
 import com.google.cloud.tools.jib.gradle.JibExtension
+import com.google.cloud.tools.jib.gradle.JibTask
 import net.bnb1.kradle.Catalog
 import net.bnb1.kradle.core.Blueprint
 import net.bnb1.kradle.createTask
 import net.bnb1.kradle.extraDir
+import net.bnb1.kradle.render
 import net.bnb1.kradle.sourceSets
 import org.gradle.api.Project
 import org.gradle.api.tasks.SourceSet
-import org.gradle.kotlin.dsl.named
+import org.gradle.kotlin.dsl.extra
 import java.net.URL
 import java.nio.file.Files
 
-private const val TASK_NAME = "buildImage"
+private const val TASK_BUILD_IMAGE = "buildImage"
+private const val TASK_PUSH_IMAGE = "pushImage"
 
 class JibBlueprint(project: Project) : Blueprint(project) {
 
-    lateinit var dockerProperties: DockerProperties
+    lateinit var jibProperties: JibProperties
     lateinit var applicationProperties: ApplicationProperties
 
-    override fun doCreateTasks() {
-        project.createTask<BuildDockerTask>(TASK_NAME, "Builds Docker image")
+    override fun doAddExtraProperties() {
+        project.extra["imageName"] = jibProperties.imageName ?: project.name
     }
 
-    override fun doConfigure() {
-        project.tasks.named<BuildDockerTask>(TASK_NAME).configure {
-            dependsOn(project.sourceSets.getByName(SourceSet.MAIN_SOURCE_SET_NAME).runtimeClasspath)
-            dependsOn(project.configurations.getByName("runtimeClasspath"))
-            setJibExtension(createExtension())
-            doFirst {
-                if (dockerProperties.withStartupScript.get()) {
-                    copyResource(project, "app.sh")
-                    downloadTini(project)
-                }
-                if (dockerProperties.withJvmKill.hasValue) {
-                    downloadTini(project)
-                    downloadJvmKill(project)
-                }
+    override fun doCreateTasks() {
+        val extension = createExtension()
+        project.createTask<BuildDockerTask>(TASK_BUILD_IMAGE, "Builds Docker image")
+            .also { configureTask(it, extension) }
+        project.createTask<BuildImageTask>(TASK_PUSH_IMAGE, "Pushes container image to remote registry")
+            .also { configureTask(it, extension) }
+    }
+
+    private fun configureTask(task: JibTask, extension: JibExtension) = task.apply {
+        dependsOn(project.sourceSets.getByName(SourceSet.MAIN_SOURCE_SET_NAME).runtimeClasspath)
+        dependsOn(project.configurations.getByName("runtimeClasspath"))
+        setJibExtension(extension)
+        doFirst {
+            if (jibProperties.withStartupScript) {
+                copyResource(project, "app.sh")
+                downloadTini(project)
+            }
+            if (jibProperties.withJvmKill != null) {
+                downloadTini(project)
+                downloadJvmKill(project)
             }
         }
     }
 
+    @Suppress("LongMethod", "ComplexMethod")
     private fun createExtension(): JibExtension {
-        val withJvmKill = dockerProperties.withJvmKill.hasValue
-        val withStartupScript = dockerProperties.withStartupScript.get()
+        val withJvmKill = jibProperties.withJvmKill != null
+        val withStartupScript = jibProperties.withStartupScript
         val jibExtension = JibExtension(project).apply {
+            setAllowInsecureRegistries(jibProperties.allowInsecureRegistries)
+
             from {
-                image = dockerProperties.baseImage.get()
+                image = jibProperties.baseImage
             }
 
             to {
-                image = "${project.rootProject.name}:latest"
+                image = project.render(project.extra["imageName"].toString())
                 tags = setOf(project.version.toString())
             }
 
             container {
                 creationTime = "USE_CURRENT_TIMESTAMP"
-                ports = dockerProperties.ports.get().map { it.toString() }
+                ports = jibProperties.ports.map { it.toString() }
 
-                if (dockerProperties.javaOpts.hasValue) {
+                if (jibProperties.jvmOptions != null) {
                     if (withStartupScript) {
-                        environment = mapOf("JAVA_OPTS" to dockerProperties.javaOpts.get())
+                        environment = mapOf("JAVA_OPTS" to jibProperties.jvmOptions)
                     } else {
-                        jvmFlags = dockerProperties.javaOpts.get().split(" ")
+                        jvmFlags = jibProperties.jvmOptions!!.split(" ")
                     }
                 }
 
                 if (withJvmKill) {
-                    val jvmKillFileName = "jvmkill-${dockerProperties.withJvmKill.get()}.so"
+                    val jvmKillFileName = "jvmkill-${jibProperties.withJvmKill}.so"
                     if (withStartupScript) {
                         environment = environment + mapOf("JAVA_AGENT" to "/app/extra/$jvmKillFileName")
                     } else {
@@ -76,7 +89,7 @@ class JibBlueprint(project: Project) : Blueprint(project) {
                     }
                 }
 
-                val mainClass = applicationProperties.mainClass.get()
+                val mainClass = applicationProperties.mainClass
                 if (withStartupScript) {
                     environment = environment + mapOf("MAIN_CLASS" to mainClass)
                     entrypoint = listOf("/app/extra/tini", "--", "/app/extra/app.sh")
@@ -90,6 +103,10 @@ class JibBlueprint(project: Project) : Blueprint(project) {
                         "@/app/jib-classpath-file",
                         mainClass
                     )
+                }
+
+                if (jibProperties.arguments != null) {
+                    args = project.render(jibProperties.arguments!!).split(" ")
                 }
             }
 
@@ -135,7 +152,7 @@ class JibBlueprint(project: Project) : Blueprint(project) {
     }
 
     private fun downloadJvmKill(project: Project) {
-        val jvmKillFile = project.extraDir.resolve("jvmkill-${dockerProperties.withJvmKill.get()}.so")
+        val jvmKillFile = project.extraDir.resolve("jvmkill-${jibProperties.withJvmKill}.so")
         if (jvmKillFile.exists()) {
             return
         }
@@ -143,7 +160,7 @@ class JibBlueprint(project: Project) : Blueprint(project) {
         jvmKillFile.parentFile.mkdirs()
 
         val jvmKillBaseUrl = "https://java-buildpack.cloudfoundry.org/jvmkill/bionic/x86_64"
-        val url = URL(jvmKillBaseUrl + "/jvmkill-${dockerProperties.withJvmKill.get()}-RELEASE.so")
+        val url = URL(jvmKillBaseUrl + "/jvmkill-${jibProperties.withJvmKill}-RELEASE.so")
         project.logger.lifecycle("Downloading $url")
         url.openStream().use { Files.copy(it, jvmKillFile.toPath()) }
     }

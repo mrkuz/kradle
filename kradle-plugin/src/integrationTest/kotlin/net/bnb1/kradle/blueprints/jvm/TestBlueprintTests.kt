@@ -28,6 +28,7 @@ class TestBlueprintTests : BehaviorSpec({
                     println("Hello Test!")
                     println("KRADLE_PROJECT_DIR = " + System.getenv("KRADLE_PROJECT_DIR"))
                     println("KRADLE_PROJECT_ROOT_DIR = " + System.getenv("KRADLE_PROJECT_ROOT_DIR"))
+                    println("KRADLE_PROFILE = " + System.getenv("KRADLE_PROFILE"))
                 }
             }
             """.trimIndent()
@@ -270,6 +271,34 @@ class TestBlueprintTests : BehaviorSpec({
 
             Then("Show stdout") {
                 result.output shouldContain "Hello Test!"
+            }
+        }
+    }
+
+    Given("test.showStandardStreams = true AND build profiles set") {
+        project.setUp {
+            """
+            general {
+                buildProfiles {
+                    active("test")
+                }
+            }
+            jvm {
+                kotlin.enable()
+                test {
+                    withJunitJupiter()
+                    showStandardStreams(true)
+                }
+            }
+            """.trimIndent()
+        }
+        createAppTest("test")
+
+        When("Run test") {
+            val result = project.runTask("test")
+
+            Then("KRADLE_PROFILE is set") {
+                result.output shouldContain "KRADLE_PROFILE = test"
             }
         }
     }

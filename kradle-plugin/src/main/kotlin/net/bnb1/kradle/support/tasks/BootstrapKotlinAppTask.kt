@@ -7,12 +7,12 @@ import java.nio.file.Path
 
 open class BootstrapKotlinAppTask : BootstrapBaseTask() {
 
-    @Input
+    @get:Input
     val mainClass = project.objects.empty<String>()
 
     @TaskAction
     fun run() {
-        initializeGit()
+        val git = initializeGit()
         createDirectories("kotlin")
         createFiles()
         copyTextResource("detekt-config.yml")
@@ -41,5 +41,6 @@ open class BootstrapKotlinAppTask : BootstrapBaseTask() {
                 """.trimIndent()
             )
         }
+        git.add().addFilepattern(".").call()
     }
 }
