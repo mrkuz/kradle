@@ -246,4 +246,87 @@ class JibBlueprintTests : BehaviorSpec({
             }
         }
     }
+
+    // Requires docker
+    xGiven("docker.arguments = Hello World") {
+        project.setUp(name) {
+            """
+            jvm {
+                java.enable()
+                application {
+                    mainClass("com.example.demo.App")
+                }
+                docker {
+                    arguments("Hello World")
+                }
+            }
+            """.trimIndent()
+        }
+        project.writeAppJava { "System.out.println(args[0] + \" \" + args[1]);" }
+
+        When("Build and run container") {
+            project.runTask("buildImage")
+            val output = runContainer()
+
+            Then("Succeed") {
+                output shouldContain "Hello World"
+            }
+        }
+    }
+
+    // Requires docker
+    xGiven("docker.arguments = Hello World AND docker.startupScript = true") {
+        project.setUp(name) {
+            """
+            jvm {
+                java.enable()
+                application {
+                    mainClass("com.example.demo.App")
+                }
+                docker {
+                    arguments("Hello World")
+                    withStartupScript()
+                }
+            }
+            """.trimIndent()
+        }
+        project.writeAppJava { "System.out.println(args[0] + \" \" + args[1]);" }
+
+        When("Build and run container") {
+            project.runTask("buildImage")
+            val output = runContainer()
+
+            Then("Succeed") {
+                output shouldContain "Hello World"
+            }
+        }
+    }
+
+    // Requires docker
+    xGiven("docker.arguments = Hello World AND docker.jvmKill = true") {
+        project.setUp(name) {
+            """
+            jvm {
+                java.enable()
+                application {
+                    mainClass("com.example.demo.App")
+                }
+                docker {
+                    arguments("Hello World")
+                    withJvmKill()
+                }
+            }
+            """.trimIndent()
+        }
+        project.writeAppJava { "System.out.println(args[0] + \" \" + args[1]);" }
+
+        When("Build and run container") {
+            project.runTask("buildImage")
+            val output = runContainer()
+
+            Then("Succeed") {
+                output shouldContain "Hello World"
+            }
+        }
+    }
 })

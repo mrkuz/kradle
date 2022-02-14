@@ -71,11 +71,11 @@ class JibBlueprint(project: Project) : Blueprint(project) {
                 creationTime = "USE_CURRENT_TIMESTAMP"
                 ports = jibProperties.ports.map { it.toString() }
 
-                if (jibProperties.jvmOpts != null) {
+                if (jibProperties.jvmOptions != null) {
                     if (withStartupScript) {
-                        environment = mapOf("JAVA_OPTS" to jibProperties.jvmOpts)
+                        environment = mapOf("JAVA_OPTS" to jibProperties.jvmOptions)
                     } else {
-                        jvmFlags = jibProperties.jvmOpts!!.split(" ")
+                        jvmFlags = jibProperties.jvmOptions!!.split(" ")
                     }
                 }
 
@@ -102,6 +102,10 @@ class JibBlueprint(project: Project) : Blueprint(project) {
                         "@/app/jib-classpath-file",
                         mainClass
                     )
+                }
+
+                if (jibProperties.arguments != null) {
+                    args = jibProperties.arguments!!.split(" ")
                 }
             }
 

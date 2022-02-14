@@ -9,5 +9,6 @@ class JibProperties(var baseImage: String) : Properties {
     val ports = mutableSetOf<Int>()
     var withJvmKill: String? = null
     var withStartupScript = false
-    var jvmOpts: String? = null
+    var jvmOptions: String? = null
+    var arguments: String? = null
 }

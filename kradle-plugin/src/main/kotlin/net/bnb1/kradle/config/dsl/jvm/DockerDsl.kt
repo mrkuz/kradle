@@ -19,6 +19,9 @@ class DockerDsl(properties: JibProperties) {
     val withAppSh = withStartupScript
     val startupScript = withStartupScript
 
-    val jvmOpts = Optional<String>(null) { properties.jvmOpts = it }
-    val javaOpts = jvmOpts
+    val jvmOptions = Optional<String>(null) { properties.jvmOptions = it }
+    val jvmOpts = jvmOptions
+    val javaOpts = jvmOptions
+
+    val arguments = Optional<String>(null) { properties.arguments = it }
 }

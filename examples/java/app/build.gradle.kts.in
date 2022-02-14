@@ -140,6 +140,7 @@ kradle {
             imageName(project.name)
             allowInsecureRegistries(false)
             jvmOpts("...")
+            arguments("...")
             ports(...)
             */
             withJvmKill(/* "${versions.jvmKill}" */)
