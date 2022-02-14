@@ -5,6 +5,12 @@
 ### Version main-SNAPSHOT (2022-02-14)
 
 #### Bugfixes
+#### Additions
+#### Changes
+
+### Version 2.3.0 (2022-02-14)
+
+#### Bugfixes
 
 - `kover`: Exclude `benchmark` sources from analysis
 

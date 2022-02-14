@@ -7,6 +7,7 @@ import io.kotest.matchers.file.shouldExist
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.string.shouldMatch
 import net.bnb1.kradle.TestProject
+import org.eclipse.jgit.api.Git
 import org.gradle.testkit.runner.TaskOutcome
 
 private const val DEFAULT_LINES = 4
@@ -86,6 +87,34 @@ class BuildPropertiesBlueprintTests : BehaviorSpec({
                 val lines = output.readLines()
                 lines.shouldHaveSize(DEFAULT_LINES + 1)
                 lines.forOne { it shouldMatch Regex("git.commit-id=[a-z0-9]{7}") }
+            }
+        }
+    }
+
+    Given("Git project without commit") {
+        project.setUp {
+            """
+            general {
+                buildProperties.enable()
+                git.enable()
+            }
+            jvm {
+                kotlin.enable()
+            }
+            """.trimIndent()
+        }
+        Git.init().setDirectory(project.projectDir).call()
+
+        When("Run generateBuildProperties") {
+            project.runTask("generateBuildProperties")
+
+            Then("build.properties contains empty Git commit id") {
+                val output = project.buildDir.resolve("resources/main/build.properties")
+                output.shouldExist()
+
+                val lines = output.readLines()
+                lines.shouldHaveSize(DEFAULT_LINES + 1)
+                lines.forOne { it shouldMatch Regex("^git.commit-id=$") }
             }
         }
     }

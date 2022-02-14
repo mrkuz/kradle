@@ -5,6 +5,12 @@
 ### Version ${kradleVersion} (${new Date().format("yyyy-MM-dd")})
 
 #### Bugfixes
+#### Additions
+#### Changes
+
+### Version 2.3.0 (2022-02-14)
+
+#### Bugfixes
 
 - `kover`: Exclude `benchmark` sources from analysis
 
