@@ -5,6 +5,9 @@
 ### Version ${kradleVersion} (${new Date().format("yyyy-MM-dd")})
 
 #### Bugfixes
+
+- Fix support for Gradle 7.4
+
 #### Additions
 #### Changes
 
