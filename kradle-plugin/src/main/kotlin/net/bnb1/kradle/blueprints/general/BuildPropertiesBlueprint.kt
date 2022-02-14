@@ -14,7 +14,15 @@ class BuildPropertiesBlueprint(project: Project) : Blueprint(project) {
     override fun doCreateTasks() {
         project.createTask<GenerateBuildPropertiesTask>("generateBuildProperties", "Generates build.properties") {
             if (withGit()) {
-                gitCommit.set(project.provider { project.extra["gitCommit"].toString() })
+                gitCommit.set(
+                    project.provider {
+                        if (project.extra.has("gitCommit")) {
+                            project.extra["gitCommit"].toString()
+                        } else {
+                            ""
+                        }
+                    }
+                )
             }
             if (withBuildProfiles()) {
                 profile.set(project.provider { project.extra["profile"].toString() })
