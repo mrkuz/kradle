@@ -364,7 +364,7 @@ kradle {
 Looks for a file called _project.properties_ in the project directory. If found, the entries are added to the
 project properties.
 
-If [build profiles](#feature-build-profiles) are enabled, the entries of _project-<PROFILE>.properties_ are also added.
+If [build profiles](#feature-build-profiles) are enabled, the entries of _project-&lt;PROFILE>.properties_ are also added.
 They have precedence over _project.properties_.
 
 <a id="feature-build-properties"></a>
@@ -488,7 +488,7 @@ kradle {
 ```
 
 - `releaseName`: Release name
-- `valuesFile`: Use values file with `helmInstall` and `helmUpgrade` ((relative to project directory))
+- `valuesFile`: Use values file with `helmInstall` and `helmUpgrade` (relative to project directory)
 
 <a id="feature-set-jvm"></a>
 ### JVM features
@@ -1049,7 +1049,8 @@ kradle {
             imageName(project.name)
             allowInsecureRegistries(false)
             // ports(…)
-            // jvmOpts("…")
+            // jvmOptions("…")
+            // arguments("…")
             // withJvmKill(1.16.0")
             withStartupScript(false)
         }
@@ -1061,7 +1062,8 @@ kradle {
 - `imageName`: Name of the created image (without tag)
 - `allowInsecureRegistries`: Allows use of insecure registries
 - `ports`: List of exposed ports
-- `jvmOpts`: Options passed to the JVM
+- `jvmOptions`: Options passed to the JVM
+- `arguments`: Arguments passed to the application
 - `withJvmKill`: Adds [jvmkill](https://github.com/airlift/jvmkill) to the image, which terminates the JVM if it is unable to allocate memory
 - `withStartupScript`: Uses a script as entrypoint for the container. Either you provide your own script at _src/main/extra/app.sh_ or `kradle` will create one
 
@@ -1475,7 +1477,8 @@ kradle {
             baseImage("bellsoft/liberica-openjdk-alpine:17")
             imageName(project.name)
             allowInsecureRegistries(false)
-            // jvmOpts("…")
+            // jvmOptions("…")
+            // arguments("…")
             // ports(…)
             // withJvmKill("1.16.0")
             withStartupScript(false)

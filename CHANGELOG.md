@@ -2,7 +2,7 @@
 
 ## Changelog
 
-### Version main-SNAPSHOT (2022-02-13)
+### Version main-SNAPSHOT (2022-02-14)
 
 #### Bugfixes
 
@@ -17,8 +17,9 @@
 - New alias `verify` for `check`
 - New project property `gitBranchPrefix`
 - `docker`: New task `pushImage`
-- `docker`: New options `imageName` and `allowInsecureRegistries`
+- `docker`: New options `imageName`, `arguments` and `allowInsecureRegistries`
 - `docker`: Add project property `imageName`
+- `docker`: Add `jvmOptions` as alternative to `jvmOpts`
 
 #### Changes
 

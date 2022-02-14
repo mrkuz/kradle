@@ -364,7 +364,7 @@ kradle {
 Looks for a file called _project.properties_ in the project directory. If found, the entries are added to the
 project properties.
 
-If [build profiles](#feature-build-profiles) are enabled, the entries of _project-<PROFILE>.properties_ are also added.
+If [build profiles](#feature-build-profiles) are enabled, the entries of _project-&lt;PROFILE>.properties_ are also added.
 They have precedence over _project.properties_.
 
 <a id="feature-build-properties"></a>
@@ -488,7 +488,7 @@ kradle {
 ```
 
 - `releaseName`: Release name
-- `valuesFile`: Use values file with `helmInstall` and `helmUpgrade` ((relative to project directory))
+- `valuesFile`: Use values file with `helmInstall` and `helmUpgrade` (relative to project directory)
 
 <a id="feature-set-jvm"></a>
 ### JVM features

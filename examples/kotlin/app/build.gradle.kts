@@ -130,6 +130,7 @@ kradle {
             allowInsecureRegistries(false)
             ports(...)
             jvmOpts("...")
+            arguments("...")
             */
             withJvmKill(/* "1.16.0" */)
             // withStartupScript(false)
