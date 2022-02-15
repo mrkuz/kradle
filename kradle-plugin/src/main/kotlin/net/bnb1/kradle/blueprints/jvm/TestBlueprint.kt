@@ -86,7 +86,7 @@ class TestBlueprint(project: Project) : Blueprint(project) {
             .filter { it.startsWith("test") }
             .forEach {
                 val configName = it.replace(Regex("^test"), name)
-                project.configurations.getByName(configName) {
+                project.configurations.findByName(configName)?.apply {
                     extendsFrom(project.configurations.getByName(it))
                 }
             }

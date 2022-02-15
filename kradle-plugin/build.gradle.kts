@@ -10,11 +10,11 @@ plugins {
     `maven-publish`
     id(Catalog.Build.Plugins.gradlePublish.id) version Catalog.Build.Plugins.gradlePublish.version
     id(Catalog.Build.Plugins.kotlinJvm.id) version Catalog.Build.Plugins.kotlinJvm.version
-    id("net.bitsandbobs.kradle") version "2.2.0"
+    id("net.bitsandbobs.kradle") version "2.3.0"
 }
 
 group = "net.bitsandbobs.kradle"
-version = "2.3.0"
+version = "main-SNAPSHOT"
 
 buildscript {
     dependencies {
@@ -74,6 +74,11 @@ kradle {
                     rules {
                         disable("no-wildcard-imports")
                     }
+                }
+            }
+            codeAnalysis {
+                detekt {
+                    configFile("../detekt-config.yml")
                 }
             }
             test {
