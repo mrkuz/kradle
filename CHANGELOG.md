@@ -2,11 +2,17 @@
 
 ## Changelog
 
-### Version main-SNAPSHOT (2022-02-14)
+### Version main-SNAPSHOT (2022-02-15)
 
 #### Bugfixes
 #### Additions
 #### Changes
+
+### Version 2.3.1 (2022-02-15)
+
+#### Bugfixes
+
+- Fix support for Gradle 7.4
 
 ### Version 2.3.0 (2022-02-14)
 
