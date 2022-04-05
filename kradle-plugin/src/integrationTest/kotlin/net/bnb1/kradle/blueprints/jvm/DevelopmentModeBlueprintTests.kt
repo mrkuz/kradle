@@ -41,6 +41,48 @@ class DevelopmentModeBlueprintTests : BehaviorSpec({
         }
     }
 
+    Given("Default configuration AND dev dependencies") {
+        project.writeSettingsFile()
+        project.buildFile.writeText(
+            """
+            plugins {
+                id("org.jetbrains.kotlin.jvm") version "1.6.0"
+                id("net.bitsandbobs.kradle")
+            }
+
+            group = "com.example"
+            version = "1.0.0"
+
+            kradle {
+                jvm {
+                    targetJvm("11")
+                    kotlin.enable()
+                    application {
+                        mainClass("com.example.demo.AppKt")
+                    }
+                    developmentMode.enable()
+                }
+            }
+
+            dependencies {
+                add("kradleDev", "org.springframework.boot:spring-boot-devtools:2.6.5")
+            }
+            """.trimIndent()
+        )
+        project.writeHelloWorldAppKt()
+
+        When("Check dependencies") {
+
+            Then("Dev dependencies are not available in runtime classpath") {
+                project.shouldNotHaveDependency("runtimeClasspath", "org.springframework.boot:spring-boot-devtools")
+            }
+
+            Then("Dev dependencies are available in kradleDev") {
+                project.shouldHaveDependency("kradleDev", "org.springframework.boot:spring-boot-devtools")
+            }
+        }
+    }
+
     Given("Default configuration AND build profiles") {
         project.setUp {
             """

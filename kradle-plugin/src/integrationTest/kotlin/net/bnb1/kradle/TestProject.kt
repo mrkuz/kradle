@@ -3,6 +3,7 @@ package net.bnb1.kradle
 import io.kotest.core.spec.IsolationMode
 import io.kotest.core.spec.Spec
 import io.kotest.matchers.string.shouldContain
+import io.kotest.matchers.string.shouldNotContain
 import org.eclipse.jgit.api.Git
 import org.gradle.api.Plugin
 import org.gradle.testkit.runner.GradleRunner
@@ -51,6 +52,9 @@ class TestProject(spec: Spec) {
 
     fun shouldHaveDependency(configuration: String, id: String) =
         runTask("dependencies", "--configuration", configuration).output.shouldContain(id)
+
+    fun shouldNotHaveDependency(configuration: String, id: String) =
+        runTask("dependencies", "--configuration", configuration).output.shouldNotContain(id)
 
     fun setUp(name: String = "test", kradleConfig: () -> String) {
         writeSettingsFile(name)
