@@ -40,7 +40,6 @@ class KotlinAppBootstrapBlueprintTests : BehaviorSpec({
                 result.task(":bootstrapKotlinApp")!!.outcome shouldBe TaskOutcome.SUCCESS
 
                 // And: "Project files and directories are created"
-                project.projectDir.resolve(".git").shouldExist()
                 project.projectDir.resolve("gradlew").shouldExist()
                 project.projectDir.resolve("src/main/resources").shouldExist()
                 project.projectDir.resolve("src/main/extra").shouldExist()

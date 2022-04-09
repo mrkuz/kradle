@@ -37,7 +37,6 @@ class JavaLibBootstrapBlueprintTests : BehaviorSpec({
                 result.task(":bootstrapJavaLib")!!.outcome shouldBe TaskOutcome.SUCCESS
 
                 // And: "Project files and directories are created"
-                project.projectDir.resolve(".git").shouldExist()
                 project.projectDir.resolve("gradlew").shouldExist()
                 project.projectDir.resolve("src/main/java/com/example").shouldExist()
                 project.projectDir.resolve("src/main/resources").shouldExist()

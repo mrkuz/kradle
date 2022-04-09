@@ -12,7 +12,6 @@ open class BootstrapJavaAppTask : BootstrapBaseTask() {
 
     @TaskAction
     fun run() {
-        initializeGit()
         createDirectories("java")
         createFiles()
 

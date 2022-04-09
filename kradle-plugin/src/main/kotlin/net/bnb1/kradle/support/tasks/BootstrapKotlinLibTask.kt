@@ -6,7 +6,6 @@ open class BootstrapKotlinLibTask : BootstrapBaseTask() {
 
     @TaskAction
     fun run() {
-        initializeGit()
         createDirectories("kotlin")
         createFiles()
     }

@@ -35,6 +35,10 @@ class GitBlueprintTests : BehaviorSpec({
             Then("Task generateGitignore is available") {
                 project.shouldHaveTask("generateGitignore")
             }
+
+            Then("Task stageAllFiles is available") {
+                project.shouldHaveTask("stageAllFiles")
+            }
         }
 
         When("Check for project properties") {
@@ -52,6 +56,17 @@ class GitBlueprintTests : BehaviorSpec({
 
                 // And: ".gitignore exists"
                 project.projectDir.resolve(".gitignore").shouldExist()
+            }
+        }
+
+        When("Run stageAllFiles") {
+            val result = project.runTask("stageAllFiles")
+
+            Then("Succeed") {
+                result.task(":stageAllFiles")!!.outcome shouldBe TaskOutcome.SUCCESS
+
+                // And: ".git exists"
+                project.projectDir.resolve(".git").shouldExist()
             }
         }
 

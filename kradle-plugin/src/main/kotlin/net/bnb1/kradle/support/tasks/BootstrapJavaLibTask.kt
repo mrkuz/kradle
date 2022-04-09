@@ -6,7 +6,6 @@ open class BootstrapJavaLibTask : BootstrapBaseTask() {
 
     @TaskAction
     fun run() {
-        initializeGit()
         createDirectories("java")
         createFiles()
     }
