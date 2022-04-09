@@ -11,7 +11,6 @@ open class BootstrapBaseTask : DefaultTask() {
     }
 
     protected fun initializeGit(): Git {
-        copyTextResource("gitignore", project.rootDir.resolve(".gitignore"))
         if (!project.rootDir.resolve(".git").exists()) {
             return Git.init().setDirectory(project.rootDir).call()
         }

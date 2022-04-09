@@ -16,13 +16,18 @@ class DetektBlueprint(project: Project) : Blueprint(project) {
     lateinit var detektProperties: DetektProperties
     lateinit var codeAnalysisProperties: CodeAnalysisProperties
     lateinit var extendsTask: String
+    lateinit var extendsBootstrapTask: String
 
     override fun doCreateTasks() {
         val configFile = project.projectDir.resolve(detektProperties.configFile)
 
-        project.createHelperTask<GenerateDetektConfigTask>("generateDetektConfig", "Generates detekt-config.yml") {
+        val generateTask = project.createHelperTask<GenerateDetektConfigTask>(
+            "generateDetektConfig",
+            "Generates detekt-config.yml"
+        ) {
             outputFile.set(project.projectDir.resolve(detektProperties.configFile))
         }
+        project.tasks.findByName(extendsBootstrapTask)?.dependsOn(generateTask)
 
         project.configurations.create(CONFIGURATION_NAME) {
             val dependencyProvider = project.provider {

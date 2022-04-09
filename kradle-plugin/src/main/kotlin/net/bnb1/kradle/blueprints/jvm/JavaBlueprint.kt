@@ -24,6 +24,7 @@ class JavaBlueprint(project: Project) : Blueprint(project) {
 
     lateinit var javaProperties: JavaProperties
     lateinit var jvmProperties: JvmProperties
+    lateinit var extendsBootstrapTask: String
 
     override fun doCheckPreconditions() {
         if (getJavaRelease() < MIN_JAVA_VERSION) {
@@ -53,8 +54,12 @@ class JavaBlueprint(project: Project) : Blueprint(project) {
 
     override fun doCreateTasks() {
         javaProperties.withLombok?.let {
-            project.createTask<GenerateLombokConfigTask>("generateLombokConfig", "Generates lombok.config")
-            project.tasks.getByName("compileJava").dependsOn("generateLombokConfig")
+            val generateTask = project.createTask<GenerateLombokConfigTask>(
+                "generateLombokConfig",
+                "Generates lombok.config"
+            )
+            project.tasks.getByName("compileJava").dependsOn(generateTask)
+            project.tasks.findByName(extendsBootstrapTask)?.dependsOn(generateTask)
         }
     }
 

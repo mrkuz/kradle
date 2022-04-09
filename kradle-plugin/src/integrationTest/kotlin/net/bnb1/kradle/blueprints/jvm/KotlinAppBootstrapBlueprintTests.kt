@@ -41,14 +41,12 @@ class KotlinAppBootstrapBlueprintTests : BehaviorSpec({
 
                 // And: "Project files and directories are created"
                 project.projectDir.resolve(".git").shouldExist()
-                project.projectDir.resolve(".gitignore").shouldExist()
                 project.projectDir.resolve("gradlew").shouldExist()
                 project.projectDir.resolve("src/main/resources").shouldExist()
                 project.projectDir.resolve("src/main/extra").shouldExist()
                 project.projectDir.resolve("src/test/kotlin/com/example/demo").shouldExist()
                 project.projectDir.resolve("src/test/resources").shouldExist()
                 project.projectDir.resolve("src/benchmark/kotlin").shouldExist()
-                project.projectDir.resolve("detekt-config.yml").shouldExist()
                 project.projectDir.resolve("README.md").shouldExist()
                 project.projectDir.resolve("LICENSE").shouldExist()
                 project.projectDir.resolve("project.properties").shouldExist()

@@ -6,10 +6,8 @@ open class BootstrapKotlinLibTask : BootstrapBaseTask() {
 
     @TaskAction
     fun run() {
-        val git = initializeGit()
+        initializeGit()
         createDirectories("kotlin")
         createFiles()
-        copyTextResource("detekt-config.yml")
-        git.add().addFilepattern(".").call()
     }
 }

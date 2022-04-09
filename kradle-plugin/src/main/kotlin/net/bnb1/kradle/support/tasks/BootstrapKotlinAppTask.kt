@@ -12,10 +12,9 @@ open class BootstrapKotlinAppTask : BootstrapBaseTask() {
 
     @TaskAction
     fun run() {
-        val git = initializeGit()
+        initializeGit()
         createDirectories("kotlin")
         createFiles()
-        copyTextResource("detekt-config.yml")
 
         val packageName = mainClass.get().replace(Regex(".[^.]+$"), "")
         val path = Path.of(mainClass.get().replace(".", "/"))
@@ -41,6 +40,5 @@ open class BootstrapKotlinAppTask : BootstrapBaseTask() {
                 """.trimIndent()
             )
         }
-        git.add().addFilepattern(".").call()
     }
 }

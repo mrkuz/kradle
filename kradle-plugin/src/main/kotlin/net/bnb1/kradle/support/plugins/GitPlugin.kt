@@ -12,6 +12,10 @@ private const val COMMIT_LENGTH = 7
 
 class GitPlugin : Plugin<Project> {
 
+    companion object {
+        const val TASK_NAME = "generateGitignore"
+    }
+
     override fun apply(project: Project) {
         if (project.rootDir.resolve(".git").exists()) {
             val git = Git.open(project.rootDir)
@@ -30,6 +34,6 @@ class GitPlugin : Plugin<Project> {
             }
         }
 
-        project.createTask<GenerateGitignoreTask>("generateGitignore", "Generates .gitignore")
+        project.createTask<GenerateGitignoreTask>(TASK_NAME, "Generates .gitignore")
     }
 }

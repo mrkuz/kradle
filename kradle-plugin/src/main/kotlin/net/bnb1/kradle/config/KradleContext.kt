@@ -32,7 +32,10 @@ class KradleContext(project: Project) {
         }
         features.git.also { me ->
             me belongsTo featureSets.general
-            me += blueprints.git
+            me activatesAfter features.bootstrap
+            me += blueprints.git.also {
+                it.extendsBootstrapTask = features.bootstrap.defaultTaskName
+            }
         }
         features.buildProfiles.also { me ->
             me belongsTo featureSets.general
@@ -59,6 +62,7 @@ class KradleContext(project: Project) {
 
         features.kotlin.also { me ->
             me belongsTo featureSets.jvm
+            me activatesAfter features.bootstrap
             me += setOf(
                 blueprints.java,
                 blueprints.kotlin,
@@ -85,8 +89,11 @@ class KradleContext(project: Project) {
         }
         features.java.also { me ->
             me belongsTo featureSets.jvm
+            me activatesAfter features.bootstrap
             me += setOf(
-                blueprints.java,
+                blueprints.java.also {
+                    it.extendsBootstrapTask = features.bootstrap.defaultTaskName
+                },
                 blueprints.bootstrap.also {
                     it dependsOn features.bootstrap
                 },
@@ -213,16 +220,19 @@ class KradleContext(project: Project) {
         features.checkstyle.also { me ->
             me.enable()
             me belongsTo featureSets.jvm
+            me activatesAfter features.bootstrap
             me activatesAfter features.lint
             me += blueprints.checkstyle.also {
                 it dependsOn features.lint
                 it dependsOn features.java
                 it.extendsTask = features.lint.defaultTaskName
+                it.extendsBootstrapTask = features.bootstrap.defaultTaskName
             }
         }
         features.pmd.also { me ->
             me.enable()
             me belongsTo featureSets.jvm
+            me activatesAfter features.bootstrap
             me activatesAfter features.codeAnalysis
             me += blueprints.pmd.also {
                 it dependsOn features.codeAnalysis
@@ -258,6 +268,7 @@ class KradleContext(project: Project) {
                 it dependsOn features.codeAnalysis
                 it dependsOn features.kotlin
                 it.extendsTask = features.codeAnalysis.defaultTaskName
+                it.extendsBootstrapTask = features.bootstrap.defaultTaskName
             }
         }
         features.jacoco.also { me ->

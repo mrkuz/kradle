@@ -173,4 +173,26 @@ class DetektBlueprintTests : BehaviorSpec({
             }
         }
     }
+
+    Given("Default configuration AND bootstrap") {
+        project.setUp {
+            """
+            general {
+                bootstrap.enable()
+            }
+            jvm {
+                kotlin.enable()
+                codeAnalysis.enable()
+            }
+            """.trimIndent()
+        }
+
+        When("Run bootstrap") {
+            val result = project.runTask("bootstrap")
+
+            Then("generateDetektConfig is called") {
+                result.task(":generateDetektConfig")!!.outcome shouldBe TaskOutcome.SUCCESS
+            }
+        }
+    }
 })

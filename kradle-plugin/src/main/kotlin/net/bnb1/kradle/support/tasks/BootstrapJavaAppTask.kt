@@ -12,11 +12,9 @@ open class BootstrapJavaAppTask : BootstrapBaseTask() {
 
     @TaskAction
     fun run() {
-        val git = initializeGit()
+        initializeGit()
         createDirectories("java")
         createFiles()
-        copyTextResource("checkstyle.xml")
-        copyTextResource("lombok.config")
 
         val packageName = mainClass.get().replace(Regex(".[^.]+$"), "")
         val path = Path.of(mainClass.get().replace(".", "/"))
@@ -43,7 +41,5 @@ open class BootstrapJavaAppTask : BootstrapBaseTask() {
                 """.trimIndent()
             )
         }
-
-        git.add().addFilepattern(".").call()
     }
 }

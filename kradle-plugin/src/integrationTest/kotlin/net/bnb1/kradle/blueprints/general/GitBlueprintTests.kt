@@ -105,4 +105,23 @@ class GitBlueprintTests : BehaviorSpec({
             }
         }
     }
+
+    Given("Default configuration AND bootstrap") {
+        project.setUp {
+            """
+            general {
+                git.enable()
+                bootstrap.enable()
+            }
+            """.trimIndent()
+        }
+
+        When("Run bootstrap") {
+            val result = project.runTask("bootstrap")
+
+            Then("generateGitignore is called") {
+                result.task(":generateGitignore")!!.outcome shouldBe TaskOutcome.SUCCESS
+            }
+        }
+    }
 })
