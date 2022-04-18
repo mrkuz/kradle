@@ -158,9 +158,10 @@ tasks.named("runKtlintCheckOverMainSourceSet") {
 }
 
 tasks.register<Copy>("buildAgent") {
-    dependsOn(":kradle-agent:jar")
-    from(project(":kradle-agent").buildDir.resolve("libs/kradle-agent.jar"))
+    dependsOn(":kradle-agent:shadowJar")
+    from(project(":kradle-agent").buildDir.resolve("libs/kradle-agent-all.jar"))
     into(project.buildDir.resolve("resources/main/"))
+    rename { "kradle-agent.jar" }
 }
 
 tasks.named("processResources").configure {

@@ -21,7 +21,7 @@ public class AgentTests {
 
     @BeforeEach
     void setUp() {
-        agent = new Agent(projectDir.toString());
+        agent = new Agent(projectDir.toString(), "");
         Path.of(projectDir.toString(), "src/main/resources").toFile().mkdirs();
         Path.of(projectDir.toString(), "src/main/kotlin").toFile().mkdirs();
     }
