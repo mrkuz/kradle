@@ -236,4 +236,62 @@ class SpringBootBlueprintTests : BehaviorSpec({
             }
         }
     }
+
+    Given("kotlin.enable() AND springBoot.useWeb()") {
+        project.setUp {
+            """
+            jvm {
+                kotlin.enable()
+                application {
+                    mainClass("com.example.demo.AppKt")
+                }
+                developmentMode.enable()
+                frameworks {
+                    springBoot {
+                        useWeb()
+                    }
+                }
+            }
+            """.trimIndent()
+        }
+
+        When("Check for dependencies") {
+
+            Then("jackson-module-kotlin is available") {
+                project.shouldHaveDependency("implementation", "com.fasterxml.jackson.module:jackson-module-kotlin")
+            }
+        }
+    }
+
+    Given("kotlin.enable() AND springBoot.useWebFlux()") {
+        project.setUp {
+            """
+            jvm {
+                kotlin.enable()
+                application {
+                    mainClass("com.example.demo.AppKt")
+                }
+                developmentMode.enable()
+                frameworks {
+                    springBoot {
+                        useWebFlux()
+                    }
+                }
+            }
+            """.trimIndent()
+        }
+
+        Then("jackson-module-kotlin is available") {
+            project.shouldHaveDependency("implementation", "com.fasterxml.jackson.module:jackson-module-kotlin")
+
+            // And: reactor-kotlin-extensions is available
+            project.shouldHaveDependency("implementation", "io.projectreactor.kotlin:reactor-kotlin-extensions")
+
+            // And: kotlinx-coroutines-reactor is available
+            project.shouldHaveDependency("implementation", "org.jetbrains.kotlinx:kotlinx-coroutines-reactor")
+
+            // And: reactor-test is available
+            project.shouldHaveDependency("testImplementation", "io.projectreactor:reactor-test")
+        }
+    }
 })

@@ -61,6 +61,9 @@ object Catalog {
             artifact("org.springframework.boot", "spring-boot-starter-webflux", Versions.springBoot);
         val springBootStarterActuator =
             artifact("org.springframework.boot", "spring-boot-starter-actuator", Versions.springBoot);
+        val jacksonModuleKotlin = artifact("com.fasterxml.jackson.module", "jackson-module-kotlin", "");
+        val reactorKotlinExtensions = artifact("io.projectreactor.kotlin", "reactor-kotlin-extensions", "");
+        val kotlinxCoroutinesReactor = artifact("org.jetbrains.kotlinx", "kotlinx-coroutines-reactor", "");
 
         object Tools {
             val kotlinxBenchmarkRuntime = artifact(
@@ -96,8 +99,10 @@ object Catalog {
             val archUnitJunit5 = artifact("com.tngtech.archunit", "archunit-junit5", Versions.archUnit)
             val testcontainers = artifact("org.testcontainers", "testcontainers", Versions.testcontainers)
             val testcontainersJunit5 = artifact("org.testcontainers", "junit-jupiter", Versions.testcontainers)
+
             val springBootStarterTest =
                 artifact("org.springframework.boot", "spring-boot-starter-test", Versions.springBoot);
+            val reactorTest = artifact("io.projectreactor", "reactor-test", "");
         }
 
         fun artifact(group: String, name: String, version: String): String {

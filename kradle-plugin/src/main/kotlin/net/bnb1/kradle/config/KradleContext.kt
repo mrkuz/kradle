@@ -222,6 +222,7 @@ class KradleContext(project: Project) {
             me belongsTo featureSets.jvm
             me += setOf(
                 blueprints.springBoot.also {
+                    it.withKotlin = { features.kotlin.isEnabled }
                     it.withDevelopmentMode = { features.developmentMode.isEnabled }
                     it.developmentConfiguration = DevelopmentModeBlueprint.CONFIGURATION_NAME
                 },
