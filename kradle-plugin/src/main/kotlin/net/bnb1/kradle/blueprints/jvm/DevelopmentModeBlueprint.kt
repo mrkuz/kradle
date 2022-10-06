@@ -49,7 +49,6 @@ class DevelopmentModeBlueprint(project: Project) : Blueprint(project) {
             environment("KRADLE_DEV_MODE", "true")
             // Tell agent about the project root
             environment("KRADLE_PROJECT_ROOT_DIR", project.rootDir)
-            // environment("KRADLE_AGENT_MODE", "rebuild")
 
             if (withBuildProfiles()) {
                 environment("KRADLE_PROFILE", project.extra["profile"].toString())

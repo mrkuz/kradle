@@ -4,20 +4,23 @@ import io.kotest.core.spec.style.BehaviorSpec
 import io.kotest.matchers.string.shouldContain
 import net.bnb1.kradle.TestProject
 
-class DevelopmentModeBlueprintTests : BehaviorSpec({
+class SpringBootDevelopmentModeBlueprintTests : BehaviorSpec({
 
     val project = TestProject(this)
 
     Given("Default configuration") {
         project.setUp {
             """
-           jvm {
-               kotlin.enable()
-               application {
-                   mainClass("com.example.demo.AppKt")
-               }
-               developmentMode.enable()
-           }
+            jvm {
+                kotlin.enable()
+                application {
+                    mainClass("com.example.demo.AppKt")
+                }
+                developmentMode.enable()
+                frameworks {
+                    springBoot.enable()
+                }
+            }
             """.trimIndent()
         }
         project.writeAppKt { "println(\"KRADLE_DEV_MODE=\" + System.getenv()[\"KRADLE_DEV_MODE\"])" }
@@ -44,49 +47,35 @@ class DevelopmentModeBlueprintTests : BehaviorSpec({
         }
     }
 
-    Given("Default configuration AND dev dependencies") {
-        project.writeSettingsFile()
-        project.buildFile.writeText(
+    Given("withDevTools()") {
+        project.setUp {
             """
-            plugins {
-                id("org.jetbrains.kotlin.jvm") version "1.6.0"
-                id("net.bitsandbobs.kradle")
-            }
-
-            group = "com.example"
-            version = "1.0.0"
-
-            kradle {
-                jvm {
-                    targetJvm("11")
-                    kotlin.enable()
-                    application {
-                        mainClass("com.example.demo.AppKt")
+            jvm {
+                kotlin.enable()
+                application {
+                    mainClass("com.example.demo.AppKt")
+                }
+                developmentMode.enable()
+                frameworks {
+                    springBoot {
+                        withDevTools()
                     }
-                    developmentMode.enable()
                 }
             }
-
-            dependencies {
-                add("kradleDev", "org.springframework.boot:spring-boot-devtools:2.6.5")
-            }
             """.trimIndent()
-        )
+        }
         project.writeHelloWorldAppKt()
 
-        When("Check dependencies") {
+        When("Run dev") {
+            val result = project.runTask("dev")
 
-            Then("Dev dependencies are not available in runtime classpath") {
-                project.shouldNotHaveDependency("runtimeClasspath", "org.springframework.boot:spring-boot-devtools")
-            }
-
-            Then("Dev dependencies are available in kradleDev") {
-                project.shouldHaveDependency("kradleDev", "org.springframework.boot:spring-boot-devtools")
+            Then("Agent runs in rebuild mode") {
+                result.output shouldContain "DEBUG Mode: rebuild"
             }
         }
     }
 
-    Given("Default configuration AND build profiles") {
+    Given("kotlin.enable() AND build profile set") {
         project.setUp {
             """
             general {
@@ -100,16 +89,19 @@ class DevelopmentModeBlueprintTests : BehaviorSpec({
                     mainClass("com.example.demo.AppKt")
                 }
                 developmentMode.enable()
+                frameworks {
+                    springBoot.enable()
+                }
             }
             """.trimIndent()
         }
-        project.writeAppKt { "println(\"KRADLE_PROFILE=\" + System.getenv()[\"KRADLE_PROFILE\"])" }
+        project.writeAppKt { "println(\"SPRING_PROFILES_ACTIVE=\" + System.getenv()[\"SPRING_PROFILES_ACTIVE\"])" }
 
-        When("Run dev") {
+        When("Run 'dev'") {
             val result = project.runTask("dev")
 
-            Then("KRADLE_PROFILE environment variable is set") {
-                result.output shouldContain "KRADLE_PROFILE=test"
+            Then("SPRING_PROFILES_ACTIVE environment variable is set") {
+                result.output shouldContain "SPRING_PROFILES_ACTIVE=test"
             }
         }
     }

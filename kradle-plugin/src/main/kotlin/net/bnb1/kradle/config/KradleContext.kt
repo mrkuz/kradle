@@ -223,6 +223,7 @@ class KradleContext(project: Project) {
             me += setOf(
                 blueprints.springBoot.also {
                     it.withKotlin = { features.kotlin.isEnabled }
+                    it.withBuildProfiles = { features.buildProfiles.isEnabled }
                     it.withDevelopmentMode = { features.developmentMode.isEnabled }
                     it.developmentConfiguration = DevelopmentModeBlueprint.CONFIGURATION_NAME
                 },
@@ -240,6 +241,17 @@ class KradleContext(project: Project) {
                     it dependsOn features.bootstrap
                     it dependsOn features.application
                     it.extendsTask = features.bootstrap.defaultTaskName
+                },
+                blueprints.springBootDevelopmentMode.also {
+                    it dependsOn features.developmentMode
+                    it dependsOn features.application
+                    it.withBuildProfiles = { features.buildProfiles.isEnabled }
+                    it.extendsTask = features.developmentMode.defaultTaskName
+                },
+                blueprints.springBootShadowBlueprint.also {
+                    it dependsOn features.packaging
+                    it dependsOn features.application
+                    it.extendsTask = features.packaging.defaultTaskName
                 }
             )
         }

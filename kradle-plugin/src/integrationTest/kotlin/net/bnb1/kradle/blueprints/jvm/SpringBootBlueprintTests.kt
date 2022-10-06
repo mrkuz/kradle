@@ -1,6 +1,7 @@
 package net.bnb1.kradle.blueprints.jvm
 
 import io.kotest.core.spec.style.BehaviorSpec
+import io.kotest.matchers.string.shouldContain
 import net.bnb1.kradle.TestProject
 
 class SpringBootBlueprintTests : BehaviorSpec({
@@ -292,6 +293,36 @@ class SpringBootBlueprintTests : BehaviorSpec({
 
             // And: reactor-test is available
             project.shouldHaveDependency("testImplementation", "io.projectreactor:reactor-test")
+        }
+    }
+
+    Given("kotlin.enable() AND build profile set") {
+        project.setUp {
+            """
+            general {
+                buildProfiles {
+                    active("test")
+                }
+            }
+            jvm {
+                kotlin.enable()
+                application {
+                    mainClass("com.example.demo.AppKt")
+                }
+                frameworks {
+                    springBoot.enable()
+                }
+            }
+            """.trimIndent()
+        }
+        project.writeAppKt { "println(\"SPRING_PROFILES_ACTIVE=\" + System.getenv()[\"SPRING_PROFILES_ACTIVE\"])" }
+
+        When("Run 'run'") {
+            val result = project.runTask("run")
+
+            Then("SPRING_PROFILES_ACTIVE environment variable is set") {
+                result.output shouldContain "SPRING_PROFILES_ACTIVE=test"
+            }
         }
     }
 })
