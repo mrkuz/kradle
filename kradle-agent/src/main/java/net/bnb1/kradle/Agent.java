@@ -57,8 +57,10 @@ public final class Agent {
 
         if ("rebuild".equalsIgnoreCase(mode)) {
             changeStrategy = new RebuildStrategy(projectPath);
+            debug("Mode: rebuild");
         } else {
             changeStrategy = new ExitStrategy();
+            debug("Mode: default");
         }
 
         debug("Project root: " + projectPath);

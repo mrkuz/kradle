@@ -1,5 +1,6 @@
 package net.bnb1.kradle.config
 
+import net.bnb1.kradle.blueprints.jvm.DevelopmentModeBlueprint
 import net.bnb1.kradle.core.Feature
 import net.bnb1.kradle.core.FeatureSet
 import net.bnb1.kradle.core.Properties
@@ -73,6 +74,7 @@ class KradleContext(project: Project) {
                 blueprints.kotlinAppBootstrap.also {
                     it dependsOn features.bootstrap
                     it dependsOn features.application
+                    it disabledBy features.springBoot
                     it.extendsTask = features.bootstrap.defaultTaskName
                 },
                 blueprints.kotlinLibBootstrap.also {
@@ -100,6 +102,7 @@ class KradleContext(project: Project) {
                 blueprints.javaAppBootstrap.also {
                     it dependsOn features.bootstrap
                     it dependsOn features.application
+                    it disabledBy features.springBoot
                     it.extendsTask = features.bootstrap.defaultTaskName
                 },
                 blueprints.javaLibBootstrap.also {
@@ -213,6 +216,44 @@ class KradleContext(project: Project) {
         features.documentation.also { me ->
             me belongsTo featureSets.jvm
             me += blueprints.dokka
+        }
+
+        features.springBoot.also { me ->
+            me belongsTo featureSets.jvm
+            me += setOf(
+                blueprints.springBoot.also {
+                    it.withKotlin = { features.kotlin.isEnabled }
+                    it.withBuildProfiles = { features.buildProfiles.isEnabled }
+                    it.withDevelopmentMode = { features.developmentMode.isEnabled }
+                    it.developmentConfiguration = DevelopmentModeBlueprint.CONFIGURATION_NAME
+                },
+                blueprints.bootstrap.also {
+                    it dependsOn features.bootstrap
+                },
+                blueprints.springBootJavaAppBootstrap.also {
+                    it dependsOn features.java
+                    it dependsOn features.bootstrap
+                    it dependsOn features.application
+                    it.extendsTask = features.bootstrap.defaultTaskName
+                },
+                blueprints.springBootKotlinAppBootstrap.also {
+                    it dependsOn features.kotlin
+                    it dependsOn features.bootstrap
+                    it dependsOn features.application
+                    it.extendsTask = features.bootstrap.defaultTaskName
+                },
+                blueprints.springBootDevelopmentMode.also {
+                    it dependsOn features.developmentMode
+                    it dependsOn features.application
+                    it.withBuildProfiles = { features.buildProfiles.isEnabled }
+                    it.extendsTask = features.developmentMode.defaultTaskName
+                },
+                blueprints.springBootShadowBlueprint.also {
+                    it dependsOn features.packaging
+                    it dependsOn features.application
+                    it.extendsTask = features.packaging.defaultTaskName
+                }
+            )
         }
     }
 

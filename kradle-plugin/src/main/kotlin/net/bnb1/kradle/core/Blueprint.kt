@@ -13,10 +13,16 @@ open class Blueprint(protected val project: Project) {
 
     private val activated = AtomicBoolean(false)
     private val dependsOn = mutableSetOf<Feature>()
+    private val disabledBy = mutableSetOf<Feature>()
 
     infix fun dependsOn(feature: Feature) {
         if (activated.get()) throw IllegalStateException("Configuration not allowed when activated")
         dependsOn += feature
+    }
+
+    infix fun disabledBy(feature: Feature) {
+        if (activated.get()) throw IllegalStateException("Configuration not allowed when activated")
+        disabledBy += feature
     }
 
     fun activate(tracer: Tracer) {
@@ -24,8 +30,14 @@ open class Blueprint(protected val project: Project) {
             val missing = dependsOn
                 .filter { !it.isEnabled }
                 .map { it.name }
+            val disabled = disabledBy
+                .filter { it.isEnabled }
+                .map { it.name }
+
             if (missing.isNotEmpty()) {
                 trace("! ${this@Blueprint::class.simpleName} (B, missing features: ${missing.joinToString(", ")})")
+            } else if (disabled.isNotEmpty()) {
+                trace("! ${this@Blueprint::class.simpleName} (B, disabled by: ${missing.joinToString(", ")})")
             } else if (!activated.compareAndSet(false, true)) {
                 trace("! ${this@Blueprint::class.simpleName} (B, already activated)")
             } else if (!shouldActivate()) {

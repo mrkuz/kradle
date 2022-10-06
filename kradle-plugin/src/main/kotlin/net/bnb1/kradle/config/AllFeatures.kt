@@ -24,13 +24,15 @@ class AllFeatures(registry: Registry) {
     val vulnerabilityScan = registry("vulnerabilityScan") { Feature(it) }
     val lint = registry("lint") { Feature(it, "lint") }
     val codeAnalysis = registry("codeAnalysis") { Feature(it, "analyzeCode") }
-    val developmentMode = registry("developmentMode") { Feature(it) }
+    val developmentMode = registry("developmentMode") { Feature(it, "dev") }
     val test = registry("test") { Feature(it) }
     val codeCoverage = registry("codeCoverage") { Feature(it, "analyzeTestCoverage") }
     val benchmark = registry("benchmark") { Feature(it) }
-    val packaging = registry("packaging") { Feature(it) }
+    val packaging = registry("packaging") { Feature(it, "uberJar") }
     val docker = registry("docker") { Feature(it) }
     val documentation = registry("documentation") { Feature(it) }
+
+    val springBoot = registry("spring") { Feature(it) }
 
     // Sub-features
     val checkstyle = registry("checkstyle") { Feature(it) }

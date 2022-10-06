@@ -39,6 +39,11 @@ import net.bnb1.kradle.blueprints.jvm.PackagingBlueprint
 import net.bnb1.kradle.blueprints.jvm.PmdBlueprint
 import net.bnb1.kradle.blueprints.jvm.ShadowBlueprint
 import net.bnb1.kradle.blueprints.jvm.SpotBugsBlueprint
+import net.bnb1.kradle.blueprints.jvm.SpringBootBlueprint
+import net.bnb1.kradle.blueprints.jvm.SpringBootDevelopmentModeBlueprint
+import net.bnb1.kradle.blueprints.jvm.SpringBootJavaAppBootstrapBlueprint
+import net.bnb1.kradle.blueprints.jvm.SpringBootKotlinAppBootstrapBlueprint
+import net.bnb1.kradle.blueprints.jvm.SpringBootShadowBlueprint
 import net.bnb1.kradle.blueprints.jvm.TestBlueprint
 import net.bnb1.kradle.inject
 import net.bnb1.kradle.support.Registry
@@ -199,4 +204,26 @@ class AllBlueprints(registry: Registry, properties: AllProperties, project: Proj
             kotlinTestProperties = properties.kotlinTest
         }
     }
+
+    val springBoot = registry {
+        SpringBootBlueprint(project).inject {
+            springBootProperties = properties.springBoot
+        }
+    }
+    val springBootJavaAppBootstrap = registry {
+        SpringBootJavaAppBootstrapBlueprint(project).inject {
+            applicationProperties = properties.application
+        }
+    }
+    val springBootKotlinAppBootstrap = registry {
+        SpringBootKotlinAppBootstrapBlueprint(project).inject {
+            applicationProperties = properties.application
+        }
+    }
+    val springBootDevelopmentMode = registry {
+        SpringBootDevelopmentModeBlueprint(project).inject {
+            springBootProperties = properties.springBoot
+        }
+    }
+    val springBootShadowBlueprint = registry { SpringBootShadowBlueprint(project) }
 }
