@@ -2,30 +2,30 @@ object Catalog {
 
     object Versions {
         const val jvm = "17"
-        const val kotlin = "1.6.0"
+        const val kotlin = "1.7.20"
         const val jmh = "1.35"
         const val tini = "0.19.0"
         const val jvmKill = "1.16.0"
-        const val detekt = "1.19.0"
-        const val ktlint = "0.45.1"
-        const val kotlinCoroutines = "1.6.1"
-        const val kotest = "5.2.2"
-        const val mockk = "1.12.3"
-        const val junit = "5.8.2"
-        const val jacoco = "0.8.7"
-        const val checkstyle = "10.1"
-        const val pmd = "6.44.0"
-        const val spotbugs = "4.6.0"
-        const val findSecBugs = "1.11.0"
+        const val detekt = "1.21.0"
+        const val ktlint = "0.47.1"
+        const val kotlinCoroutines = "1.6.4"
+        const val kotest = "5.5.0"
+        const val mockk = "1.13.2"
+        const val junit = "5.9.1"
+        const val jacoco = "0.8.8"
+        const val checkstyle = "10.3.4"
+        const val pmd = "6.50.0"
+        const val spotbugs = "4.7.2"
+        const val findSecBugs = "1.12.0"
         const val fbContrib = "7.4.7"
         const val findBugs = "3.0.1"
-        const val slf4j = "1.7.36"
-        const val archUnit = "0.23.1"
-        const val testcontainers = "1.16.3"
-        const val lombok = "1.18.22"
+        const val slf4j = "2.0.3"
+        const val archUnit = "1.0.0"
+        const val testcontainers = "1.17.5"
+        const val lombok = "1.18.24"
         const val guava = "31.1-jre"
-        const val caffeine = "3.0.6"
-        const val log4j = "2.17.2"
+        const val caffeine = "3.1.1"
+        const val log4j = "2.19.0"
         const val springBoot = "2.7.4"
     }
 
@@ -115,15 +115,15 @@ object Catalog {
     object Build {
 
         object Versions {
-            const val kotlin = "1.5.31"
-            const val kotest = "4.6.3"
-            const val kotlinxBenchmarkPlugin = "0.4.2"
+            const val kotlin = "1.6.21"
+            const val kotest = "5.5.0"
+            const val kotlinxBenchmarkPlugin = "0.4.5"
             const val testLogger = "3.2.0"
         }
 
         object Plugins {
             val kotlinJvm = Plugin("org.jetbrains.kotlin.jvm", Versions.kotlin)
-            val gradlePublish = Plugin("com.gradle.plugin-publish", "0.21.0")
+            val gradlePublish = Plugin("com.gradle.plugin-publish", "1.0.0")
             val testLogger = Plugin("com.adarshr.test-logger", Versions.testLogger)
         }
 
@@ -134,11 +134,11 @@ object Catalog {
             }
 
             const val kotlinStdlib = "org.jetbrains.kotlin:kotlin-stdlib-jdk8:${Versions.kotlin}"
-            const val jgit = "org.eclipse.jgit:org.eclipse.jgit:6.1.0.202203080745-r"
+            const val jgit = "org.eclipse.jgit:org.eclipse.jgit:6.3.0.202209071007-r"
 
             object Plugins {
                 const val kotlin = "org.jetbrains.kotlin:kotlin-gradle-plugin:${Versions.kotlin}"
-                const val dokka = "org.jetbrains.dokka:dokka-gradle-plugin:1.5.31" // 1.6.10
+                const val dokka = "org.jetbrains.dokka:dokka-gradle-plugin:1.7.10"
                 const val allOpen = "org.jetbrains.kotlin:kotlin-allopen:${Versions.kotlin}"
                 const val kotlinSerialization = "org.jetbrains.kotlin:kotlin-serialization:${Versions.kotlin}"
                 const val kotlinBenchmark =
@@ -147,13 +147,13 @@ object Catalog {
                 const val shadow = "gradle.plugin.com.github.jengelman.gradle.plugins:shadow:7.0.0"
                 const val jib = "gradle.plugin.com.google.cloud.tools:jib-gradle-plugin:3.2.1"
                 const val versions = "com.github.ben-manes:gradle-versions-plugin:0.42.0"
-                const val detekt = "io.gitlab.arturbosch.detekt:detekt-gradle-plugin:1.19.0"
-                const val ktlint = "org.jlleitschuh.gradle:ktlint-gradle:10.2.1"
-                const val owaspDependencyCheck = "org.owasp:dependency-check-gradle:7.0.4.1"
-                const val kover = "org.jetbrains.kotlinx:kover:0.5.0"
+                const val detekt = "io.gitlab.arturbosch.detekt:detekt-gradle-plugin:1.21.0"
+                const val ktlint = "org.jlleitschuh.gradle:ktlint-gradle:11.0.0"
+                const val owaspDependencyCheck = "org.owasp:dependency-check-gradle:7.2.1"
+                const val kover = "org.jetbrains.kotlinx:kover:0.6.1"
 
                 // Java
-                const val spotbugs = "com.github.spotbugs.snom:spotbugs-gradle-plugin:5.0.6"
+                const val spotbugs = "com.github.spotbugs.snom:spotbugs-gradle-plugin:5.0.12"
             }
 
             object Test {
