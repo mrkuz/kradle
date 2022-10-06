@@ -6,7 +6,12 @@
 
 #### Bugfixes
 #### Additions
+
+- New feature `frameworks`, including support for [Spring Boot](https://spring.io/projects/spring-boot)
+
 #### Changes
+
+- `bootstrap`: Generate files based on enabled features
 
 ### Version 2.3.1 (2022-02-15)
 

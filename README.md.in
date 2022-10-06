@@ -76,6 +76,7 @@ Most of the functionality is provided by other well-known plugins. `kradle` take
     - [Packaging](#feature-packaging)
     - [Docker](#feature-docker)
     - [Documentation](#feature-documentation)
+    - [Frameworks](#feature-frameworks)
 - [Presets](#presets)
     - [Kotlin/JVM application](#preset-kotlin-jvm-application)
     - [Kotlin/JVM library](#preset-kotlin-jvm-library)
@@ -1085,6 +1086,63 @@ Package and module documentation can be placed in _package.md_ or _module.md_ in
 
 Plugins used: [Dokka Plugin](https://plugins.gradle.org/plugin/org.jetbrains.dokka)
 
+<a id="feature-frameworks"></a>
+### Frameworks
+
+```kotlin
+kradle {
+    jvm {
+        frameworks {
+            …
+        }
+    }
+}
+```
+
+Configures miscellaneous frameworks.
+
+The integration of frameworks is very basic. For more control and features consider using their official Gradle plugins.
+
+### Spring Boot
+
+```kotlin
+kradle {
+    jvm {
+        frameworks {
+            springBoot.enable()
+        }
+    }
+}
+```
+
+Adds Spring Boot and Spring Boot Test dependencies.
+
+If [build profiles](#feature-build-profiles) are enabled, the environment variable `SPRING_PROFILE_ACTIVE` is set when using `run` and `dev`.
+
+#### Options
+
+```kotlin
+kradle {
+    jvm {
+        frameworks {
+            springBoot {
+                version("${versions.springBoot}")
+                // withDevTools("default")
+                // useWebMvc("default")
+                // useWebFlux("default")
+                // useActuator("default")
+            }
+        }
+    }
+}
+```
+
+- `version`: Spring Boot version used
+- `withDevTools`: Uses SpringBoot DevTools when running `dev`
+- `useWebMvc`: Adds Spring Web MVC dependencies
+- `useWebFlux`: Adds Spring WebFlux dependencies
+- `useActuator`: Adds Spring Boot Actuator
+
 <a id="presets"></a>
 ## Presets
 
@@ -1485,6 +1543,16 @@ kradle {
         }
 
         documentation.enable()
+
+        frameworks {
+            springBoot {
+                version("${versions.springBoot}")
+                // withDevTools("default")
+                // useWebMvc("default")
+                // useWebFlux("default")
+                // useActuator("default")
+            }
+        }
     }
 }
 ```
