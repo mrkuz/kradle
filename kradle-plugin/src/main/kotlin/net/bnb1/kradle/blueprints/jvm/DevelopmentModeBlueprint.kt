@@ -12,7 +12,7 @@ import org.gradle.jvm.toolchain.JavaToolchainService
 import org.gradle.kotlin.dsl.extra
 import org.gradle.kotlin.dsl.named
 
-private val CONFIGURATION_NAME = "kradleDev"
+private const val CONFIGURATION_NAME = "kradleDev"
 
 class DevelopmentModeBlueprint(project: Project) : Blueprint(project) {
 

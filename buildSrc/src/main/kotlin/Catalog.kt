@@ -26,6 +26,7 @@ object Catalog {
         const val guava = "31.1-jre"
         const val caffeine = "3.0.6"
         const val log4j = "2.17.2"
+        const val springBoot = "2.7.4"
     }
 
     object Dependencies {

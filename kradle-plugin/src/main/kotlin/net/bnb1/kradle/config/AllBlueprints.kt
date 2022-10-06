@@ -39,6 +39,7 @@ import net.bnb1.kradle.blueprints.jvm.PackagingBlueprint
 import net.bnb1.kradle.blueprints.jvm.PmdBlueprint
 import net.bnb1.kradle.blueprints.jvm.ShadowBlueprint
 import net.bnb1.kradle.blueprints.jvm.SpotBugsBlueprint
+import net.bnb1.kradle.blueprints.jvm.SpringBootBlueprint
 import net.bnb1.kradle.blueprints.jvm.TestBlueprint
 import net.bnb1.kradle.inject
 import net.bnb1.kradle.support.Registry
@@ -197,6 +198,12 @@ class AllBlueprints(registry: Registry, properties: AllProperties, project: Proj
     val kotlinTest = registry {
         KotlinTestBlueprint(project).inject {
             kotlinTestProperties = properties.kotlinTest
+        }
+    }
+
+    val springBoot = registry {
+        SpringBootBlueprint(project).inject {
+            springBootProperties = properties.springBoot
         }
     }
 }

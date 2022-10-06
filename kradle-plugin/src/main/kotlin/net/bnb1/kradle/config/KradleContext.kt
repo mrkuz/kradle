@@ -214,6 +214,11 @@ class KradleContext(project: Project) {
             me belongsTo featureSets.jvm
             me += blueprints.dokka
         }
+
+        features.springBoot.also { me ->
+            me belongsTo featureSets.jvm
+            me += blueprints.springBoot
+        }
     }
 
     private fun initializeSubFeatures() {

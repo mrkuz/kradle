@@ -32,6 +32,8 @@ class AllFeatures(registry: Registry) {
     val docker = registry("docker") { Feature(it) }
     val documentation = registry("documentation") { Feature(it) }
 
+    val springBoot = registry("spring") { Feature(it) }
+
     // Sub-features
     val checkstyle = registry("checkstyle") { Feature(it) }
     val pmd = registry("pmd") { Feature(it) }

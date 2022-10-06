@@ -3,6 +3,7 @@ package net.bnb1.kradle.config.dsl.jvm
 import net.bnb1.kradle.config.AllFeatures
 import net.bnb1.kradle.config.AllProperties
 import net.bnb1.kradle.core.dsl.FeatureDsl
+import net.bnb1.kradle.dsl.Configurable
 import net.bnb1.kradle.dsl.Empty
 import net.bnb1.kradle.dsl.Value
 
@@ -31,4 +32,6 @@ class JvmDsl(features: AllFeatures, properties: AllProperties) {
     val packaging = `package`
     val docker = FeatureDsl(features.docker, DockerDsl(properties.jib))
     val documentation = FeatureDsl(features.documentation, Empty)
+
+    val frameworks = Configurable(FrameworksDsl(features, properties))
 }
