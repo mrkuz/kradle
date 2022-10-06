@@ -61,6 +61,46 @@ class BlueprintTests : BehaviorSpec({
         }
     }
 
+    Given("Blueprint with feature dependency and anti-feature") {
+        val feature = Feature("1")
+        val antiFeature = Feature("2")
+        blueprint.dependsOn(feature)
+        blueprint.disabledBy(antiFeature)
+
+        When("Feature is enabled AND anti-feature is is not enabled") {
+            feature.enable()
+
+            Then("Blueprint is activated") {
+                blueprint.activate(tracer)
+                blueprint.activated.get() shouldBe 1
+            }
+        }
+
+        When("Feature is not enabled AND anti-feature is is not enabled") {
+
+            Then("Blueprint is not activated") {
+                blueprint.activate(tracer)
+                blueprint.activated.get() shouldBe 0
+            }
+        }
+
+        When("Feature is enabled AND anti-feature is enabled") {
+
+            Then("Blueprint is not activated") {
+                blueprint.activate(tracer)
+                blueprint.activated.get() shouldBe 0
+            }
+        }
+
+        When("Feature is not enabled AND anti-feature is enabled") {
+
+            Then("Blueprint is not activated") {
+                blueprint.activate(tracer)
+                blueprint.activated.get() shouldBe 0
+            }
+        }
+    }
+
     given("Activated blueprint") {
         blueprint.activate(tracer)
 

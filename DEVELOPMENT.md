@@ -21,8 +21,20 @@
        in [AllBlueprints.kt](kradle-plugin/src/main/kotlin/net/bnb1/kradle/config/AllBlueprints.kt)
     9. Configure feature in [KradleContext.kt](kradle-plugin/src/main/kotlin/net/bnb1/kradle/config/KradleContext.kt)
     10. Run `./gradlew build` and make sure everything still works
+4. Create unit tests [src/test](kradle-plugin/src/test)
+5. Create integration tests for blueprint in [src/integrationTest](kradle-plugin/src/integrationTest)
+    1. Create a test for the default configuration
+    2. Create a test for each configuration option
 
 # FAQ
+
+## Miscellaneous
+
+### How to install plugin locally?
+
+```shell
+./gradlew publishToMavenLocal
+```
 
 ## Naming
 

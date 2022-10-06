@@ -1,9 +1,11 @@
 package net.bnb1.kradle.blueprints.jvm
 
 import io.kotest.core.spec.style.BehaviorSpec
+import io.kotest.inspectors.forAll
 import io.kotest.inspectors.forOne
 import io.kotest.matchers.file.shouldExist
 import io.kotest.matchers.shouldBe
+import io.kotest.matchers.string.shouldNotStartWith
 import net.bnb1.kradle.TestProject
 import org.gradle.testkit.runner.TaskOutcome
 
@@ -55,6 +57,7 @@ class JavaAppBootstrapBlueprintTests : BehaviorSpec({
 
                 val lines = appKt.readLines()
                 lines.forOne { it shouldBe "package com.example.demo;" }
+                lines.forAll { it shouldNotStartWith "import " }
             }
         }
 

@@ -73,6 +73,7 @@ class KradleContext(project: Project) {
                 blueprints.kotlinAppBootstrap.also {
                     it dependsOn features.bootstrap
                     it dependsOn features.application
+                    it disabledBy features.springBoot
                     it.extendsTask = features.bootstrap.defaultTaskName
                 },
                 blueprints.kotlinLibBootstrap.also {
@@ -100,6 +101,7 @@ class KradleContext(project: Project) {
                 blueprints.javaAppBootstrap.also {
                     it dependsOn features.bootstrap
                     it dependsOn features.application
+                    it disabledBy features.springBoot
                     it.extendsTask = features.bootstrap.defaultTaskName
                 },
                 blueprints.javaLibBootstrap.also {
@@ -217,7 +219,24 @@ class KradleContext(project: Project) {
 
         features.springBoot.also { me ->
             me belongsTo featureSets.jvm
-            me += blueprints.springBoot
+            me += setOf(
+                blueprints.springBoot,
+                blueprints.bootstrap.also {
+                    it dependsOn features.bootstrap
+                },
+                blueprints.springBootJavaAppBootstrap.also {
+                    it dependsOn features.java
+                    it dependsOn features.bootstrap
+                    it dependsOn features.application
+                    it.extendsTask = features.bootstrap.defaultTaskName
+                },
+                blueprints.springBootKotlinAppBootstrap.also {
+                    it dependsOn features.kotlin
+                    it dependsOn features.bootstrap
+                    it dependsOn features.application
+                    it.extendsTask = features.bootstrap.defaultTaskName
+                }
+            )
         }
     }
 
