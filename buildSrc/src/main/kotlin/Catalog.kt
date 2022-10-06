@@ -43,6 +43,7 @@ object Catalog {
 
         object Platform {
             val kotlin = artifact("org.jetbrains.kotlin", "kotlin-bom", Versions.kotlin)
+            val springBoot = artifact("org.springframework.boot", "spring-boot-dependencies", Versions.springBoot);
         }
 
         val kotlinCoroutines = artifact("org.jetbrains.kotlinx", "kotlinx-coroutines-core", Versions.kotlinCoroutines)
@@ -53,6 +54,13 @@ object Catalog {
         val caffeine = artifact("com.github.ben-manes.caffeine", "caffeine", Versions.caffeine)
         val caffeineGuava = artifact("com.github.ben-manes.caffeine", "guava", Versions.caffeine)
         val log4j = artifact("org.apache.logging.log4j", "log4j", Versions.log4j)
+
+        val springBootStarter = artifact("org.springframework.boot", "spring-boot-starter", Versions.springBoot);
+        val springBootStarterWeb = artifact("org.springframework.boot", "spring-boot-starter-web", Versions.springBoot);
+        val springBootStarterWebFlux =
+            artifact("org.springframework.boot", "spring-boot-starter-webflux", Versions.springBoot);
+        val springBootStarterActuator =
+            artifact("org.springframework.boot", "spring-boot-starter-actuator", Versions.springBoot);
 
         object Tools {
             val kotlinxBenchmarkRuntime = artifact(
@@ -67,6 +75,7 @@ object Catalog {
             val fbContrib = artifact("com.mebigfatguy.sb-contrib", "sb-contrib", Versions.fbContrib)
             val findBugsAnnotations = artifact("com.google.code.findbugs", "annotations", Versions.findBugs)
             val slf4jSimple = artifact("org.slf4j", "slf4j-simple", Versions.slf4j)
+            val springBootDevtools = artifact("org.springframework.boot", "spring-boot-devtools", Versions.springBoot);
 
             // Not directly referred, but still used in kradle
             val jvmKill = artifact("org.cloudfoundry", "jvmkill", Versions.jvmKill)
@@ -87,6 +96,8 @@ object Catalog {
             val archUnitJunit5 = artifact("com.tngtech.archunit", "archunit-junit5", Versions.archUnit)
             val testcontainers = artifact("org.testcontainers", "testcontainers", Versions.testcontainers)
             val testcontainersJunit5 = artifact("org.testcontainers", "junit-jupiter", Versions.testcontainers)
+            val springBootStarterTest =
+                artifact("org.springframework.boot", "spring-boot-starter-test", Versions.springBoot);
         }
 
         fun artifact(group: String, name: String, version: String): String {

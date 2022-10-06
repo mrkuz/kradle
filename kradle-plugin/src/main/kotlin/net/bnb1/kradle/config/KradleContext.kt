@@ -1,5 +1,6 @@
 package net.bnb1.kradle.config
 
+import net.bnb1.kradle.blueprints.jvm.DevelopmentModeBlueprint
 import net.bnb1.kradle.core.Feature
 import net.bnb1.kradle.core.FeatureSet
 import net.bnb1.kradle.core.Properties
@@ -220,7 +221,10 @@ class KradleContext(project: Project) {
         features.springBoot.also { me ->
             me belongsTo featureSets.jvm
             me += setOf(
-                blueprints.springBoot,
+                blueprints.springBoot.also {
+                    it.withDevelopmentMode = { features.developmentMode.isEnabled }
+                    it.developmentConfiguration = DevelopmentModeBlueprint.CONFIGURATION_NAME
+                },
                 blueprints.bootstrap.also {
                     it dependsOn features.bootstrap
                 },

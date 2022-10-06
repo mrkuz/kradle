@@ -12,14 +12,16 @@ import org.gradle.jvm.toolchain.JavaToolchainService
 import org.gradle.kotlin.dsl.extra
 import org.gradle.kotlin.dsl.named
 
-private const val CONFIGURATION_NAME = "kradleDev"
-
 class DevelopmentModeBlueprint(project: Project) : Blueprint(project) {
 
     lateinit var applicationProperties: ApplicationProperties
     lateinit var javaProperties: JavaProperties
 
     lateinit var withBuildProfiles: () -> Boolean
+
+    companion object {
+        const val CONFIGURATION_NAME = "kradleDev"
+    }
 
     override fun doCreateTasks() {
         val mainSourceSet = project.sourceSets.getByName(SourceSet.MAIN_SOURCE_SET_NAME)
