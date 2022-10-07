@@ -64,6 +64,7 @@ class PmdBlueprint(project: Project) : Blueprint(project) {
                     it.outputLocation.set(project.buildDir.resolve("reports/pmd/${sourceSet.name}.${it.name}"))
                 }
                 ignoreFailures = codeAnalysisProperties.ignoreFailures
+                threads.set(1)
             }
             pmdTask.dependsOn(taskName)
         }
