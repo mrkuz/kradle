@@ -10,7 +10,7 @@ plugins {
     `maven-publish`
     id(Catalog.Build.Plugins.gradlePublish.id) version Catalog.Build.Plugins.gradlePublish.version
     id(Catalog.Build.Plugins.kotlinJvm.id) version Catalog.Build.Plugins.kotlinJvm.version
-    id("net.bitsandbobs.kradle") version "2.3.1"
+    id("net.bitsandbobs.kradle") version "2.4.0"
 }
 
 group = "net.bitsandbobs.kradle"

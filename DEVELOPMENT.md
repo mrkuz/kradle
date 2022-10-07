@@ -50,11 +50,27 @@
 12. Generate updated _README.md_ and _CHANGELOG.md_ `./gradlew renderTemplates`
 13. Commit and push changes
 
+    ```shell
+    git add -u
+    git commit
+    git push
+    ```
+
+14. Use the new deployed plugin [build.gradle.kts](kradle-plugin/build.gradle.kts)
+15. Make sure everything works `./gradlew clean build`
+16. Commit and push changes
+
+    ```shell
+    git add -u
+    git commit -m"Use self vX.Y.Z"
+    git push
+    ```
+
 # FAQ
 
 ## Miscellaneous
 
-### How to install plugin locally?
+### How to install the plugin locally?
 
 ```shell
 ./gradlew publishToMavenLocal

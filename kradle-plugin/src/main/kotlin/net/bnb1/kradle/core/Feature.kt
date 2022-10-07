@@ -67,7 +67,7 @@ class Feature(val name: String, private val taskName: String? = null) {
     fun hasBlueprint(blueprint: KClass<out Blueprint>) = blueprints.any { it::class == blueprint }
 
     private fun failIfNotInactive() {
-        if (!isInactive) throw IllegalStateException("Configuration not allowed when activated")
+        check(isInactive) { "Configuration not allowed when activated" }
     }
 
     fun enable() {

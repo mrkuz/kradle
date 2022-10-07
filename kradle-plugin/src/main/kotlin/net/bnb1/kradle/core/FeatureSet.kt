@@ -28,7 +28,7 @@ class FeatureSet(val name: String) {
     fun hasFeature(feature: Feature) = features.contains(feature)
 
     private fun failIfActive() {
-        if (activated.get()) throw IllegalStateException("Configuration not allowed when activated")
+        check(!activated.get()) { "Configuration not allowed when activated" }
     }
 
     fun activate(tracer: Tracer) {
@@ -51,9 +51,7 @@ class FeatureSet(val name: String) {
     }
 
     private fun activateOrdered(tracer: Tracer, visited: MutableSet<Feature>, feature: Feature) {
-        if (!visited.add(feature)) {
-            throw IllegalStateException("Dependency loop detected")
-        }
+        check(visited.add(feature)) { "Dependency loop detected" }
         tracer.trace("${feature.name} (F)")
         tracer.branch {
             feature.shouldActivateAfter().asSequence()
