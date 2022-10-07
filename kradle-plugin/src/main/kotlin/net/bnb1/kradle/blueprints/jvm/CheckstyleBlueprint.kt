@@ -16,13 +16,18 @@ class CheckstyleBlueprint(project: Project) : Blueprint(project) {
     lateinit var checkstyleProperties: CheckstyleProperties
     lateinit var lintProperties: LintProperties
     lateinit var extendsTask: String
+    lateinit var extendsBootstrapTask: String
 
     override fun doCreateTasks() {
         val configFile = project.projectDir.resolve(checkstyleProperties.configFile)
 
-        project.createHelperTask<GenerateCheckstyleConfigTask>("generateCheckstyleConfig", "Generates checkstyle.xml") {
+        val generateTask = project.createHelperTask<GenerateCheckstyleConfigTask>(
+            "generateCheckstyleConfig",
+            "Generates checkstyle.xml"
+        ) {
             outputFile.set(configFile)
         }
+        project.tasks.findByPath(extendsBootstrapTask)?.dependsOn(generateTask)
 
         project.configurations.create(CONFIGURATION_NAME) {
             val dependencyProvider = project.provider {

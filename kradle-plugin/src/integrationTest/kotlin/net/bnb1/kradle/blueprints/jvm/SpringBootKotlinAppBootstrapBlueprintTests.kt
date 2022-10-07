@@ -1,15 +1,13 @@
 package net.bnb1.kradle.blueprints.jvm
 
 import io.kotest.core.spec.style.BehaviorSpec
-import io.kotest.inspectors.forAll
 import io.kotest.inspectors.forOne
 import io.kotest.matchers.file.shouldExist
 import io.kotest.matchers.shouldBe
-import io.kotest.matchers.string.shouldNotStartWith
 import net.bnb1.kradle.TestProject
 import org.gradle.testkit.runner.TaskOutcome
 
-class KotlinAppBootstrapBlueprintTests : BehaviorSpec({
+class SpringBootKotlinAppBootstrapBlueprintTests : BehaviorSpec({
 
     val project = TestProject(this)
 
@@ -23,6 +21,9 @@ class KotlinAppBootstrapBlueprintTests : BehaviorSpec({
                 kotlin.enable()
                 application {
                     mainClass("com.example.demo.AppKt")
+                }
+                frameworks {
+                    springBoot.enable()
                 }
             }
             """.trimIndent()
@@ -44,6 +45,7 @@ class KotlinAppBootstrapBlueprintTests : BehaviorSpec({
                 // And: "Project files and directories are created"
                 project.projectDir.resolve("gradlew").shouldExist()
                 project.projectDir.resolve("src/main/resources").shouldExist()
+                project.projectDir.resolve("src/main/resources/application.properties").shouldExist()
                 project.projectDir.resolve("src/main/extra").shouldExist()
                 project.projectDir.resolve("src/test/kotlin/com/example/demo").shouldExist()
                 project.projectDir.resolve("src/test/resources").shouldExist()
@@ -57,7 +59,7 @@ class KotlinAppBootstrapBlueprintTests : BehaviorSpec({
 
                 val lines = appKt.readLines()
                 lines.forOne { it shouldBe "package com.example.demo" }
-                lines.forAll { it shouldNotStartWith "import " }
+                lines.forOne { it shouldBe "import org.springframework.boot.autoconfigure.SpringBootApplication" }
             }
         }
 

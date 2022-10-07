@@ -4,6 +4,7 @@ import net.bnb1.kradle.core.Blueprint
 import net.bnb1.kradle.createTask
 import net.bnb1.kradle.sourceSets
 import org.gradle.api.Project
+import org.gradle.api.plugins.JavaPlugin
 import org.gradle.api.plugins.JavaPluginExtension
 import org.gradle.api.tasks.JavaExec
 import org.gradle.api.tasks.SourceSet
@@ -18,6 +19,10 @@ class DevelopmentModeBlueprint(project: Project) : Blueprint(project) {
 
     lateinit var withBuildProfiles: () -> Boolean
 
+    companion object {
+        const val CONFIGURATION_NAME = "kradleDev"
+    }
+
     override fun doCreateTasks() {
         val mainSourceSet = project.sourceSets.getByName(SourceSet.MAIN_SOURCE_SET_NAME)
         val agentResource = javaClass.getResource("/kradle-agent.jar")
@@ -25,6 +30,11 @@ class DevelopmentModeBlueprint(project: Project) : Blueprint(project) {
         val javaExtension = project.extensions.getByType(JavaPluginExtension::class.java)
         val toolchainService = project.extensions.getByType(JavaToolchainService::class.java)
         val launcher = toolchainService.launcherFor(javaExtension.toolchain)
+
+        val runtime = project.configurations.getByName(JavaPlugin.RUNTIME_CLASSPATH_CONFIGURATION_NAME)
+        val configuration = project.configurations.create(CONFIGURATION_NAME) {
+            extendsFrom(runtime)
+        }
 
         project.createTask<JavaExec>(
             "dev",
@@ -49,7 +59,7 @@ class DevelopmentModeBlueprint(project: Project) : Blueprint(project) {
             if (javaProperties.previewFeatures) {
                 jvmArgs = jvmArgs + "--enable-preview"
             }
-            classpath = mainSourceSet.runtimeClasspath
+            classpath = mainSourceSet.runtimeClasspath + configuration
             jvmArgs = jvmArgs + "-javaagent:${agentFile.absolutePath}"
 
             javaLauncher.set(launcher)

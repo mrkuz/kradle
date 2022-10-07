@@ -25,7 +25,9 @@ import java.util.regex.Pattern;
 public final class Agent {
 
     public static void premain(String args, Instrumentation instrumentation) throws IOException {
-        new Agent(System.getenv().get("KRADLE_PROJECT_ROOT_DIR")).start();
+        new Agent(
+                System.getenv().get("KRADLE_PROJECT_ROOT_DIR"),
+                System.getenv().get("KRADLE_AGENT_MODE")).start();
     }
 
     private final ExecutorService executor = Executors.newSingleThreadExecutor(runnable -> {
@@ -42,13 +44,23 @@ public final class Agent {
     private final List<WatchKey> keys = new ArrayList<>();
     private final Map<Path, String> hashes = new HashMap<>();
 
-    public Agent(String projectRoot) {
+    private final ChangeStrategy changeStrategy;
+
+    public Agent(String projectRoot, String mode) {
         if (projectRoot == null) {
             throw new IllegalStateException("Project root not set");
         }
         projectPath = Path.of(projectRoot);
         if (!projectPath.toFile().isDirectory()) {
             throw new IllegalStateException("Project root is not a directory");
+        }
+
+        if ("rebuild".equalsIgnoreCase(mode)) {
+            changeStrategy = new RebuildStrategy(projectPath);
+            debug("Mode: rebuild");
+        } else {
+            changeStrategy = new ExitStrategy();
+            debug("Mode: default");
         }
 
         debug("Project root: " + projectPath);
@@ -71,11 +83,11 @@ public final class Agent {
                 while (true) {
                     var key = watcher.take();
                     if (detectChange(watcher, key)) {
-                        System.exit(0);
+                        changeStrategy.onChangeDetected();
                     }
                 }
             } catch (Exception ex) {
-                System.err.println("ERROR Watch failed");
+                error("Watch failed");
                 ex.printStackTrace();
             }
         });
@@ -223,5 +235,9 @@ public final class Agent {
 
     private void debug(String message) {
         System.out.println("DEBUG " + message);
+    }
+
+    private void error(String message) {
+        System.err.println("ERROR " + message);
     }
 }

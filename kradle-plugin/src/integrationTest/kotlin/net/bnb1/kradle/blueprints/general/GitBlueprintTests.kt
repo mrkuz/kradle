@@ -35,6 +35,10 @@ class GitBlueprintTests : BehaviorSpec({
             Then("Task generateGitignore is available") {
                 project.shouldHaveTask("generateGitignore")
             }
+
+            Then("Task stageAllFiles is available") {
+                project.shouldHaveTask("stageAllFiles")
+            }
         }
 
         When("Check for project properties") {
@@ -52,6 +56,17 @@ class GitBlueprintTests : BehaviorSpec({
 
                 // And: ".gitignore exists"
                 project.projectDir.resolve(".gitignore").shouldExist()
+            }
+        }
+
+        When("Run stageAllFiles") {
+            val result = project.runTask("stageAllFiles")
+
+            Then("Succeed") {
+                result.task(":stageAllFiles")!!.outcome shouldBe TaskOutcome.SUCCESS
+
+                // And: ".git exists"
+                project.projectDir.resolve(".git").shouldExist()
             }
         }
 
@@ -102,6 +117,25 @@ class GitBlueprintTests : BehaviorSpec({
                     // And: "gitBranchPrefix is set"
                     project.shouldHaveProperty("gitBranchPrefix", "feature")
                 }
+            }
+        }
+    }
+
+    Given("Default configuration AND bootstrap") {
+        project.setUp {
+            """
+            general {
+                git.enable()
+                bootstrap.enable()
+            }
+            """.trimIndent()
+        }
+
+        When("Run bootstrap") {
+            val result = project.runTask("bootstrap")
+
+            Then("generateGitignore is called") {
+                result.task(":generateGitignore")!!.outcome shouldBe TaskOutcome.SUCCESS
             }
         }
     }

@@ -182,4 +182,27 @@ class JavaBlueprintTests : BehaviorSpec({
             }
         }
     }
+
+    Given("java.useLombok = true AND bootstrap") {
+        project.setUp {
+            """
+            general {
+                bootstrap.enable()
+            }
+            jvm {
+                java {
+                   withLombok()
+                }
+            }
+            """.trimIndent()
+        }
+
+        When("Run bootstrap") {
+            val result = project.runTask("bootstrap")
+
+            Then("generateLombokConfig is called") {
+                result.task(":generateLombokConfig")!!.outcome shouldBe TaskOutcome.SUCCESS
+            }
+        }
+    }
 })

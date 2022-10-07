@@ -1,13 +1,14 @@
 package net.bnb1.kradle.blueprints.jvm
 
 import kotlinx.kover.KoverPlugin
+import kotlinx.kover.api.KoverProjectConfig
 import kotlinx.kover.api.KoverTaskExtension
-import kotlinx.kover.tasks.KoverHtmlReportTask
 import net.bnb1.kradle.apply
 import net.bnb1.kradle.core.Blueprint
 import net.bnb1.kradle.sourceSets
 import org.gradle.api.Project
 import org.gradle.api.tasks.testing.Test
+import org.gradle.kotlin.dsl.configure
 import org.gradle.kotlin.dsl.withType
 
 class KoverBlueprint(project: Project) : Blueprint(project) {
@@ -22,18 +23,25 @@ class KoverBlueprint(project: Project) : Blueprint(project) {
     override fun doConfigure() {
         project.tasks.withType<Test> {
             val extension = extensions.getByType(KoverTaskExtension::class.java)
-            extension.isDisabled = koverProperties.excludes.contains(name)
+            extension.isDisabled.set(koverProperties.excludes.contains(name))
         }
 
-        // Kover only excludes the "test" source set, but we want to exclude all test variants and benchmarks.
-        val excludeSourceSets = project.sourceSets.filter {
-            it.name.endsWith("test", true) || it.name == "benchmark"
-        }
-        val excludeSources = excludeSourceSets.flatMap { it.allSource.srcDirs }
-        val excludeOutputs = excludeSourceSets.flatMap { it.output.classesDirs }
-        project.tasks.withType<KoverHtmlReportTask> {
-            srcDirs.set(srcDirs.get().filter { !excludeSources.contains(it) })
-            outputDirs.set(outputDirs.get().filter { !excludeOutputs.contains(it) })
+        // Exclude all test and benchmark source sets
+        val excludeSourceSets = project.sourceSets
+            .filter {
+                it.name.endsWith("test", true) || it.name == "benchmark"
+            }
+            .map { it.name }
+
+        project.configure<KoverProjectConfig> {
+            filters {
+                sourceSets {
+                    excludes.addAll(excludeSourceSets)
+                }
+            }
+            htmlReport {
+                reportDir.set(project.buildDir.resolve("reports/kover/project-html/"))
+            }
         }
 
         project.tasks.getByName(extendsTask).dependsOn("koverHtmlReport")

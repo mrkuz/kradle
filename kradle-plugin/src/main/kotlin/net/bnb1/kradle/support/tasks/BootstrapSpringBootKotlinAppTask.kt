@@ -5,7 +5,7 @@ import org.gradle.api.tasks.Input
 import org.gradle.api.tasks.TaskAction
 import java.nio.file.Path
 
-open class BootstrapKotlinAppTask : BootstrapBaseTask() {
+open class BootstrapSpringBootKotlinAppTask : BootstrapBaseTask() {
 
     @get:Input
     val mainClass = project.objects.empty<String>()
@@ -30,14 +30,29 @@ open class BootstrapKotlinAppTask : BootstrapBaseTask() {
                 """
                 package $packageName
                 
-                class $mainClassName
+                import org.springframework.boot.CommandLineRunner
+                import org.springframework.boot.autoconfigure.SpringBootApplication
+                import org.springframework.boot.runApplication
                 
-                fun main() {
-                    println("Hello World!")
+                @SpringBootApplication
+                class $mainClassName : CommandLineRunner {
+                
+                    override fun run(args : Array<String>) {
+                        println("Hello World!");
+                    }
+                }
+                
+                fun main(args: Array<String>) {
+                	runApplication<$mainClassName>(*args)
                 }
                 
                 """.trimIndent()
             )
+        }
+
+        val applicationProperties = project.projectDir.resolve("src/main/resources/application.properties")
+        if (!applicationProperties.exists()) {
+            applicationProperties.createNewFile()
         }
     }
 }

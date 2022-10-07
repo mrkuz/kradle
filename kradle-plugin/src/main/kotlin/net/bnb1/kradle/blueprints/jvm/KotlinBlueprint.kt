@@ -56,7 +56,7 @@ class KotlinBlueprint(project: Project) : Blueprint(project) {
                 } else {
                     jvmProperties.targetJvm
                 }
-                freeCompilerArgs = listOf("-Xopt-in=kotlin.RequiresOptIn", "-Xjsr305=strict")
+                freeCompilerArgs = listOf("-opt-in=kotlin.RequiresOptIn", "-Xjsr305=strict")
             }
         }
     }

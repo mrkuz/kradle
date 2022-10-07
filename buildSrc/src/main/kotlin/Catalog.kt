@@ -2,30 +2,31 @@ object Catalog {
 
     object Versions {
         const val jvm = "17"
-        const val kotlin = "1.6.0"
-        const val jmh = "1.34"
+        const val kotlin = "1.7.20"
+        const val jmh = "1.35"
         const val tini = "0.19.0"
         const val jvmKill = "1.16.0"
-        const val detekt = "1.19.0"
+        const val detekt = "1.21.0"
         const val ktlint = "0.43.2"
-        const val kotlinCoroutines = "1.6.0"
-        const val kotest = "5.1.0"
-        const val mockk = "1.12.2"
-        const val junit = "5.8.2"
-        const val jacoco = "0.8.7"
-        const val checkstyle = "9.3"
-        const val pmd = "6.42.0"
-        const val spotbugs = "4.5.3"
-        const val findSecBugs = "1.11.0"
+        const val kotlinCoroutines = "1.6.4"
+        const val kotest = "5.5.0"
+        const val mockk = "1.13.2"
+        const val junit = "5.9.1"
+        const val jacoco = "0.8.8"
+        const val checkstyle = "10.3.4"
+        const val pmd = "6.50.0"
+        const val spotbugs = "4.7.2"
+        const val findSecBugs = "1.12.0"
         const val fbContrib = "7.4.7"
         const val findBugs = "3.0.1"
-        const val slf4j = "1.7.35"
-        const val archUnit = "0.22.0"
-        const val testcontainers = "1.16.3"
-        const val lombok = "1.18.22"
-        const val guava = "31.0.1-jre"
-        const val caffeine = "3.0.5"
-        const val log4j = "2.17.1"
+        const val slf4j = "2.0.3"
+        const val archUnit = "1.0.0"
+        const val testcontainers = "1.17.5"
+        const val lombok = "1.18.24"
+        const val guava = "31.1-jre"
+        const val caffeine = "3.1.1"
+        const val log4j = "2.19.0"
+        const val springBoot = "2.7.4"
     }
 
     object Dependencies {
@@ -42,6 +43,7 @@ object Catalog {
 
         object Platform {
             val kotlin = artifact("org.jetbrains.kotlin", "kotlin-bom", Versions.kotlin)
+            val springBoot = artifact("org.springframework.boot", "spring-boot-dependencies", Versions.springBoot)
         }
 
         val kotlinCoroutines = artifact("org.jetbrains.kotlinx", "kotlinx-coroutines-core", Versions.kotlinCoroutines)
@@ -52,6 +54,16 @@ object Catalog {
         val caffeine = artifact("com.github.ben-manes.caffeine", "caffeine", Versions.caffeine)
         val caffeineGuava = artifact("com.github.ben-manes.caffeine", "guava", Versions.caffeine)
         val log4j = artifact("org.apache.logging.log4j", "log4j", Versions.log4j)
+
+        val springBootStarter = artifact("org.springframework.boot", "spring-boot-starter", Versions.springBoot)
+        val springBootStarterWeb = artifact("org.springframework.boot", "spring-boot-starter-web", Versions.springBoot)
+        val springBootStarterWebFlux =
+            artifact("org.springframework.boot", "spring-boot-starter-webflux", Versions.springBoot)
+        val springBootStarterActuator =
+            artifact("org.springframework.boot", "spring-boot-starter-actuator", Versions.springBoot)
+        val jacksonModuleKotlin = artifact("com.fasterxml.jackson.module", "jackson-module-kotlin", "")
+        val reactorKotlinExtensions = artifact("io.projectreactor.kotlin", "reactor-kotlin-extensions", "")
+        val kotlinxCoroutinesReactor = artifact("org.jetbrains.kotlinx", "kotlinx-coroutines-reactor", "")
 
         object Tools {
             val kotlinxBenchmarkRuntime = artifact(
@@ -66,6 +78,7 @@ object Catalog {
             val fbContrib = artifact("com.mebigfatguy.sb-contrib", "sb-contrib", Versions.fbContrib)
             val findBugsAnnotations = artifact("com.google.code.findbugs", "annotations", Versions.findBugs)
             val slf4jSimple = artifact("org.slf4j", "slf4j-simple", Versions.slf4j)
+            val springBootDevtools = artifact("org.springframework.boot", "spring-boot-devtools", Versions.springBoot)
 
             // Not directly referred, but still used in kradle
             val jvmKill = artifact("org.cloudfoundry", "jvmkill", Versions.jvmKill)
@@ -86,6 +99,10 @@ object Catalog {
             val archUnitJunit5 = artifact("com.tngtech.archunit", "archunit-junit5", Versions.archUnit)
             val testcontainers = artifact("org.testcontainers", "testcontainers", Versions.testcontainers)
             val testcontainersJunit5 = artifact("org.testcontainers", "junit-jupiter", Versions.testcontainers)
+
+            val springBootStarterTest =
+                artifact("org.springframework.boot", "spring-boot-starter-test", Versions.springBoot)
+            val reactorTest = artifact("io.projectreactor", "reactor-test", "")
         }
 
         fun artifact(group: String, name: String, version: String): String {
@@ -98,15 +115,16 @@ object Catalog {
     object Build {
 
         object Versions {
-            const val kotlin = "1.5.31"
-            const val kotest = "4.6.3"
-            const val kotlinxBenchmarkPlugin = "0.4.2"
+            const val kotlin = "1.6.21"
+            const val kotest = "5.5.0"
+            const val kotlinxBenchmarkPlugin = "0.4.5"
+            const val testLogger = "3.2.0"
         }
 
         object Plugins {
             val kotlinJvm = Plugin("org.jetbrains.kotlin.jvm", Versions.kotlin)
-            val gradlePublish = Plugin("com.gradle.plugin-publish", "0.20.0")
-            val testLogger = Plugin("com.adarshr.test-logger", "3.1.0")
+            val gradlePublish = Plugin("com.gradle.plugin-publish", "1.0.0")
+            val testLogger = Plugin("com.adarshr.test-logger", Versions.testLogger)
         }
 
         object Dependencies {
@@ -116,33 +134,33 @@ object Catalog {
             }
 
             const val kotlinStdlib = "org.jetbrains.kotlin:kotlin-stdlib-jdk8:${Versions.kotlin}"
-            const val jgit = "org.eclipse.jgit:org.eclipse.jgit:6.0.0.202111291000-r"
+            const val jgit = "org.eclipse.jgit:org.eclipse.jgit:6.3.0.202209071007-r"
 
             object Plugins {
                 const val kotlin = "org.jetbrains.kotlin:kotlin-gradle-plugin:${Versions.kotlin}"
-                const val dokka = "org.jetbrains.dokka:dokka-gradle-plugin:1.5.31" // 1.6.10
+                const val dokka = "org.jetbrains.dokka:dokka-gradle-plugin:1.7.10"
                 const val allOpen = "org.jetbrains.kotlin:kotlin-allopen:${Versions.kotlin}"
                 const val kotlinSerialization = "org.jetbrains.kotlin:kotlin-serialization:${Versions.kotlin}"
                 const val kotlinBenchmark =
                     "org.jetbrains.kotlinx:kotlinx-benchmark-plugin:${Versions.kotlinxBenchmarkPlugin}"
-                const val testLogger = "com.adarshr:gradle-test-logger-plugin:3.1.0"
+                const val testLogger = "com.adarshr:gradle-test-logger-plugin:${Versions.testLogger}"
                 const val shadow = "gradle.plugin.com.github.jengelman.gradle.plugins:shadow:7.0.0"
-                const val jib = "gradle.plugin.com.google.cloud.tools:jib-gradle-plugin:3.2.0"
+                const val jib = "gradle.plugin.com.google.cloud.tools:jib-gradle-plugin:3.2.1"
                 const val versions = "com.github.ben-manes:gradle-versions-plugin:0.42.0"
-                const val detekt = "io.gitlab.arturbosch.detekt:detekt-gradle-plugin:1.19.0"
-                const val ktlint = "org.jlleitschuh.gradle:ktlint-gradle:10.2.1"
-                const val owaspDependencyCheck = "org.owasp:dependency-check-gradle:6.5.3"
-                const val kover = "org.jetbrains.kotlinx:kover:0.5.0"
+                const val detekt = "io.gitlab.arturbosch.detekt:detekt-gradle-plugin:1.21.0"
+                const val ktlint = "org.jlleitschuh.gradle:ktlint-gradle:11.0.0"
+                const val owaspDependencyCheck = "org.owasp:dependency-check-gradle:7.2.1"
+                const val kover = "org.jetbrains.kotlinx:kover:0.6.1"
 
                 // Java
-                const val spotbugs = "com.github.spotbugs.snom:spotbugs-gradle-plugin:5.0.5"
+                const val spotbugs = "com.github.spotbugs.snom:spotbugs-gradle-plugin:5.0.12"
             }
 
             object Test {
                 const val kotlinTest = "org.jetbrains.kotlin:kotlin-test:${Versions.kotlin}"
                 const val kotestJunit5 = "io.kotest:kotest-runner-junit5:${Versions.kotest}"
                 const val kotestProperty = "io.kotest:kotest-property:${Versions.kotest}"
-                const val dockerJava = "com.github.docker-java:docker-java:3.2.12"
+                const val dockerJava = "com.github.docker-java:docker-java:3.2.13"
                 val kotestBundle = setOf(kotestJunit5, kotestProperty)
             }
         }
@@ -159,7 +177,7 @@ object Catalog {
                 "org.apache.logging.log4j:log4j-api:2.17.1",
                 "org.apache.logging.log4j:log4j-core:2.17.1",
                 "org.apache.maven:maven-model:3.0.5",
-                "com.thoughtworks.xstream:xstream:1.4.18",
+                "com.thoughtworks.xstream:xstream:1.4.19",
                 "org.jetbrains.kotlin:kotlin-stdlib:${Versions.kotlin}!!",
                 "org.jetbrains.kotlin:kotlin-stdlib-common:${Versions.kotlin}!!",
                 "org.jetbrains.kotlin:kotlin-stdlib-jdk7:${Versions.kotlin}!!",

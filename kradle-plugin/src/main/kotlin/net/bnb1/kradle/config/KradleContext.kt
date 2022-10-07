@@ -1,5 +1,6 @@
 package net.bnb1.kradle.config
 
+import net.bnb1.kradle.blueprints.jvm.DevelopmentModeBlueprint
 import net.bnb1.kradle.core.Feature
 import net.bnb1.kradle.core.FeatureSet
 import net.bnb1.kradle.core.Properties
@@ -32,7 +33,10 @@ class KradleContext(project: Project) {
         }
         features.git.also { me ->
             me belongsTo featureSets.general
-            me += blueprints.git
+            me activatesAfter features.bootstrap
+            me += blueprints.git.also {
+                it.extendsBootstrapTask = features.bootstrap.defaultTaskName
+            }
         }
         features.buildProfiles.also { me ->
             me belongsTo featureSets.general
@@ -59,6 +63,7 @@ class KradleContext(project: Project) {
 
         features.kotlin.also { me ->
             me belongsTo featureSets.jvm
+            me activatesAfter features.bootstrap
             me += setOf(
                 blueprints.java,
                 blueprints.kotlin,
@@ -69,6 +74,7 @@ class KradleContext(project: Project) {
                 blueprints.kotlinAppBootstrap.also {
                     it dependsOn features.bootstrap
                     it dependsOn features.application
+                    it disabledBy features.springBoot
                     it.extendsTask = features.bootstrap.defaultTaskName
                 },
                 blueprints.kotlinLibBootstrap.also {
@@ -85,14 +91,18 @@ class KradleContext(project: Project) {
         }
         features.java.also { me ->
             me belongsTo featureSets.jvm
+            me activatesAfter features.bootstrap
             me += setOf(
-                blueprints.java,
+                blueprints.java.also {
+                    it.extendsBootstrapTask = features.bootstrap.defaultTaskName
+                },
                 blueprints.bootstrap.also {
                     it dependsOn features.bootstrap
                 },
                 blueprints.javaAppBootstrap.also {
                     it dependsOn features.bootstrap
                     it dependsOn features.application
+                    it disabledBy features.springBoot
                     it.extendsTask = features.bootstrap.defaultTaskName
                 },
                 blueprints.javaLibBootstrap.also {
@@ -207,22 +217,63 @@ class KradleContext(project: Project) {
             me belongsTo featureSets.jvm
             me += blueprints.dokka
         }
+
+        features.springBoot.also { me ->
+            me belongsTo featureSets.jvm
+            me += setOf(
+                blueprints.springBoot.also {
+                    it.withKotlin = { features.kotlin.isEnabled }
+                    it.withBuildProfiles = { features.buildProfiles.isEnabled }
+                    it.withDevelopmentMode = { features.developmentMode.isEnabled }
+                    it.developmentConfiguration = DevelopmentModeBlueprint.CONFIGURATION_NAME
+                },
+                blueprints.bootstrap.also {
+                    it dependsOn features.bootstrap
+                },
+                blueprints.springBootJavaAppBootstrap.also {
+                    it dependsOn features.java
+                    it dependsOn features.bootstrap
+                    it dependsOn features.application
+                    it.extendsTask = features.bootstrap.defaultTaskName
+                },
+                blueprints.springBootKotlinAppBootstrap.also {
+                    it dependsOn features.kotlin
+                    it dependsOn features.bootstrap
+                    it dependsOn features.application
+                    it.extendsTask = features.bootstrap.defaultTaskName
+                },
+                blueprints.springBootDevelopmentMode.also {
+                    it dependsOn features.developmentMode
+                    it dependsOn features.application
+                    it.withBuildProfiles = { features.buildProfiles.isEnabled }
+                    it.extendsTask = features.developmentMode.defaultTaskName
+                },
+                blueprints.springBootShadowBlueprint.also {
+                    it dependsOn features.packaging
+                    it dependsOn features.application
+                    it.extendsTask = features.packaging.defaultTaskName
+                }
+            )
+        }
     }
 
     private fun initializeSubFeatures() {
         features.checkstyle.also { me ->
             me.enable()
             me belongsTo featureSets.jvm
+            me activatesAfter features.bootstrap
             me activatesAfter features.lint
             me += blueprints.checkstyle.also {
                 it dependsOn features.lint
                 it dependsOn features.java
                 it.extendsTask = features.lint.defaultTaskName
+                it.extendsBootstrapTask = features.bootstrap.defaultTaskName
             }
         }
         features.pmd.also { me ->
             me.enable()
             me belongsTo featureSets.jvm
+            me activatesAfter features.bootstrap
             me activatesAfter features.codeAnalysis
             me += blueprints.pmd.also {
                 it dependsOn features.codeAnalysis
@@ -258,6 +309,7 @@ class KradleContext(project: Project) {
                 it dependsOn features.codeAnalysis
                 it dependsOn features.kotlin
                 it.extendsTask = features.codeAnalysis.defaultTaskName
+                it.extendsBootstrapTask = features.bootstrap.defaultTaskName
             }
         }
         features.jacoco.also { me ->

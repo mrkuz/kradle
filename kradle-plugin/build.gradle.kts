@@ -10,11 +10,11 @@ plugins {
     `maven-publish`
     id(Catalog.Build.Plugins.gradlePublish.id) version Catalog.Build.Plugins.gradlePublish.version
     id(Catalog.Build.Plugins.kotlinJvm.id) version Catalog.Build.Plugins.kotlinJvm.version
-    id("net.bitsandbobs.kradle") version "2.3.0"
+    id("net.bitsandbobs.kradle") version "2.3.1"
 }
 
 group = "net.bitsandbobs.kradle"
-version = "2.3.1"
+version = "main-SNAPSHOT"
 
 buildscript {
     dependencies {
@@ -158,9 +158,10 @@ tasks.named("runKtlintCheckOverMainSourceSet") {
 }
 
 tasks.register<Copy>("buildAgent") {
-    dependsOn(":kradle-agent:jar")
-    from(project(":kradle-agent").buildDir.resolve("libs/kradle-agent.jar"))
+    dependsOn(":kradle-agent:shadowJar")
+    from(project(":kradle-agent").buildDir.resolve("libs/kradle-agent-all.jar"))
     into(project.buildDir.resolve("resources/main/"))
+    rename { "kradle-agent.jar" }
 }
 
 tasks.named("processResources").configure {

@@ -1,12 +1,16 @@
 plugins {
     `java`
+    id("com.github.johnrengelman.shadow") version "7.1.2"
 }
 
 repositories {
     mavenCentral()
+    maven("https://repo.gradle.org/gradle/libs-releases-local/")
 }
 
 dependencies {
+    implementation("org.gradle:gradle-tooling-api:7.1.1")
+    runtimeOnly("org.slf4j:slf4j-simple:1.7.36")
     testImplementation(platform("org.junit:junit-bom:5.7.2"))
     testImplementation("org.junit.jupiter:junit-jupiter")
 }

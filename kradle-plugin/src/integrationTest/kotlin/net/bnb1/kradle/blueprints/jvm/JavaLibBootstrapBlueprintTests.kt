@@ -37,8 +37,6 @@ class JavaLibBootstrapBlueprintTests : BehaviorSpec({
                 result.task(":bootstrapJavaLib")!!.outcome shouldBe TaskOutcome.SUCCESS
 
                 // And: "Project files and directories are created"
-                project.projectDir.resolve(".git").shouldExist()
-                project.projectDir.resolve(".gitignore").shouldExist()
                 project.projectDir.resolve("gradlew").shouldExist()
                 project.projectDir.resolve("src/main/java/com/example").shouldExist()
                 project.projectDir.resolve("src/main/resources").shouldExist()
@@ -46,8 +44,6 @@ class JavaLibBootstrapBlueprintTests : BehaviorSpec({
                 project.projectDir.resolve("src/test/java/com/example").shouldExist()
                 project.projectDir.resolve("src/test/resources").shouldExist()
                 project.projectDir.resolve("src/benchmark/java").shouldExist()
-                project.projectDir.resolve("checkstyle.xml").shouldExist()
-                project.projectDir.resolve("lombok.config").shouldExist()
                 project.projectDir.resolve("README.md").shouldExist()
                 project.projectDir.resolve("LICENSE").shouldExist()
                 project.projectDir.resolve("project.properties").shouldExist()

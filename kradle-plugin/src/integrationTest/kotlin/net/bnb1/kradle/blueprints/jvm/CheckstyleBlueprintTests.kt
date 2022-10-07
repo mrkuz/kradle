@@ -164,4 +164,26 @@ class CheckstyleBlueprintTests : BehaviorSpec({
             }
         }
     }
+
+    Given("Default configuration AND bootstrap") {
+        project.setUp {
+            """
+            general {
+                bootstrap.enable()
+            }
+            jvm {
+                java.enable()
+                lint.enable()
+            }
+            """.trimIndent()
+        }
+
+        When("Run bootstrap") {
+            val result = project.runTask("bootstrap")
+
+            Then("generateCheckstyleConfig is called") {
+                result.task(":generateCheckstyleConfig")!!.outcome shouldBe TaskOutcome.SUCCESS
+            }
+        }
+    }
 })
