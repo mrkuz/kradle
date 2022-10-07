@@ -4,8 +4,6 @@
 
 ### Version ${kradleVersion} (${new Date().format("yyyy-MM-dd")})
 
-#### Bugfixes
-
 #### Additions
 
 - New feature `frameworks`, including support for [Spring Boot](https://spring.io/projects/spring-boot)

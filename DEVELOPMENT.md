@@ -22,10 +22,26 @@
        in [AllBlueprints.kt](kradle-plugin/src/main/kotlin/net/bnb1/kradle/config/AllBlueprints.kt)
     9. Configure feature in [KradleContext.kt](kradle-plugin/src/main/kotlin/net/bnb1/kradle/config/KradleContext.kt)
     10. Run `./gradlew build` and make sure everything still works
-5. Create unit tests [src/test](kradle-plugin/src/test)
+5. Create unit tests in [src/test](kradle-plugin/src/test)
 6. Create integration tests for blueprint in [src/integrationTest](kradle-plugin/src/integrationTest)
     1. Create a test for the default configuration
     2. Create a test for each configuration option
+7. Implement the new feature
+
+# Release
+
+1. Switch to stable branch `git checkout stable`
+2. Merge main branch `git merge main`
+3. Update version in [build.gradle.kts](kradle-plugin/build.gradle.kts)
+4. Generate updated _README.md_ and _CHANGELOG.md_ `./gradle renderTemplates`
+5. Commit and push changes
+
+   ```shell
+   git add -u
+   git commit -m"Release vX.Y.Z"
+   git push
+   ```
+6.
 
 # FAQ
 

@@ -2,9 +2,7 @@
 
 ## Changelog
 
-### Version main-SNAPSHOT (2022-10-07)
-
-#### Bugfixes
+### Version 2.4.0 (2022-10-07)
 
 #### Additions
 
