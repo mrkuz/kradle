@@ -49,6 +49,11 @@ class KotlinBlueprint(project: Project) : Blueprint(project) {
     }
 
     override fun doConfigure() {
+        var compilerArgs = mutableListOf("-opt-in=kotlin.RequiresOptIn", "-Xjsr305=strict")
+        if (kotlinProperties.k2) {
+            compilerArgs.add("-Xuse-k2")
+        }
+
         project.tasks.withType<KotlinCompile> {
             kotlinOptions {
                 jvmTarget = if (jvmProperties.targetJvm == "8") {
@@ -56,7 +61,7 @@ class KotlinBlueprint(project: Project) : Blueprint(project) {
                 } else {
                     jvmProperties.targetJvm
                 }
-                freeCompilerArgs = listOf("-opt-in=kotlin.RequiresOptIn", "-Xjsr305=strict")
+                freeCompilerArgs = compilerArgs
             }
         }
     }

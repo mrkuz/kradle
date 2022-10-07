@@ -5,4 +5,5 @@ import net.bnb1.kradle.core.Properties
 class KotlinProperties : Properties {
 
     var useCoroutines: String? = null
+    var k2: Boolean = false
 }

@@ -9,6 +9,7 @@
 #### Additions
 
 - New feature `frameworks`, including support for [Spring Boot](https://spring.io/projects/spring-boot)
+- `kotlin`: Add new option `k2`
 
 #### Changes
 

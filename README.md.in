@@ -586,6 +586,7 @@ kradle {
     jvm {
         kotlin {
             // useCoroutines("${versions.kotlinCoroutines}")
+            k2(false)
             lint {
                 ktlint.enable {
                     version("${versions.ktlint}")
@@ -610,6 +611,8 @@ kradle {
 ```
 
 - `useCoroutines`: Adds Kotlin coroutines dependency
+- `k2`: Enable the
+  new [K2 compiler](https://kotlinlang.org/docs/whatsnew17.html#new-kotlin-k2-compiler-for-the-jvm-in-alpha)C
 - `test.useKoTest`: Adds [kotest](https://kotest.io/) test dependencies (only if [test improvements](#feature-test) are
   enabled)
 - `test.useMockk`: Adds [mockk](https://mockk.io/) test dependency (only if [test improvements](#feature-test) are
@@ -1495,6 +1498,7 @@ kradle {
         targetJvm("${versions.jvm}")
         kotlin {
             // useCoroutines("${versions.kotlinCoroutines}")
+            k2(false)
             lint {
                 ktlint.enable {
                     version("${versions.ktlint}")
