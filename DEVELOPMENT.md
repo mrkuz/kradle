@@ -40,5 +40,6 @@
 
 ### When to `use` and when to use `with` prefix for option names?
 
+- Use no prefix if the option is a simple on/off switch
 - Use `use` if the option just adds dependencies
 - Use `with` if the option does more than that
