@@ -8,6 +8,12 @@
 
 #### Additions
 
+#### Changes
+
+### Version 2.4.0 (2022-10-07)
+
+#### Additions
+
 - New feature `frameworks`, including support for [Spring Boot](https://spring.io/projects/spring-boot)
 
 #### Changes
