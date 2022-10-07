@@ -1,5 +1,5 @@
 plugins {
-    id("org.jetbrains.kotlin.jvm") version "1.6.0"
+    id("org.jetbrains.kotlin.jvm") version "1.7.20"
     id("net.bitsandbobs.kradle") version "main-SNAPSHOT"
 }
 
@@ -42,7 +42,7 @@ kradle {
 
         // targetJvm("17")
         kotlin {
-            useCoroutines(/* "1.6.0" */)
+            useCoroutines(/* "1.6.4" */)
             lint {
                 ktlint.enable {
                     // version("0.43.2")
@@ -54,21 +54,21 @@ kradle {
             /*
             codeAnalysis {
                 detekt.enable {
-                    version("1.19.0")
+                    version("1.21.0")
                     configFile("detekt-config.yml")
                 }
             }
             */
             test {
-                useKotest(/* "5.1.0" */)
-                useMockk(/* "1.12.2" */)
+                useKotest(/* "5.5.0" */)
+                useMockk(/* "1.13.2" */)
             }
         }
 
         dependencies {
-            // useCaffeine("3.0.5")
-            // useGuava("31.0.1-jre")
-            // useLog4j("2.17.1")
+            // useCaffeine("3.1.1")
+            // useGuava("31.1-jre")
+            // useLog4j("2.19.0")
         }
 
         vulnerabilityScan.enable()
@@ -83,7 +83,7 @@ kradle {
         test {
             /*
             junitJupiter.enable {
-                version("5.8.2")
+                version("5.9.1")
             }
             */
             prettyPrint(true)
@@ -91,8 +91,8 @@ kradle {
             withIntegrationTests(true)
             withFunctionalTests(true)
             // withCustomTests("...")
-            // useArchUnit("0.22.0")
-            // useTestcontainers("1.16.3")
+            // useArchUnit("1.0.0")
+            // useTestcontainers("1.17.5")
         }
 
         codeCoverage {
@@ -101,7 +101,7 @@ kradle {
                 excludes("...")
             }
             jacoco.configureOnly {
-                version("0.8.7")
+                version("0.8.8")
                 excludes("...")
             }
             */
@@ -110,7 +110,7 @@ kradle {
         benchmark {
             /*
             jmh {
-                version("1.34")
+                version("1.35")
             }
             */
         }
@@ -137,5 +137,17 @@ kradle {
         }
 
         documentation.enable()
+
+        /*
+        frameworks {
+            springBoot {
+                version("2.7.4")
+                withDevTools("2.7.4")
+                useWeb("2.7.4")
+                useWebFlux("2.7.4")
+                useActuator("2.7.4")
+            }
+        }
+        */
     }
 }

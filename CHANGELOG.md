@@ -2,11 +2,19 @@
 
 ## Changelog
 
-### Version main-SNAPSHOT (2022-02-15)
+### Version main-SNAPSHOT (2022-10-07)
 
 #### Bugfixes
+
 #### Additions
+
+- New feature `frameworks`, including support for [Spring Boot](https://spring.io/projects/spring-boot)
+
 #### Changes
+
+- [Kotlin 1.7.20](https://blog.jetbrains.com/kotlin/2022/09/kotlin-1-7-20-released/)
+- Dependency updates
+- `bootstrap`: Generate files based on enabled features
 
 ### Version 2.3.1 (2022-02-15)
 
@@ -49,7 +57,8 @@
 
 - `jvm`: Fix support for target JVM 8
 - `benchmarks`: Fix pure Java projects with benchmarks enabled
-- `docker`:  Fix `buildImage` in combination with `startupScript` or `withJvmKill` (first image created was missing extra files)
+- `docker`:  Fix `buildImage` in combination with `startupScript` or `withJvmKill` (first image created was missing
+  extra files)
 - `bootstrap`: Don't overwrite existing _App.kt_ or _App.java_ files
 
 #### Additions
@@ -62,7 +71,7 @@
 - `jacoco`: New option `excludes`
 - `jacoco`: Add configuration to `codeCoverage`
 
-    Before
+  Before
 
     ```kotlin
     kradle {
@@ -74,7 +83,7 @@
     }
     ```
 
-    After
+  After
 
     ```kotlin
     kradle {
@@ -94,7 +103,7 @@
 - `test`: Add `test.withCustomTests` as alternative to `test.customTests`
 - `test`: Alternative configuration for JUnit Jupiter
 
-    Before
+  Before
 
     ```kotlin
     kradle {
@@ -106,7 +115,7 @@
     }
     ```
 
-    After
+  After
 
     ```kotlin
     kradle {
@@ -127,7 +136,7 @@
 - `docker`: Add `test.withStartupScript` as alternative to `test.startupScript`
 - `benchmark`: Alternative configuration for JMH version
 
-    Before
+  Before
 
     ```kotlin
     kradle {
@@ -137,7 +146,7 @@
     }
     ```
 
-    After
+  After
 
     ```kotlin
     kradle {
@@ -175,7 +184,7 @@
 - `ktlint`: Rules are configurable
 - `ktlint`, `detekt`: Alternative configuration
 
-    Before
+  Before
 
     ```kotlin
     kradle {
@@ -193,7 +202,7 @@
     }
     ```
 
-    After
+  After
 
     ```kotlin
     kradle {
@@ -217,7 +226,7 @@
 - `test`: Add support for [custom tests](README.md#feature-test)
 - `test`: Alternative configuration
 
-    Before
+  Before
 
     ```kotlin
     kradle {
@@ -230,7 +239,7 @@
     }
     ```
 
-    After
+  After
 
     ```kotlin
     kradle {
@@ -245,7 +254,7 @@
 
 - `docker`: Alternative configuration
 
-    Before
+  Before
 
       ```
       kradle {
@@ -258,7 +267,7 @@
       }
       ```
 
-    After
+  After
 
       ```
       kradle {
@@ -298,8 +307,10 @@
 #### Changes
 
 - `jvm`: Set default target JVM to 17
-- Deprecate `kradle-app` and `kradle-lib`. They still work, but won't receive any new features. Consider using `net.bitsandbobs.kradle` instead.
-- __Breaking change__: [`disable`](https://github.com/mrkuz/kradle/tree/v1.2.0#blueprints) for `kradle-app` and `kradle-lib` removed
+- Deprecate `kradle-app` and `kradle-lib`. They still work, but won't receive any new features. Consider
+  using `net.bitsandbobs.kradle` instead.
+- __Breaking change__: [`disable`](https://github.com/mrkuz/kradle/tree/v1.2.0#blueprints) for `kradle-app`
+  and `kradle-lib` removed
 
 ### Version 1.2.0 (2021-09-23)
 
@@ -315,14 +326,15 @@
 
 #### Changes
 
-- The tasks `showDependencyUpdates`, `analyzeCode`, `analyzeDependencies`, `generateDocumentation`,  `uberJar` and `buildImage` are now independent tasks, not aliases
+- The tasks `showDependencyUpdates`, `analyzeCode`, `analyzeDependencies`, `generateDocumentation`,  `uberJar`
+  and `buildImage` are now independent tasks, not aliases
 - Add `kotlin-reflect` to project dependencies
 - Enable strict JSR-305 processing
 - `DEV_MODE=true` is no longer set when launching the application with `run`
 - `uberJar`: JAR is no longer minimized
 - `generateBuildProperties`: Content of _build.properties_ changed
 
-    Before
+  Before
 
     ```properties
     version=…
@@ -330,7 +342,7 @@
     git.commit-id=…
     ```
 
-    After
+  After
 
     ```properties
     project.name=…
@@ -350,7 +362,7 @@
 - Add source sets and tasks for integration and functional tests
 - Syntactic sugar: Overload invoke operator for setting options
 
-    Before
+  Before
 
     ```kotlin
     kradle {
@@ -358,7 +370,7 @@
     }
     ```
 
-    After
+  After
 
     ```kotlin
     kradle {
@@ -368,7 +380,7 @@
 
 - Add option for main class inside `kradle` configuration
 
-    Before
+  Before
 
     ```kotlin
     application {
@@ -376,7 +388,7 @@
     }
     ```
 
-    After
+  After
 
     ```kotlin
     kradle {
@@ -386,7 +398,7 @@
 
 - Add `jacocoVersion` to `test`
 
-    Before
+  Before
 
     ```kotlin
     kradle {
@@ -394,7 +406,7 @@
     }
     ```
 
-    After
+  After
 
     ```kotlin
     kradle {

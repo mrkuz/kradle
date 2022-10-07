@@ -148,5 +148,17 @@ kradle {
         }
 
         documentation.enable()
+
+        /*
+        frameworks {
+            springBoot {
+                version("${versions.springBoot}")
+                withDevTools("${versions.springBoot}")
+                useWeb("${versions.springBoot}")
+                useWebFlux("${versions.springBoot}")
+                useActuator("${versions.springBoot}")
+            }
+        }
+        */
     }
 }

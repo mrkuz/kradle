@@ -7,7 +7,8 @@
     3. Add feature description in features section
     4. Update presets
     5. Update configuration DSL reference
-3. Create necessary boilerplate
+3. Update [examples](examples)
+4. Create necessary boilerplate
     1. Register new feature
        in [AllFeatures.kt](kradle-plugin/src/main/kotlin/net/bnb1/kradle/config/AllFeatures.kt)
     2. Add new dependencies to [buildSrc/Catalog.kt](buildSrc/src/main/kotlin/Catalog.kt)
@@ -21,8 +22,8 @@
        in [AllBlueprints.kt](kradle-plugin/src/main/kotlin/net/bnb1/kradle/config/AllBlueprints.kt)
     9. Configure feature in [KradleContext.kt](kradle-plugin/src/main/kotlin/net/bnb1/kradle/config/KradleContext.kt)
     10. Run `./gradlew build` and make sure everything still works
-4. Create unit tests [src/test](kradle-plugin/src/test)
-5. Create integration tests for blueprint in [src/integrationTest](kradle-plugin/src/integrationTest)
+5. Create unit tests [src/test](kradle-plugin/src/test)
+6. Create integration tests for blueprint in [src/integrationTest](kradle-plugin/src/integrationTest)
     1. Create a test for the default configuration
     2. Create a test for each configuration option
 
