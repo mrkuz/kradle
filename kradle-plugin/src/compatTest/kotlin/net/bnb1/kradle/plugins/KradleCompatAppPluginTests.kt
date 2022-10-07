@@ -30,7 +30,7 @@ class KradleCompatAppPluginTests : CompatSpec({
 
         val result = runTask("dependencies", "--configuration", "runtimeClasspath")
 
-        result.output shouldContain "org.jetbrains.kotlin:kotlin-stdlib:1.5.31"
+        result.output shouldContain "org.jetbrains.kotlin:kotlin-stdlib:1.6.21"
         result.output shouldNotContain "org.jetbrains.kotlin:kotlin-stdlib:1.5.21"
     }
 

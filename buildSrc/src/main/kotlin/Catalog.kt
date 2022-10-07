@@ -7,7 +7,7 @@ object Catalog {
         const val tini = "0.19.0"
         const val jvmKill = "1.16.0"
         const val detekt = "1.21.0"
-        const val ktlint = "0.47.1"
+        const val ktlint = "0.43.2"
         const val kotlinCoroutines = "1.6.4"
         const val kotest = "5.5.0"
         const val mockk = "1.13.2"
@@ -43,7 +43,7 @@ object Catalog {
 
         object Platform {
             val kotlin = artifact("org.jetbrains.kotlin", "kotlin-bom", Versions.kotlin)
-            val springBoot = artifact("org.springframework.boot", "spring-boot-dependencies", Versions.springBoot);
+            val springBoot = artifact("org.springframework.boot", "spring-boot-dependencies", Versions.springBoot)
         }
 
         val kotlinCoroutines = artifact("org.jetbrains.kotlinx", "kotlinx-coroutines-core", Versions.kotlinCoroutines)
@@ -58,9 +58,9 @@ object Catalog {
         val springBootStarter = artifact("org.springframework.boot", "spring-boot-starter", Versions.springBoot)
         val springBootStarterWeb = artifact("org.springframework.boot", "spring-boot-starter-web", Versions.springBoot)
         val springBootStarterWebFlux =
-            artifact("org.springframework.boot", "spring-boot-starter-webflux", Versions.springBoot);
+            artifact("org.springframework.boot", "spring-boot-starter-webflux", Versions.springBoot)
         val springBootStarterActuator =
-            artifact("org.springframework.boot", "spring-boot-starter-actuator", Versions.springBoot);
+            artifact("org.springframework.boot", "spring-boot-starter-actuator", Versions.springBoot)
         val jacksonModuleKotlin = artifact("com.fasterxml.jackson.module", "jackson-module-kotlin", "")
         val reactorKotlinExtensions = artifact("io.projectreactor.kotlin", "reactor-kotlin-extensions", "")
         val kotlinxCoroutinesReactor = artifact("org.jetbrains.kotlinx", "kotlinx-coroutines-reactor", "")

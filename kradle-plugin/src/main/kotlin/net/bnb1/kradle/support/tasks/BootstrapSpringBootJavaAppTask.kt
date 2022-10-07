@@ -38,7 +38,7 @@ open class BootstrapSpringBootJavaAppTask : BootstrapBaseTask() {
                 public class $mainClassName implements CommandLineRunner {
                 
                     public static void main(String[] args) {
-                        SpringApplication.run(${mainClassName}.class, args);
+                        SpringApplication.run($mainClassName.class, args);
                     }
                 
                     @Override
