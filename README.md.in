@@ -194,12 +194,9 @@ Which tasks are available, depends on the [features](#features) enabled.
 | <a id="task-push-image"></a>[pushImage](#feature-docker) | Pushes container image to remote registry (applications only) | - | [Jib Plugin](https://plugins.gradle.org/plugin/com.google.cloud.tools.jib) |
 | <a id="task-install"></a>[install](#feature-library) | Installs JAR to local Maven repository (libraries only) |  publishToMavenLocal | [Maven Publish Plugin](https://docs.gradle.org/current/userguide/publishing_maven.html) |
 | <a id="task-generate-git-ignore"></a>[generateGitignore](#feature-git) | Generates _.gitignore_ | - | - |
-| <a id="task-generate-build-properties"></a>[generateBuildProperties](#feature-build-properties) | Generates
-_build.properties_ | - | - |
-| <a id="task-generate-detekt-config"></a>[generateDetektConfig](#feature-code-analysis) | Generates
-_detekt-config.yml_ | - | - |
-| <a id="task-generate-checkstyle-config"></a>[generateCheckstyleConfig](#feature-code-analysis) | Generates
-_checkstyle.xml_ | - | - |
+| <a id="task-generate-build-properties"></a>[generateBuildProperties](#feature-build-properties) | Generates _build.properties_ | - | - |
+| <a id="task-generate-detekt-config"></a>[generateDetektConfig](#feature-code-analysis) | Generates _detekt-config.yml_ | - | - |
+| <a id="task-generate-checkstyle-config"></a>[generateCheckstyleConfig](#feature-code-analysis) | Generates _checkstyle.xml_ | - | - |
 | <a id="task-generate-lombok-config"></a>[generateLombokConfig](#feature-java) | Generates _lombok.config_ | - | - |
 | <a id="task-generate-helm-chart"></a>[generateHelmChart](#feature-helm) | Generates Helm chart | - | - |
 | <a id="task-process-helm-chart"></a>[processHelmChart](#feature-helm) | Processes Helm chart | - | - |
