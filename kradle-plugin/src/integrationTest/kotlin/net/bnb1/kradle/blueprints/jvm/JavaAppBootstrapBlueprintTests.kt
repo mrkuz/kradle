@@ -22,6 +22,8 @@ class JavaAppBootstrapBlueprintTests : BehaviorSpec({
             }
             jvm {
                 java.enable()
+                lint.enable()
+                codeAnalysis.enable()
                 application {
                     mainClass("com.example.demo.App")
                 }

@@ -18,6 +18,8 @@ class KotlinLibBootstrapBlueprintTests : BehaviorSpec({
             }
             jvm {
                 kotlin.enable()
+                lint.enable()
+                codeAnalysis.enable()
                 library.enable()
             }
             """.trimIndent()

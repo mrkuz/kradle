@@ -18,6 +18,8 @@ class JavaLibBootstrapBlueprintTests : BehaviorSpec({
             }
             jvm {
                 java.enable()
+                lint.enable()
+                codeAnalysis.enable()
                 library.enable()
             }
             """.trimIndent()

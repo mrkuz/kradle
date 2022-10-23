@@ -20,6 +20,8 @@ class SpringBootKotlinAppBootstrapBlueprintTests : BehaviorSpec({
             }
             jvm {
                 kotlin.enable()
+                lint.enable()
+                codeAnalysis.enable()
                 application {
                     mainClass("com.example.demo.AppKt")
                 }
