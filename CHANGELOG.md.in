@@ -7,6 +7,7 @@
 #### Bugfixes
 
 - `kotest`: Downgrade from 5.5.0 to 5.2.3 because of issues with Gradle test filters (`--class`)
+- `bootstrap`: Fix code style for Spring Boot app
 
 #### Additions
 
