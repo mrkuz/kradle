@@ -36,11 +36,13 @@ class TestBlueprint(project: Project) : Blueprint(project) {
 
     // compat: Must be public we can create the tasks eagerly
     public override fun doCreateTasks() {
-        // compat: Avoid duplicate creation on activate
-        if (project.tasks.findByName(RUN_TESTS_TASK) == null) {
-            project.createTask<Task>(RUN_TESTS_TASK, "Runs all tests") {
-                dependsOn("test")
-            }
+        if (project.tasks.findByName(RUN_TESTS_TASK) != null) {
+            // compat: Avoid duplicate creation on activate
+            return
+        }
+
+        project.createTask<Task>(RUN_TESTS_TASK, "Runs all tests") {
+            dependsOn("test")
         }
 
         val customTests = mutableListOf<String>()

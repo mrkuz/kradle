@@ -6,6 +6,8 @@
 
 #### Bugfixes
 
+- Fix test ordering for legacy plugins
+
 #### Additions
 
 #### Changes
