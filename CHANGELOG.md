@@ -2,13 +2,20 @@
 
 ## Changelog
 
-### Version main-SNAPSHOT (2022-10-07)
+### Version main-SNAPSHOT (2022-10-23)
 
 #### Bugfixes
 
 #### Additions
 
 #### Changes
+
+### Version 2.4.1 (2022-10-23)
+
+#### Bugfixes
+
+- `kotest`: Downgrade from 5.5.0 to 5.2.3 because of issues with Gradle test filters (`--test`)
+- `bootstrap`: Fix code style for Spring Boot app
 
 ### Version 2.4.0 (2022-10-07)
 
