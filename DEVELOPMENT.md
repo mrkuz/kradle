@@ -34,21 +34,28 @@
 2. Merge main branch `git merge main`
 3. Update version in [build.gradle.kts](kradle-plugin/build.gradle.kts)
 4. Generate updated _README.md_ and _CHANGELOG.md_ `./gradlew renderTemplates`
-5. Commit and push changes
+5. Commit changes
 
    ```shell
    git add -u
    git commit -m"Release vX.Y.Z"
-   git push
    ```
 6. Create a clean build, which also runs all checks and tests `./gradlew clean build`
-7. Publish plugins `./gradlew publishPlugins`
-8. Switch to main branch `git checkout main`
-9. Merge stable branch, but don't commit `git merge --no-commit stable`
-10. Set version in [build.gradle.kts](kradle-plugin/build.gradle.kts) back to `main-SNAPSHOT`
-11. Prepare [CHANGELOG.md.in](CHANGELOG.md.in) for next release
-12. Generate updated _README.md_ and _CHANGELOG.md_ `./gradlew renderTemplates`
-13. Commit and push changes
+7. Tag and push changes
+
+   ```shell
+   git tag vX.Y.Z
+   git push
+   git push origin vX.Y.Z
+   ```
+
+8. Publish plugins `./gradlew publishPlugins`
+9. Switch to main branch `git checkout main`
+10. Merge stable branch, but don't commit `git merge --no-commit stable`
+11. Set version in [build.gradle.kts](kradle-plugin/build.gradle.kts) back to `main-SNAPSHOT`
+12. Prepare [CHANGELOG.md.in](CHANGELOG.md.in) for next release
+13. Generate updated _README.md_ and _CHANGELOG.md_ `./gradlew renderTemplates`
+14. Commit and push changes
 
     ```shell
     git add -u
@@ -56,9 +63,9 @@
     git push
     ```
 
-14. Use the new deployed plugin [build.gradle.kts](kradle-plugin/build.gradle.kts)
-15. Make sure everything works `./gradlew clean build`
-16. Commit and push changes
+15. Use the new deployed plugin [build.gradle.kts](kradle-plugin/build.gradle.kts)
+16. Make sure everything works `./gradlew clean build`
+17. Commit and push changes
 
     ```shell
     git add -u
