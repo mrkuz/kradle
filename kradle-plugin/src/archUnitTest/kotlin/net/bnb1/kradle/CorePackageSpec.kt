@@ -10,7 +10,7 @@ class CorePackageSpec : FunSpec({
 
     val classes = ClassFileImporter()
         .withImportOption(ImportOption.Predefined.DO_NOT_INCLUDE_TESTS)
-        .withImportOption { it.contains("Test") }
+        .withImportOption { !it.contains("Test") }
         .withImportOption(ImportOption.Predefined.DO_NOT_INCLUDE_JARS)
         .importPackages("net.bnb1.kradle")
 

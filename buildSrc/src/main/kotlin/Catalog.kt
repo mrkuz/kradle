@@ -9,7 +9,7 @@ object Catalog {
         const val detekt = "1.21.0"
         const val ktlint = "0.43.2"
         const val kotlinCoroutines = "1.6.4"
-        const val kotest = "5.5.0"
+        const val kotest = "5.2.3"
         const val mockk = "1.13.2"
         const val junit = "5.9.1"
         const val jacoco = "0.8.8"
@@ -116,7 +116,7 @@ object Catalog {
 
         object Versions {
             const val kotlin = "1.6.21"
-            const val kotest = "5.5.0"
+            const val kotest = "5.2.3"
             const val kotlinxBenchmarkPlugin = "0.4.5"
             const val testLogger = "3.2.0"
         }

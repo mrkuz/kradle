@@ -16,12 +16,12 @@ open class Blueprint(protected val project: Project) {
     private val disabledBy = mutableSetOf<Feature>()
 
     infix fun dependsOn(feature: Feature) {
-        if (activated.get()) throw IllegalStateException("Configuration not allowed when activated")
+        check(!activated.get()) { "Configuration not allowed when activated" }
         dependsOn += feature
     }
 
     infix fun disabledBy(feature: Feature) {
-        if (activated.get()) throw IllegalStateException("Configuration not allowed when activated")
+        check(!activated.get()) { "Configuration not allowed when activated" }
         disabledBy += feature
     }
 

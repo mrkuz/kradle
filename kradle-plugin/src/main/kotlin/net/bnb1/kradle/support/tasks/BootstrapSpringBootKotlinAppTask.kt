@@ -37,13 +37,14 @@ open class BootstrapSpringBootKotlinAppTask : BootstrapBaseTask() {
                 @SpringBootApplication
                 class $mainClassName : CommandLineRunner {
                 
-                    override fun run(args : Array<String>) {
-                        println("Hello World!");
+                    override fun run(args: Array<String>) {
+                        println("Hello World!")
                     }
                 }
-                
+
+                @Suppress("SpreadOperator")
                 fun main(args: Array<String>) {
-                	runApplication<$mainClassName>(*args)
+                    runApplication<$mainClassName>(*args)
                 }
                 
                 """.trimIndent()

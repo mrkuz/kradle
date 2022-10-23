@@ -33,7 +33,7 @@
 1. Switch to stable branch `git checkout stable`
 2. Merge main branch `git merge main`
 3. Update version in [build.gradle.kts](kradle-plugin/build.gradle.kts)
-4. Generate updated _README.md_ and _CHANGELOG.md_ `./gradle renderTemplates`
+4. Generate updated _README.md_ and _CHANGELOG.md_ `./gradlew renderTemplates`
 5. Commit and push changes
 
    ```shell
@@ -41,13 +41,36 @@
    git commit -m"Release vX.Y.Z"
    git push
    ```
-6.
+6. Create a clean build, which also runs all checks and tests `./gradlew clean build`
+7. Publish plugins `./gradlew publishPlugins`
+8. Switch to main branch `git checkout main`
+9. Merge stable branch, but don't commit `git merge --no-commit stable`
+10. Set version in [build.gradle.kts](kradle-plugin/build.gradle.kts) back to `main-SNAPSHOT`
+11. Prepare [CHANGELOG.md.in](CHANGELOG.md.in) for next release
+12. Generate updated _README.md_ and _CHANGELOG.md_ `./gradlew renderTemplates`
+13. Commit and push changes
+
+    ```shell
+    git add -u
+    git commit
+    git push
+    ```
+
+14. Use the new deployed plugin [build.gradle.kts](kradle-plugin/build.gradle.kts)
+15. Make sure everything works `./gradlew clean build`
+16. Commit and push changes
+
+    ```shell
+    git add -u
+    git commit -m"Use self vX.Y.Z"
+    git push
+    ```
 
 # FAQ
 
 ## Miscellaneous
 
-### How to install plugin locally?
+### How to install the plugin locally?
 
 ```shell
 ./gradlew publishToMavenLocal

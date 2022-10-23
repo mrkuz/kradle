@@ -86,10 +86,11 @@ class TestProject(spec: Spec) {
             jvm.configureOnly {
                 targetJvm("11")
             }
-            ${kradleConfig()}
-        }
-
+        
         """.trimIndent()
+
+                + kradleConfig().prependIndent("    ")
+                + "\n}\n"
     )
 
     fun addTask(name: String, doLast: String) {

@@ -18,6 +18,8 @@ class KotlinLibBootstrapBlueprintTests : BehaviorSpec({
             }
             jvm {
                 kotlin.enable()
+                lint.enable()
+                codeAnalysis.enable()
                 library.enable()
             }
             """.trimIndent()
@@ -55,6 +57,15 @@ class KotlinLibBootstrapBlueprintTests : BehaviorSpec({
 
             Then("bootstrapKotlinLib is called") {
                 result.task(":bootstrapKotlinLib")!!.outcome shouldBe TaskOutcome.SUCCESS
+            }
+        }
+
+        When("Run bootstrap and build") {
+            project.runTask("bootstrap")
+            val result = project.runTask("build")
+
+            Then("build is successful") {
+                result.task(":build")!!.outcome shouldBe TaskOutcome.SUCCESS
             }
         }
     }
