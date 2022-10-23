@@ -87,10 +87,7 @@ class TestProject(spec: Spec) {
                 targetJvm("11")
             }
         
-        """.trimIndent()
-
-                + kradleConfig().prependIndent("    ")
-                + "\n}\n"
+        """.trimIndent() + kradleConfig().prependIndent("    ") + "\n}\n"
     )
 
     fun addTask(name: String, doLast: String) {
