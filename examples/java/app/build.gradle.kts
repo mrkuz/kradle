@@ -1,6 +1,6 @@
 plugins {
     `java`
-    id("net.bitsandbobs.kradle") version "main-SNAPSHOT"
+    id("net.bitsandbobs.kradle") version "2.4.1"
 }
 
 group = "com.example"

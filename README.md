@@ -102,8 +102,8 @@ Kotlin:
 
 ```shell
 mkdir demo && cd demo
-curl -O https://raw.githubusercontent.com/mrkuz/kradle/main/examples/kotlin/app/settings.gradle.kts
-curl -O https://raw.githubusercontent.com/mrkuz/kradle/main/examples/kotlin/app/build.gradle.kts
+curl -O https://raw.githubusercontent.com/mrkuz/kradle/stable/examples/kotlin/app/settings.gradle.kts
+curl -O https://raw.githubusercontent.com/mrkuz/kradle/stable/examples/kotlin/app/build.gradle.kts
 gradle bootstrap
 ```
 
@@ -111,8 +111,8 @@ Java:
 
 ```shell
 mkdir demo && cd demo
-curl -O https://raw.githubusercontent.com/mrkuz/kradle/main/examples/java/app/settings.gradle.kts
-curl -O https://raw.githubusercontent.com/mrkuz/kradle/main/examples/java/app/build.gradle.kts
+curl -O https://raw.githubusercontent.com/mrkuz/kradle/stable/examples/java/app/settings.gradle.kts
+curl -O https://raw.githubusercontent.com/mrkuz/kradle/stable/examples/java/app/build.gradle.kts
 gradle bootstrap
 ```
 
@@ -139,7 +139,7 @@ _build.gradle.kts_
 ```kotlin
 plugins {
     id("org.jetbrains.kotlin.jvm") version "1.7.20"
-    id("net.bitsandbobs.kradle") version "main-SNAPSHOT"
+    id("net.bitsandbobs.kradle") version "2.4.1"
 }
 
 group = "com.example"
@@ -159,8 +159,7 @@ kradle {
 Make sure you apply the Kotlin plugin before `kradle`. For applications, you have to provide the `mainClass`.
 
 If you are starting from scratch, you can run `gradle boostrap` to initialize Git, add Gradle wrapper and create
-essential directories
-and files.
+essential directories and files.
 
 The example above uses the Kotlin/JVM application [preset](#presets).
 
@@ -381,8 +380,7 @@ Looks for a file called _project.properties_ in the project directory. If found,
 project properties.
 
 If [build profiles](#feature-build-profiles) are enabled, the entries of _project-&lt;PROFILE>.properties_ are also
-added.
-They have precedence over _project.properties_.
+added. They have precedence over _project.properties_.
 
 <a id="feature-build-properties"></a>
 
@@ -397,8 +395,7 @@ kradle {
 ```
 
 Adds the task `generateBuildProperties`, which generates a file _build.properties_ containing the project name, group,
-version and the
-build timestamp.
+version and the build timestamp.
 
 If [build profiles](#feature-build-profiles) are enabled, the active profile is added.
 
@@ -449,8 +446,7 @@ kradle {
 - `<NAME>`: Name of the created task
 - `description`: Description of the created task
 - `dependsOn`: List of task dependencies
-- `prompt`: Asks for user input. The entered values can be accessed with `$#{inputs.<KEY>}`. Can be called zero, once
-  or multiple times
+- `prompt`: Asks for user input. The entered values can be accessed with `$#{inputs.<KEY>}`. Can be called zero, once or multiple times
 - `commands`: Commands to execute. If any fails, the execution is stopped and the build fails
 
 #### Example
@@ -488,8 +484,7 @@ kradle {
 
 Adds the task `generateHelmChart`, which generates a basic [Helm](https://helm.sh/) chart in _src/main/helm_.
 
-Adds the task `processHelmChart`, which copies _src/main/helm_ to _build/helm_ and expands all property references in _
-Chart.yaml_ and _values.yaml_.
+Adds the task `processHelmChart`, which copies _src/main/helm_ to _build/helm_ and expands all property references in _Chart.yaml_ and _values.yaml_.
 
 Adds following script tasks:
 
@@ -557,8 +552,8 @@ Enables [Opt-ins](https://kotlinlang.org/docs/opt-in-requirements.html).
 
 [JSR-305](https://jcp.org/en/jsr/detail?id=305) nullability mismatches are reported as error (`"-Xjsr305=strict"`).
 
-Plugins
-used: [kotlinx.serialization Plugin](https://plugins.gradle.org/plugin/org.jetbrains.kotlin.plugin.serialization),
+Plugins used:
+[kotlinx.serialization Plugin](https://plugins.gradle.org/plugin/org.jetbrains.kotlin.plugin.serialization),
 [All-open Compiler Plugin](https://plugins.gradle.org/plugin/org.jetbrains.kotlin.plugin.allopen),
 [Java Plugin](https://docs.gradle.org/current/userguide/java_plugin.html),
 [detekt Plugin](https://plugins.gradle.org/plugin/io.gitlab.arturbosch.detekt),
@@ -598,7 +593,7 @@ kradle {
                 }
             }
             test {
-                // useKotest("5.5.0")
+                // useKotest("5.2.3")
                 // useMockk("1.13.2")
             }
         }
@@ -607,10 +602,8 @@ kradle {
 ```
 
 - `useCoroutines`: Adds Kotlin coroutines dependency
-- `test.useKoTest`: Adds [kotest](https://kotest.io/) test dependencies (only if [test improvements](#feature-test) are
-  enabled)
-- `test.useMockk`: Adds [mockk](https://mockk.io/) test dependency (only if [test improvements](#feature-test) are
-  enabled)
+- `test.useKoTest`: Adds [kotest](https://kotest.io/) test dependencies (only if [test improvements](#feature-test) are enabled)
+- `test.useMockk`: Adds [mockk](https://mockk.io/) test dependency (only if [test improvements](#feature-test) are enabled)
 - `ktlint.version`: ktlint version used
 - `ktlint.rules.disable`: Disables ktlint rule. Can be called multiple times
 - `detekt.version`: detekt version used
@@ -686,8 +679,7 @@ kradle {
 ```
 
 - `previewFeatures`: Enables preview features
-- `withLombok`: Enables [Project Lombok](https://projectlombok.org/). Adds the task `generateLombokConfig`, which
-  generates _lombok.config_ with sane defaults
+- `withLombok`: Enables [Project Lombok](https://projectlombok.org/). Adds the task `generateLombokConfig`, which generates _lombok.config_ with sane defaults
 - `checkstyle.version`: checkstyle version used
 - `checkstyle.configFile`: checkstyle configuration file used (relative to project directory)
 - `pmd.version`: PMD version used
@@ -936,15 +928,11 @@ kradle {
 ```
 
 - `junitJupiter.version`: JUnit Jupiter version used
-- `prettyPrint`: Prettifies test output
-  with [Gradle Test Logger Plugin](https://plugins.gradle.org/plugin/com.adarshr.test-logger)
+- `prettyPrint`: Prettifies test output with [Gradle Test Logger Plugin](https://plugins.gradle.org/plugin/com.adarshr.test-logger)
 - `showStandardStreams`: Shows stdout and stderr in test output
-- `withIntegrationTests`: Adds task `integrationTest`, which runs tests under _src/integrationTest_. The task is
-  executed when running `check`
-- `withFunctionalTests`: Adds task `functionalTest`, which runs tests under _src/functionalTest_. The task is executed
-  when running `check`
-- `withCustomTests`: Adds task `<NAME>Test`, which runs tests under _src/&lt;NAME&gt;_. The task is executed when
-  running `check`. Can be called multiple times
+- `withIntegrationTests`: Adds task `integrationTest`, which runs tests under _src/integrationTest_. The task is executed when running `check`
+- `withFunctionalTests`: Adds task `functionalTest`, which runs tests under _src/functionalTest_. The task is executed when running `check`
+- `withCustomTests`: Adds task `<NAME>Test`, which runs tests under _src/&lt;NAME&gt;_. The task is executed when running `check`. Can be called multiple times
 - `useArchUnit`: Adds [ArchUnit](https://www.archunit.org/) test dependencies
 - `useTestcontainers`: Adds [Testcontainers](https://www.testcontainers.org/) test dependencies
 
@@ -1011,8 +999,7 @@ kradle {
 }
 ```
 
-Adds the task `runBenchmarks`, which runs [JMH](https://github.com/openjdk/jmh) benchmarks found under _
-src/benchmark/kotlin_.
+Adds the task `runBenchmarks`, which runs [JMH](https://github.com/openjdk/jmh) benchmarks found under _src/benchmark/kotlin_.
 
 Plugins used: [kotlinx.benchmark Plugin](https://plugins.gradle.org/plugin/org.jetbrains.kotlinx.benchmark)
 , [All-open Compiler Plugin](https://plugins.gradle.org/plugin/org.jetbrains.kotlin.plugin.allopen)
@@ -1118,10 +1105,8 @@ kradle {
 - `ports`: List of exposed ports
 - `jvmOptions`: Options passed to the JVM
 - `arguments`: Arguments passed to the application
-- `withJvmKill`: Adds [jvmkill](https://github.com/airlift/jvmkill) to the image, which terminates the JVM if it is
-  unable to allocate memory
-- `withStartupScript`: Uses a script as entrypoint for the container. Either you provide your own script at _
-  src/main/extra/app.sh_ or `kradle` will create one
+- `withJvmKill`: Adds [jvmkill](https://github.com/airlift/jvmkill) to the image, which terminates the JVM if it is unable to allocate memory
+- `withStartupScript`: Uses a script as entrypoint for the container. Either you provide your own script at _src/main/extra/app.sh_ or `kradle` will create one
 
 <a id="feature-documentation"></a>
 
@@ -1136,8 +1121,7 @@ kradle {
 ```
 
 Adds the task `generateDocumentation`, which uses [Dokka](https://kotlin.github.io/dokka/) to generate a HTML
-documentation based on
-KDoc comments. The documentation can be found under _build/docs_.
+documentation based on KDoc comments. The documentation can be found under _build/docs_.
 
 Package and module documentation can be placed in _package.md_ or _module.md_ in the project or any source directory.
 
@@ -1507,7 +1491,7 @@ kradle {
                 }
             }
             test {
-                // useKotest("5.5.0")
+                // useKotest("5.2.3")
                 // useMockk("1.13.2")
             }
         }
@@ -1652,8 +1636,7 @@ of `gradle kradleDump`.
 
 ### Major release
 
-- Configuration DSL can change and violate backwards compatibility (__Breaking change__ in
-  the [CHANGELOG](CHANGELOG.md)).
+- Configuration DSL can change and violate backwards compatibility (__Breaking change__ in the [CHANGELOG](CHANGELOG.md)).
 - Otherwise same as minor release.
 
 <a id="license"></a>
