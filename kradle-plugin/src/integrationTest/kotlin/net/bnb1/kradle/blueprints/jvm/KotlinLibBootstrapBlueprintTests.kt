@@ -57,5 +57,14 @@ class KotlinLibBootstrapBlueprintTests : BehaviorSpec({
                 result.task(":bootstrapKotlinLib")!!.outcome shouldBe TaskOutcome.SUCCESS
             }
         }
+
+        When("Run bootstrap and build") {
+            project.runTask("bootstrap")
+            val result = project.runTask("build")
+
+            Then("build is successful") {
+                result.task(":build")!!.outcome shouldBe TaskOutcome.SUCCESS
+            }
+        }
     }
 })

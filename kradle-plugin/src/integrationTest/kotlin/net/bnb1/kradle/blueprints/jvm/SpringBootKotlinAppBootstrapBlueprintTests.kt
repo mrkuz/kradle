@@ -4,6 +4,7 @@ import io.kotest.core.spec.style.BehaviorSpec
 import io.kotest.inspectors.forOne
 import io.kotest.matchers.file.shouldExist
 import io.kotest.matchers.shouldBe
+import io.kotest.matchers.string.shouldContain
 import net.bnb1.kradle.TestProject
 import org.gradle.testkit.runner.TaskOutcome
 
@@ -68,6 +69,25 @@ class SpringBootKotlinAppBootstrapBlueprintTests : BehaviorSpec({
 
             Then("bootstrapKotlinApp is called") {
                 result.task(":bootstrapKotlinApp")!!.outcome shouldBe TaskOutcome.SUCCESS
+            }
+        }
+
+        When("Run bootstrap and build") {
+            project.runTask("bootstrap")
+            val result = project.runTask("build")
+
+            Then("build is successful") {
+                result.task(":build")!!.outcome shouldBe TaskOutcome.SUCCESS
+            }
+        }
+
+        When("Run bootstrap and run") {
+            project.runTask("bootstrap")
+            val result = project.runTask("run")
+
+            Then("run is successful") {
+                result.task(":run")!!.outcome shouldBe TaskOutcome.SUCCESS
+                result.output shouldContain "Hello World!"
             }
         }
     }
