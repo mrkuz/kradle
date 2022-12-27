@@ -34,8 +34,12 @@ dependencies {
 
     // Plugins
     implementation(Catalog.Build.Dependencies.Plugins.kotlin)
-    implementation(Catalog.Build.Dependencies.Plugins.allOpen)
-    implementation(Catalog.Build.Dependencies.Plugins.kotlinSerialization)
+    implementation(Catalog.Build.Dependencies.Plugins.allOpen) {
+        exclude("org.jetbrains.kotlin", "kotlin-gradle-plugin-api")
+    }
+    implementation(Catalog.Build.Dependencies.Plugins.kotlinSerialization) {
+        exclude("org.jetbrains.kotlin", "kotlin-gradle-plugin-api")
+    }
     implementation(Catalog.Build.Dependencies.Plugins.dokka)
     implementation(Catalog.Build.Dependencies.Plugins.kotlinBenchmark)
     implementation(Catalog.Build.Dependencies.Plugins.testLogger)
