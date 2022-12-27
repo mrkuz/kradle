@@ -20,7 +20,7 @@ class DependencyUpdatesBlueprint(project: Project) : Blueprint(project) {
     object VersionFilter : ComponentFilter {
 
         // Exclude milestones and RCs
-        override fun reject(current: ComponentSelectionWithCurrent?) = reject(current!!.candidate.version)
+        override fun reject(candidate: ComponentSelectionWithCurrent) = reject(candidate.candidate.version)
 
         fun reject(version: String): Boolean {
             val alpha = "^.*[.-]alpha[.-]?[0-9]*$".toRegex(RegexOption.IGNORE_CASE)

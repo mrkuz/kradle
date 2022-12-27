@@ -84,7 +84,7 @@ class TestProject(spec: Spec) {
         
         kradle {
             jvm.configureOnly {
-                targetJvm("11")
+                targetJvm("17")
             }
         
         """.trimIndent() + kradleConfig().prependIndent("    ") + "\n}\n"
