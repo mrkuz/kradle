@@ -34,6 +34,7 @@ abstract class CompatSpec(body: CompatSpec.() -> Unit) : FunSpec({}) {
         .withProjectDir(projectDir)
         .withPluginClasspath()
         .withArguments(listOf(task) + arguments)
+        .forwardOutput()
         .build()
 
     fun addTask(name: String, doLast: String) {
