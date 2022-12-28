@@ -105,8 +105,11 @@ class DependenciesBlueprintTests : BehaviorSpec({
 
         When("Check for dependencies") {
 
-            Then("log4j is available") {
-                project.shouldHaveDependency("implementation", "org.apache.logging.log4j:log4j")
+            Then("log4j-api is available") {
+                project.shouldHaveDependency("implementation", "org.apache.logging.log4j:log4j-api")
+
+                // And: log4j-core is available
+                project.shouldHaveDependency("implementation", "org.apache.logging.log4j:log4j-core")
             }
         }
     }

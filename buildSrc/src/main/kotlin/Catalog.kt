@@ -53,7 +53,8 @@ object Catalog {
         val guava = artifact("com.google.guava", "guava", Versions.guava)
         val caffeine = artifact("com.github.ben-manes.caffeine", "caffeine", Versions.caffeine)
         val caffeineGuava = artifact("com.github.ben-manes.caffeine", "guava", Versions.caffeine)
-        val log4j = artifact("org.apache.logging.log4j", "log4j", Versions.log4j)
+        val log4jApi = artifact("org.apache.logging.log4j", "log4j-api", Versions.log4j)
+        val log4jCore = artifact("org.apache.logging.log4j", "log4j-core", Versions.log4j)
 
         val springBootStarter = artifact("org.springframework.boot", "spring-boot-starter", Versions.springBoot)
         val springBootStarterWeb = artifact("org.springframework.boot", "spring-boot-starter-web", Versions.springBoot)

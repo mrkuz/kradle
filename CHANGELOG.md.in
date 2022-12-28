@@ -7,10 +7,13 @@
 #### Bugfixes
 
 - Fix test ordering for legacy plugins
+- Add missing log4j2 dependencies
 
 #### Additions
 
 #### Changes
+
+- Dependency updates
 
 ### Version 2.4.1 (2022-10-23)
 
