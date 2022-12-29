@@ -2,7 +2,7 @@ object Catalog {
 
     object Versions {
         const val jvm = "17"
-        const val kotlin = "1.7.22"
+        const val kotlin = "1.8.0"
         const val jmh = "1.36"
         const val tini = "0.19.0"
         const val jvmKill = "1.16.0"
@@ -47,7 +47,7 @@ object Catalog {
         }
 
         val kotlinCoroutines = artifact("org.jetbrains.kotlinx", "kotlinx-coroutines-core", Versions.kotlinCoroutines)
-        val kotlinStdlib = artifact("org.jetbrains.kotlin", "kotlin-stdlib-jdk8", Versions.kotlin)
+        val kotlinStdlib = artifact("org.jetbrains.kotlin", "kotlin-stdlib", Versions.kotlin)
         val kotlinReflect = artifact("org.jetbrains.kotlin", "kotlin-reflect", Versions.kotlin)
         val lombok = artifact("org.projectlombok", "lombok", Versions.lombok)
         val guava = artifact("com.google.guava", "guava", Versions.guava)
