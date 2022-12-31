@@ -1,10 +1,13 @@
 package net.bnb1.kradle.blueprints.jvm
 
 import io.kotest.core.spec.style.BehaviorSpec
+import io.kotest.inspectors.forOne
 import io.kotest.matchers.file.shouldExist
 import io.kotest.matchers.shouldBe
 import net.bnb1.kradle.TestProject
 import org.gradle.testkit.runner.TaskOutcome
+import java.nio.file.FileSystems
+import java.nio.file.Files
 
 class LoggingBlueprintTests : BehaviorSpec({
 
@@ -68,6 +71,23 @@ class LoggingBlueprintTests : BehaviorSpec({
 
                 // And: "log4j.xml is created"
                 project.projectDir.resolve("src/main/resources/log4j2.xml").shouldExist()
+            }
+        }
+
+        When("Run jar") {
+            project.runTask("jar")
+
+            Then("Jar file is created") {
+                val jarFile = project.buildDir.resolve("libs/test-1.0.0.jar")
+                jarFile.shouldExist()
+
+                // And: multi-release attribute is set to true
+                val zipEntry = FileSystems.newFileSystem(jarFile.toPath()).getPath("META-INF/MANIFEST.MF")
+                val manifest = project.buildDir.resolve("MANIFEST.MF")
+                Files.copy(zipEntry, manifest.toPath())
+
+                val lines = manifest.readLines()
+                lines.forOne { it shouldBe "Multi-Release: true" }
             }
         }
     }
