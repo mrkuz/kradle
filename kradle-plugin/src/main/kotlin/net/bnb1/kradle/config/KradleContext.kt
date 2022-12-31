@@ -137,7 +137,9 @@ class KradleContext(project: Project) {
             me += setOf(
                 blueprints.dependencyUpdates,
                 blueprints.dependencies,
-                blueprints.logging
+                blueprints.logging.also {
+                    it.extendsBootstrapTask = features.bootstrap.defaultTaskName
+                }
             )
         }
         features.vulnerabilityScan.also { me ->
@@ -220,7 +222,9 @@ class KradleContext(project: Project) {
         }
         features.logging.also { me ->
             me belongsTo featureSets.jvm
-            me += blueprints.logging
+            me += blueprints.logging.also {
+                it.extendsBootstrapTask = features.bootstrap.defaultTaskName
+            }
         }
 
         features.springBoot.also { me ->

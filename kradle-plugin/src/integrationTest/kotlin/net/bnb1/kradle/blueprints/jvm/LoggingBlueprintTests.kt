@@ -1,7 +1,10 @@
 package net.bnb1.kradle.blueprints.jvm
 
 import io.kotest.core.spec.style.BehaviorSpec
+import io.kotest.matchers.file.shouldExist
+import io.kotest.matchers.shouldBe
 import net.bnb1.kradle.TestProject
+import org.gradle.testkit.runner.TaskOutcome
 
 class LoggingBlueprintTests : BehaviorSpec({
 
@@ -47,6 +50,47 @@ class LoggingBlueprintTests : BehaviorSpec({
 
                 // And: log4j-core is available
                 project.shouldHaveDependency("implementation", "org.apache.logging.log4j:log4j-core")
+            }
+        }
+
+        When("Check for tasks") {
+
+            Then("Task generateLog4jConfig is available") {
+                project.shouldHaveTask("generateLog4jConfig")
+            }
+        }
+
+        When("Run generateLog4jConfig") {
+            val result = project.runTask("generateLog4jConfig")
+
+            Then("Succeed") {
+                result.task(":generateLog4jConfig")!!.outcome shouldBe TaskOutcome.SUCCESS
+
+                // And: "log4j.xml is created"
+                project.projectDir.resolve("src/main/resources/log4j2.xml").shouldExist()
+            }
+        }
+    }
+
+    Given("logging.withLog4j = true AND bootstrap") {
+        project.setUp {
+            """
+            general {
+                bootstrap.enable()
+            }
+            jvm {
+                logging {
+                    withLog4j()
+                }
+            }
+            """.trimIndent()
+        }
+
+        When("Run bootstrap") {
+            val result = project.runTask("bootstrap")
+
+            Then("generateLog4jConfig is called") {
+                result.task(":generateLog4jConfig")!!.outcome shouldBe TaskOutcome.SUCCESS
             }
         }
     }

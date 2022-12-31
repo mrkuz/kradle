@@ -2,13 +2,26 @@ package net.bnb1.kradle.blueprints.jvm
 
 import net.bnb1.kradle.Catalog
 import net.bnb1.kradle.core.Blueprint
+import net.bnb1.kradle.createTask
 import net.bnb1.kradle.implementation
+import net.bnb1.kradle.support.tasks.GenerateLog4jConfigTask
 import org.gradle.api.Project
 import org.gradle.kotlin.dsl.dependencies
 
 class LoggingBlueprint(project: Project) : Blueprint(project) {
 
     lateinit var loggingProperties: LoggingProperties
+    lateinit var extendsBootstrapTask: String
+
+    override fun doCreateTasks() {
+        loggingProperties.withLog4j?.let {
+            val generateTask = project.createTask<GenerateLog4jConfigTask>(
+                "generateLog4jConfig",
+                "Generates log4j.xml"
+            )
+            project.tasks.findByName(extendsBootstrapTask)?.dependsOn(generateTask)
+        }
+    }
 
     override fun doAddDependencies() {
         loggingProperties.withSlf4j?.let {

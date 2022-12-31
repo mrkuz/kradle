@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration>
+    <Appenders>
+        <Console name="console">
+            <PatternLayout pattern="%d{HH:mm:ss.SSS} %-5p [%t] %c{1.} - %m%n"/>
+        </Console>
+    </Appenders>
+    <Loggers>
+        <Root level="warn">
+            <AppenderRef ref="console"/>
+        </Root>
+        <Logger name="net.bnb1" level="debug" additivity="false">
+            <AppenderRef ref="console"/>
+        </Logger>
+    </Loggers>
+</Configuration>
