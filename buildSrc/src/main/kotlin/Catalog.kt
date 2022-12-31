@@ -55,7 +55,9 @@ object Catalog {
         val caffeineGuava = artifact("com.github.ben-manes.caffeine", "guava", Versions.caffeine)
         val log4jApi = artifact("org.apache.logging.log4j", "log4j-api", Versions.log4j)
         val log4jCore = artifact("org.apache.logging.log4j", "log4j-core", Versions.log4j)
+        val log4jSlf4j = artifact("org.apache.logging.log4j", "log4j-slf4j2-impl", Versions.log4j)
         val slf4jApi = artifact("org.slf4j", "slf4j-api", Versions.slf4j)
+        val slf4jSimple = artifact("org.slf4j", "slf4j-simple", Versions.slf4j)
 
         val springBootStarter = artifact("org.springframework.boot", "spring-boot-starter", Versions.springBoot)
         val springBootStarterWeb = artifact("org.springframework.boot", "spring-boot-starter-web", Versions.springBoot)
@@ -79,7 +81,6 @@ object Catalog {
             val findSecBugs = artifact("com.h3xstream.findsecbugs", "findsecbugs-plugin", Versions.findSecBugs)
             val fbContrib = artifact("com.mebigfatguy.sb-contrib", "sb-contrib", Versions.fbContrib)
             val findBugsAnnotations = artifact("com.google.code.findbugs", "annotations", Versions.findBugs)
-            val slf4jSimple = artifact("org.slf4j", "slf4j-simple", Versions.slf4j)
             val springBootDevtools = artifact("org.springframework.boot", "spring-boot-devtools", Versions.springBoot)
 
             // Not directly referred, but still used in kradle

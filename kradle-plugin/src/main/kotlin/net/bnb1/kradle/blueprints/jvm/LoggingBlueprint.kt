@@ -14,6 +14,9 @@ class LoggingBlueprint(project: Project) : Blueprint(project) {
         loggingProperties.withSlf4j?.let {
             project.dependencies {
                 implementation("${Catalog.Dependencies.slf4jApi}:$it")
+                if (loggingProperties.withLog4j == null) {
+                    implementation("${Catalog.Dependencies.slf4jSimple}:$it")
+                }
             }
         }
 
@@ -21,6 +24,9 @@ class LoggingBlueprint(project: Project) : Blueprint(project) {
             project.dependencies {
                 implementation("${Catalog.Dependencies.log4jApi}:$it")
                 implementation("${Catalog.Dependencies.log4jCore}:$it")
+                if (loggingProperties.withSlf4j != null) {
+                    implementation("${Catalog.Dependencies.log4jSlf4j}:$it")
+                }
             }
         }
     }

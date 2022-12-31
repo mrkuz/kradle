@@ -50,7 +50,7 @@ class SpotBugsBlueprint(project: Project) : Blueprint(project) {
     override fun doAddDependencies() {
         project.dependencies {
             add("compileOnly", "${Catalog.Dependencies.Tools.findBugsAnnotations}:${Catalog.Versions.findBugs}")
-            add("spotbugsSlf4j", "${Catalog.Dependencies.Tools.slf4jSimple}:${Catalog.Versions.slf4j}")
+            add("spotbugsSlf4j", "${Catalog.Dependencies.slf4jSimple}:${Catalog.Versions.slf4j}")
             spotBugsProperties.useFindSecBugs?.let {
                 add("spotbugsPlugins", "${Catalog.Dependencies.Tools.findSecBugs}:$it")
             }
