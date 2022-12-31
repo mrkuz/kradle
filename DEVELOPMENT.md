@@ -16,12 +16,13 @@
     4. Add properties class in [net.bnb1.kradle.blueprint](kradle-plugin/src/main/kotlin/net/bnb1/kradle/blueprints)
     5. Register new properties
        in [AllProperties.kt](kradle-plugin/src/main/kotlin/net/bnb1/kradle/config/AllProperties.kt)
-    6. Define DSL in [net.bnb1.kradle.config.dsl](kradle-plugin/src/main/kotlin/net/bnb1/kradle/config/dsl)
-    7. Create empty blueprint in [net.bnb1.kradle.blueprint](kradle-plugin/src/main/kotlin/net/bnb1/kradle/blueprints)
-    8. Register new blueprint
+    6. Create DSL class in [net.bnb1.kradle.config.dsl](kradle-plugin/src/main/kotlin/net/bnb1/kradle/config/dsl)
+    7. Choose a parent for the new DSL element in [net.bnb1.kradle.config.dsl](kradle-plugin/src/main/kotlin/net/bnb1/kradle/config/dsl)
+    8. Create empty blueprint in [net.bnb1.kradle.blueprint](kradle-plugin/src/main/kotlin/net/bnb1/kradle/blueprints)
+    9. Register new blueprint
        in [AllBlueprints.kt](kradle-plugin/src/main/kotlin/net/bnb1/kradle/config/AllBlueprints.kt)
-    9. Configure feature in [KradleContext.kt](kradle-plugin/src/main/kotlin/net/bnb1/kradle/config/KradleContext.kt)
-    10. Run `./gradlew build` and make sure everything still works
+    10. Configure feature in [KradleContext.kt](kradle-plugin/src/main/kotlin/net/bnb1/kradle/config/KradleContext.kt)
+    11. Run `./gradlew build` and make sure everything still works
 5. Create unit tests in [src/test](kradle-plugin/src/test)
 6. Create integration tests for blueprint in [src/integrationTest](kradle-plugin/src/integrationTest)
     1. Create a test for the default configuration

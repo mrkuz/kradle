@@ -11,6 +11,8 @@
 
 #### Additions
 
+- New feature `logging`, including support for [log4j](https://logging.apache.org/log4j/2.x/) and [slf4j](https://www.slf4j.org/)
+
 #### Changes
 
 - [Kotlin 1.8.0](https://kotlinlang.org/docs/whatsnew18.html)

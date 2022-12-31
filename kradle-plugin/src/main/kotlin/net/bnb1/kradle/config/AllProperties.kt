@@ -20,6 +20,7 @@ import net.bnb1.kradle.blueprints.jvm.KotlinTestProperties
 import net.bnb1.kradle.blueprints.jvm.KoverProperties
 import net.bnb1.kradle.blueprints.jvm.KtlintProperties
 import net.bnb1.kradle.blueprints.jvm.LintProperties
+import net.bnb1.kradle.blueprints.jvm.LoggingProperties
 import net.bnb1.kradle.blueprints.jvm.PmdProperties
 import net.bnb1.kradle.blueprints.jvm.ShadowProperties
 import net.bnb1.kradle.blueprints.jvm.SpotBugsProperties
@@ -60,6 +61,7 @@ class AllProperties(registry: Registry) {
     val shadow = registry { ShadowProperties() }
 
     val jib = registry { JibProperties("bellsoft/liberica-openjdk-alpine:${Catalog.Versions.jvm}") }
+    val logging = registry { LoggingProperties() }
 
     val springBoot = registry { SpringBootProperties(Catalog.Versions.springBoot) }
 }

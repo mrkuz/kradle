@@ -32,6 +32,7 @@ import net.bnb1.kradle.blueprints.jvm.KoverBlueprint
 import net.bnb1.kradle.blueprints.jvm.KtlintBlueprint
 import net.bnb1.kradle.blueprints.jvm.LibraryBlueprint
 import net.bnb1.kradle.blueprints.jvm.LintBlueprint
+import net.bnb1.kradle.blueprints.jvm.LoggingBlueprint
 import net.bnb1.kradle.blueprints.jvm.MavenPublishBlueprint
 import net.bnb1.kradle.blueprints.jvm.OwaspDependencyCheckBlueprint
 import net.bnb1.kradle.blueprints.jvm.PackageApplicationBlueprint
@@ -202,6 +203,11 @@ class AllBlueprints(registry: Registry, properties: AllProperties, project: Proj
     val kotlinTest = registry {
         KotlinTestBlueprint(project).inject {
             kotlinTestProperties = properties.kotlinTest
+        }
+    }
+    val logging = registry {
+        LoggingBlueprint(project).inject {
+            loggingProperties = properties.logging
         }
     }
 

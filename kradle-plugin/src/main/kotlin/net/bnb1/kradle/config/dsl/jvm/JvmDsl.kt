@@ -16,7 +16,7 @@ class JvmDsl(features: AllFeatures, properties: AllProperties) {
     val application = FeatureDsl(features.application, ApplicationDsl(properties.application))
     val library = FeatureDsl(features.library, Empty)
     val dependencyUpdates = FeatureDsl(features.dependencyUpdates, Empty)
-    val dependencies = FeatureDsl(features.dependencies, DependenciesDsl(properties.dependencies))
+    val dependencies = FeatureDsl(features.dependencies, DependenciesDsl(properties))
     val vulnerabilityScan = FeatureDsl(features.vulnerabilityScan, Empty)
     val lint = FeatureDsl(features.lint, LintDsl(properties.lint))
     val codeAnalysis = FeatureDsl(features.codeAnalysis, CodeAnalysisDsl(properties.codeAnalysis))
@@ -32,6 +32,7 @@ class JvmDsl(features: AllFeatures, properties: AllProperties) {
     val packaging = `package`
     val docker = FeatureDsl(features.docker, DockerDsl(properties.jib))
     val documentation = FeatureDsl(features.documentation, Empty)
+    val logging = FeatureDsl(features.logging, LoggingDsl(properties.logging))
 
     val frameworks = Configurable(FrameworksDsl(features, properties))
 }

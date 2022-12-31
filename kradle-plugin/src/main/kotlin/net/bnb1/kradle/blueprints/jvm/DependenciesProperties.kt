@@ -6,5 +6,4 @@ class DependenciesProperties : Properties {
 
     var useGuava: String? = null
     var useCaffeine: String? = null
-    var useLog4j: String? = null
 }

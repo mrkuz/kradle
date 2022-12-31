@@ -136,7 +136,8 @@ class KradleContext(project: Project) {
             me belongsTo featureSets.jvm
             me += setOf(
                 blueprints.dependencyUpdates,
-                blueprints.dependencies
+                blueprints.dependencies,
+                blueprints.logging
             )
         }
         features.vulnerabilityScan.also { me ->
@@ -216,6 +217,10 @@ class KradleContext(project: Project) {
         features.documentation.also { me ->
             me belongsTo featureSets.jvm
             me += blueprints.dokka
+        }
+        features.logging.also { me ->
+            me belongsTo featureSets.jvm
+            me += blueprints.logging
         }
 
         features.springBoot.also { me ->

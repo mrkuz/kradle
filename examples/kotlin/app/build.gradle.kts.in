@@ -68,7 +68,6 @@ kradle {
         dependencies {
             // useCaffeine("${versions.caffeine}")
             // useGuava("${versions.guava}")
-            // useLog4j("${versions.log4j}")
         }
 
         vulnerabilityScan.enable()
@@ -137,6 +136,11 @@ kradle {
         }
 
         documentation.enable()
+
+        logging {
+            // withSlf4j("${versions.slf4j}")
+            // withLog4j("${versions.log4j}")
+        }
 
         /*
         frameworks {

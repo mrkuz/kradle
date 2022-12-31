@@ -28,12 +28,5 @@ class DependenciesBlueprint(project: Project) : Blueprint(project) {
                 }
             }
         }
-
-        dependenciesProperties.useLog4j?.let {
-            project.dependencies {
-                implementation("${Catalog.Dependencies.log4jApi}:$it")
-                implementation("${Catalog.Dependencies.log4jCore}:$it")
-            }
-        }
     }
 }

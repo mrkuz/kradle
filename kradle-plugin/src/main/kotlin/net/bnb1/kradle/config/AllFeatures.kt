@@ -31,6 +31,7 @@ class AllFeatures(registry: Registry) {
     val packaging = registry("packaging") { Feature(it, "uberJar") }
     val docker = registry("docker") { Feature(it) }
     val documentation = registry("documentation") { Feature(it) }
+    val logging = registry("logging") { Feature(it) }
 
     val springBoot = registry("spring") { Feature(it) }
 
