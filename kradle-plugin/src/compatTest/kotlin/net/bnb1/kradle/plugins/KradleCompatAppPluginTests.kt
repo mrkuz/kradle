@@ -2,6 +2,7 @@ package net.bnb1.kradle.plugins
 
 import io.kotest.matchers.string.shouldContain
 import io.kotest.matchers.string.shouldNotContain
+import net.bnb1.kradle.Catalog
 import net.bnb1.kradle.CompatSpec
 import org.gradle.testkit.runner.GradleRunner
 
@@ -56,6 +57,7 @@ class KradleCompatAppPluginTests : CompatSpec({
         )
 
         val result = GradleRunner.create()
+            .withGradleVersion(Catalog.Build.Versions.gradleForTesting)
             .withProjectDir(projectDir)
             .withArguments("dependencies", "--configuration", "runtimeClasspath")
             .build()

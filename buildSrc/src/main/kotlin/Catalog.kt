@@ -122,6 +122,7 @@ object Catalog {
             const val kotest = "5.5.4"
             const val kotlinxBenchmarkPlugin = "0.4.5"
             const val testLogger = "3.2.0"
+            const val gradleForTesting = "7.6.1"
         }
 
         object Plugins {
