@@ -193,13 +193,29 @@ tasks.register("renderTemplates").configure {
     }
 }
 
+val tags = listOf(
+    "kotlin",
+    "java",
+    "linting",
+    "code-analysis",
+    "dependency-analysis",
+    "benchmarking",
+    "documentation",
+    "testing",
+    "uberjar",
+    "docker"
+)
+
 gradlePlugin {
+    website.set("https://github.com/mrkuz/kradle/tree/stable")
+    vcsUrl.set("https://github.com/mrkuz/kradle/tree/stable")
     plugins {
         create("kradle") {
             id = "net.bitsandbobs.kradle"
             implementationClass = "net.bnb1.kradle.plugins.KradlePlugin"
             displayName = "Kradle Plugin"
             description = "Swiss army knife for Kotlin/JVM (and also Java) development"
+            tags.set(tags)
         }
         create("kradleApp") {
             id = "net.bitsandbobs.kradle-app"
@@ -207,6 +223,7 @@ gradlePlugin {
             displayName = "Kradle App Plugin"
             description =
                 "Swiss army knife for Kotlin/JVM development (deprecated, consider using 'net.bitsandbobs.kradle' instead)"
+            tags.set(tags)
         }
         create("kradleLib") {
             id = "net.bitsandbobs.kradle-lib"
@@ -214,26 +231,9 @@ gradlePlugin {
             displayName = "Kradle Lib Plugin"
             description =
                 "Swiss army knife for Kotlin/JVM development (deprecated, consider using 'net.bitsandbobs.kradle' instead)"
+            tags.set(tags)
         }
     }
-}
-
-pluginBundle {
-    website = "https://github.com/mrkuz/kradle/tree/stable"
-    vcsUrl = "https://github.com/mrkuz/kradle/tree/stable"
-    tags =
-        listOf(
-            "kotlin",
-            "java",
-            "linting",
-            "code-analysis",
-            "dependency-analysis",
-            "benchmarking",
-            "documentation",
-            "testing",
-            "uberjar",
-            "docker"
-        )
 }
 
 // Publish with alias 'kradle-gradle-plugin' (optional)
