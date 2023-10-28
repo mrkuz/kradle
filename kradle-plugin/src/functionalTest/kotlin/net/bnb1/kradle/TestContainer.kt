@@ -12,7 +12,7 @@ private const val KRADLE_RW = "/home/gradle/kradle-rw"
 
 class TestContainer(spec: Spec) {
 
-    private val container = KGenericContainer(DockerImageName.parse("gradle:7-jdk17"))
+    private val container = KGenericContainer(DockerImageName.parse("gradle:8-jdk17"))
         .withFileSystemBind(System.getenv("KRADLE_PROJECT_ROOT_DIR"), KRADLE_RO, BindMode.READ_ONLY)
         .withFileSystemBind(
             Path.of(System.getenv("KRADLE_PROJECT_DIR"), "var", "gradle").toString(),
@@ -52,7 +52,7 @@ class TestContainer(spec: Spec) {
 
     fun start(): TestContainer {
         container.start()
-        container.execInContainer("cp", "-rf", KRADLE_RO, KRADLE_RW)
+        container.execInContainer("git", "clone", KRADLE_RO, KRADLE_RW)
         container.execInContainer("gradle", "-p", KRADLE_RW, "clean", "publishToMavenLocal")
         return this
     }
