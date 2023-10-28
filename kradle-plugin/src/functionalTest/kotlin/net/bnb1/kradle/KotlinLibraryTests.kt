@@ -17,7 +17,7 @@ class KotlinLibraryTests : FunSpec({
         val bootstrapResult = container.exec("gradle", "bootstrap")
         bootstrapResult.exitCode shouldBe 0
 
-        val installResult = container.exec("./gradlew", "install")
+        val installResult = container.exec("./gradlew", "install", "--info", "--stacktrace")
         installResult.exitCode shouldBe 0
 
         val lsResult = container.exec(

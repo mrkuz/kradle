@@ -2,7 +2,7 @@ import groovy.text.SimpleTemplateEngine
 import org.eclipse.jgit.api.Git
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 import java.io.FileWriter
-import java.util.*
+import java.util.Properties
 
 plugins {
     `java-gradle-plugin`
@@ -156,6 +156,14 @@ tasks.withType<KotlinCompile> {
 tasks.withType<Jar> {
     dependsOn("copyCatalog")
 }
+
+// Run functional tests with colima
+/*
+tasks.withType<Test> {
+    environment("DOCKER_HOST", "unix:///Users/mrkuz/.colima/default/docker.sock")
+    environment("TESTCONTAINERS_DOCKER_SOCKET_OVERRIDE", "/var/run/docker.sock")
+}
+*/
 
 tasks.named("runKtlintCheckOverMainSourceSet") {
     dependsOn("copyCatalog")

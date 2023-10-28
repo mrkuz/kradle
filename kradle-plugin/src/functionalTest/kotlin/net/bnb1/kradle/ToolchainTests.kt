@@ -17,7 +17,7 @@ class ToolchainTests : FunSpec({
         val bootstrapResult = container.exec("gradle", "bootstrap")
         bootstrapResult.exitCode shouldBe 0
 
-        val installResult = container.exec("./gradlew", "run")
+        val installResult = container.exec("./gradlew", "run", "--info", "--stacktrace")
         installResult.exitCode shouldBe 0
         installResult.stdout shouldContain "Java 11"
     }

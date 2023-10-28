@@ -23,7 +23,7 @@ class JavaQuickStartTests : FunSpec({
         val bootstrapResult = container.exec("gradle", "bootstrap")
         bootstrapResult.exitCode shouldBe 0
 
-        val runResult = container.exec("./gradlew", "run")
+        val runResult = container.exec("./gradlew", "run", "--info", "--stacktrace")
         runResult.stdout shouldContain "Hello World!"
     }
 })

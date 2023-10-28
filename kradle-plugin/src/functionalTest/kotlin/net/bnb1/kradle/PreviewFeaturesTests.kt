@@ -16,7 +16,7 @@ class PreviewFeaturesTests : FunSpec({
         val bootstrapResult = container.exec("gradle", "bootstrap")
         bootstrapResult.exitCode shouldBe 0
 
-        val installResult = container.exec("./gradlew", "compileJava")
+        val installResult = container.exec("./gradlew", "compileJava", "--info", "--stacktrace")
         installResult.exitCode shouldBe 0
     }
 })
