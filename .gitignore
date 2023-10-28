@@ -4,3 +4,4 @@ build
 out
 gradle.properties
 var
+.DS_Store
