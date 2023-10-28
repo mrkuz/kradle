@@ -31,7 +31,7 @@ abstract class CompatSpec(body: CompatSpec.() -> Unit) : FunSpec({}) {
     }
 
     fun runTask(task: String, vararg arguments: String) = GradleRunner.create()
-        .withGradleVersion(Catalog.Build.Versions.gradleForTesting)
+        .withGradleVersion(Catalog.Versions.gradleForTesting)
         .withProjectDir(projectDir)
         .withPluginClasspath()
         .withArguments(listOf(task) + arguments)

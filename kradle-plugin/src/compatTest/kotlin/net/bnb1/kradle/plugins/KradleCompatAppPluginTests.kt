@@ -57,7 +57,7 @@ class KradleCompatAppPluginTests : CompatSpec({
         )
 
         val result = GradleRunner.create()
-            .withGradleVersion(Catalog.Build.Versions.gradleForTesting)
+            .withGradleVersion(Catalog.Versions.gradleForTesting)
             .withProjectDir(projectDir)
             .withArguments("dependencies", "--configuration", "runtimeClasspath")
             .build()
