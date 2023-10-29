@@ -2,12 +2,14 @@ package net.bnb1.kradle.blueprints.jvm
 
 import io.gitlab.arturbosch.detekt.Detekt
 import net.bnb1.kradle.Catalog
+import net.bnb1.kradle.buildDirAsFile
 import net.bnb1.kradle.core.Blueprint
 import net.bnb1.kradle.createHelperTask
 import net.bnb1.kradle.support.tasks.GenerateDetektConfigTask
 import org.gradle.api.Project
 import org.gradle.api.Task
 import org.jetbrains.kotlin.gradle.dsl.KotlinProjectExtension
+import java.util.Locale
 
 private const val CONFIGURATION_NAME = "kradleDetekt"
 
@@ -42,10 +44,10 @@ class DetektBlueprint(project: Project) : Blueprint(project) {
         val kotlinExtension = project.extensions.getByType(KotlinProjectExtension::class.java)
         kotlinExtension.sourceSets.forEach { sourceSet ->
             val sourceFiles = sourceSet.kotlin.files
-                .filter { it.extension.toLowerCase() == "kt" }
+                .filter { it.extension.lowercase(Locale.ROOT) == "kt" }
                 .toSet()
 
-            val taskName = "detekt" + sourceSet.name[0].toUpperCase() + sourceSet.name.substring(1)
+            val taskName = "detekt" + sourceSet.name[0].uppercaseChar() + sourceSet.name.substring(1)
 
             project.createHelperTask<Detekt>(taskName, "Runs detekt code analysis on '${sourceSet.name}'") {
                 setSource(sourceFiles)
@@ -53,7 +55,7 @@ class DetektBlueprint(project: Project) : Blueprint(project) {
                 reports {
                     html {
                         required.set(true)
-                        outputLocation.set(project.buildDir.resolve("reports/detekt/${sourceSet.name}.html"))
+                        outputLocation.set(project.buildDirAsFile.resolve("reports/detekt/${sourceSet.name}.html"))
                     }
                     xml.required.set(false)
                     sarif.required.set(false)

@@ -15,7 +15,7 @@ class KradleContextSpec : FunSpec({
         .importPackages("net.bnb1.kradle")
 
     test("Limit access to Kradle context") {
-        var rule = ArchRuleDefinition
+        val rule = ArchRuleDefinition
             .theClass(KradleContext::class.java)
             .should().onlyHaveDependentClassesThat().resideInAnyPackage(
                 "net.bnb1.kradle.plugins",

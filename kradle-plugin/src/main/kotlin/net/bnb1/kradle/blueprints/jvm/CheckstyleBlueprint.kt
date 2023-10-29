@@ -1,6 +1,7 @@
 package net.bnb1.kradle.blueprints.jvm
 
 import net.bnb1.kradle.Catalog
+import net.bnb1.kradle.buildDirAsFile
 import net.bnb1.kradle.core.Blueprint
 import net.bnb1.kradle.createHelperTask
 import net.bnb1.kradle.support.tasks.GenerateCheckstyleConfigTask
@@ -43,7 +44,7 @@ class CheckstyleBlueprint(project: Project) : Blueprint(project) {
 
         val javaExtension = project.extensions.getByType(JavaPluginExtension::class.java)
         javaExtension.sourceSets.forEach { sourceSet ->
-            val taskName = "checkstyle" + sourceSet.name[0].toUpperCase() + sourceSet.name.substring(1)
+            val taskName = "checkstyle" + sourceSet.name[0].uppercaseChar() + sourceSet.name.substring(1)
 
             project.createHelperTask<Checkstyle>(taskName, "Runs checkstyle on '${sourceSet.name}'") {
                 setSource(sourceSet.java.files)
@@ -58,7 +59,9 @@ class CheckstyleBlueprint(project: Project) : Blueprint(project) {
                     xml.required.set(false)
                 }
                 reports.forEach {
-                    it.outputLocation.set(project.buildDir.resolve("reports/checkstyle/${sourceSet.name}.${it.name}"))
+                    it.outputLocation.set(
+                        project.buildDirAsFile.resolve("reports/checkstyle/${sourceSet.name}.${it.name}")
+                    )
                 }
                 if (!configFile.exists()) {
                     dependsOn("generateCheckstyleConfig")

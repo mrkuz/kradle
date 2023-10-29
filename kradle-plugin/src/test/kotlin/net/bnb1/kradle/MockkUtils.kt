@@ -5,7 +5,6 @@ import io.mockk.MockKGateway
 import io.mockk.impl.JvmMockKGateway
 import kotlin.reflect.KClass
 
-@Suppress("UNCHECKED_CAST")
 object MockkUtils {
 
     fun findInvocations(klass: KClass<*>, methodName: String): List<Invocation> {

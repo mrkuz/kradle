@@ -4,6 +4,7 @@ import kotlinx.kover.KoverPlugin
 import kotlinx.kover.api.KoverProjectConfig
 import kotlinx.kover.api.KoverTaskExtension
 import net.bnb1.kradle.apply
+import net.bnb1.kradle.buildDirAsFile
 import net.bnb1.kradle.core.Blueprint
 import net.bnb1.kradle.sourceSets
 import org.gradle.api.Project
@@ -40,7 +41,7 @@ class KoverBlueprint(project: Project) : Blueprint(project) {
                 }
             }
             htmlReport {
-                reportDir.set(project.buildDir.resolve("reports/kover/project-html/"))
+                reportDir.set(project.buildDirAsFile.resolve("reports/kover/project-html/"))
             }
         }
 

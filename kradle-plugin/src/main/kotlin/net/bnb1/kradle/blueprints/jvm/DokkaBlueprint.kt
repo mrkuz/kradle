@@ -1,5 +1,6 @@
 package net.bnb1.kradle.blueprints.jvm
 
+import net.bnb1.kradle.buildDirAsFile
 import net.bnb1.kradle.core.Blueprint
 import net.bnb1.kradle.createTask
 import org.gradle.api.Project
@@ -9,7 +10,7 @@ class DokkaBlueprint(project: Project) : Blueprint(project) {
 
     override fun doCreateTasks() {
         project.createTask<DokkaTask>("generateDocumentation", "Generates Dokka HTML documentation") {
-            outputDirectory.set(project.buildDir.resolve("docs"))
+            outputDirectory.set(project.buildDirAsFile.resolve("docs"))
             dokkaSourceSets
                 .filter { it.name == "main" }
                 .forEach {

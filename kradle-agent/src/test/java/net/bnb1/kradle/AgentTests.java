@@ -5,7 +5,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
 
 import java.io.File;
-import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.concurrent.TimeUnit;
@@ -64,11 +64,11 @@ public class AgentTests {
     @Test
     void compareAndUpdateHash() throws Exception {
         var file = projectPath("src/main/resources/config.properties");
-        Files.write(file, "key = before".getBytes(Charset.forName("UTF-8")));
+        Files.write(file, "key = before".getBytes(StandardCharsets.UTF_8));
         agent.initializeWatcher();
 
         assertFalse(agent.compareAndUpdateHash(file));
-        Files.write(file, "key = after".getBytes(Charset.forName("UTF-8")));
+        Files.write(file, "key = after".getBytes(StandardCharsets.UTF_8));
         assertTrue(agent.compareAndUpdateHash(file));
     }
 
@@ -77,14 +77,14 @@ public class AgentTests {
         var watcher = agent.initializeWatcher();
 
         var file = projectPath("src/main/resources/config.properties");
-        Files.write(file, "key = value".getBytes(Charset.forName("UTF-8")));
+        Files.write(file, "key = value".getBytes(StandardCharsets.UTF_8));
         assertTrue(agent.detectChange(watcher, watcher.poll(10, TimeUnit.SECONDS)));
     }
 
     @Test
     void detectFileDeleted() throws Exception {
         var file = projectPath("src/main/resources/config.properties");
-        Files.write(file, "key = value".getBytes(Charset.forName("UTF-8")));
+        Files.write(file, "key = value".getBytes(StandardCharsets.UTF_8));
         var watcher = agent.initializeWatcher();
 
         file.toFile().delete();
@@ -94,10 +94,10 @@ public class AgentTests {
     @Test
     void detectFileModified() throws Exception {
         var file = projectPath("src/main/resources/config.properties");
-        Files.write(file, "key = before".getBytes(Charset.forName("UTF-8")));
+        Files.write(file, "key = before".getBytes(StandardCharsets.UTF_8));
         var watcher = agent.initializeWatcher();
 
-        Files.write(file, "key = after".getBytes(Charset.forName("UTF-8")));
+        Files.write(file, "key = after".getBytes(StandardCharsets.UTF_8));
         assertTrue(agent.detectChange(watcher, watcher.poll(10, TimeUnit.SECONDS)));
     }
 
@@ -121,7 +121,7 @@ public class AgentTests {
 
         var file = projectPath("src/main/resources/extra/config.properties");
         file.getParent().toFile().mkdirs();
-        Files.write(file, "key = value".getBytes(Charset.forName("UTF-8")));
+        Files.write(file, "key = value".getBytes(StandardCharsets.UTF_8));
         assertTrue(agent.detectChange(watcher, watcher.poll(10, TimeUnit.SECONDS)));
     }
 }

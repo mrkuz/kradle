@@ -6,16 +6,15 @@ import io.kotest.matchers.string.shouldContain
 import io.kotest.matchers.string.shouldNotContain
 import org.eclipse.jgit.api.Git
 import org.gradle.api.Plugin
+import org.gradle.testkit.runner.BuildResult
 import org.gradle.testkit.runner.GradleRunner
 import java.io.File
 import java.nio.file.Files.createTempDirectory
-import kotlin.io.path.ExperimentalPathApi
 import kotlin.reflect.KClass
 
 class TestProject(spec: Spec) {
 
-    @OptIn(ExperimentalPathApi::class)
-    val projectDir = createTempDirectory("kradle-test-").toFile()
+    val projectDir: File = createTempDirectory("kradle-test-").toFile()
     val settingsFile
         get() = projectDir.resolve("settings.gradle.kts")
     val buildFile
@@ -32,7 +31,7 @@ class TestProject(spec: Spec) {
         spec.afterSpec { projectDir.deleteRecursively() }
     }
 
-    fun runTask(task: String, vararg arguments: String) = GradleRunner.create()
+    fun runTask(task: String, vararg arguments: String): BuildResult = GradleRunner.create()
         .withGradleVersion(Catalog.Versions.gradleForTesting)
         .withProjectDir(projectDir)
         .withPluginClasspath()
@@ -164,7 +163,7 @@ class TestProject(spec: Spec) {
     }
 
     private fun createHasPropertyTask(name: String): String {
-        val taskName = "hasProperty${name[0].toUpperCase() + name.substring(1)}"
+        val taskName = "hasProperty${name[0].uppercaseChar() + name.substring(1)}"
         addTask(
             taskName,
             "println(\"$name=\${project.properties[\"$name\"]}\")"

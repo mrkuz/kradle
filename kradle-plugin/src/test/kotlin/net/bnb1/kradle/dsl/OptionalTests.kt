@@ -99,7 +99,7 @@ class OptionalTests : BehaviorSpec({
     }
 
     Given("Optional with suggestion") {
-        val optional = Optional<String>("suggestion") { target = it }
+        val optional = Optional("suggestion") { target = it }
 
         When("Call set with value") {
             optional.set("new")

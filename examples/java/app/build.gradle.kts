@@ -1,5 +1,5 @@
 plugins {
-    `java`
+    java
     id("net.bitsandbobs.kradle") version "main-SNAPSHOT"
 }
 

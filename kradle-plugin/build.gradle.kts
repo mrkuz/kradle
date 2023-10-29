@@ -124,7 +124,7 @@ configurations {
 }
 
 tasks.register("copyCatalog").configure {
-    val generatedSources = project.buildDir.resolve("generatedSources/main/kotlin")
+    val generatedSources = project.layout.buildDirectory.asFile.get().resolve("generatedSources/main/kotlin")
     outputs.dir(generatedSources)
 
     doFirst {
@@ -145,7 +145,7 @@ tasks.register("copyCatalog").configure {
 
 sourceSets {
     main {
-        java.srcDirs(project.buildDir.resolve("generatedSources/main/kotlin"))
+        java.srcDirs(project.layout.buildDirectory.asFile.get().resolve("generatedSources/main/kotlin"))
     }
 }
 
@@ -171,8 +171,8 @@ tasks.named("runKtlintCheckOverMainSourceSet") {
 
 tasks.register<Copy>("buildAgent") {
     dependsOn(":kradle-agent:shadowJar")
-    from(project(":kradle-agent").buildDir.resolve("libs/kradle-agent-all.jar"))
-    into(project.buildDir.resolve("resources/main/"))
+    from(project(":kradle-agent").layout.buildDirectory.asFile.get().resolve("libs/kradle-agent-all.jar"))
+    into(project.layout.buildDirectory.asFile.get().resolve("resources/main/"))
     rename { "kradle-agent.jar" }
 }
 
@@ -229,16 +229,16 @@ gradlePlugin {
             id = "net.bitsandbobs.kradle-app"
             implementationClass = "net.bnb1.kradle.v1.KradleCompatAppPlugin"
             displayName = "Kradle App Plugin"
-            description =
-                "Swiss army knife for Kotlin/JVM development (deprecated, consider using 'net.bitsandbobs.kradle' instead)"
+            description = "Swiss army knife for Kotlin/JVM development" +
+                " (deprecated, consider using 'net.bitsandbobs.kradle' instead)"
             tags.set(tags)
         }
         create("kradleLib") {
             id = "net.bitsandbobs.kradle-lib"
             implementationClass = "net.bnb1.kradle.v1.KradleCompatLibPlugin"
             displayName = "Kradle Lib Plugin"
-            description =
-                "Swiss army knife for Kotlin/JVM development (deprecated, consider using 'net.bitsandbobs.kradle' instead)"
+            description = "Swiss army knife for Kotlin/JVM development" +
+                " (deprecated, consider using 'net.bitsandbobs.kradle' instead)"
             tags.set(tags)
         }
     }

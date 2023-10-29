@@ -15,7 +15,7 @@ class CorePackageSpec : FunSpec({
         .importPackages("net.bnb1.kradle")
 
     test("No global access from core") {
-        var rule = ArchRuleDefinition
+        val rule = ArchRuleDefinition
             .classes().that().resideOutsideOfPackage("net.bnb1.kradle.core..")
             .and().areNotAssignableTo(Tracer::class.java)
             .should().onlyHaveDependentClassesThat().resideOutsideOfPackage("net.bnb1.kradle.core..")

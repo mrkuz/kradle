@@ -1,6 +1,7 @@
 package net.bnb1.kradle.blueprints.general
 
 import net.bnb1.kradle.blueprints.jvm.JibProperties
+import net.bnb1.kradle.buildDirAsFile
 import net.bnb1.kradle.core.Blueprint
 import net.bnb1.kradle.createScriptTask
 import net.bnb1.kradle.createTask
@@ -34,7 +35,7 @@ class HelmBlueprint(project: Project) : Blueprint(project) {
             ""
         }
 
-        val chart = project.buildDir.resolve("helm").absolutePath
+        val chart = project.buildDirAsFile.resolve("helm").absolutePath
 
         project.createScriptTask("helmInstall", "Installs Helm chart") {
             commands.add(

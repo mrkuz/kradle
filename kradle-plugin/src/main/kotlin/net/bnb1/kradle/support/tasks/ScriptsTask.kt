@@ -3,6 +3,7 @@ package net.bnb1.kradle.support.tasks
 import net.bnb1.kradle.render
 import org.gradle.api.DefaultTask
 import org.gradle.api.internal.tasks.userinput.UserInputHandler
+import org.gradle.api.provider.ListProperty
 import org.gradle.api.tasks.Internal
 import org.gradle.api.tasks.TaskAction
 import org.gradle.api.tasks.options.Option
@@ -21,10 +22,10 @@ open class ScriptsTask @Inject constructor(private val execOperations: ExecOpera
     var echo: Boolean = false
 
     @get:Internal
-    val prompts = project.objects.listProperty(Prompt::class.java)
+    val prompts: ListProperty<Prompt> = project.objects.listProperty(Prompt::class.java)
 
     @get:Internal
-    val commands = project.objects.listProperty(String::class.java)
+    val commands: ListProperty<String> = project.objects.listProperty(String::class.java)
 
     @TaskAction
     fun run() {

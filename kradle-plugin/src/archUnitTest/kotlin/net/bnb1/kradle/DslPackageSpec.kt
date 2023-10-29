@@ -14,7 +14,7 @@ class DslPackageSpec : FunSpec({
         .importPackages("net.bnb1.kradle")
 
     test("No global access from dsl") {
-        var rule = ArchRuleDefinition
+        val rule = ArchRuleDefinition
             .classes().that().resideOutsideOfPackage("net.bnb1.kradle.dsl")
             .should().onlyHaveDependentClassesThat().resideOutsideOfPackage("net.bnb1.kradle.dsl")
 

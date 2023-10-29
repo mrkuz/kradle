@@ -1,6 +1,8 @@
 package net.bnb1.kradle.support.tasks
 
+import net.bnb1.kradle.buildDirAsFile
 import org.gradle.api.DefaultTask
+import org.gradle.api.provider.Property
 import org.gradle.api.tasks.Internal
 import org.gradle.api.tasks.TaskAction
 
@@ -12,15 +14,15 @@ open class GenerateBuildPropertiesTask : DefaultTask() {
     }
 
     @get:Internal
-    val gitCommit = project.objects.property(String::class.java)
+    val gitCommit: Property<String> = project.objects.property(String::class.java)
 
     @get:Internal
-    val profile = project.objects.property(String::class.java)
+    val profile: Property<String> = project.objects.property(String::class.java)
 
     @SuppressWarnings("MagicNumber")
     @TaskAction
     fun run() {
-        val output = project.buildDir.resolve("resources/main/build.properties")
+        val output = project.buildDirAsFile.resolve("resources/main/build.properties")
         output.parentFile.mkdirs()
         output.printWriter().use {
             it.println("project.name=${project.name}")

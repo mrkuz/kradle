@@ -1,6 +1,7 @@
 package net.bnb1.kradle.blueprints.jvm
 
 import net.bnb1.kradle.apply
+import net.bnb1.kradle.buildDirAsFile
 import net.bnb1.kradle.core.Blueprint
 import net.bnb1.kradle.createHelperTask
 import net.bnb1.kradle.sourceSets
@@ -68,6 +69,6 @@ class JacocoBlueprint(project: Project) : Blueprint(project) {
     private fun configureReports(reports: JacocoReportsContainer) = reports.apply {
         csv.required.set(false)
         xml.required.set(false)
-        html.outputLocation.set(project.buildDir.resolve("reports/jacoco/project-html/"))
+        html.outputLocation.set(project.buildDirAsFile.resolve("reports/jacoco/project-html/"))
     }
 }

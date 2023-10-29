@@ -72,7 +72,6 @@ class TestBlueprint(project: Project) : Blueprint(project) {
         }
     }
 
-    @Suppress("DEPRECATION")
     private fun createTask(name: String, description: String) {
         // compat: Avoid duplicate creation on activate
         if (project.sourceSets.findByName(name) != null) {
@@ -121,7 +120,7 @@ class TestBlueprint(project: Project) : Blueprint(project) {
     }
 
     override fun doConfigure() {
-        var testEvents = setOf(TestLogEvent.SKIPPED, TestLogEvent.PASSED, TestLogEvent.FAILED)
+        val testEvents = mutableSetOf(TestLogEvent.SKIPPED, TestLogEvent.PASSED, TestLogEvent.FAILED)
         if (testProperties.showStandardStreams) {
             testEvents += setOf(TestLogEvent.STANDARD_OUT, TestLogEvent.STANDARD_ERROR)
         }

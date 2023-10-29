@@ -9,7 +9,7 @@ class InvertedFlagSetTests : BehaviorSpec({
 
     isolationMode = IsolationMode.InstancePerLeaf
 
-    var target = mutableSetOf<String>()
+    val target = mutableSetOf<String>()
 
     Given("Inverted flags") {
 

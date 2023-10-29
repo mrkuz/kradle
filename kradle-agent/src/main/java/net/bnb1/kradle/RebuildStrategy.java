@@ -16,6 +16,7 @@ public class RebuildStrategy implements ChangeStrategy {
     }
 
     @Override
+    @SuppressWarnings({"CallToPrintStackTrace", "resource"})
     public void onChangeDetected() {
         var connection = GradleConnector.newConnector()
                 .forProjectDirectory(projectPath.toFile())

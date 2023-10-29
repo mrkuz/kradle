@@ -10,6 +10,7 @@ import org.gradle.api.provider.Property
 import org.gradle.api.tasks.SourceSetContainer
 import org.gradle.kotlin.dsl.DependencyHandlerScope
 import org.gradle.kotlin.dsl.extra
+import java.io.File
 import java.io.StringWriter
 
 const val KRADLE_TASK_GROUP = "Kradle"
@@ -77,7 +78,10 @@ fun Project.render(text: String, additionalProperties: Map<String, Any> = mapOf(
 val Project.extraDir
     get() = file(this.projectDir.resolve("src/main/extra"))
 
-val Project.sourceSets
+val Project.buildDirAsFile: File
+    get() = this.layout.buildDirectory.asFile.get()
+
+val Project.sourceSets: SourceSetContainer
     get() = this.extensions.getByType(SourceSetContainer::class.java)
 
 // DependencyHandlerScope

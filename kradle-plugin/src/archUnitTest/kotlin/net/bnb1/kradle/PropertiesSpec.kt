@@ -15,7 +15,7 @@ class PropertiesSpec : FunSpec({
         .importPackages("net.bnb1.kradle")
 
     test("Properties naming") {
-        var rule = ArchRuleDefinition
+        val rule = ArchRuleDefinition
             .classes().that().areAssignableTo(Properties::class.java)
             .and().areTopLevelClasses()
             .should().haveSimpleNameEndingWith("Properties")

@@ -5,6 +5,7 @@ import com.github.spotbugs.snom.SpotBugsExtension
 import com.github.spotbugs.snom.SpotBugsTask
 import net.bnb1.kradle.Catalog
 import net.bnb1.kradle.apply
+import net.bnb1.kradle.buildDirAsFile
 import net.bnb1.kradle.core.Blueprint
 import net.bnb1.kradle.createHelperTask
 import org.gradle.api.Project
@@ -31,15 +32,15 @@ class SpotBugsBlueprint(project: Project) : Blueprint(project) {
         javaExtension.sourceSets
             .filter { it.java.files.isNotEmpty() }
             .forEach { sourceSet ->
-                val taskName = "spotbugs" + sourceSet.name[0].toUpperCase() + sourceSet.name.substring(1)
+                val taskName = "spotbugs" + sourceSet.name[0].uppercaseChar() + sourceSet.name.substring(1)
                 project.createHelperTask<SpotBugsTask>(taskName, "Runs SpotBugs on '${sourceSet.name}'") {
                     sourceDirs = sourceSet.java.sourceDirectories
                     classes = project.objects.fileCollection().from(sourceSet.java.classesDirectory)
                     auxClassPaths = sourceSet.compileClasspath
-                    reportsDir.set(project.buildDir.resolve("reports/spotbugs"))
+                    reportsDir.set(project.buildDirAsFile.resolve("reports/spotbugs"))
                     reports.create("html") {
                         required.set(true)
-                        outputLocation.set(project.buildDir.resolve("reports/spotbugs/${sourceSet.name}.html"))
+                        outputLocation.set(project.buildDirAsFile.resolve("reports/spotbugs/${sourceSet.name}.html"))
                     }
                     ignoreFailures = codeAnalysisProperties.ignoreFailures
                 }

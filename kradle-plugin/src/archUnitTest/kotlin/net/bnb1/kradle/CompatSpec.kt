@@ -14,7 +14,7 @@ class CompatSpec : FunSpec({
         .importPackages("net.bnb1.kradle")
 
     test("No global access to v1") {
-        var rule = ArchRuleDefinition
+        val rule = ArchRuleDefinition
             .noClasses().that().resideOutsideOfPackage("net.bnb1.kradle.v1")
             .should().dependOnClassesThat().resideInAPackage("net.bnb1.kradle.v1")
         rule.check(classes)

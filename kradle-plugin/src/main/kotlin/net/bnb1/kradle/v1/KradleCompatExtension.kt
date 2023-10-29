@@ -6,7 +6,7 @@ import net.bnb1.kradle.property
 import org.gradle.api.model.ObjectFactory
 import javax.inject.Inject
 
-open class KradleCompatExtension @Inject constructor(private val factory: ObjectFactory) {
+open class KradleCompatExtension @Inject constructor(factory: ObjectFactory) {
 
     private val _mainClass = factory.empty<String>()
     fun mainClass(name: String, jvmName: Boolean = false) {
@@ -17,7 +17,7 @@ open class KradleCompatExtension @Inject constructor(private val factory: Object
         }
     }
 
-    val mainClass
+    val mainClass: String
         get() = _mainClass.getOrElse("")
 
     val targetJvm = factory.property(Catalog.Versions.jvm)

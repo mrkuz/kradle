@@ -15,7 +15,7 @@ class BlueprintsSpec : FunSpec({
         .importPackages("net.bnb1.kradle")
 
     test("Blueprint naming") {
-        var rule = ArchRuleDefinition
+        val rule = ArchRuleDefinition
             .classes().that().areAssignableTo(Blueprint::class.java)
             .should().haveSimpleNameEndingWith("Blueprint")
 

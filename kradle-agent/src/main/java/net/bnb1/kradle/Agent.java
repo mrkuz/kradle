@@ -24,7 +24,7 @@ import java.util.regex.Pattern;
  */
 public final class Agent {
 
-    public static void premain(String args, Instrumentation instrumentation) throws IOException {
+    public static void premain(String args, Instrumentation instrumentation) {
         new Agent(
                 System.getenv().get("KRADLE_PROJECT_ROOT_DIR"),
                 System.getenv().get("KRADLE_AGENT_MODE")).start();
@@ -76,6 +76,7 @@ public final class Agent {
         fileIncludes.add(Pattern.compile(".*\\.ya?ml", Pattern.CASE_INSENSITIVE));
     }
 
+    @SuppressWarnings({"CallToPrintStackTrace", "InfiniteLoopStatement"})
     public void start() {
         executor.submit(() -> {
             try {
@@ -133,7 +134,7 @@ public final class Agent {
         if (dirIncludes.isEmpty()) {
             return true;
         }
-        return dirIncludes.stream().anyMatch(path -> dir.endsWith(path)) || isParentWatched(dir);
+        return dirIncludes.stream().anyMatch(dir::endsWith) || isParentWatched(dir);
     }
 
     @VisibleForTesting
@@ -152,7 +153,7 @@ public final class Agent {
             return false;
         }
         return keys.stream()
-                .filter(key -> key.isValid())
+                .filter(WatchKey::isValid)
                 .map(key -> (Path) key.watchable())
                 .anyMatch(p -> path.getParent().endsWith(p));
     }
@@ -217,7 +218,7 @@ public final class Agent {
     }
 
     private String md5(Path file) throws IOException {
-        MessageDigest md5 = null;
+        MessageDigest md5;
         try {
             md5 = MessageDigest.getInstance("MD5");
         } catch (NoSuchAlgorithmException ex) {

@@ -35,7 +35,7 @@ class TestContainer(spec: Spec) {
 
     fun bindResource(resource: String, to: String = resource) {
         container.withFileSystemBind(
-            javaClass.getResource("/$resource").path,
+            javaClass.getResource("/$resource")!!.path,
             "/home/gradle/$to",
             BindMode.READ_ONLY
         )

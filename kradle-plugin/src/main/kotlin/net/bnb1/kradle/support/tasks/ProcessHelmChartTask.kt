@@ -1,5 +1,6 @@
 package net.bnb1.kradle.support.tasks
 
+import net.bnb1.kradle.buildDirAsFile
 import org.gradle.api.DefaultTask
 import org.gradle.api.tasks.InputDirectory
 import org.gradle.api.tasks.OutputDirectory
@@ -12,7 +13,7 @@ abstract class ProcessHelmChartTask : DefaultTask() {
     val sourceDirectory = project.projectDir.resolve("src/main/helm")
 
     @get:OutputDirectory
-    val outputDirectory = project.buildDir.resolve("helm")
+    val outputDirectory = project.buildDirAsFile.resolve("helm")
 
     private val expandFiles = setOf("Chart.yaml", "values.yaml", "values-*.yaml")
 

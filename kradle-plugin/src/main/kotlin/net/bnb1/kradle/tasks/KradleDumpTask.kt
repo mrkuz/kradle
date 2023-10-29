@@ -36,7 +36,7 @@ open class KradleDumpTask : DefaultTask() {
     @TaskAction
     fun run() {
         val properties = JavaProperties()
-        javaClass.getResource("/build.properties").openStream().use {
+        javaClass.getResource("/build.properties")!!.openStream().use {
             properties.load(it)
         }
         val kradleVersion = properties["project.version"]
@@ -147,7 +147,7 @@ open class KradleDumpTask : DefaultTask() {
         internal.forEach {
             if (project.pluginManager.hasPlugin(it)) {
                 val plugin = project.plugins.getPlugin(it)
-                var jar = getJar(plugin::class)
+                val jar = getJar(plugin::class)
                 dump("- $it ($jar, ${plugin::class.qualifiedName})")
             }
         }

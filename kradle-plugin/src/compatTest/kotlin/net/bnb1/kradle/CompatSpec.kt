@@ -2,15 +2,14 @@ package net.bnb1.kradle
 
 import io.kotest.core.spec.style.FunSpec
 import org.eclipse.jgit.api.Git
+import org.gradle.testkit.runner.BuildResult
 import org.gradle.testkit.runner.GradleRunner
 import java.io.File
-import kotlin.io.path.ExperimentalPathApi
 import kotlin.io.path.createTempDirectory
 
 abstract class CompatSpec(body: CompatSpec.() -> Unit) : FunSpec({}) {
 
-    @OptIn(ExperimentalPathApi::class)
-    val projectDir = createTempDirectory("kradle-test-").toFile()
+    val projectDir: File = createTempDirectory("kradle-test-").toFile()
     val settingsFile
         get() = projectDir.resolve("settings.gradle.kts")
     val buildFile
@@ -30,7 +29,7 @@ abstract class CompatSpec(body: CompatSpec.() -> Unit) : FunSpec({}) {
         body()
     }
 
-    fun runTask(task: String, vararg arguments: String) = GradleRunner.create()
+    fun runTask(task: String, vararg arguments: String): BuildResult = GradleRunner.create()
         .withGradleVersion(Catalog.Versions.gradleForTesting)
         .withProjectDir(projectDir)
         .withPluginClasspath()

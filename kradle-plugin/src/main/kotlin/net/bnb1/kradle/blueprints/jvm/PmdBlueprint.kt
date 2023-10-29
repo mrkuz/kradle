@@ -1,6 +1,7 @@
 package net.bnb1.kradle.blueprints.jvm
 
 import net.bnb1.kradle.Catalog
+import net.bnb1.kradle.buildDirAsFile
 import net.bnb1.kradle.core.Blueprint
 import net.bnb1.kradle.createHelperTask
 import org.gradle.api.Project
@@ -31,7 +32,7 @@ class PmdBlueprint(project: Project) : Blueprint(project) {
 
         val javaExtension = project.extensions.getByType(JavaPluginExtension::class.java)
         javaExtension.sourceSets.forEach { sourceSet ->
-            val taskName = "pmd" + sourceSet.name[0].toUpperCase() + sourceSet.name.substring(1)
+            val taskName = "pmd" + sourceSet.name[0].uppercaseChar() + sourceSet.name.substring(1)
 
             val enabledRuleSets = mutableListOf<String>()
             with(pmdProperties.ruleSets) {
@@ -61,7 +62,7 @@ class PmdBlueprint(project: Project) : Blueprint(project) {
                 ruleSets = enabledRuleSets
                 targetJdk = TargetJdk.VERSION_1_7
                 reports.forEach {
-                    it.outputLocation.set(project.buildDir.resolve("reports/pmd/${sourceSet.name}.${it.name}"))
+                    it.outputLocation.set(project.buildDirAsFile.resolve("reports/pmd/${sourceSet.name}.${it.name}"))
                 }
                 ignoreFailures = codeAnalysisProperties.ignoreFailures
                 threads.set(1)
