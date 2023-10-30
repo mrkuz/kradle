@@ -4,6 +4,7 @@ import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.spec.style.BehaviorSpec
 import io.kotest.matchers.file.shouldExist
 import io.kotest.matchers.shouldBe
+import net.bnb1.kradle.Catalog
 import net.bnb1.kradle.TestProject
 import org.gradle.testkit.runner.TaskOutcome
 import org.gradle.testkit.runner.UnexpectedBuildFailure
@@ -19,7 +20,7 @@ class KtlintBlueprintTests : BehaviorSpec({
         project.buildFile.writeText(
             """
             plugins {
-                id("org.jetbrains.kotlin.jvm") version "1.6.0"
+                id("org.jetbrains.kotlin.jvm") version "${Catalog.Versions.kotlin}"
                 id("net.bitsandbobs.kradle")
             }
             
@@ -28,7 +29,7 @@ class KtlintBlueprintTests : BehaviorSpec({
             
             kradle {
                 jvm {
-                    targetJvm("11")
+                    targetJvm("${Catalog.Versions.jvm}")
                     kotlin.enable()
                     lint.enable()
                 }
@@ -75,7 +76,7 @@ class KtlintBlueprintTests : BehaviorSpec({
         When("Check dependencies") {
 
             Then("ktlint is available") {
-                project.shouldHaveDependency("ktlint", "com.pinterest:ktlint")
+                project.shouldHaveDependency("ktlint", "com.pinterest.ktlint:ktlint-cli")
             }
         }
     }

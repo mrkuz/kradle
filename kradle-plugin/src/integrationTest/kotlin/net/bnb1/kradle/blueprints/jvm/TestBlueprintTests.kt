@@ -243,10 +243,10 @@ class TestBlueprintTests : BehaviorSpec({
                 result.output shouldContain "Hello Test!"
 
                 // And: "KRADLE_PROJECT_DIR is set"
-                result.output shouldContain "KRADLE_PROJECT_DIR = " + project.projectDir.absoluteFile
+                result.output shouldContain "KRADLE_PROJECT_DIR = " + project.projectDir.canonicalPath
 
                 // And: "KRADLE_PROJECT_ROOT_DIR is set"
-                result.output shouldContain "KRADLE_PROJECT_ROOT_DIR = " + project.projectDir.absoluteFile
+                result.output shouldContain "KRADLE_PROJECT_ROOT_DIR = " + project.projectDir.canonicalPath
             }
         }
     }

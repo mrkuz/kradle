@@ -4,6 +4,7 @@ import io.kotest.inspectors.forOne
 import io.kotest.matchers.file.shouldExist
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.string.shouldContain
+import net.bnb1.kradle.Catalog
 import net.bnb1.kradle.CompatSpec
 
 class ApplicationBlueprintTests : CompatSpec({
@@ -24,7 +25,7 @@ class ApplicationBlueprintTests : CompatSpec({
         buildFile.writeText(
             """
             plugins {
-               id("org.jetbrains.kotlin.jvm") version "1.6.0"
+               id("org.jetbrains.kotlin.jvm") version "${Catalog.Versions.kotlin}"
                id("net.bitsandbobs.kradle-app") version "main-SNAPSHOT"
             }
             
@@ -47,7 +48,7 @@ class ApplicationBlueprintTests : CompatSpec({
         buildFile.writeText(
             """
             plugins {
-               id("org.jetbrains.kotlin.jvm") version "1.6.0"
+               id("org.jetbrains.kotlin.jvm") version "${Catalog.Versions.kotlin}"
                id("net.bitsandbobs.kradle-app") version "main-SNAPSHOT"
             }
             
@@ -70,7 +71,7 @@ class ApplicationBlueprintTests : CompatSpec({
         buildFile.writeText(
             """
             plugins {
-               id("org.jetbrains.kotlin.jvm") version "1.6.0"
+               id("org.jetbrains.kotlin.jvm") version "${Catalog.Versions.kotlin}"
                id("net.bitsandbobs.kradle-app") version "main-SNAPSHOT"
             }
             
@@ -94,7 +95,7 @@ class ApplicationBlueprintTests : CompatSpec({
         buildFile.writeText(
             """
             plugins {
-               id("org.jetbrains.kotlin.jvm") version "1.6.0"
+               id("org.jetbrains.kotlin.jvm") version "${Catalog.Versions.kotlin}"
                id("net.bitsandbobs.kradle-app") version "main-SNAPSHOT"
             }
             
@@ -102,7 +103,7 @@ class ApplicationBlueprintTests : CompatSpec({
             version = "1.0.0"
             
             kradle {
-                targetJvm("11")
+                targetJvm("${Catalog.Versions.jvm}")
                 mainClass("com.example.demo.CustomApp", jvmName = true)
             }
             

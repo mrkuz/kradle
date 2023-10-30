@@ -4,6 +4,7 @@ object BuildCatalog {
         const val kotlin = "1.9.10"
         const val kotest = "5.7.2"
         const val testLogger = "4.0.0"
+        const val dockerJava = "3.3.0"
     }
 
     object Plugins {
@@ -45,8 +46,11 @@ object BuildCatalog {
             const val kotlinTest = "org.jetbrains.kotlin:kotlin-test:${Versions.kotlin}"
             const val kotestJunit5 = "io.kotest:kotest-runner-junit5:${Versions.kotest}"
             const val kotestProperty = "io.kotest:kotest-property:${Versions.kotest}"
-            const val dockerJava = "com.github.docker-java:docker-java:3.3.0"
+            const val dockerJava = "com.github.docker-java:docker-java:${Versions.dockerJava}"
+            const val dockerJavaApache =
+                "com.github.docker-java:docker-java-transport-httpclient5:${Versions.dockerJava}"
             val kotestBundle = setOf(kotestJunit5, kotestProperty)
+            val dockerJavaBundle = setOf(dockerJava, dockerJavaApache)
         }
     }
 

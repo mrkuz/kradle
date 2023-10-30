@@ -114,8 +114,8 @@ class HelmBlueprintTests : BehaviorSpec({
             Then("Values file is used") {
                 result.output.shouldContain(
                     "helm install app " +
-                        "${project.buildDir.resolve("helm")} " +
-                        "-f ${project.projectDir.resolve("values-test.yaml")}"
+                        "${project.buildDir.resolve("helm").canonicalPath} " +
+                        "-f ${project.projectDir.resolve("values-test.yaml").canonicalPath}"
                 )
             }
         }
@@ -126,8 +126,8 @@ class HelmBlueprintTests : BehaviorSpec({
             Then("Values file is used") {
                 result.output.shouldContain(
                     "helm upgrade --install app " +
-                        "${project.buildDir.resolve("helm")} " +
-                        "-f ${project.projectDir.resolve("values-test.yaml")}"
+                        "${project.buildDir.resolve("helm").canonicalPath} " +
+                        "-f ${project.projectDir.resolve("values-test.yaml").canonicalPath}"
                 )
             }
         }

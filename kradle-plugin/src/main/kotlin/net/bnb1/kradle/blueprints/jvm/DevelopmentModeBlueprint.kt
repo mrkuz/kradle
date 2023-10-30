@@ -48,7 +48,7 @@ class DevelopmentModeBlueprint(project: Project) : Blueprint(project) {
             // Allows the application to figure out we are running in development mode
             environment("KRADLE_DEV_MODE", "true")
             // Tell agent about the project root
-            environment("KRADLE_PROJECT_ROOT_DIR", project.rootDir)
+            environment("KRADLE_PROJECT_ROOT_DIR", project.rootDir.absolutePath)
 
             if (withBuildProfiles()) {
                 environment("KRADLE_PROFILE", project.extra["profile"].toString())

@@ -55,8 +55,8 @@ dependencies {
 
     // Testing
     testImplementation(BuildCatalog.Dependencies.Test.kotlinTest)
-    testImplementation(BuildCatalog.Dependencies.Test.dockerJava)
     BuildCatalog.Dependencies.Test.kotestBundle.forEach { testImplementation(it) }
+    BuildCatalog.Dependencies.Test.dockerJavaBundle.forEach { testImplementation(it) }
 
     constraints {
         BuildCatalog.Constraints.ids.forEach {
@@ -71,7 +71,7 @@ kradle {
         buildProperties.enable()
     }
     jvm {
-        targetJvm("11")
+        targetJvm("17")
         kotlin {
             lint {
                 ktlint {
@@ -107,7 +107,7 @@ kradle {
 afterEvaluate {
     tasks.withType<KotlinCompile> {
         kotlinOptions {
-            jvmTarget = "11"
+            jvmTarget = "17"
         }
     }
 }

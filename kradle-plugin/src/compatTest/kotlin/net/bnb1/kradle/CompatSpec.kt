@@ -58,7 +58,7 @@ abstract class CompatSpec(body: CompatSpec.() -> Unit) : FunSpec({}) {
     fun writeBuildFile(output: File, kradleConfig: () -> String) = output.writeText(
         """
             plugins {
-                id("org.jetbrains.kotlin.jvm") version "1.6.0"
+                id("org.jetbrains.kotlin.jvm") version "${Catalog.Versions.kotlin}"
                 id("net.bitsandbobs.kradle") version "main-SNAPSHOT"
             }
             
@@ -67,7 +67,7 @@ abstract class CompatSpec(body: CompatSpec.() -> Unit) : FunSpec({}) {
             
             kradle {
                 jvm.configureOnly {
-                    targetJvm("11")
+                    targetJvm("${Catalog.Versions.jvm}")
                 }
                 ${kradleConfig()}
             }
@@ -83,7 +83,7 @@ abstract class CompatSpec(body: CompatSpec.() -> Unit) : FunSpec({}) {
     fun writeCompatAppBuildFile(output: File) = output.writeText(
         """
             plugins {
-                id("org.jetbrains.kotlin.jvm") version "1.6.0"
+                id("org.jetbrains.kotlin.jvm") version "${Catalog.Versions.kotlin}"
                 id("net.bitsandbobs.kradle-app") version "main-SNAPSHOT"
             }
             
@@ -91,7 +91,7 @@ abstract class CompatSpec(body: CompatSpec.() -> Unit) : FunSpec({}) {
             version = "1.0.0"
             
             kradle {
-                targetJvm("11")
+                targetJvm("${Catalog.Versions.jvm}")
                 mainClass("com.example.demo.App")
             }
             
@@ -123,7 +123,7 @@ abstract class CompatSpec(body: CompatSpec.() -> Unit) : FunSpec({}) {
     fun writeCompatLibBuildFile(output: File) = output.writeText(
         """
             plugins {
-                id("org.jetbrains.kotlin.jvm") version "1.6.0"
+                id("org.jetbrains.kotlin.jvm") version "${Catalog.Versions.kotlin}"
                 id("net.bitsandbobs.kradle-lib") version "main-SNAPSHOT"
             }
             
@@ -131,7 +131,7 @@ abstract class CompatSpec(body: CompatSpec.() -> Unit) : FunSpec({}) {
             version = "1.0.0"
             
             kradle {
-                targetJvm("11")
+                targetJvm("${Catalog.Versions.jvm}")
             }
             
         """.trimIndent()

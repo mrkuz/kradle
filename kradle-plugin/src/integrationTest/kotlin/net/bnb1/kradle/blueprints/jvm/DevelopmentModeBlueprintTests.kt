@@ -2,6 +2,7 @@ package net.bnb1.kradle.blueprints.jvm
 
 import io.kotest.core.spec.style.BehaviorSpec
 import io.kotest.matchers.string.shouldContain
+import net.bnb1.kradle.Catalog
 import net.bnb1.kradle.TestProject
 
 class DevelopmentModeBlueprintTests : BehaviorSpec({
@@ -36,7 +37,7 @@ class DevelopmentModeBlueprintTests : BehaviorSpec({
                 result.output shouldContain "KRADLE_DEV_MODE=true"
 
                 // And: "Agent is attached"
-                result.output shouldContain "DEBUG Project root: ${project.projectDir.absolutePath}"
+                result.output shouldContain "DEBUG Project root: ${project.projectDir.canonicalPath}"
 
                 // And: "Agent runs in default mode"
                 result.output shouldContain "DEBUG Mode: default"
@@ -49,7 +50,7 @@ class DevelopmentModeBlueprintTests : BehaviorSpec({
         project.buildFile.writeText(
             """
             plugins {
-                id("org.jetbrains.kotlin.jvm") version "1.6.0"
+                id("org.jetbrains.kotlin.jvm") version "${Catalog.Versions.kotlin}"
                 id("net.bitsandbobs.kradle")
             }
 
@@ -58,7 +59,7 @@ class DevelopmentModeBlueprintTests : BehaviorSpec({
 
             kradle {
                 jvm {
-                    targetJvm("11")
+                    targetJvm("${Catalog.Versions.jvm}")
                     kotlin.enable()
                     application {
                         mainClass("com.example.demo.AppKt")

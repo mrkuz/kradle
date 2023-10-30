@@ -12,20 +12,25 @@ private const val KRADLE_RW = "/home/gradle/kradle-rw"
 
 class TestContainer(spec: Spec) {
 
-    private val container = KGenericContainer(DockerImageName.parse("gradle:8-jdk17"))
-        .withFileSystemBind(System.getenv("KRADLE_PROJECT_ROOT_DIR"), KRADLE_RO, BindMode.READ_ONLY)
-        .withFileSystemBind(
-            Path.of(System.getenv("KRADLE_PROJECT_DIR"), "var", "gradle").toString(),
-            "/home/gradle/.gradle",
-            BindMode.READ_WRITE
+    private val container =
+        KGenericContainer(
+            DockerImageName.parse(
+                "gradle:${Catalog.Versions.gradleForTesting}-jdk${Catalog.Versions.jvm}"
+            )
         )
-        .withFileSystemBind(
-            Path.of(System.getenv("KRADLE_PROJECT_DIR"), "var", "m2").toString(),
-            "/home/gradle/.m2",
-            BindMode.READ_WRITE
-        )
-        .withCommand("sleep", "1h")
-        .withCreateContainerCmdModifier { it.withUser("gradle") }!!
+            .withFileSystemBind(System.getenv("KRADLE_PROJECT_ROOT_DIR"), KRADLE_RO, BindMode.READ_ONLY)
+            .withFileSystemBind(
+                Path.of(System.getenv("KRADLE_PROJECT_DIR"), "var", "gradle").toString(),
+                "/home/gradle/.gradle",
+                BindMode.READ_WRITE
+            )
+            .withFileSystemBind(
+                Path.of(System.getenv("KRADLE_PROJECT_DIR"), "var", "m2").toString(),
+                "/home/gradle/.m2",
+                BindMode.READ_WRITE
+            )
+            .withCommand("sleep", "1h")
+            .withCreateContainerCmdModifier { it.withUser("gradle") }!!
 
     init {
         spec.afterSpec {

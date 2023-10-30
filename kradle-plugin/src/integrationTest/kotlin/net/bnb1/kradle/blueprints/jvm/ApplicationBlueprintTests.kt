@@ -4,6 +4,7 @@ import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.spec.style.BehaviorSpec
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.string.shouldContain
+import net.bnb1.kradle.Catalog
 import net.bnb1.kradle.TestProject
 import org.gradle.api.plugins.ApplicationPlugin
 import org.gradle.testkit.runner.TaskOutcome
@@ -100,7 +101,7 @@ class ApplicationBlueprintTests : BehaviorSpec({
         project.buildFile.writeText(
             """
             plugins {
-                id("org.jetbrains.kotlin.jvm") version "1.6.0"
+                id("org.jetbrains.kotlin.jvm") version "${Catalog.Versions.kotlin}"
                 id("net.bitsandbobs.kradle")
             }
 
@@ -108,7 +109,7 @@ class ApplicationBlueprintTests : BehaviorSpec({
 
             kradle {
                 jvm {
-                    targetJvm("11")
+                    targetJvm("${Catalog.Versions.jvm}")
                     kotlin.enable()
                     application {
                         mainClass("com.example.demo.AppKt")
@@ -133,7 +134,7 @@ class ApplicationBlueprintTests : BehaviorSpec({
         project.buildFile.writeText(
             """
             plugins {
-                id("org.jetbrains.kotlin.jvm") version "1.6.0"
+                id("org.jetbrains.kotlin.jvm") version "${Catalog.Versions.kotlin}"
                 id("net.bitsandbobs.kradle")
             }
 
@@ -142,7 +143,7 @@ class ApplicationBlueprintTests : BehaviorSpec({
 
             kradle {
                 jvm {
-                    targetJvm("11")
+                    targetJvm("${Catalog.Versions.jvm}")
                     kotlin.enable()
                     application {
                         mainClass("com.example.demo.AppKt")
@@ -167,7 +168,7 @@ class ApplicationBlueprintTests : BehaviorSpec({
         project.buildFile.writeText(
             """
             plugins {
-                id("org.jetbrains.kotlin.jvm") version "1.6.0"
+                id("org.jetbrains.kotlin.jvm") version "${Catalog.Versions.kotlin}"
                 id("net.bitsandbobs.kradle")
             }
 
@@ -175,7 +176,7 @@ class ApplicationBlueprintTests : BehaviorSpec({
 
             kradle {
                 jvm {
-                    targetJvm("11")
+                    targetJvm("${Catalog.Versions.jvm}")
                     kotlin.enable()
                     application {
                         mainClass("com.example.demo.AppKt")

@@ -26,7 +26,7 @@ class TestProject(spec: Spec) {
         spec.isolationMode = IsolationMode.InstancePerLeaf
         spec.beforeSpec {
             projectDir.mkdirs()
-            println("Project dir: ${projectDir.absolutePath}")
+            println("Project dir: ${projectDir.canonicalPath}")
         }
         spec.afterSpec { projectDir.deleteRecursively() }
     }
@@ -75,7 +75,7 @@ class TestProject(spec: Spec) {
     fun writeBuildFile(output: File, kradleConfig: () -> String) = output.writeText(
         """
         plugins {
-            id("org.jetbrains.kotlin.jvm") version "1.6.0"
+            id("org.jetbrains.kotlin.jvm") version "${Catalog.Versions.kotlin}"
             id("net.bitsandbobs.kradle")
         }
         

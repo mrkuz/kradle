@@ -3,6 +3,7 @@ package net.bnb1.kradle.blueprints
 import io.kotest.matchers.file.shouldExist
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.string.shouldContain
+import net.bnb1.kradle.Catalog
 import net.bnb1.kradle.CompatSpec
 import org.gradle.testkit.runner.TaskOutcome
 
@@ -40,7 +41,7 @@ class DetektBlueprintTests : CompatSpec({
         buildFile.writeText(
             """
             plugins {
-               id("org.jetbrains.kotlin.jvm") version "1.6.0"
+               id("org.jetbrains.kotlin.jvm") version "${Catalog.Versions.kotlin}"
                id("net.bitsandbobs.kradle-lib") version "main-SNAPSHOT"
             }
             

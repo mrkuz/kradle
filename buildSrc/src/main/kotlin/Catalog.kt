@@ -28,7 +28,7 @@ object Catalog {
         const val caffeine = "3.1.8"
         const val log4j = "2.21.1"
         const val springBoot = "3.1.5"
-        const val gradleForTesting = "8.4"
+        const val gradleForTesting = "8.0"
     }
 
     object Dependencies {

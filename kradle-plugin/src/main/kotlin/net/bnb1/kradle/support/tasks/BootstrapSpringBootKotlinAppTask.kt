@@ -36,7 +36,6 @@ open class BootstrapSpringBootKotlinAppTask : BootstrapBaseTask() {
                 
                 @SpringBootApplication
                 class $mainClassName : CommandLineRunner {
-                
                     override fun run(args: Array<String>) {
                         println("Hello World!")
                     }

@@ -18,7 +18,6 @@ class TestBlueprintTests : CompatSpec({
             import org.junit.jupiter.api.Test
             
             class AppTest {
-
                 @Test
                 fun doNothing() = Unit
             }

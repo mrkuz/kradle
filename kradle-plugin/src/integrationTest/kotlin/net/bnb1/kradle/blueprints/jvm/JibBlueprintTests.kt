@@ -5,7 +5,7 @@ import com.github.dockerjava.api.command.WaitContainerResultCallback
 import com.github.dockerjava.api.model.Frame
 import com.github.dockerjava.core.DefaultDockerClientConfig
 import com.github.dockerjava.core.DockerClientImpl
-import com.github.dockerjava.jaxrs.JerseyDockerHttpClient
+import com.github.dockerjava.httpclient5.ApacheDockerHttpClient
 import io.kotest.core.spec.style.BehaviorSpec
 import io.kotest.inspectors.forOne
 import io.kotest.matchers.collections.shouldContain
@@ -14,12 +14,12 @@ import io.kotest.matchers.shouldBe
 import io.kotest.matchers.string.shouldContain
 import net.bnb1.kradle.TestProject
 import org.gradle.testkit.runner.TaskOutcome
-import java.util.*
+import java.util.UUID
 
 class JibBlueprintTests : BehaviorSpec({
 
     val config = DefaultDockerClientConfig.createDefaultConfigBuilder().build()
-    val httpClient = JerseyDockerHttpClient.Builder()
+    val httpClient = ApacheDockerHttpClient.Builder()
         .dockerHost(config.dockerHost)
         .sslConfig(config.sslConfig)
         .build()
@@ -49,6 +49,7 @@ class JibBlueprintTests : BehaviorSpec({
         return output
     }
 
+    /*
     afterEach {
         dockerClient.listImagesCmd().exec()
             .filter { it.repoTags.contains("$name:latest") }
@@ -57,6 +58,7 @@ class JibBlueprintTests : BehaviorSpec({
                 dockerClient.removeImageCmd(it.id).withForce(true).exec()
             }
     }
+    */
 
     Given("Default configuration") {
         project.setUp(name) {

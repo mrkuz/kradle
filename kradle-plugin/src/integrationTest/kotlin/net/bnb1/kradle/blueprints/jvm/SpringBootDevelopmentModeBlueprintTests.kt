@@ -39,7 +39,7 @@ class SpringBootDevelopmentModeBlueprintTests : BehaviorSpec({
                 result.output shouldContain "KRADLE_DEV_MODE=true"
 
                 // And: "Agent is attached"
-                result.output shouldContain "DEBUG Project root: ${project.projectDir.absolutePath}"
+                result.output shouldContain "DEBUG Project root: ${project.projectDir.canonicalPath}"
 
                 // And: "Agent runs in default mode"
                 result.output shouldContain "DEBUG Mode: default"

@@ -24,7 +24,8 @@ class JibBlueprintPushTests : BehaviorSpec({
 
     val project = TestProject(this)
 
-    Given("docker.imageName = localhost:5000/demo") {
+    // Requires docker
+    xGiven("docker.imageName = localhost:5000/demo") {
         val registry = "${container.host}:${container.getMappedPort(REGISTRY_PORT)}"
         project.setUp {
             """

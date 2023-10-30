@@ -25,7 +25,7 @@ abstract class IntegrationSpec(body: IntegrationSpec.() -> Unit) : BehaviorSpec(
     init {
         beforeSpec {
             projectDir.mkdirs()
-            println("Project dir: ${projectDir.absolutePath}")
+            println("Project dir: ${projectDir.canonicalPath}")
         }
 
         afterSpec { projectDir.deleteRecursively() }
@@ -69,7 +69,7 @@ abstract class IntegrationSpec(body: IntegrationSpec.() -> Unit) : BehaviorSpec(
     fun writeBuildFile(output: File, kradleConfig: () -> String) = output.writeText(
         """
             plugins {
-                id("org.jetbrains.kotlin.jvm") version "1.6.0"
+                id("org.jetbrains.kotlin.jvm") version "${Catalog.Versions.kotlin}"
                 id("net.bitsandbobs.kradle") version "main-SNAPSHOT"
             }
             
@@ -78,7 +78,7 @@ abstract class IntegrationSpec(body: IntegrationSpec.() -> Unit) : BehaviorSpec(
             
             kradle {
                 jvm.configureOnly {
-                    targetJvm("11")
+                    targetJvm("${Catalog.Versions.jvm}")
                 }
                 ${kradleConfig()}
             }
