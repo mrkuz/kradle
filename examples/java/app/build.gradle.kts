@@ -43,11 +43,11 @@ kradle {
         // targetJvm("17")
         java {
             // previewFeatures(false)
-            withLombok("1.18.24")
+            withLombok("1.18.30")
             /*
             lint {
                 checkstyle.enable {
-                    version("10.3.4")
+                    version("10.12.4")
                     configFile("checkstyle.xml")
                 }
             }
@@ -55,7 +55,7 @@ kradle {
             codeAnalysis {
                 /*
                 pmd.enable {
-                    version("6.50.0")
+                    version("6.55.0")
                     ruleSets {
                         bestPractices(false)
                         codeStyle(false)
@@ -69,17 +69,16 @@ kradle {
                 }
                 */
                 spotBugs.enable {
-                    // version("4.7.2")
-                    useFbContrib(/* "7.4.7" */)
+                    // version("4.8.0")
+                    useFbContrib(/* "7.6.0" */)
                     useFindSecBugs(/* "1.12.0" */)
                 }
             }
         }
 
         dependencies {
-            // useCaffeine("3.1.1")
-            // useGuava("31.1-jre")
-            // useLog4j("2.19.0")
+            // useCaffeine("3.1.8")
+            // useGuava("32.1.3-jre")
         }
 
         vulnerabilityScan.enable()
@@ -94,7 +93,7 @@ kradle {
         test {
             /*
             junitJupiter.enable {
-                version("5.9.1")
+                version("5.10.0")
             }
             */
             prettyPrint(true)
@@ -102,8 +101,8 @@ kradle {
             withIntegrationTests(true)
             withFunctionalTests(true)
             // withCustomTests("...")
-            // useArchUnit("1.0.0")
-            // useTestcontainers("1.17.5")
+            // useArchUnit("1.1.0")
+            // useTestcontainers("1.19.1")
         }
 
         codeCoverage {
@@ -112,7 +111,7 @@ kradle {
                 excludes("...")
             }
             jacoco.configureOnly {
-                version("0.8.8")
+                version("0.8.11")
                 excludes("...")
             }
             */
@@ -121,7 +120,7 @@ kradle {
         benchmark {
             /*
             jmh {
-                version("1.35")
+                version("1.37")
             }
             */
         }
@@ -149,14 +148,19 @@ kradle {
 
         documentation.enable()
 
+        logging {
+            // withSlf4j("2.0.9")
+            // withLog4j("2.21.1")
+        }
+
         /*
         frameworks {
             springBoot {
-                version("2.7.4")
-                withDevTools("2.7.4")
-                useWeb("2.7.4")
-                useWebFlux("2.7.4")
-                useActuator("2.7.4")
+                version("3.1.5")
+                withDevTools("3.1.5")
+                useWeb("3.1.5")
+                useWebFlux("3.1.5")
+                useActuator("3.1.5")
             }
         }
         */
