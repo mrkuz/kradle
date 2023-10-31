@@ -21,7 +21,13 @@ class KtlintBlueprint(project: Project) : Blueprint(project) {
     override fun doConfigure() {
         project.configure<KtlintExtension> {
             enableExperimentalRules.set(true)
-            disabledRules.set(ktlintProperties.ruleExcludes)
+            ktlintProperties.ruleExcludes.forEach {
+                if (it.startsWith("ktlint_")) {
+                    additionalEditorconfig.put(it, "disabled")
+                } else {
+                    additionalEditorconfig.put("ktlint_standard_$it", "disabled")
+                }
+            }
             version.set(ktlintProperties.version)
             ignoreFailures.set(lintProperties.ignoreFailures)
             reporters {

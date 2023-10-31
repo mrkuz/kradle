@@ -174,5 +174,32 @@ class KtlintBlueprintTests : BehaviorSpec({
                 }
             }
         }
+
+        And("ktlint.rules.disable(ktlint_standard_no-semi)") {
+            project.setUp {
+                """
+                jvm {
+                    kotlin {
+                        lint {
+                            ktlint {
+                                rules {
+                                    disable("ktlint_standard_no-semi")
+                                }
+                            }
+                        }
+                    }
+                    lint.enable()
+                }
+                """
+            }
+
+            When("Run ktlintMainSourceSetCheck") {
+                val result = project.runTask("ktlintMainSourceSetCheck")
+
+                Then("Succeed") {
+                    result.task(":ktlintMainSourceSetCheck")!!.outcome shouldBe TaskOutcome.SUCCESS
+                }
+            }
+        }
     }
 })
