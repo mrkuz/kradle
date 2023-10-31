@@ -1,6 +1,7 @@
 plugins {
     java
-    id("com.github.johnrengelman.shadow") version "7.1.2"
+    id(BuildCatalog.Plugins.versions.id) version BuildCatalog.Plugins.versions.version
+    id(BuildCatalog.Plugins.shadow.id) version BuildCatalog.Plugins.shadow.version
 }
 
 repositories {
@@ -10,8 +11,8 @@ repositories {
 
 dependencies {
     implementation("org.gradle:gradle-tooling-api:7.1.1")
-    runtimeOnly("org.slf4j:slf4j-simple:1.7.36")
-    testImplementation(platform("org.junit:junit-bom:5.7.2"))
+    runtimeOnly("org.slf4j:slf4j-simple:2.0.9")
+    testImplementation(platform("org.junit:junit-bom:5.10.0"))
     testImplementation("org.junit.jupiter:junit-jupiter")
 }
 

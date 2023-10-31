@@ -116,8 +116,6 @@ object Catalog {
             return "${artifact.group}:${artifact.name}"
         }
     }
-
-    data class Plugin(val id: String, val version: String)
-
+    
     data class Artifact(val group: String, val name: String, val version: String)
 }

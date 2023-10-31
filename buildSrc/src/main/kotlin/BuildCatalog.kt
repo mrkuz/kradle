@@ -8,9 +8,11 @@ object BuildCatalog {
     }
 
     object Plugins {
-        val kotlinJvm = Catalog.Plugin("org.jetbrains.kotlin.jvm", Versions.kotlin)
-        val gradlePublish = Catalog.Plugin("com.gradle.plugin-publish", "1.2.1")
-        val testLogger = Catalog.Plugin("com.adarshr.test-logger", Versions.testLogger)
+        val kotlinJvm = Plugin("org.jetbrains.kotlin.jvm", Versions.kotlin)
+        val gradlePublish = Plugin("com.gradle.plugin-publish", "1.2.1")
+        val testLogger = Plugin("com.adarshr.test-logger", Versions.testLogger)
+        val shadow = Plugin("com.github.johnrengelman.shadow", "8.1.1")
+        val versions = Plugin("com.github.ben-manes.versions", "0.49.0")
     }
 
     object Dependencies {
@@ -30,13 +32,15 @@ object BuildCatalog {
             const val kotlinBenchmark =
                 "org.jetbrains.kotlinx:kotlinx-benchmark-plugin:${Catalog.Versions.kotlinxBenchmarkPlugin}"
             const val testLogger = "com.adarshr:gradle-test-logger-plugin:${Versions.testLogger}"
-            const val shadow = "gradle.plugin.com.github.jengelman.gradle.plugins:shadow:7.0.0"
             const val jib = "gradle.plugin.com.google.cloud.tools:jib-gradle-plugin:3.2.1"
-            const val versions = "com.github.ben-manes:gradle-versions-plugin:0.49.0"
             const val detekt = "io.gitlab.arturbosch.detekt:detekt-gradle-plugin:1.23.1"
             const val ktlint = "org.jlleitschuh.gradle:ktlint-gradle:11.6.1"
             const val owaspDependencyCheck = "org.owasp:dependency-check-gradle:8.4.2"
             const val kover = "org.jetbrains.kotlinx:kover:0.6.1"
+
+            val shadow = "gradle.plugin.com.github.jengelman.gradle.plugins:shadow:" +
+                BuildCatalog.Plugins.shadow.version
+            val versions = "com.github.ben-manes:gradle-versions-plugin:${BuildCatalog.Plugins.versions.version}"
 
             // Java
             const val spotbugs = "com.github.spotbugs.snom:spotbugs-gradle-plugin:5.2.1"
@@ -53,6 +57,8 @@ object BuildCatalog {
             val dockerJavaBundle = setOf(dockerJava, dockerJavaApache)
         }
     }
+
+    data class Plugin(val id: String, val version: String)
 
     object Constraints {
 
