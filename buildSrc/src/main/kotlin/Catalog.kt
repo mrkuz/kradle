@@ -6,7 +6,7 @@ object Catalog {
         const val jmh = "1.37"
         const val tini = "0.19.0"
         const val jvmKill = "1.16.0"
-        const val detekt = "1.23.1"
+        const val detekt = "1.23.3"
         const val ktlint = "1.0.1"
         const val kotlinCoroutines = "1.7.3"
         const val kotlinxBenchmarkPlugin = "0.4.9"
@@ -116,6 +116,6 @@ object Catalog {
             return "${artifact.group}:${artifact.name}"
         }
     }
-    
+
     data class Artifact(val group: String, val name: String, val version: String)
 }

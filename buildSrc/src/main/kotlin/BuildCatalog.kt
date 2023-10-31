@@ -4,7 +4,7 @@ object BuildCatalog {
         const val kotlin = "1.9.10"
         const val kotest = "5.7.2"
         const val testLogger = "4.0.0"
-        const val dockerJava = "3.3.0"
+        const val dockerJava = "3.3.4"
     }
 
     object Plugins {
@@ -33,7 +33,7 @@ object BuildCatalog {
                 "org.jetbrains.kotlinx:kotlinx-benchmark-plugin:${Catalog.Versions.kotlinxBenchmarkPlugin}"
             const val testLogger = "com.adarshr:gradle-test-logger-plugin:${Versions.testLogger}"
             const val jib = "gradle.plugin.com.google.cloud.tools:jib-gradle-plugin:3.2.1"
-            const val detekt = "io.gitlab.arturbosch.detekt:detekt-gradle-plugin:1.23.1"
+            const val detekt = "io.gitlab.arturbosch.detekt:detekt-gradle-plugin:1.23.3"
             const val ktlint = "org.jlleitschuh.gradle:ktlint-gradle:11.6.1"
             const val owaspDependencyCheck = "org.owasp:dependency-check-gradle:8.4.2"
             const val kover = "org.jetbrains.kotlinx:kover:0.6.1"
