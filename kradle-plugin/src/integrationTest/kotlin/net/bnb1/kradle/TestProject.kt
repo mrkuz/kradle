@@ -7,7 +7,7 @@ import io.kotest.matchers.string.shouldNotContain
 import org.eclipse.jgit.api.Git
 import org.gradle.api.Plugin
 import org.gradle.testkit.runner.BuildResult
-import org.gradle.testkit.runner.GradleRunner
+import org.gradle.testkit.runner.internal.DefaultGradleRunner
 import java.io.File
 import java.nio.file.Files.createTempDirectory
 import kotlin.reflect.KClass
@@ -31,7 +31,8 @@ class TestProject(spec: Spec) {
         spec.afterSpec { projectDir.deleteRecursively() }
     }
 
-    fun runTask(task: String, vararg arguments: String): BuildResult = GradleRunner.create()
+    fun runTask(task: String, vararg arguments: String): BuildResult = DefaultGradleRunner()
+        .withJvmArguments("-Xmx4G", "-XX:MaxMetaspaceSize=512m")
         .withGradleVersion(Catalog.Versions.gradleForTesting)
         .withProjectDir(projectDir)
         .withPluginClasspath()

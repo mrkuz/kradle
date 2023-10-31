@@ -3,7 +3,7 @@ package net.bnb1.kradle
 import io.kotest.core.spec.IsolationMode
 import io.kotest.core.spec.style.BehaviorSpec
 import org.gradle.testkit.runner.BuildResult
-import org.gradle.testkit.runner.GradleRunner
+import org.gradle.testkit.runner.internal.DefaultGradleRunner
 import java.io.File
 import kotlin.io.path.createTempDirectory
 import kotlin.reflect.KClass
@@ -33,11 +33,12 @@ abstract class IntegrationSpec(body: IntegrationSpec.() -> Unit) : BehaviorSpec(
         body()
     }
 
-    fun runTask(task: String, vararg arguments: String): BuildResult = GradleRunner.create()
+    fun runTask(task: String, vararg arguments: String): BuildResult = DefaultGradleRunner()
+        .withJvmArguments("-Xmx4G", "-XX:MaxMetaspaceSize=512m")
         .withGradleVersion(Catalog.Versions.gradleForTesting)
         .withProjectDir(projectDir)
         .withPluginClasspath()
-        .withArguments(listOf(task) + arguments)
+        .withArguments(listOf(task) + arguments + listOf("--stacktrace"))
         .forwardOutput()
         .build()
 
