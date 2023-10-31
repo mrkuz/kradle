@@ -1,6 +1,5 @@
 package net.bnb1.kradle.blueprints
 
-import io.kotest.matchers.ints.shouldBeLessThan
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.string.shouldContain
 import net.bnb1.kradle.CompatSpec
@@ -60,21 +59,5 @@ class TestBlueprintTests : CompatSpec({
         val result = runTask("functionalTest")
 
         result.task(":functionalTest")!!.outcome shouldBe TaskOutcome.SUCCESS
-    }
-
-    test("Check test ordering") {
-        bootstrapCompatAppProject()
-        createAppTest("functionalTest")
-        createAppTest("integrationTest")
-        createAppTest("test")
-
-        val result = runTask("check")
-
-        val test = result.output.indexOf("Task :test")
-        val integrationTest = result.output.indexOf("Task :integrationTest")
-        val functionalTest = result.output.indexOf("Task :functionalTest")
-
-        test shouldBeLessThan integrationTest
-        integrationTest shouldBeLessThan functionalTest
     }
 })

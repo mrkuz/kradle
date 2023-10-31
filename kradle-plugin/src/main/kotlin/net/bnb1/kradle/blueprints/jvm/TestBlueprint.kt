@@ -64,10 +64,10 @@ class TestBlueprint(project: Project) : Blueprint(project) {
             val name = customTests[i]
             createTask("${name}Test", "Runs the $name tests")
             if (i == 0) {
-                project.tasks.findByName("${name}Test")!!.mustRunAfter("test")
+                project.tasks.findByName("${name}Test")!!.shouldRunAfter("test")
             } else {
                 val prevName = customTests[i - 1]
-                project.tasks.findByName("${name}Test")!!.mustRunAfter("${prevName}Test")
+                project.tasks.findByName("${name}Test")!!.shouldRunAfter("${prevName}Test")
             }
         }
     }
