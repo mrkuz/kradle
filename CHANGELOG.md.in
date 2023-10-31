@@ -4,18 +4,13 @@
 
 ### Version ${kradleVersion} (${new Date().format("yyyy-MM-dd")})
 
-#### Bugfixes
-
-- Fix test ordering for legacy plugins
-- Add missing log4j2 dependencies
-
 #### Additions
 
 - New feature `logging`, including support for [log4j](https://logging.apache.org/log4j/2.x/) and [slf4j](https://www.slf4j.org/)
 
 #### Changes
 
-- [Kotlin 1.8.0](https://kotlinlang.org/docs/whatsnew18.html)
+- [Kotlin 1.9.0](https://kotlinlang.org/docs/whatsnew19.html)
 - [Gradle 8](https://gradle.org/whats-new/gradle-8/)
 - Dependency updates
 
