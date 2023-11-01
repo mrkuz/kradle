@@ -32,14 +32,13 @@ object BuildCatalog {
             const val kotlinBenchmark =
                 "org.jetbrains.kotlinx:kotlinx-benchmark-plugin:${Catalog.Versions.kotlinxBenchmarkPlugin}"
             const val testLogger = "com.adarshr:gradle-test-logger-plugin:${Versions.testLogger}"
-            const val jib = "gradle.plugin.com.google.cloud.tools:jib-gradle-plugin:3.2.1"
+            const val jib = "com.google.cloud.tools:jib-gradle-plugin:3.4.0"
             const val detekt = "io.gitlab.arturbosch.detekt:detekt-gradle-plugin:1.23.3"
             const val ktlint = "org.jlleitschuh.gradle:ktlint-gradle:11.6.1"
             const val owaspDependencyCheck = "org.owasp:dependency-check-gradle:8.4.2"
             const val kover = "org.jetbrains.kotlinx:kover:0.6.1"
 
-            val shadow = "gradle.plugin.com.github.jengelman.gradle.plugins:shadow:" +
-                BuildCatalog.Plugins.shadow.version
+            val shadow = "com.github.johnrengelman:shadow:${BuildCatalog.Plugins.shadow.version}"
             val versions = "com.github.ben-manes:gradle-versions-plugin:${BuildCatalog.Plugins.versions.version}"
 
             // Java

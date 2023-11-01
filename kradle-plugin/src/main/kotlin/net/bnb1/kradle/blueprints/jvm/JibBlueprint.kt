@@ -69,7 +69,7 @@ class JibBlueprint(project: Project) : Blueprint(project) {
             }
 
             container {
-                creationTime = "USE_CURRENT_TIMESTAMP"
+                creationTime.set("USE_CURRENT_TIMESTAMP")
                 ports = jibProperties.ports.map { it.toString() }
 
                 if (jibProperties.jvmOptions != null) {
@@ -117,10 +117,8 @@ class JibBlueprint(project: Project) : Blueprint(project) {
                             setFrom(project.extraDir)
                             into = "/app/extra"
                         }
-                        permissions = mapOf(
-                            "**/*.sh" to "755",
-                            "**/tini" to "755"
-                        )
+                        permissions.put("**/*.sh", "755")
+                        permissions.put("**/tini", "755")
                     }
                 }
             }
