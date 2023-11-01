@@ -201,7 +201,7 @@ tasks.register("renderTemplates").configure {
     }
 }
 
-val tags = listOf(
+val pluginTags = listOf(
     "kotlin",
     "java",
     "linting",
@@ -223,7 +223,7 @@ gradlePlugin {
             implementationClass = "net.bnb1.kradle.plugins.KradlePlugin"
             displayName = "Kradle Plugin"
             description = "Swiss army knife for Kotlin/JVM (and also Java) development"
-            tags.set(tags)
+            tags.set(pluginTags)
         }
         create("kradleApp") {
             id = "net.bitsandbobs.kradle-app"
@@ -231,7 +231,7 @@ gradlePlugin {
             displayName = "Kradle App Plugin"
             description = "Swiss army knife for Kotlin/JVM development" +
                 " (deprecated, consider using 'net.bitsandbobs.kradle' instead)"
-            tags.set(tags)
+            tags.set(pluginTags)
         }
         create("kradleLib") {
             id = "net.bitsandbobs.kradle-lib"
@@ -239,7 +239,7 @@ gradlePlugin {
             displayName = "Kradle Lib Plugin"
             description = "Swiss army knife for Kotlin/JVM development" +
                 " (deprecated, consider using 'net.bitsandbobs.kradle' instead)"
-            tags.set(tags)
+            tags.set(pluginTags)
         }
     }
 }
