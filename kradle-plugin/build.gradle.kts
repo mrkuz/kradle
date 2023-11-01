@@ -14,7 +14,7 @@ plugins {
 }
 
 group = "net.bitsandbobs.kradle"
-version = "main-SNAPSHOT"
+version = "2.5.0"
 
 buildscript {
     dependencies {

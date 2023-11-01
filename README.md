@@ -51,6 +51,7 @@ unified configuration DSL.
     - [`generateCheckstyleConfig`](#task-generate-checkstyle-config)
     - [`generateDetektConfig`](#task-generate-detekt-config)
     - [`generateLombokConfig`](#task-generate-lombok-config)
+    - [`generateLog4jConfig`](#task-generate-log4j-config)
     - [`generateHelmChart`](#task-generate-helm-chart)
     - [`processHelmChart`](#task-process-helm-chart)
 
@@ -77,6 +78,7 @@ unified configuration DSL.
     - [Packaging](#feature-packaging)
     - [Docker](#feature-docker)
     - [Documentation](#feature-documentation)
+    - [Logging](#feature-logging)
     - [Frameworks](#feature-frameworks)
 - [Presets](#presets)
     - [Kotlin/JVM application](#preset-kotlin-jvm-application)
@@ -102,8 +104,8 @@ Kotlin:
 
 ```shell
 mkdir demo && cd demo
-curl -O https://raw.githubusercontent.com/mrkuz/kradle/main/examples/kotlin/app/settings.gradle.kts
-curl -O https://raw.githubusercontent.com/mrkuz/kradle/main/examples/kotlin/app/build.gradle.kts
+curl -O https://raw.githubusercontent.com/mrkuz/kradle/stable/examples/kotlin/app/settings.gradle.kts
+curl -O https://raw.githubusercontent.com/mrkuz/kradle/stable/examples/kotlin/app/build.gradle.kts
 gradle bootstrap
 ```
 
@@ -111,8 +113,8 @@ Java:
 
 ```shell
 mkdir demo && cd demo
-curl -O https://raw.githubusercontent.com/mrkuz/kradle/main/examples/java/app/settings.gradle.kts
-curl -O https://raw.githubusercontent.com/mrkuz/kradle/main/examples/java/app/build.gradle.kts
+curl -O https://raw.githubusercontent.com/mrkuz/kradle/stable/examples/java/app/settings.gradle.kts
+curl -O https://raw.githubusercontent.com/mrkuz/kradle/stable/examples/java/app/build.gradle.kts
 gradle bootstrap
 ```
 
@@ -138,8 +140,8 @@ _build.gradle.kts_
 
 ```kotlin
 plugins {
-    id("org.jetbrains.kotlin.jvm") version "1.7.20"
-    id("net.bitsandbobs.kradle") version "main-SNAPSHOT"
+    id("org.jetbrains.kotlin.jvm") version "1.9.10"
+    id("net.bitsandbobs.kradle") version "2.5.0"
 }
 
 group = "com.example"
@@ -173,35 +175,36 @@ For Java projects apply the Java plugin instead of the Kotlin plugin.
 
 Which tasks are available, depends on the [features](#features) enabled.
 
-| Task | Description | Alias for | Plugins used |
-|---|---|---|---|
-| <a id="task-bootstrap"></a>[bootstrap](#feature-bootstrap) | Bootstraps app/lib project | - | - |
-| <a id="task-show-dependency-updates"></a>[showDependencyUpdates](#feature-dependencies) | Displays dependency updates | - | [Gradle Versions Plugin](https://plugins.gradle.org/plugin/com.github.ben-manes.versions) |
-| <a id="task-lint-"></a>[lint](#feature-linti) | Runs [ktlint](https://ktlint.github.io/) (Kotlin) and [checkstyle](https://checkstyle.sourceforge.io/) (Java) | - | [ktlint Plugin](https://plugins.gradle.org/plugin/org.jlleitschuh.gradle.ktlint), [Checkstyle Plugin](https://docs.gradle.org/current/userguide/checkstyle_plugin.html) |
-| <a id="task-analyze-code"></a>[analyzeCode](#feature-code-analysis) | Runs [detekt](https://detekt.github.io/detekt/) (Kotlin), [PMD](https://pmd.github.io/) (Java) and [SpotBugs](https://spotbugs.github.io/) (Java) code analysis | - | [detekt Plugin](https://plugins.gradle.org/plugin/io.gitlab.arturbosch.detekt), [PMD Plugin](https://docs.gradle.org/current/userguide/pmd_plugin.html), [SpotBugs Plugin](https://plugins.gradle.org/plugin/com.github.spotbugs) |
-| <a id="task-analyze-dependencies"></a>[analyzeDependencies](#feature-vulnerability-scan) | Analyzes dependencies for vulnerabilities | - | [OWASP Dependency Check Plugin](https://plugins.gradle.org/plugin/org.owasp.dependencycheck) |
-| <a id="task-dev"></a>[dev](#feature-development-mode) | Runs the application and stops it when sources change (use with `-t`, applications only) | - | - |
-| <a id="task-run-benchmarks"></a>[runBenchmarks](#feature-benchmark) | Runs [JMH](https://github.com/openjdk/jmh) benchmarks | benchmark | [kotlinx.benchmark Plugin](https://plugins.gradle.org/plugin/org.jetbrains.kotlinx.benchmark) |
-| <a id="task-integration-test"></a>[integrationTest](#feature-test) | Runs integration tests | - | - |
-| <a id="task-functional-test"></a>[functionalTest](#feature-test) | Runs functional tests | - | - |
-| <a id="task-run-tests"></a>[runTests](#feature-test) | Runs all tests | - | - |
-| <a id="task-analyze-test-coverage"></a>[analyzeTestCoverage](#feature-code-coverage) | Runs test coverage analysis | - | [Kover](https://github.com/Kotlin/kotlinx-kover), [JaCocCo Plugin](https://docs.gradle.org/current/userguide/jacoco_plugin.html) |
-| <a id="task-generate-documentation"></a>[generateDocumentation](#feature-documentation) | Generates [Dokka](https://kotlin.github.io/dokka/) HTML documentation | - | [Dokka Plugin](https://plugins.gradle.org/plugin/org.jetbrains.dokka) |
-| <a id="task-package"></a>[package](#feature-packaging) | Creates JAR | jar | [Java Plugin](https://docs.gradle.org/current/userguide/java_plugin.html) |
-| <a id="task-uber-jar"></a>[uberJar](#feature-packaging) | Creates Uber-JAR (applications only) | - | [Gradle Shadow Plugin](https://plugins.gradle.org/plugin/com.github.johnrengelman.shadow) |
-| <a id="task-build-image"></a>[buildImage](#feature-docker) | Builds Docker image (applications only) | - | [Jib Plugin](https://plugins.gradle.org/plugin/com.google.cloud.tools.jib) |
-| <a id="task-push-image"></a>[pushImage](#feature-docker) | Pushes container image to remote registry (applications only) | - | [Jib Plugin](https://plugins.gradle.org/plugin/com.google.cloud.tools.jib) |
-| <a id="task-install"></a>[install](#feature-library) | Installs JAR to local Maven repository (libraries only) |  publishToMavenLocal | [Maven Publish Plugin](https://docs.gradle.org/current/userguide/publishing_maven.html) |
-| <a id="task-generate-git-ignore"></a>[generateGitignore](#feature-git) | Generates _.gitignore_ | - | - |
-| <a id="task-generate-build-properties"></a>[generateBuildProperties](#feature-build-properties) | Generates _build.properties_ | - | - |
-| <a id="task-generate-detekt-config"></a>[generateDetektConfig](#feature-code-analysis) | Generates _detekt-config.yml_ | - | - |
-| <a id="task-generate-checkstyle-config"></a>[generateCheckstyleConfig](#feature-code-analysis) | Generates _checkstyle.xml_ | - | - |
-| <a id="task-generate-lombok-config"></a>[generateLombokConfig](#feature-java) | Generates _lombok.config_ | - | - |
-| <a id="task-generate-helm-chart"></a>[generateHelmChart](#feature-helm) | Generates Helm chart | - | - |
-| <a id="task-process-helm-chart"></a>[processHelmChart](#feature-helm) | Processes Helm chart | - | - |
-| compile | Compiles main classes | classes | - |
-| verify | Runs all checks and tests | check | - |
-| kradleDump | Dumps kradle diagnostic information | - | - |
+| Task                                                                                            | Description                                                                                                                                                     | Alias for          | Plugins used                                                                                                                                                                                                                     |
+|-------------------------------------------------------------------------------------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------|--------------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| <a id="task-bootstrap"></a>[bootstrap](#feature-bootstrap)                                      | Bootstraps app/lib project                                                                                                                                      | -                  | -                                                                                                                                                                                                                                |
+| <a id="task-show-dependency-updates"></a>[showDependencyUpdates](#feature-dependencies)         | Displays dependency updates                                                                                                                                     | -                  | [Gradle Versions Plugin](https://plugins.gradle.org/plugin/com.github.ben-manes.versions)                                                                                                                                        |
+| <a id="task-lint-"></a>[lint](#feature-linti)                                                   | Runs [ktlint](https://ktlint.github.io/) (Kotlin) and [checkstyle](https://checkstyle.sourceforge.io/) (Java)                                                   | -                  | [ktlint Plugin](https://plugins.gradle.org/plugin/org.jlleitschuh.gradle.ktlint), [Checkstyle Plugin](https://docs.gradle.org/current/userguide/checkstyle_plugin.html)                                                          |
+| <a id="task-analyze-code"></a>[analyzeCode](#feature-code-analysis)                             | Runs [detekt](https://detekt.github.io/detekt/) (Kotlin), [PMD](https://pmd.github.io/) (Java) and [SpotBugs](https://spotbugs.github.io/) (Java) code analysis | -                  | [detekt Plugin](https://plugins.gradle.org/plugin/io.gitlab.arturbosch.detekt), [PMD Plugin](https://docs.gradle.org/current/userguide/pmd_plugin.html), [SpotBugs Plugin](https://plugins.gradle.org/plugin/com.github.spotbugs) |
+| <a id="task-analyze-dependencies"></a>[analyzeDependencies](#feature-vulnerability-scan)        | Analyzes dependencies for vulnerabilities                                                                                                                       | -                  | [OWASP Dependency Check Plugin](https://plugins.gradle.org/plugin/org.owasp.dependencycheck)                                                                                                                                     |
+| <a id="task-dev"></a>[dev](#feature-development-mode)                                           | Runs the application and stops it when sources change (use with `-t`, applications only)                                                                        | -                  | -                                                                                                                                                                                                                                |
+| <a id="task-run-benchmarks"></a>[runBenchmarks](#feature-benchmark)                             | Runs [JMH](https://github.com/openjdk/jmh) benchmarks                                                                                                           | benchmark          | [kotlinx.benchmark Plugin](https://plugins.gradle.org/plugin/org.jetbrains.kotlinx.benchmark)                                                                                                                                    |
+| <a id="task-integration-test"></a>[integrationTest](#feature-test)                              | Runs integration tests                                                                                                                                          | -                  | -                                                                                                                                                                                                                                |
+| <a id="task-functional-test"></a>[functionalTest](#feature-test)                                | Runs functional tests                                                                                                                                           | -                  | -                                                                                                                                                                                                                                |
+| <a id="task-run-tests"></a>[runTests](#feature-test)                                            | Runs all tests                                                                                                                                                  | -                  | -                                                                                                                                                                                                                                |
+| <a id="task-analyze-test-coverage"></a>[analyzeTestCoverage](#feature-code-coverage)            | Runs test coverage analysis                                                                                                                                     | -                  | [Kover](https://github.com/Kotlin/kotlinx-kover), [JaCocCo Plugin](https://docs.gradle.org/current/userguide/jacoco_plugin.html)                                                                                                 |
+| <a id="task-generate-documentation"></a>[generateDocumentation](#feature-documentation)         | Generates [Dokka](https://kotlin.github.io/dokka/) HTML documentation                                                                                           | -                  | [Dokka Plugin](https://plugins.gradle.org/plugin/org.jetbrains.dokka)                                                                                                                                                            |
+| <a id="task-package"></a>[package](#feature-packaging)                                          | Creates JAR                                                                                                                                                     | jar                | [Java Plugin](https://docs.gradle.org/current/userguide/java_plugin.html)                                                                                                                                                        |
+| <a id="task-uber-jar"></a>[uberJar](#feature-packaging)                                         | Creates Uber-JAR (applications only)                                                                                                                            | -                  | [Gradle Shadow Plugin](https://plugins.gradle.org/plugin/com.github.johnrengelman.shadow)                                                                                                                                        |
+| <a id="task-build-image"></a>[buildImage](#feature-docker)                                      | Builds Docker image (applications only)                                                                                                                         | -                  | [Jib Plugin](https://plugins.gradle.org/plugin/com.google.cloud.tools.jib)                                                                                                                                                       |
+| <a id="task-push-image"></a>[pushImage](#feature-docker)                                        | Pushes container image to remote registry (applications only)                                                                                                   | -                  | [Jib Plugin](https://plugins.gradle.org/plugin/com.google.cloud.tools.jib)                                                                                                                                                       |
+| <a id="task-install"></a>[install](#feature-library)                                            | Installs JAR to local Maven repository (libraries only)                                                                                                         | publishToMavenLocal | [Maven Publish Plugin](https://docs.gradle.org/current/userguide/publishing_maven.html)                                                                                                                                          |
+| <a id="task-generate-git-ignore"></a>[generateGitignore](#feature-git)                          | Generates _.gitignore_                                                                                                                                          | -                  | -                                                                                                                                                                                                                                |
+| <a id="task-generate-build-properties"></a>[generateBuildProperties](#feature-build-properties) | Generates _build.properties_                                                                                                                                    | -                  | -                                                                                                                                                                                                                                |
+| <a id="task-generate-detekt-config"></a>[generateDetektConfig](#feature-code-analysis)          | Generates _detekt-config.yml_                                                                                                                                   | -                  | -                                                                                                                                                                                                                                |
+| <a id="task-generate-checkstyle-config"></a>[generateCheckstyleConfig](#feature-code-analysis)  | Generates _checkstyle.xml_                                                                                                                                      | -                  | -                                                                                                                                                                                                                                |
+| <a id="task-generate-lombok-config"></a>[generateLombokConfig](#feature-java)                   | Generates _lombok.config_                                                                                                                                       | -                  | -                                                                                                                                                                                                                                |
+| <a id="task-generate-log4j-config"></a>[generateLog4jConfig](#feature-logging)                  | Generates _log4j.xml_                                                                                                                                           | -                  | -                                                                                                                                                                                                                                |
+| <a id="task-generate-helm-chart"></a>[generateHelmChart](#feature-helm)                         | Generates Helm chart                                                                                                                                            | -                  | -                                                                                                                                                                                                                                |
+| <a id="task-process-helm-chart"></a>[processHelmChart](#feature-helm)                           | Processes Helm chart                                                                                                                                            | -                  | -                                                                                                                                                                                                                                |
+| compile                                                                                         | Compiles main classes                                                                                                                                           | classes            | -                                                                                                                                                                                                                                |
+| verify                                                                                          | Runs all checks and tests                                                                                                                                       | check              | -                                                                                                                                                                                                                                |
+| kradleDump                                                                                      | Dumps kradle diagnostic information                                                                                                                             | -                  | -                                                                                                                                                                                                                                |
 
 <a id="features"></a>
 
@@ -233,7 +236,7 @@ kradle {
     jvm {
         benchmark.enable {
             jmh {
-                version("1.35")
+                version("1.37")
             }
         }
     }
@@ -262,7 +265,7 @@ kradle {
     jvm {
         test {
             junitJupiter.enable {
-                version("5.9.1")
+                version("5.10.0")
             }
         }
     }
@@ -577,10 +580,10 @@ Plugins used:
 kradle {
     jvm {
         kotlin {
-            // useCoroutines("1.6.4")
+            // useCoroutines("1.7.3")
             lint {
                 ktlint.enable {
-                    version("0.43.2")
+                    version("1.0.1")
                     rules {
                         // disable("…")
                     }
@@ -588,13 +591,13 @@ kradle {
             }
             codeAnalysis {
                 detekt.enable {
-                    version("1.21.0")
+                    version("1.23.3")
                     configFile("detekt-config.yml")
                 }
             }
             test {
-                // useKotest("5.2.3")
-                // useMockk("1.13.2")
+                // useKotest("5.7.2")
+                // useMockk("1.13.8")
             }
         }
     }
@@ -646,16 +649,16 @@ kradle {
     jvm {
         java {
             previewFeatures(false)
-            // withLombok("1.18.24")
+            // withLombok("1.18.30")
             lint {
                 checkstyle.enable {
-                    version("10.3.4")
+                    version("10.12.4")
                     configFile("checkstyle.xml")
                 }
             }
             codeAnalysis {
                 pmd.enable {
-                    version("6.50.0")
+                    version("6.55.0")
                     ruleSets {
                         bestPractices(false)
                         codeStyle(false)
@@ -668,8 +671,8 @@ kradle {
                     }
                 }
                 spotBugs.enable {
-                    version("4.7.2")
-                    // useFbContrib(7.4.7)
+                    version("4.8.0")
+                    // useFbContrib(7.6.0)
                     // useFindSecBugs(1.12.0)
                 }
             }
@@ -763,9 +766,9 @@ Plugins used: [Gradle Versions Plugin](https://plugins.gradle.org/plugin/com.git
 kradle {
     jvm {
         dependencies {
-            useCaffeine("3.1.1")
-            useGuava("31.1-jre")
-            useLog4j("2.19.0")
+            useCaffeine("3.1.8")
+            useGuava("32.1.3-jre")
+            useLog4j("2.21.1")
         }
     }
 }
@@ -773,7 +776,6 @@ kradle {
 
 - `useCaffeine`: Adds [Caffeine](https://github.com/ben-manes/caffeine) caching library
 - `useGuava`: Adds [Guava](https://github.com/google/guava) Google core libraries
-- `useLog4j`: Adds [log4j](https://logging.apache.org/log4j/2.x/) logging
 
 <a id="feature-vulnerability-scan"></a>
 
@@ -911,7 +913,7 @@ kradle {
     jvm {
         test {
             junitJupiter.enable {
-                version("5.9.1")
+                version("5.10.0")
             }
             prettyPrint(false)
             showStandardStreams(false)
@@ -919,8 +921,8 @@ kradle {
             withFunctionalTests(false)
             /*
             withCustomTests("<NAME>")
-            useArchUnit("1.0.0")
-            useTestcontainers("1.17.5")
+            useArchUnit("1.1.0")
+            useTestcontainers("1.19.1")
             */
         }
     }
@@ -974,7 +976,7 @@ kradle {
             }
             /*
             jacoco.enable {
-                version("0.8.8")
+                version("0.8.11")
                 excludes("…")
             }
             */
@@ -1011,7 +1013,7 @@ kradle {
     jvm {
         benchmark {
             jmh {
-                version("1.35")
+                version("1.37")
             }
         }
     }
@@ -1127,6 +1129,34 @@ Package and module documentation can be placed in _package.md_ or _module.md_ in
 
 Plugins used: [Dokka Plugin](https://plugins.gradle.org/plugin/org.jetbrains.dokka)
 
+<a id="feature-logging"></a>
+
+### Logging
+
+```kotlin
+kradle {
+    jvm {
+        logging.enable()
+    }
+}
+```
+
+#### Options
+
+```kotlin
+kradle {
+    jvm {
+        logging {
+            withSlf4j("2.0.9")
+            withLog4j("2.21.1")
+        }
+    }
+}
+```
+
+- `withSlf4j`: Adds [SLF4J](https://www.slf4j.org/)
+- `withLog4j`: Adds [Log4j](https://logging.apache.org/log4j/2.x/) and the task `generateLog4jConfig`, which generates _log4j.xml_ with sane defaults
+
 <a id="feature-frameworks"></a>
 
 ### Frameworks
@@ -1169,11 +1199,11 @@ kradle {
     jvm {
         frameworks {
             springBoot {
-                version("2.7.4")
-                // withDevTools("2.7.4")
-                // useWeb("2.7.4")
-                // useWebFlux("2.7.4")
-                // useActuator("2.7.4")
+                version("3.1.5")
+                // withDevTools("3.1.5")
+                // useWeb("3.1.5")
+                // useWebFlux("3.1.5")
+                // useActuator("3.1.5")
             }
         }
     }
@@ -1475,10 +1505,10 @@ kradle {
     jvm {
         targetJvm("17")
         kotlin {
-            // useCoroutines("1.6.4")
+            // useCoroutines("1.7.3")
             lint {
                 ktlint.enable {
-                    version("0.43.2")
+                    version("1.0.1")
                     rules {
                         // disable("…")
                     }
@@ -1486,27 +1516,27 @@ kradle {
             }
             codeAnalysis {
                 detekt.enable {
-                    version("1.21.0")
+                    version("1.23.3")
                     configFile("detekt-config.yml")
                 }
             }
             test {
-                // useKotest("5.2.3")
-                // useMockk("1.13.2")
+                // useKotest("5.7.2")
+                // useMockk("1.13.8")
             }
         }
         java {
             previewFeatures(false)
-            // withLombok("1.18.24")
+            // withLombok("1.18.30")
             lint {
                 checkstyle.enable {
-                    version("10.3.4")
+                    version("10.12.4")
                     configFile("checkstyle.xml")
                 }
             }
             codeAnalysis {
                 pmd.enable {
-                    version("6.50.0")
+                    version("6.55.0")
                     ruleSets {
                         bestPractices(false)
                         codeStyle(false)
@@ -1519,8 +1549,8 @@ kradle {
                     }
                 }
                 spotBugs.enable {
-                    version("4.7.2")
-                    useFbContrib("7.4.7")
+                    version("4.8.0")
+                    useFbContrib("7.6.0")
                     useFindSecBugs("1.12.0")
                 }
             }
@@ -1531,9 +1561,8 @@ kradle {
         library.enable() // Conflicts with application
 
         dependencies {
-            // useCaffeine("3.1.1")
-            // useGuava("31.1-jre")
-            // useLog4j("2.19.0")
+            // useCaffeine("3.1.8")
+            // useGuava("32.1.3-jre")
         }
 
         vulnerabilityScan.enable()
@@ -1547,15 +1576,15 @@ kradle {
 
         test {
             junitJupiter.enable {
-                version("5.9.1")
+                version("5.10.0")
             }
             prettyPrint(false)
             showStandardStreams(false)
             withIntegrationTests(false)
             withFunctionalTests(false)
             // withCustomTests("…")
-            // useArchUnit("1.0.0")
-            // useTestcontainers("1.17.5")
+            // useArchUnit("1.1.0")
+            // useTestcontainers("1.19.1")
         }
 
         codeCoverage {
@@ -1563,14 +1592,14 @@ kradle {
                 // excludes("…")
             }
             jacoco.configureOnly {
-                version("0.8.8")
+                version("0.8.11")
                 // excludes("…")
             }
         }
 
         benchmark {
             jmh {
-                version("1.35")
+                version("1.37")
             }
         }
 
@@ -1593,13 +1622,18 @@ kradle {
 
         documentation.enable()
 
+        logging {
+            // withSlf4j("2.0.9")
+            // withLog4j("2.21.1")
+        }
+
         frameworks {
             springBoot {
-                version("2.7.4")
-                // withDevTools("2.7.4")
-                // useWeb("2.7.4")
-                // useWebFlux("2.7.4")
-                // useActuator("2.7.4")
+                version("3.1.5")
+                // withDevTools("3.1.5")
+                // useWeb("3.1.5")
+                // useWebFlux("3.1.5")
+                // useActuator("3.1.5")
             }
         }
     }

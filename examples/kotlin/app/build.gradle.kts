@@ -1,6 +1,6 @@
 plugins {
     id("org.jetbrains.kotlin.jvm") version "1.9.10"
-    id("net.bitsandbobs.kradle") version "main-SNAPSHOT"
+    id("net.bitsandbobs.kradle") version "2.5.0"
 }
 
 group = "com.example"
@@ -54,7 +54,7 @@ kradle {
             /*
             codeAnalysis {
                 detekt.enable {
-                    version("1.23.1")
+                    version("1.23.3")
                     configFile("detekt-config.yml")
                 }
             }
