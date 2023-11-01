@@ -3,7 +3,7 @@ package net.bnb1.kradle.blueprints.general
 import net.bnb1.kradle.core.Blueprint
 import org.gradle.api.Project
 import org.gradle.kotlin.dsl.extra
-import java.util.*
+import java.util.Properties
 
 class ProjectPropertiesBlueprint(project: Project) : Blueprint(project) {
 

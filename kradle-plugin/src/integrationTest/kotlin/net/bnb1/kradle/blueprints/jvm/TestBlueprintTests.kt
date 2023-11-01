@@ -195,13 +195,13 @@ class TestBlueprintTests : BehaviorSpec({
     Given("test.prettyPrint = true") {
         project.setUp {
             """
-           jvm {
-               kotlin.enable()
-               test {
-                   withJunitJupiter()
-                   prettyPrint(true)
-               }
-           }
+            jvm {
+                kotlin.enable()
+                test {
+                    withJunitJupiter()
+                    prettyPrint(true)
+                }
+            }
             """.trimIndent()
         }
         createAppTest("test")

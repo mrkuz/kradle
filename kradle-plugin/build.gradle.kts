@@ -10,7 +10,7 @@ plugins {
     `maven-publish`
     id(BuildCatalog.Plugins.gradlePublish.id) version BuildCatalog.Plugins.gradlePublish.version
     id(BuildCatalog.Plugins.kotlinJvm.id) version BuildCatalog.Plugins.kotlinJvm.version
-    id("net.bitsandbobs.kradle") version "2.4.1"
+    id("net.bitsandbobs.kradle") version "2.5.0"
 }
 
 group = "net.bitsandbobs.kradle"
@@ -76,7 +76,16 @@ kradle {
             lint {
                 ktlint {
                     rules {
-                        disable("no-wildcard-imports")
+                        disable("annotation")
+                        disable("blank-line-before-declaration")
+                        disable("filename")
+                        disable("function-signature")
+                        disable("multiline-expression-wrapping")
+                        disable("no-empty-first-line-in-class-body")
+                        disable("property-naming")
+                        disable("string-template-indent")
+                        disable("trailing-comma-on-call-site")
+                        disable("trailing-comma-on-declaration-site")
                     }
                 }
             }
@@ -157,14 +166,6 @@ tasks.withType<Jar> {
     dependsOn("copyCatalog")
 }
 
-// Run functional tests with colima
-/*
-tasks.withType<Test> {
-    environment("DOCKER_HOST", "unix:///Users/mrkuz/.colima/default/docker.sock")
-    environment("TESTCONTAINERS_DOCKER_SOCKET_OVERRIDE", "/var/run/docker.sock")
-}
-*/
-
 tasks.named("runKtlintCheckOverMainSourceSet") {
     dependsOn("copyCatalog")
 }
@@ -200,6 +201,14 @@ tasks.register("renderTemplates").configure {
             }
     }
 }
+
+/*
+// Run functional tests with colima
+tasks.withType<Test> {
+    environment("DOCKER_HOST", "unix:///Users/mrkuz/.colima/default/docker.sock")
+    environment("TESTCONTAINERS_DOCKER_SOCKET_OVERRIDE", "/var/run/docker.sock")
+}
+*/
 
 val pluginTags = listOf(
     "kotlin",

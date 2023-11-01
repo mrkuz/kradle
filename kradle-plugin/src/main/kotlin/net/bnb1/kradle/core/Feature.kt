@@ -18,7 +18,9 @@ import kotlin.reflect.KClass
 class Feature(val name: String, private val taskName: String? = null) {
 
     enum class State {
-        INACTIVE, ACTIVATING, ACTIVATED
+        INACTIVE,
+        ACTIVATING,
+        ACTIVATED
     }
 
     lateinit var tracer: Tracer

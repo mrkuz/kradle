@@ -12,6 +12,7 @@ open class Registry {
 
     fun add(instance: Any) = add(instance::class.qualifiedName!!, instance)
 
+    @Suppress("UseRequire")
     fun add(name: String, instance: Any) {
         if (_map.putIfAbsent(Pair(instance::class, name), instance) != null) {
             throw IllegalArgumentException("Duplicate key: $name, ${instance::class.qualifiedName}")

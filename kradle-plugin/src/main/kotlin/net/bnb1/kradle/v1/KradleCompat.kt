@@ -23,7 +23,8 @@ class KradleCompat(
 ) {
 
     enum class ProjectType {
-        APPLICATION, LIBRARY
+        APPLICATION,
+        LIBRARY
     }
 
     fun activate() {
@@ -93,6 +94,7 @@ class KradleCompat(
                     ProjectType.APPLICATION -> application {
                         mainClass(compatExtension.mainClass)
                     }
+
                     ProjectType.LIBRARY -> library.enable()
                 }
 

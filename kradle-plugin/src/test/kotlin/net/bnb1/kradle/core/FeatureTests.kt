@@ -196,4 +196,5 @@ class FeatureTests : BehaviorSpec({
 })
 
 class Blueprint1(project: Project) : Blueprint(project)
+
 class Blueprint2(project: Project) : Blueprint(project)

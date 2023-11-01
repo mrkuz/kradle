@@ -49,16 +49,16 @@ class JibBlueprintTests : BehaviorSpec({
         return output
     }
 
-    /*
     afterEach {
+        /*
         dockerClient.listImagesCmd().exec()
             .filter { it.repoTags.contains("$name:latest") }
             .forEach {
                 println("Removing image ${it.id}")
                 dockerClient.removeImageCmd(it.id).withForce(true).exec()
             }
+         */
     }
-    */
 
     Given("Default configuration") {
         project.setUp(name) {
