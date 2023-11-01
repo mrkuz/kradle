@@ -2,13 +2,25 @@
 
 ## Changelog
 
-### Version main-SNAPSHOT (2022-10-23)
+### Version main-SNAPSHOT (2023-11-01)
 
 #### Bugfixes
 
 #### Additions
 
 #### Changes
+
+### Version 2.5.0 (2023-11-01)
+
+#### Additions
+
+- New feature `logging`, including support for [log4j](https://logging.apache.org/log4j/2.x/) and [slf4j](https://www.slf4j.org/)
+
+#### Changes
+
+- [Kotlin 1.9.0](https://kotlinlang.org/docs/whatsnew19.html)
+- [Gradle 8](https://gradle.org/whats-new/gradle-8/)
+- Dependency updates
 
 ### Version 2.4.1 (2022-10-23)
 

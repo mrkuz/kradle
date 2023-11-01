@@ -54,7 +54,7 @@ kradle {
             /*
             codeAnalysis {
                 detekt.enable {
-                    version("1.23.1")
+                    version("1.23.3")
                     configFile("detekt-config.yml")
                 }
             }
