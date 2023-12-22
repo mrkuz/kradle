@@ -1,8 +1,8 @@
 object Catalog {
 
     object Versions {
-        const val jvm = "17"
-        const val kotlin = "1.9.10"
+        const val jvm = "21"
+        const val kotlin = "1.9.20"
         const val jmh = "1.37"
         const val tini = "0.19.0"
         const val jvmKill = "1.16.0"
@@ -28,7 +28,8 @@ object Catalog {
         const val caffeine = "3.1.8"
         const val log4j = "2.21.1"
         const val springBoot = "3.1.5"
-        const val gradleForTesting = "8.0"
+        const val gradleForIntegrationTests = "8.0"
+        const val gradleForFunctionalTests = "8.5"
     }
 
     object Dependencies {

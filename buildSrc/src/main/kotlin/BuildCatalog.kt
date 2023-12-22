@@ -1,7 +1,7 @@
 object BuildCatalog {
 
     object Versions {
-        const val kotlin = "1.9.10"
+        const val kotlin = "1.9.20"
         const val kotest = "5.7.2"
         const val testLogger = "4.0.0"
         const val dockerJava = "3.3.4"

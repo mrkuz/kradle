@@ -33,7 +33,7 @@ class TestProject(spec: Spec) {
 
     fun runTask(task: String, vararg arguments: String): BuildResult = DefaultGradleRunner()
         .withJvmArguments("-Xmx4G", "-XX:MaxMetaspaceSize=512m")
-        .withGradleVersion(Catalog.Versions.gradleForTesting)
+        .withGradleVersion(Catalog.Versions.gradleForIntegrationTests)
         .withProjectDir(projectDir)
         .withPluginClasspath()
         .withArguments(listOf(task) + arguments + listOf("--stacktrace"))

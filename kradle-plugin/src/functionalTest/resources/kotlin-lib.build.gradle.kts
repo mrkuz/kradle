@@ -1,5 +1,5 @@
 plugins {
-    id("org.jetbrains.kotlin.jvm") version "1.6.0"
+    id("org.jetbrains.kotlin.jvm") version "1.9.20"
     id("net.bitsandbobs.kradle") version "main-SNAPSHOT"
 }
 

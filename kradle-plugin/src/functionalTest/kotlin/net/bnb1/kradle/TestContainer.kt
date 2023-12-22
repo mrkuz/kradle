@@ -15,7 +15,7 @@ class TestContainer(spec: Spec) {
     private val container =
         KGenericContainer(
             DockerImageName.parse(
-                "gradle:${Catalog.Versions.gradleForTesting}-jdk${Catalog.Versions.jvm}"
+                "gradle:${Catalog.Versions.gradleForFunctionalTests}-jdk${Catalog.Versions.jvm}"
             )
         )
             .withFileSystemBind(System.getenv("KRADLE_PROJECT_ROOT_DIR"), KRADLE_RO, BindMode.READ_ONLY)
