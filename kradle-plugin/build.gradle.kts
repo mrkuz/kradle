@@ -105,7 +105,7 @@ kradle {
         test {
             prettyPrint(true)
             showStandardStreams(true)
-            withCustomTests("archUnit", "compat", "integration", "functional")
+            withCustomTests("archUnit", "integration", "functional")
             useArchUnit()
             useTestcontainers()
         }
@@ -232,22 +232,6 @@ gradlePlugin {
             implementationClass = "net.bnb1.kradle.plugins.KradlePlugin"
             displayName = "Kradle Plugin"
             description = "Swiss army knife for Kotlin/JVM (and also Java) development"
-            tags.set(pluginTags)
-        }
-        create("kradleApp") {
-            id = "net.bitsandbobs.kradle-app"
-            implementationClass = "net.bnb1.kradle.v1.KradleCompatAppPlugin"
-            displayName = "Kradle App Plugin"
-            description = "Swiss army knife for Kotlin/JVM development" +
-                " (deprecated, consider using 'net.bitsandbobs.kradle' instead)"
-            tags.set(pluginTags)
-        }
-        create("kradleLib") {
-            id = "net.bitsandbobs.kradle-lib"
-            implementationClass = "net.bnb1.kradle.v1.KradleCompatLibPlugin"
-            displayName = "Kradle Lib Plugin"
-            description = "Swiss army knife for Kotlin/JVM development" +
-                " (deprecated, consider using 'net.bitsandbobs.kradle' instead)"
             tags.set(pluginTags)
         }
     }

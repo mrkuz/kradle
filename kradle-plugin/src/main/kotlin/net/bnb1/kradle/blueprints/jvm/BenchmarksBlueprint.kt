@@ -38,13 +38,7 @@ class BenchmarksBlueprint(project: Project) : Blueprint(project) {
         project.apply(BenchmarksPlugin::class.java)
     }
 
-    // compat: Must be public we can create the tasks eagerly
-    public override fun doCreateSourceSets() {
-        // compat: Avoid duplicate creation on activate
-        if (project.sourceSets.findByName(SOURCE_SET_NAME) != null) {
-            return
-        }
-
+    override fun doCreateSourceSets() {
         project.extensions.findByType<AllOpenExtension>()?.apply {
             // JMH requires benchmark classes to be open
             annotation("org.openjdk.jmh.annotations.State")

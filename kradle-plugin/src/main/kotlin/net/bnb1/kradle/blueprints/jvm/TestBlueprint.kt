@@ -34,13 +34,7 @@ class TestBlueprint(project: Project) : Blueprint(project) {
         }
     }
 
-    // compat: Must be public we can create the tasks eagerly
-    public override fun doCreateTasks() {
-        if (project.tasks.findByName(RUN_TESTS_TASK) != null) {
-            // compat: Avoid duplicate creation on activate
-            return
-        }
-
+    override fun doCreateTasks() {
         project.createTask<Task>(RUN_TESTS_TASK, "Runs all tests") {
             dependsOn("test")
         }
@@ -73,11 +67,6 @@ class TestBlueprint(project: Project) : Blueprint(project) {
     }
 
     private fun createTask(name: String, description: String) {
-        // compat: Avoid duplicate creation on activate
-        if (project.sourceSets.findByName(name) != null) {
-            return
-        }
-
         val mainSourceSet = project.sourceSets.getByName(SourceSet.MAIN_SOURCE_SET_NAME)
         val sourceSet = project.sourceSets.create(name)
         sourceSet.compileClasspath += mainSourceSet.output
