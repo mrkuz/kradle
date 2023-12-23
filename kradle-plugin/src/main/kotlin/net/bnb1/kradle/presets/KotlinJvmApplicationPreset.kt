@@ -11,45 +11,15 @@ class KotlinJvmApplicationPreset(lock: AtomicBoolean) : Preset<KradleExtensionDs
             general.configureOnly {
                 bootstrap.enable()
                 git.enable()
-                projectProperties.enable()
-                buildProperties.enable()
             }
 
             jvm.configureOnly {
-                kotlin {
-                    useCoroutines()
-                    lint {
-                        ktlint {
-                            rules {
-                                disable("no-wildcard-imports")
-                            }
-                        }
-                    }
-                    test {
-                        useKotest()
-                        useMockk()
-                    }
-                }
-
-                dependencyUpdates.enable()
-                vulnerabilityScan.enable()
+                kotlin.enable()
+                dependencies.enable()
                 lint.enable()
                 codeAnalysis.enable()
                 developmentMode.enable()
-
-                test {
-                    prettyPrint(true)
-                    withIntegrationTests()
-                    withFunctionalTests()
-                }
-                codeCoverage.enable()
-
-                benchmark.enable()
-                packaging.enable()
-                docker {
-                    withJvmKill()
-                }
-                documentation.enable()
+                test.enable()
             }
         }
     }

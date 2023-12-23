@@ -11,36 +11,15 @@ class JavaLibraryPreset(lock: AtomicBoolean) : Preset<KradleExtensionDsl>(lock) 
             general.configureOnly {
                 bootstrap.enable()
                 git.enable()
-                projectProperties.enable()
-                buildProperties.enable()
             }
 
             jvm.configureOnly {
-                java {
-                    withLombok()
-                    codeAnalysis {
-                        spotBugs {
-                            useFbContrib()
-                            useFindSecBugs()
-                        }
-                    }
-                }
+                java.enable()
                 library.enable()
-                dependencyUpdates.enable()
-                vulnerabilityScan.enable()
+                dependencies.enable()
                 lint.enable()
                 codeAnalysis.enable()
-
-                test {
-                    prettyPrint(true)
-                    withIntegrationTests()
-                    withFunctionalTests()
-                }
-                codeCoverage.enable()
-
-                benchmark.enable()
-                packaging.enable()
-                documentation.enable()
+                test.enable()
             }
         }
     }

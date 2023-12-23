@@ -1257,47 +1257,15 @@ kradle {
     general {
         bootstrap.enable()
         git.enable()
-        projectProperties.enable()
-        buildProperties.enable()
     }
 
     jvm {
-        kotlin {
-            useCoroutines()
-            lint {
-                ktlint {
-                    rules {
-                        disable("no-wildcard-imports")
-                    }
-                }
-            }
-            test {
-                useKotest()
-                useMockk()
-            }
-        }
-        application {
-            mainClass("…")
-        }
-
+        kotlin.enable()
         dependencies.enable()
-        vulnerabilityScan.enable()
         lint.enable()
         codeAnalysis.enable()
         developmentMode.enable()
-
-        test {
-            prettyPrint(true)
-            withIntegrationTests()
-            withFunctionalTests()
-        }
-        codeCoverage.enable()
-        benchmark.enable()
-        packaging.enable()
-        docker {
-            withJvmKill()
-        }
-        documentation.enable()
+        test.enable()
     }
 }
 ```
@@ -1319,40 +1287,18 @@ kradle {
     general {
         bootstrap.enable()
         git.enable()
-        projectProperties.enable()
-        buildProperties.enable()
     }
 
     jvm {
-        kotlin {
-            useCoroutines()
-            lint {
-                ktlint {
-                    rules {
-                        disable("no-wildcard-imports")
-                    }
-                }
-            }
-            test {
-                useKotest()
-                useMockk()
-            }
+        kotlin.enable()
+        application {
+            mainClass("…")
         }
         library.enable()
         dependencies.enable()
-        vulnerabilityScan.enable()
         lint.enable()
         codeAnalysis.enable()
-
-        test {
-            prettyPrint(true)
-            withIntegrationTests()
-            withFunctionalTests()
-        }
-        codeCoverage.enable()
-        benchmark.enable()
-        packaging.enable()
-        documentation.enable()
+        test.enable()
     }
 }
 ```
@@ -1380,41 +1326,18 @@ kradle {
     general {
         bootstrap.enable()
         git.enable()
-        projectProperties.enable()
-        buildProperties.enable()
     }
 
     jvm {
-        java {
-            withLombok()
-            codeAnalysis {
-                spotBugs {
-                    useFbContrib()
-                    useFindSecBugs()
-                }
-            }
-        }
+        java.enable()
         application {
             mainClass("…")
         }
         dependencies.enable()
-        vulnerabilityScan.enable()
         lint.enable()
         codeAnalysis.enable()
         developmentMode.enable()
-
-        test {
-            prettyPrint(true)
-            withIntegrationTests()
-            withFunctionalTests()
-        }
-        codeCoverage.enable()
-        benchmark.enable()
-        packaging.enable()
-        docker {
-            withJvmKill()
-        }
-        documentation.enable()
+        test.enable()
     }
 }
 ```
@@ -1436,35 +1359,15 @@ kradle {
     general {
         bootstrap.enable()
         git.enable()
-        projectProperties.enable()
-        buildProperties.enable()
     }
 
     jvm {
-        java {
-            withLombok()
-            codeAnalysis {
-                spotBugs {
-                    useFbContrib()
-                    useFindSecBugs()
-                }
-            }
-        }
+        java.enable()
         library.enable()
         dependencies.enable()
-        vulnerabilityScan.enable()
         lint.enable()
         codeAnalysis.enable()
-
-        test {
-            prettyPrint(true)
-            withIntegrationTests()
-            withFunctionalTests()
-        }
-        codeCoverage.enable()
-        benchmark.enable()
-        packaging.enable()
-        documentation.enable()
+        test.enable()
     }
 }
 ```

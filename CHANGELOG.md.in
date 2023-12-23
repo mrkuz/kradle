@@ -11,6 +11,7 @@
 #### Changes
 
 - __Breaking change__: Remove support for deprecated kradle-app and kradle-lib plugin
+- __Breaking change__: Cut number of enabled features on all presets
 - [Kotlin 1.9.20](https://kotlinlang.org/docs/whatsnew1920.html)
 - Gradle 8.5
 - `jvm`: Set default target JVM to 21
