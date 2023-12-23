@@ -2,7 +2,7 @@ object Catalog {
 
     object Versions {
         const val jvm = "21"
-        const val kotlin = "1.9.20"
+        const val kotlin = "1.9.22"
         const val jmh = "1.37"
         const val tini = "0.19.0"
         const val jvmKill = "1.16.0"
@@ -26,7 +26,7 @@ object Catalog {
         const val lombok = "1.18.30"
         const val guava = "32.1.3-jre"
         const val caffeine = "3.1.8"
-        const val log4j = "2.21.1"
+        const val log4j = "2.22.0"
         const val springBoot = "3.1.5"
         const val gradleForIntegrationTests = "8.0"
         const val gradleForFunctionalTests = "8.5"

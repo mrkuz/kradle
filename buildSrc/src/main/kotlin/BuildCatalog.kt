@@ -5,6 +5,7 @@ object BuildCatalog {
         const val kotest = "5.7.2"
         const val testLogger = "4.0.0"
         const val dockerJava = "3.3.4"
+        const val jgit = "6.8.0.202311291450-r";
     }
 
     object Plugins {
@@ -12,7 +13,7 @@ object BuildCatalog {
         val gradlePublish = Plugin("com.gradle.plugin-publish", "1.2.1")
         val testLogger = Plugin("com.adarshr.test-logger", Versions.testLogger)
         val shadow = Plugin("com.github.johnrengelman.shadow", "8.1.1")
-        val versions = Plugin("com.github.ben-manes.versions", "0.49.0")
+        val versions = Plugin("com.github.ben-manes.versions", "0.50.0")
     }
 
     object Dependencies {
@@ -22,7 +23,7 @@ object BuildCatalog {
         }
 
         const val kotlinStdlib = "org.jetbrains.kotlin:kotlin-stdlib-jdk8:${Versions.kotlin}"
-        const val jgit = "org.eclipse.jgit:org.eclipse.jgit:6.7.0.202309050840-r"
+        const val jgit = "org.eclipse.jgit:org.eclipse.jgit:${Versions.jgit}"
 
         object Plugins {
             const val kotlin = "org.jetbrains.kotlin:kotlin-gradle-plugin:${Versions.kotlin}"

@@ -551,8 +551,6 @@ kradle {
 
 Adds Kotlin Standard Library, Kotlin reflection library, and kotlin.test library dependencies.
 
-Enables [Opt-ins](https://kotlinlang.org/docs/opt-in-requirements.html).
-
 [JSR-305](https://jcp.org/en/jsr/detail?id=305) nullability mismatches are reported as error (`"-Xjsr305=strict"`).
 
 Plugins used:

@@ -28,9 +28,9 @@ class DependencyUpdatesBlueprint(project: Project) : Blueprint(project) {
             val milestone = "^.*[.-]M[.-]?[0-9]+$".toRegex(RegexOption.IGNORE_CASE)
             val releaseCandidate = "^.*[.-]RC[.-]?[0-9]*$".toRegex(RegexOption.IGNORE_CASE)
             return alpha.matches(version) ||
-                beta.matches(version) ||
-                milestone.matches(version) ||
-                releaseCandidate.matches(version)
+                    beta.matches(version) ||
+                    milestone.matches(version) ||
+                    releaseCandidate.matches(version)
         }
     }
 }
